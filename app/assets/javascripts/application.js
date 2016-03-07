@@ -16,6 +16,7 @@
 //= require i18n
 //= require i18n/translations
 //= require ./libs/bootstrap.min.js
+//= require ./adminlte/app.js
 
 
 // Reference: http://viget.com/inspire/extending-paul-irishs-comprehensive-dom-ready-execution
