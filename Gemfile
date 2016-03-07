@@ -23,6 +23,9 @@ gem 'simple_form'
 # enums
 gem 'enumerize'
 
+# para borrado ocioso
+gem "paranoia", "~> 2.0"
+
 # internacionalizacion del lado del cliente
 gem "i18n-js", ">= 3.0.0.rc11"
 
