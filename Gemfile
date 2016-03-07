@@ -15,6 +15,7 @@ gem 'uglifier', '>= 1.3.0'
 
 # template engine
 gem 'slim'
+gem "slim-rails"
 
 # para formularios
 gem 'simple_form'

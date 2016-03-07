@@ -1,0 +1,20 @@
+table.table.table-bordered
+  thead
+    tr
+      th Nombre
+      th Direccion
+      th Telefono
+      th Limite de credito
+      th
+      th
+  tbody
+    - proveedores.each do |proveedor|
+      tr
+        td = proveedor.nombre
+        td = proveedor.direccion
+        td = proveedor.telefono
+        td = proveedor.limite_credito
+        td = link_to 'Movimientos', '#', class: 'btn btn-default btn-sm'
+        td
+          = link_to '<i class="fa fa-edit"></i> '.html_safe, edit_proveedor_path(proveedor), remote: true, class: 'btn btn-default btn-sm'
+          = link_to ' <i class="fa fa-trash"></i>'.html_safe, proveedor_path(proveedor), method: 'delete', data: {confirm: "¿Desea eliminar el proveedor #{proveedor.nombre}?"}, remote: true, class: 'btn btn-danger btn-sm'

@@ -1,0 +1,17 @@
+= simple_form_for proveedor, url: !proveedor.new_record? ? proveedor_path(proveedor) : proveedores_path,
+                              html: {id: 'proveedor-form'},
+                              remote: true do |f|
+  .modal-header
+    button.close type="button" data-dismiss="modal"
+      span &times;
+    = proveedor.new_record? ? 'Nuevo proveedor' : 'Editar proveedor'
+  .modal-body
+    = f.input :nombre
+    = f.input :direccion
+    = f.input :telefono
+    = f.input :ruc
+  .modal-footer.text-right
+    input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
+
+javascript:
+  ProveedoresUI.initFormEvents();

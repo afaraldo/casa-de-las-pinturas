@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :proveedores
+
   get 'welcome/index'
 
   # The priority is based upon order of creation: first created -> highest priority.
