@@ -11,10 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160307022745) do
+ActiveRecord::Schema.define(version: 20160307165248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "personas", force: :cascade do |t|
+    t.string   "nombre",         limit: 40
+    t.string   "telefono",       limit: 20
+    t.string   "direccion",      limit: 200
+    t.string   "ruc",            limit: 30
+    t.string   "type",           limit: 15,  null: false
+    t.decimal  "limite_credito"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.datetime "deleted_at"
+  end
+
+  add_index "personas", ["deleted_at"], name: "index_personas_on_deleted_at", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name",                   default: "", null: false
