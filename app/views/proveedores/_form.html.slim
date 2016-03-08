@@ -6,11 +6,12 @@
       span &times;
     = proveedor.new_record? ? 'Nuevo proveedor' : 'Editar proveedor'
   .modal-body
-    = f.input :nombre
-    = f.input :direccion
-    = f.input :telefono
-    = f.input :ruc
+    = f.input :nombre,    input_html: {data: {'rule-maxlength' => 40, 'rule-minlength' => 2}}
+    = f.input :direccion, input_html: {data: {'rule-maxlength' => 200}}
+    = f.input :telefono,  input_html: {data: {'rule-maxlength' => 20}}
+    = f.input :ruc,       input_html: {data: {'rule-maxlength' => 30}}
   .modal-footer.text-right
+    button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
     input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
 
 javascript:
