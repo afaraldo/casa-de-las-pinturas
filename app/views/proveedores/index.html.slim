@@ -1,0 +1,12 @@
+section.content-header
+  h1 Compras
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Listado de Proveedores
+          .box-tools.pull-right
+            = link_to 'Nuevo proveedor', new_proveedor_path, class: 'btn btn-primary', remote: true
+        .box-body#proveedores-lista
+          = render partial: 'proveedores/list', locals: {proveedores: @proveedores}

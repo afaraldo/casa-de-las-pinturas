@@ -6,9 +6,44 @@ html
     = stylesheet_link_tag    'application', media: 'all'
     = javascript_include_tag 'application'
     = csrf_meta_tags
-  body data-controller="#{controller_name}" data-action="#{action_name}"
-  p.notice
-  	= notice
-  p.alert
-  	= alert
-    == yield
+  body.skin-blue-light data-controller="#{controller_name}" data-action="#{action_name}"
+    .wrapper
+      header.main-header
+        a.logo LCDP
+        nav.navbar
+          .container-fluid
+            .navbar-header
+              button.navbar-toggle.collapsed data-toggle="collapse" data-targe="#main-navbar" [type="button"]
+            #main-navbar.collapse.navbar-collapse
+              ul.nav.navbar-nav
+                li
+                  = link_to "Proveedores", proveedores_path
+              ul.nav.navbar-nav.navbar-right
+                li.dropdown
+                  a.dropdown-toggle data-toggle="dropdown" href="#"
+                    | username
+                    span.caret
+                  ul.dropdown-menu
+                    li
+                      a Cambiar contraseña
+                    li
+                      a Cerrar sesion
+      aside.main-sidebar
+        section.sidebar
+          ul.sidebar-menu
+            li
+              a
+                span Menu
+            li
+              a
+                span Menu 2
+      .content-wrapper
+        == yield
+      footer.main-footer
+        .pull-right.hidden-xs
+          b Version 2.3.0
+          strong Copyright &copy;
+    #main-modal.modal.fade
+      .modal-dialog
+        .modal-content
+
