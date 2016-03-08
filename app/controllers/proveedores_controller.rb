@@ -34,7 +34,7 @@ class ProveedoresController < ApplicationController
       @proveedores = Proveedor.all
     else
       @error = true
-      @message = "Ha ocurrido un problema al tratar de guardar el proveedor"
+      @message = "Ha ocurrido un problema al tratar de guardar el proveedor. #{@proveedor.errors.full_messages.to_sentence}"
     end
 
     render 'reload_list', format: :js
@@ -50,7 +50,7 @@ class ProveedoresController < ApplicationController
       @proveedores = Proveedor.all
     else
       @error = true
-      @message = "Ha ocurrido un problema al tratar de guardar el proveedor"
+      @message = "Ha ocurrido un problema al tratar de guardar el proveedor. #{@proveedor.errors.full_messages.to_sentence}"
     end
 
     render 'reload_list', format: :js
@@ -80,6 +80,6 @@ class ProveedoresController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def proveedor_params
-      params.require(:proveedor).permit(:nombre, :direccion, :telefono, :limite_credito)
+      params.require(:proveedor).permit(:nombre, :direccion, :ruc, :telefono, :limite_credito)
     end
 end

@@ -1,6 +1,6 @@
 | var modal = $('#main-modal');
 - if @error
-  | noty({type: "danger", text : "#{@message}"});
+  | noty({type: "error", text : "#{@message}"});
 - else
   | noty({type: "success", text : "#{@message}"});
   | modal.modal('hide');
