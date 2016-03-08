@@ -43,11 +43,14 @@
       <li><a href="#merge_pull_request" class="cc-active">Merge de pull request</a></li>
       <li class="separator"></li>
       <li>
-        <string>Layout</string>
+        <string>Frontend</string>
       </li>
       <li><a href="#main-layout" class="cc-active">Layout general</a></li>
-      <li><a href="#main-layout" class="cc-active">Formularios</a></li>
-      <li><a href="#main-layout" class="cc-active">Alertas</a></li>
+      <li><a href="#components" class="cc-active">Componentes</a></li>
+      <li><a href="#forms" class="cc-active">Formularios</a></li>
+      <li><a href="#alertas" class="cc-active">Alertas</a></li>
+      <li><a href="#validations" class="cc-active">Validaciones</a></li>
+      <li><a href="#i18n" class="cc-active">Internacionalización</a></li>
     </ul>
     <div class="docs-content">
       <h2> Politicas</h2>
@@ -115,13 +118,49 @@
       <h3 id="merge_pull_request">Merge de pull request</h3>
       <p>Pendiente...</p>
 
+      <h2>Frontend</h2>
+
+      <h3 id="main-layout">Layout general</h3>
+      <p>Para el layout general usamos la estructura de la plantilla <a href="https://almsaeedstudio.com/themes/AdminLTE/index.html">AdminLTE</a></p>
+      <p>Esta es una plantilla basada en bootsrap. Solo le da un estilo diferente a los estilos de bootstrap y ademas incorpora algunos componentes mas como el .box. Al hacer la vista de cada contenido usan esa estructura(pueden ver el ABM de proveedores como referencia):</p>
+
+      <pre class="prettyprint">
+section.content-header
+  h1 Compras (TITULO_DE_SECCION_PRINCIPAL)
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Listado de Proveedores (TITULO_DE_SUBSECCION)
+          .box-tools.pull-right (BOTONES_DE_ACCIONES_PRINCIPALES)
+            = link_to 'Nuevo proveedor', new_proveedor_path, class: 'btn btn-primary', remote: true
+        .box-body#proveedores-lista (CONTENIDO)
+          = render partial: 'proveedores/list', locals: {proveedores: @proveedores}
+      </pre>
+
+      <h3 id="components">Componentes</h3>
+      <p>En el repositorio esta la plantilla completa con su documentacion donde pueden ver como usar los componentes. En la carpeta /docs/AdminLTE/index.html</p>
+
+      <h3 id="forms">Formularios</h3>
+      <p>Usamos la gema <a href="https://github.com/plataformatec/simple_form">simple_form</a> para hacer los formularios. Es bastante simple y configurable. Ya esta configurado para que use el html de bootstrap por defecto.</p>
+
+      <h3 id="alertas">Alertas</h3>
+      <p>Para los mensajes principales a mostrar en la aplicacion (los que estan en la variable :flash) se pondran al comenzar el .content-wrapper.</p>
+      <p>Para mostrar mensajes que vienen por ajax se usará la libreria js <a href="http://ned.im/noty/#/about">noty</a>. Se usa de la siguiente forma:</p>
+
       <pre class="prettyprint">&lt;script&gt;
-    $(document).ready(function (){
-    $('#opineo').opineo('results.php', {curvalue:0, view: 'mini', votes_label:false});
-    })
+    noty({type: "error", text : "Mensaje de error"});
 &lt;/script&gt;</pre>
 
+      <h3 id="validations">Validaciones</h3>
+      <p>Para las validaciones del lado del cliente se usará la libreria js <a href="http://jqueryvalidation.org/">jquery.Validation</a> </p>
 
+      <h3 id="i18n">Internacionalización</h3>
+      <p>Para usar los locales usados del lado del servidor del lado del cliente usamos la gema <a href="https://casa-de-las-pinturas-test.herokuapp.com/">i18n-js</a>. En javascript se usa de la siguiente forma:</p>
+      <pre class="prettyprint">&lt;script&gt;
+    I18n.t("some.scoped.translation");
+&lt;/script&gt;</pre>
     </div>
   </div>
 </section>
@@ -130,7 +169,6 @@
 </section>
 <footer>
   <div class="">
-    <p> &copy; Copyright Frittt Templates. All Rights Reserved.</p>
   </div>
 </footer>
 </div>
