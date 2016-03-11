@@ -20,6 +20,9 @@ gem "slim-rails"
 # paginador
 gem 'kaminari'
 
+# buscador
+gem 'ransack'
+
 # para formularios
 gem 'simple_form'
 

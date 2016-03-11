@@ -4,4 +4,4 @@
 - else
   | noty({type: "success", text : "#{@message}"});
   | modal.modal('hide');
-  | $('#proveedores-lista').html("#{escape_javascript(render partial: 'list', locals: {proveedores: @proveedores})}");
+  | $('#proveedores-table').html("#{escape_javascript(render partial: 'list', locals: {proveedores: @proveedores})}");

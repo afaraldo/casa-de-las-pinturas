@@ -30,13 +30,31 @@
 CasaDeLasPinturas = {
     common: {
         init: function() {
-            // application-wide code
 
+            // Delay para buscar en tiempo real
+            $('.remote-search').on('keyup', 'input, select', function () {
+                var form = $(this).parents('form');
+                delay(function () {
+                    // agregar icono de "recargando"
+                    var buscadorLista = form.parents('.buscador-listado').next('.buscador-resultados');
+                    buscadorLista.append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+                    // Enviar formulario
+                    form.submit();
+                }, 500);
+            });
 
         }
     }
 
 };
+
+var delay = (function(){
+    var timer = 0;
+    return function(callback, ms){
+        clearTimeout (timer);
+        timer = setTimeout(callback, ms);
+    };
+})();
 
 UTIL = {
     exec: function( controller, action ) {
