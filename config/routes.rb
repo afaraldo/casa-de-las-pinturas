@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :configuraciones
+
   resources :proveedores
 
   get 'welcome/index'

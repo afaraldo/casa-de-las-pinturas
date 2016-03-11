@@ -1,0 +1,28 @@
+h1 Listing configuraciones
+
+table
+  thead
+    tr
+      th Empresa nombre
+      th Logo
+      th Empresa direccion
+      th Empresa telefono
+      th Empresa email
+      th
+      th
+      th
+
+  tbody
+    - @configuraciones.each do |configuracion|
+      tr
+        td = configuracion.empresa_nombre
+        td = configuracion.logo
+        td = configuracion.empresa_direccion
+        td = configuracion.empresa_telefono
+        td = configuracion.empresa_email
+        td = link_to 'Edit', edit_configuracion_path(configuracion)
+        td = link_to 'Destroy', configuracion, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+
