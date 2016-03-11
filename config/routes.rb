@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   devise_for :users
 
+  get 'proveedores/check_nombre' => 'proveedores#check_nombre'
   resources :proveedores
 
   get 'welcome/index'

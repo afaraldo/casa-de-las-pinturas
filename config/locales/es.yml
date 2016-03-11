@@ -1,5 +1,11 @@
 ---
 es:
+  simple_form:
+    labels:
+      proveedor:
+        numero_documento: 'RUC/CI'
+  proveedor:
+    unique_nombre_error: "Ya existe un proveedor con el nombre %{nombre}"
   activerecord:
     errors:
       messages:

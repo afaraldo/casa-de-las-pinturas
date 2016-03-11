@@ -72,6 +72,13 @@ class ProveedoresController < ApplicationController
     render 'reload_list', format: :js
   end
 
+  # Comprobar si ya existe el proveedor con el nombre dado
+  def check_nombre
+    proveedor = Proveedor.by_nombre(params[:nombre]).first
+
+    render json: (proveedor.nil? || proveedor.id == params[:id].to_i) ? true : t('proveedor.unique_nombre_error', nombre: params[:nombre]).to_json
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_proveedor
@@ -80,6 +87,6 @@ class ProveedoresController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def proveedor_params
-      params.require(:proveedor).permit(:nombre, :direccion, :ruc, :telefono, :limite_credito)
+      params.require(:proveedor).permit(:nombre, :direccion, :numero_documento, :telefono, :limite_credito)
     end
 end

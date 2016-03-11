@@ -2,6 +2,7 @@ table.table.table-bordered
   thead
     tr
       th Nombre
+      th RUC/CI
       th Direccion
       th Telefono
       th Limite de credito
@@ -11,6 +12,7 @@ table.table.table-bordered
     - proveedores.each do |proveedor|
       tr
         td = proveedor.nombre
+        td = proveedor.numero_documento
         td = proveedor.direccion
         td = proveedor.telefono
         td = proveedor.limite_credito
