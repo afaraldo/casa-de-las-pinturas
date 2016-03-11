@@ -29,6 +29,7 @@ gem "paranoia", "~> 2.0"
 # internacionalizacion del lado del cliente
 gem "i18n-js", ">= 3.0.0.rc11"
 
+gem 'devise'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -66,5 +67,7 @@ end
 
 group :development do
   gem 'better_errors'
+
+  gem "rails_best_practices"
 end
 
