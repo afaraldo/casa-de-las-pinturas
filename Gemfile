@@ -17,6 +17,12 @@ gem 'uglifier', '>= 1.3.0'
 gem 'slim'
 gem "slim-rails"
 
+# paginador
+gem 'kaminari'
+
+# buscador
+gem 'ransack'
+
 # para formularios
 gem 'simple_form'
 
