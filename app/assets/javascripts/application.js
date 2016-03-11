@@ -20,6 +20,7 @@
 //= require ./libs/jquery.validation/jquery.validate.js
 //= require ./libs/jquery.validation/additional-methods.js
 //= require ./libs/jquery.validation/messages_es_AR.js
+//= require ./libs/validationsConfig.js
 //= require ./libs/jquery.noty.packaged.js
 //= require ./libs/jquery.noty.defaults.js
 //= require_tree ./modules
