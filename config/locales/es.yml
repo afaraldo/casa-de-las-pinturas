@@ -1,5 +1,12 @@
 ---
 es:
+  views:
+    pagination:
+      first: "&laquo; Primero"
+      last: "Ultimo &raquo;"
+      previous: "&lsaquo; Ant"
+      next: "Sig &rsaquo;"
+      truncate: "&hellip;"
   simple_form:
     labels:
       proveedor:

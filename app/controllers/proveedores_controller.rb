@@ -4,7 +4,7 @@ class ProveedoresController < ApplicationController
   # GET /proveedores
   # GET /proveedores.json
   def index
-    @proveedores = Proveedor.all
+    @proveedores = Proveedor.page(params[:page])
   end
 
   # GET /proveedores/1
@@ -31,7 +31,7 @@ class ProveedoresController < ApplicationController
     if @proveedor.save
       @error = false
       @message = "Se ha guardado el proveedor"
-      @proveedores = Proveedor.all
+      @proveedores = Proveedor.page(params[:page])
     else
       @error = true
       @message = "Ha ocurrido un problema al tratar de guardar el proveedor. #{@proveedor.errors.full_messages.to_sentence}"
@@ -47,7 +47,7 @@ class ProveedoresController < ApplicationController
     if @proveedor.update(proveedor_params)
       @error = false
       @message = "Se ha guardado el proveedor"
-      @proveedores = Proveedor.all
+      @proveedores = Proveedor.page(params[:page])
     else
       @error = true
       @message = "Ha ocurrido un problema al tratar de guardar el proveedor. #{@proveedor.errors.full_messages.to_sentence}"
@@ -63,7 +63,7 @@ class ProveedoresController < ApplicationController
     if @proveedor.destroy
       @error = false
       @message = "Se ha eliminado el proveedor"
-      @proveedores = Proveedor.all
+      @proveedores = Proveedor.page(params[:page])
     else
       @error = true
       @message = "Ha ocurrido un problema al tratar de eliminar el proveedor"

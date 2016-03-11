@@ -3,9 +3,9 @@ table.table.table-bordered
     tr
       th Nombre
       th RUC/CI
-      th Direccion
-      th Telefono
-      th Limite de credito
+      th Dirección
+      th Teléfono
+      th Límite de crédito
       th
       th
   tbody
@@ -18,5 +18,6 @@ table.table.table-bordered
         td = proveedor.limite_credito
         td = link_to 'Movimientos', '#', class: 'btn btn-default btn-sm'
         td
-          = link_to '<i class="fa fa-edit"></i> '.html_safe, edit_proveedor_path(proveedor), remote: true, class: 'btn btn-default btn-sm'
+          = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_proveedor_path(proveedor), remote: true, class: 'btn btn-default btn-sm'
+          | #{' '}
           = link_to ' <i class="fa fa-trash"></i>'.html_safe, proveedor_path(proveedor), method: 'delete', data: {confirm: "¿Desea eliminar el proveedor #{proveedor.nombre}?"}, remote: true, class: 'btn btn-danger btn-sm'

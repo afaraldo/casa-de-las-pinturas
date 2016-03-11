@@ -10,3 +10,5 @@ section.content
             = link_to 'Nuevo proveedor', new_proveedor_path, class: 'btn btn-primary', remote: true
         .box-body#proveedores-lista
           = render partial: 'proveedores/list', locals: {proveedores: @proveedores}
+          #paginate-container
+            = paginate @proveedores
