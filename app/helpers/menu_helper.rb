@@ -21,7 +21,7 @@ module MenuHelper
 
   # Listado de submenus para cada seccion
   def side_menu
-    items = MENU_DATA['menu'][@menu_setup[:main_menu].to_s]['submenus']
+    items = @menu_setup[:main_menu].nil? ? [] : MENU_DATA['menu'][@menu_setup[:main_menu].to_s]['submenus']
     html = ""
 
     items.each do |item, opciones|
