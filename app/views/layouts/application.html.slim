@@ -8,41 +8,18 @@ html
     = csrf_meta_tags
   body.skin-blue-light data-controller="#{controller_name}" data-action="#{action_name}"
     .wrapper
-      header.main-header
-        a.logo LCDP
-        nav.navbar
-          .container-fluid
-            .navbar-header
-              button.navbar-toggle.collapsed data-toggle="collapse" data-targe="#main-navbar" [type="button"]
-            #main-navbar.collapse.navbar-collapse
-              ul.nav.navbar-nav
-                li
-                  = link_to "Proveedores", proveedores_path
-              ul.nav.navbar-nav.navbar-right
-                li.dropdown
-                  a.dropdown-toggle data-toggle="dropdown" href="#"
-                    | username
-                    span.caret
-                  ul.dropdown-menu
-                    li
-                      a Cambiar contraseña
-                    li
-                      a Cerrar sesion
+      = render 'layouts/main_menu'
       aside.main-sidebar
         section.sidebar
           ul.sidebar-menu
-            li
-              a
-                span Menu
-            li
-              a
-                span Menu 2
+            = side_menu
       .content-wrapper
         == yield
       footer.main-footer
+        strong &nbsp;
         .pull-right.hidden-xs
-          b Version 2.3.0
-          strong Copyright &copy;
+          b Version
+          |  2.3.0
     #main-modal.modal.fade
       .modal-dialog
         .modal-content
