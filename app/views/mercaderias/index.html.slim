@@ -1,0 +1,13 @@
+section.content-header
+  h1 Stock
+section.content
+  .row
+    .col-xs-8
+      .box
+        .box-header
+          h3.box-title Listado de Mercaderias
+          .box-tools.pull-right
+            = link_to 'Nueva mercaderia', "#", class: 'btn btn-primary', remote: true
+        .box-body#mercaderias-lista
+    .col-xs-4
+      = render template: 'categorias/index', locals: {categorias: @categorias}

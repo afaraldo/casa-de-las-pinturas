@@ -1,0 +1,11 @@
+table.table.table-bordered
+  thead
+    tr
+      th Nombre
+      th
+  tbody
+    - categorias.each do |cat|
+      = render partial: 'categorias/list_row', locals: {categoria: cat}
+      - if cat.subcategorias.size > 0
+        - cat.subcategorias.each do |s|
+          = render partial: 'categorias/list_row', locals: {categoria: s}
