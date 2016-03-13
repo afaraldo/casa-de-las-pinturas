@@ -79,7 +79,12 @@ class CategoriasController < ApplicationController
   end
 
   def get_categorias
-    @search = Categoria.padres.search(params[:q])
+    # si la llamada es desde el buscador incluir las subcategorias tambien
+    if params[:q].present? && params[:q][:nombre_cont].present?
+      @search = Categoria.search(params[:q])
+    else
+      @search = Categoria.padres.search(params[:q])
+    end
     @categorias = @search.result.page(params[:page])
   end
 

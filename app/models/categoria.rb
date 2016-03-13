@@ -6,9 +6,12 @@ class Categoria < ActiveRecord::Base
 
   has_many :subcategorias, class_name: 'Categoria',
            foreign_key: 'categoria_padre_id'
+  belongs_to :padre, class_name: 'Categoria',
+             foreign_key: 'categoria_padre_id'
 
   validates :nombre, presence: true
   validates :nombre, length: {maximum: 50, minimum: 2}
+  validates :nombre, uniqueness: true
 
   default_scope { order('nombre') } # Ordenar por nombre por defecto
   scope :by_nombre, lambda { |value| where('lower(nombre) = ?', value.downcase) } # buscar por nombre
