@@ -1,0 +1,3 @@
+| $("#mercaderias-table").html("#{escape_javascript(render partial: 'list', format: 'html', locals: {mercaderias: @mercaderias})}");
+| $('#paginate-container').html("#{escape_javascript(paginate(@mercaderias, remote: true)) }");
+| $('.buscador-resultados > .overlay').remove();

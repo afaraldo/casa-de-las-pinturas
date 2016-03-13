@@ -1,7 +1,12 @@
-| var modal = $('#main-modal');
+| var modal = $('#main-modal-sm');
 - if @error
   | noty({type: "error", text : "#{@message}"});
 - else
   | noty({type: "success", text : "#{@message}"});
   | modal.modal('hide');
   | $('#categorias-table').html("#{escape_javascript(render partial: 'list', locals: {categorias: @categorias})}");
+  - if params[:from_mercaderias] # recargar el select de categorias si la llamada es desde el formulario de mercaderias
+    | var categoriaSelect = $('#mercaderia_categoria_id');
+    | categoriaSelect.html("#{escape_javascript(options_for_select(Categoria.agrupado.map{ |c| [c.nombre, c.id, {'data-espadre' => c.categoria_padre_id}] }, selected: @categoria.id).insert(0, 'Seleccione una categoría...'))}");
+    | categoriaSelect.select2('destroy');
+    | MercaderiasUI.recargarCategorias();

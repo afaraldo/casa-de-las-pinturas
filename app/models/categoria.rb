@@ -18,6 +18,19 @@ class Categoria < ActiveRecord::Base
 
   scope :padres, lambda { |self_id = nil| where(categoria_padre_id: nil).where.not(id: self_id) } # busca los que sean padres y no tengan el id pasado como parametro
 
+  def self.agrupado
+    categorias = []
+
+    padres.each do |p|
+      categorias << p
+      p.subcategorias.each do |s|
+        categorias << s
+      end
+    end
+
+    categorias
+  end
+
   # si tiene subcategorias no se puede eliminar
   def check_subcategorias
     if subcategorias.size > 0

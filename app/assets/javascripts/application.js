@@ -22,6 +22,8 @@
 //= require ./libs/validationsConfig.js
 //= require ./libs/jquery.noty.packaged.js
 //= require ./libs/jquery.noty.defaults.js
+//= require ./libs/select2/select2.js
+//= require ./libs/select2/i18n/es.js
 //= require_tree ./modules
 
 
@@ -40,6 +42,15 @@ CasaDeLasPinturas = {
                     // Enviar formulario
                     form.submit();
                 }, 500);
+            });
+
+            // Para tener varios modals abiertos al mismo tiempo
+            $(document).on('show.bs.modal', '.modal', function (event) {
+                var zIndex = 1040 + (10 * $('.modal:visible').length);
+                $(this).css('z-index', zIndex);
+                setTimeout(function() {
+                    $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+                }, 0);
             });
 
         }
