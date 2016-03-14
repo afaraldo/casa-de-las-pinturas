@@ -1,5 +1,6 @@
 class Persona < ActiveRecord::Base
   acts_as_paranoid
+  has_one :user
 
   after_initialize :set_limite_credito, if: :new_record?
 
