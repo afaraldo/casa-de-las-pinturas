@@ -1,4 +1,4 @@
-= simple_form_for categoria, url: !categoria.new_record? ? categoria_path(categoria) : categorias_path,
+= simple_form_for categoria, url: !categoria.new_record? ? categoria_path(categoria) : categorias_path(from_mercaderias: params[:from_mercaderias]),
                                 html: {id: 'categoria-form'},
                                 remote: true do |f|
   .modal-header

@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get 'categorias/check_nombre' => 'categorias#check_nombre'
   resources :categorias
 
+  get 'mercaderias/check_codigo' => 'mercaderias#check_codigo'
   resources :mercaderias
 
   get 'welcome/index'

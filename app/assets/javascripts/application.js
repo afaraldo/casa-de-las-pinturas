@@ -22,6 +22,8 @@
 //= require ./libs/validationsConfig.js
 //= require ./libs/jquery.noty.packaged.js
 //= require ./libs/jquery.noty.defaults.js
+//= require ./libs/select2/select2.js
+//= require ./libs/select2/i18n/es.js
 //= require_tree ./modules
 
 
@@ -31,7 +33,10 @@ CasaDeLasPinturas = {
         init: function() {
 
             // Delay para buscar en tiempo real
-            $('.remote-search').on('keyup', 'input, select', function () {
+            $('.remote-search').on('keyup change', 'input, select', function (event) {
+                if(event.type === 'change' && this.type === 'text') // Evitar que se haga la busqueda al hacer tab
+                    return false;
+
                 var form = $(this).parents('form');
                 delay(function () {
                     // agregar icono de "recargando"
@@ -40,6 +45,15 @@ CasaDeLasPinturas = {
                     // Enviar formulario
                     form.submit();
                 }, 500);
+            });
+
+            // Para tener varios modals abiertos al mismo tiempo
+            $(document).on('show.bs.modal', '.modal', function (event) {
+                var zIndex = 1040 + (10 * $('.modal:visible').length);
+                $(this).css('z-index', zIndex);
+                setTimeout(function() {
+                    $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+                }, 0);
             });
 
         }
