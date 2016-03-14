@@ -1,25 +1,12 @@
-h1 Listing users
-
-table
-  thead
-    tr
-      th Name
-      th Email
-      th Password
-      th
-      th
-      th
-
-  tbody
-    - @users.each do |user|
-      tr
-        td = user.name
-        td = user.email
-        td = user.password
-        td = link_to 'Show', user
-        td = link_to 'Edit', edit_user_path(user)
-        td = link_to 'Destroy', user, data: {:confirm => 'Are you sure?'}, :method => :delete
-
-br
-
-= link_to 'New User', new_user_path
+section.content-header
+  h1 Usuarios
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Listado de Usuarios
+          .box-tools.pull-right
+            = link_to 'Nuevo Usuario', new_user_path, class: 'btn btn-primary', remote: true
+        .box-body#users-lista
+          = render partial: 'users/list', locals: {users: @users}
