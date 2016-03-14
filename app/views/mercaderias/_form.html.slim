@@ -26,14 +26,14 @@
     = f.input :descripcion,     input_html: {class: 'textoLargo'}
     .row
       .col-xs-6
-        = f.input :precio_venta_contado
+        = f.input :precio_venta_contado, as: :string, input_html: {class: 'maskMoneda'}
       .col-xs-6
-        = f.input :precio_venta_credito
+        = f.input :precio_venta_credito, as: :string, input_html: {class: 'maskMoneda'}
     .row
       .col-xs-6
-        = f.input :stock_minimo
+        = f.input :stock_minimo, as: :string, input_html: {class: 'maskCantidad', value: number_with_precision(f.object.stock_minimo)}
       .col-xs-6
-        = f.input :stock
+        = f.input :stock,        as: :string, input_html: {class: 'maskCantidad', value: number_with_precision(f.object.stock)}
   .modal-footer.text-right
     button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
     input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."

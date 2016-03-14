@@ -24,6 +24,8 @@
 //= require ./libs/jquery.noty.defaults.js
 //= require ./libs/select2/select2.js
 //= require ./libs/select2/i18n/es.js
+//= require ./libs/jquery.inputmask.bundle.js
+//= require_tree ./helpers
 //= require_tree ./modules
 
 

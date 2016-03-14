@@ -19,6 +19,8 @@ var ProveedoresUI = (function(){
                 }
             });
 
+            NumberHelper.mascaraMoneda('.maskMoneda');
+
             // Validate form
             $('#proveedor-form').validate();
         }

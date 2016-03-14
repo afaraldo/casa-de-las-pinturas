@@ -11,7 +11,7 @@
     = f.input :direccion, input_html: {class: 'textoLargo'}
     = f.input :telefono,  input_html: {class: 'textoMedio'}
     = f.input :numero_documento,       input_html: {class: 'textoMedio'}
-    = f.input :limite_credito, input_html: {class: 'limiteNumero'}
+    = f.input :limite_credito, as: :string, input_html: {class: 'limiteNumero maskMoneda'}
   .modal-footer.text-right
     button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
     input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
