@@ -13,7 +13,7 @@ class Categoria < ActiveRecord::Base
   validates :nombre, length: {maximum: 50, minimum: 2}
   validates :nombre, uniqueness: true
 
-  default_scope { order('nombre') } # Ordenar por nombre por defecto
+  default_scope { order('lower(nombre)') } # Ordenar por nombre por defecto
   scope :by_nombre, lambda { |value| where('lower(nombre) = ?', value.downcase) } # buscar por nombre
 
   scope :padres, lambda { |self_id = nil| where(categoria_padre_id: nil).where.not(id: self_id) } # busca los que sean padres y no tengan el id pasado como parametro

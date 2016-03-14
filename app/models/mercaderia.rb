@@ -18,7 +18,7 @@ class Mercaderia < ActiveRecord::Base
   validates :stock_minimo,         numericality: { greater_than_or_equal_to: 0 }
   validates :stock, numericality: true
 
-  default_scope { order('nombre') } # Ordenar por nombre por defecto
+  default_scope { order('lower(nombre)') } # Ordenar por nombre por defecto
   scope :by_codigo, lambda { |value| where('lower(codigo) = ?', value.downcase) } # buscar por codigo
 
 end
