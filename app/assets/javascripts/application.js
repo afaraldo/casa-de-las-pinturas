@@ -33,7 +33,10 @@ CasaDeLasPinturas = {
         init: function() {
 
             // Delay para buscar en tiempo real
-            $('.remote-search').on('keyup', 'input, select', function () {
+            $('.remote-search').on('keyup change', 'input, select', function (event) {
+                if(event.type === 'change' && this.type === 'text') // Evitar que se haga la busqueda al hacer tab
+                    return false;
+
                 var form = $(this).parents('form');
                 delay(function () {
                     // agregar icono de "recargando"

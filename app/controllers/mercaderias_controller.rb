@@ -77,6 +77,14 @@ class MercaderiasController < ApplicationController
   end
 
   def get_mercaderias
+    # incluir subcategorias se se selecciona una categoria padre
+    if params[:q].present? && params[:q][:categoria_id_eq_any].present?
+      categoria = Categoria.find(params[:q][:categoria_id_eq_any])
+      if categoria.categoria_padre_id.nil?
+        params[:q][:categoria_id_eq_any] = [categoria.id] + categoria.subcategorias.ids
+      end
+    end
+
     @search_mercaderias = Mercaderia.search(params[:q])
     @mercaderias = @search_mercaderias.result.page(params[:page])
   end

@@ -39,6 +39,13 @@ var MercaderiasUI = (function(){
             var form = $('#mercaderia-form');
             form.validate();
         },
+        recargarCategoriaFiltro: function(){
+            var categoriasFiltro = $('#mercaderias_categorias_buscador');
+            categoriasFiltro.select2({
+                templateResult: formatCategorias,
+                escapeMarkup: function(m) { return m; }
+            });
+        },
         recargarCategorias: recargarCategorias
     };
 
