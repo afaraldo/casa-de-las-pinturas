@@ -19,7 +19,7 @@ html
         strong &nbsp;
         .pull-right.hidden-xs
           b Version
-          |  2.3.0
+          = " " + APP_CONFIG['version'] + Rails.application.secrets.git_rev
     #main-modal.modal.fade
       .modal-dialog
         .modal-content
