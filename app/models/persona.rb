@@ -14,7 +14,7 @@ class Persona < ActiveRecord::Base
   validates :numero_documento, presence: true
   validates :limite_credito, numericality: { greater_than_or_equal_to: 0 }
 
-  default_scope { order('nombre') } # Ordenar por nombre por defecto
+  default_scope { order('lower(nombre)') } # Ordenar por nombre por defecto
   scope :by_nombre, lambda { |value| where('lower(nombre) = ?', value.downcase) } # buscar por nombre
 
   def set_limite_credito

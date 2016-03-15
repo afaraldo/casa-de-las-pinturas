@@ -1,7 +1,17 @@
-| var modal = $('#main-modal');
+| var modal = $('#main-modal-sm');
 - if @error
   | noty({type: "error", text : "#{@message}"});
-- else
+- else # recargar listado de categoria y filtro de categoria para mercaderias
   | noty({type: "success", text : "#{@message}"});
   | modal.modal('hide');
   | $('#categorias-table').html("#{escape_javascript(render partial: 'list', locals: {categorias: @categorias})}");
+  | var categoriasOptions = "#{escape_javascript(options_for_select(Categoria.agrupado.map{ |c| [c.nombre, c.id, {'data-espadre' => c.categoria_padre_id}] }).insert(0, '<option value="">Todas las categorías...</option>'))}";
+  | var categoriaSelect = $('#mercaderias_categorias_buscador');
+  | categoriaSelect.html(categoriasOptions);
+  | MercaderiasUI.recargarCategoriaFiltro();
+  - if params[:from_mercaderias] # recargar el select de categorias si la llamada es desde el formulario de mercaderias
+    | var categoriaSelect = $('#mercaderia_categoria_id');
+    | categoriasOptions = "#{escape_javascript(options_for_select(Categoria.agrupado.map{ |c| [c.nombre, c.id, {'data-espadre' => c.categoria_padre_id}] }, selected: @categoria.id))}";
+    | categoriaSelect.html(categoriasOptions);
+    | categoriaSelect.select2('destroy');
+    | MercaderiasUI.recargarCategorias();

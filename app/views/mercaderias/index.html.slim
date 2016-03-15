@@ -5,9 +5,31 @@ section.content
     .col-xs-8
       .box
         .box-header
-          h3.box-title Listado de Mercaderias
+          h3.box-title Mercaderias
           .box-tools.pull-right
-            = link_to 'Nueva mercaderia', "#", class: 'btn btn-primary', remote: true
+            = link_to 'Nueva mercaderia', new_mercaderia_path, class: 'btn btn-primary', remote: true
         .box-body#mercaderias-lista
+          #mercaderias-search.buscador-listado
+            = search_form_for @search_mercaderias, remote: true, class: 'remote-search' do |f|
+              .row
+                .col-xs-7
+                  .input-group
+                    = f.text_field :nombre_or_codigo_cont, class: 'form-control', placeholder: 'Buscar por nombre o codigo...'
+                    .input-group-btn
+                      button.btn.btn-default type="submit" name="commit"
+                        i.fa.fa-search
+                .col-xs-5
+                  .form-group
+                    = f.select :categoria_id_eq_any,
+                                Categoria.agrupado.map{ |c| [c.nombre, c.id, {'data-espadre' => c.categoria_padre_id}] },
+                                {include_blank: 'Todas las categorías...'},
+                                class: 'form-control',
+                                id: 'mercaderias_categorias_buscador'
+          #mercaderias-table.overlay-wrapper.buscador-resultados
+            = render partial: 'mercaderias/list', locals: {mercaderias: @mercaderias}
+          #mercaderias-paginate-container
+            = paginate @mercaderias, remote: true
     .col-xs-4
       = render template: 'categorias/index', locals: {categorias: @categorias}
+javascript:
+  MercaderiasUI.recargarCategoriaFiltro();

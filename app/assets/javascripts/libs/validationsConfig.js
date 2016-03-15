@@ -18,6 +18,8 @@ jQuery.validator.setDefaults({
             element.closest('.form-group').append(error);
         }else if(element.parents('.input-group').length > 0){
             element.parents('.input-group').after(error);
+        }else if(element.parents('.select').length > 0){ // Para select2
+            element.parents('.select').append(error);
         }else{
             error.insertAfter(element);
         }

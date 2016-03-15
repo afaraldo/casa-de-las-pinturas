@@ -5,8 +5,9 @@
 // Variables
 @import "variables";
 
-// Fontawesome
+// Librerias
 @import "libs/fontawesome/font-awesome";
+@import "libs/select2";
 
 // AdminLTE
 @import "adminlte/AdminLTE";
@@ -14,4 +15,5 @@
 
 @import "common/forms";
 @import "components/*";
+@import "modules/*";
 

@@ -1,0 +1,10 @@
+.select2-results{
+  span{
+    &.parent-categoria{
+      font-weight: 500;
+    }
+    &.subcategoria{
+      margin-left: 20px;
+    }
+  }
+}

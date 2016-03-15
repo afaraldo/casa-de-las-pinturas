@@ -1,0 +1,17 @@
+table.table.table-bordered
+  thead
+    tr
+      th Código
+      th Nombre
+      th Categoría
+      th
+  tbody
+    - mercaderias.each do |m|
+      tr
+        td = m.codigo
+        td = m.nombre
+        td = m.categoria_nombre
+        td.text-right
+          = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_mercaderia_path(m), remote: true, class: 'btn btn-default btn-sm'
+          | #{' '}
+          = link_to ' <i class="fa fa-trash"></i>'.html_safe, mercaderia_path(m), method: 'delete', data: {confirm: "¿Desea eliminar la mercaderia #{m.nombre}?"}, remote: true, class: 'btn btn-danger btn-sm'
