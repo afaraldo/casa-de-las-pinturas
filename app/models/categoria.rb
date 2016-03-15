@@ -3,9 +3,11 @@ class Categoria < ActiveRecord::Base
   acts_as_paranoid
 
   before_destroy :check_subcategorias
+  before_destroy :check_mercaderias
 
   has_many :subcategorias, class_name: 'Categoria',
            foreign_key: 'categoria_padre_id'
+  has_many :mercaderias
   belongs_to :padre, class_name: 'Categoria',
              foreign_key: 'categoria_padre_id'
 
@@ -34,7 +36,14 @@ class Categoria < ActiveRecord::Base
   # si tiene subcategorias no se puede eliminar
   def check_subcategorias
     if subcategorias.size > 0
-      errors.add(:base, "No se puede eliminar la categoria porque posee subcategorias.")
+      errors.add(:base, I18n.t("categoria.tiene_subcategorias_error"))
+      false
+    end
+  end
+
+  def check_mercaderias
+    if mercaderias.size > 0
+      errors.add(:base, I18n.t("categoria.mercaderias_dependientes_error"))
       false
     end
   end
