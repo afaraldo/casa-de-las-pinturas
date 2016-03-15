@@ -25,9 +25,9 @@
 //= require ./libs/select2/select2.js
 //= require ./libs/select2/i18n/es.js
 //= require ./libs/jquery.inputmask.bundle.js
+//= require ./libs/libs.defaults.js
 //= require_tree ./helpers
 //= require_tree ./modules
-
 
 // Reference: http://viget.com/inspire/extending-paul-irishs-comprehensive-dom-ready-execution
 CasaDeLasPinturas = {
@@ -56,6 +56,10 @@ CasaDeLasPinturas = {
                 setTimeout(function() {
                     $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
                 }, 0);
+            });
+            // fix para modal estatico
+            $(document).on('hidden.bs.modal', '.modal', function () {
+                $('.modal:visible').length && $(document.body).addClass('modal-open');
             });
 
         }
