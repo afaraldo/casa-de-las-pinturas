@@ -35,6 +35,10 @@ var MercaderiasUI = (function(){
 
             recargarCategorias();
 
+            // Encascarar campos numericos
+            NumberHelper.mascaraCantidad('.maskCantidad');
+            NumberHelper.mascaraMoneda('.maskMoneda');
+
             // Validate form
             var form = $('#mercaderia-form');
             form.validate();

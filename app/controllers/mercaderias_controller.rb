@@ -97,9 +97,15 @@ class MercaderiasController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def mercaderia_params
+    procesar_cantidades
     params.require(:mercaderia).permit(:codigo, :nombre, :categoria_id, :costo,
-                                       :unidad_de_medida, :precio_venta_contado,
+                                       :unidad_de_medida, :precio_venta_contado, :stock, :stock_minimo,
                                        :precio_venta_credito, :descripcion)
   end
 
+  # reemplazar las comas por puntos en el caso de las cantidades decimales
+  def procesar_cantidades
+    params[:mercaderia][:stock] = cantidad_a_numero(params[:mercaderia][:stock])
+    params[:mercaderia][:stock_minimo] = cantidad_a_numero(params[:mercaderia][:stock_minimo])
+  end
 end
