@@ -5,3 +5,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+Configuracion.create(empresa_nombre:'Casa de las pinturas', 
+	empresa_direccion:'Avda. Caballero c/ Carlos A. Lopez', 
+	empresa_telefono:'071-203917',
+	empresa_email:'lcdpt@info.com')

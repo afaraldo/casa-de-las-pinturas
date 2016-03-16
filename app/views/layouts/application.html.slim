@@ -19,7 +19,7 @@ html
                 li
                   = link_to "Proveedores", proveedores_path
                 li
-                  = link_to "Configuraciones", edit_configuracion_path
+                  = link_to "Configuraciones", edit_configuracion_path("1")
               ul.nav.navbar-nav.navbar-right
                 li.dropdown
                   a.dropdown-toggle data-toggle="dropdown" href="#"
@@ -39,7 +39,8 @@ html
             li
               a
                 span Menu 2
-      .content-wrapper
+              img alt="90%x300" style="height:100px; width: 50%; display: block;"  class="img-thumbnail"
+      .content-wrapper 
         == yield
       footer.main-footer
         .pull-right.hidden-xs
