@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-
-
   devise_for :users
 
   get 'welcome/index'
@@ -13,6 +11,7 @@ Rails.application.routes.draw do
   resources :categorias
 
   get 'mercaderias/check_codigo' => 'mercaderias#check_codigo'
+  get 'mercaderias/buscar' => 'mercaderias#buscar'
   resources :mercaderias
 
   resources :movimiento_mercaderias

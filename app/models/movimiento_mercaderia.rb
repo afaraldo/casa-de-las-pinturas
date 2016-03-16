@@ -4,7 +4,7 @@ class MovimientoMercaderia < ActiveRecord::Base
 
   has_many :detalles, class_name: 'MovimientoMercaderiaDetalle', dependent: :destroy
 
-  accepts_nested_attributes_for :detalles
+  accepts_nested_attributes_for :detalles, reject_if: :all_blank, allow_destroy: true
 
   enumerize :tipo, in: [:ingreso, :egreso], predicates: true
 
@@ -12,5 +12,6 @@ class MovimientoMercaderia < ActiveRecord::Base
 
   validates :fecha,  presence: true
   validates :motivo, presence: true, length: {maximum: 255, minimum: 2}
+  validates :tipo,   presence: true
 
 end

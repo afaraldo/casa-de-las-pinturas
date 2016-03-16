@@ -1,14 +1,29 @@
-= simple_form_for movimiento, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+= simple_form_for movimiento, html: { id: 'movimiento-mercaderia-form', class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
   = f.error_notification
   .row
     .col-xs-6
-      = f.input :fecha
+      = f.input :fecha, as: :string, input_html: { class: 'datepicker' }
       = f.input :motivo
-      = f.input :tipo
+      = f.input :tipo, as: :radio_buttons, wrapper: :horizontal_radio_and_checkboxes
+  .links.text-right
+    = link_to_add_association '<i class="fa fa-plus"></i> Agregar mercaderia'.html_safe, f, :detalles, class: 'btn btn-default',
+                                'data-association-insertion-node' => '#movimiento-detalles-body',
+                                'data-association-insertion-method' => 'append'
+  table.table.table-bordered
+    thead
+      tr
+        td Código
+        td Mercaderia
+        td Cantidad
+        td
+    tbody#movimiento-detalles-body
+      = f.simple_fields_for :detalles do |detalle|
+        = render 'detalle_fields', f: detalle
 
-  = f.simple_fields_for :detalles do |detalle|
-    = render 'detalle_fields', f: detalle
-  .links
-    = link_to_add_association 'Agregar detalle', f, :detalles
+  .text-right.form-actions
+    a.btn.btn-default href="#" Cancelar
+    | #{' '}
+    button.btn.btn-primary type="submit" Guardar movimiento
 
-  = f.button :submit
+javascript:
+  MovimientoMercaderiasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");

@@ -1,5 +1,8 @@
-.nested-fields
-  .form-inline
-    = f.input :mercaderia_id
-    = f.input :cantidad
-    = link_to_remove_association "x", f
+tr.nested-fields
+  td.codigo-celda
+  td
+    = f.select :mercaderia_id, [], {}, { class: 'form-control mercaderia-select' }
+  td
+    = f.text_field :cantidad, class: 'form-control maskCantidad'
+  td
+    = link_to_remove_association '<i class="fa fa-times"></i>'.html_safe, f, class: 'btn btn-default btn-sm'

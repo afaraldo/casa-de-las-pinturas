@@ -1,6 +1,6 @@
 class MovimientoMercaderiasController < ApplicationController
   before_action :set_movimiento_mercaderia, only: [:show, :edit, :update, :destroy]
-  before_action :setup_menu, only: [:index]
+  before_action :setup_menu, only: [:index, :new, :edit, :show]
 
   # configuracion del menu
   def setup_menu
@@ -31,15 +31,15 @@ class MovimientoMercaderiasController < ApplicationController
   # POST /movimiento_mercaderias
   # POST /movimiento_mercaderias.json
   def create
-    @movimiento_mercaderia = MovimientoMercaderia.new(movimiento_mercaderia_params)
+    @movimiento = MovimientoMercaderia.new(movimiento_mercaderia_params)
 
     respond_to do |format|
-      if @movimiento_mercaderia.save
-        format.html { redirect_to @movimiento_mercaderia, notice: 'Movimiento mercaderia was successfully created.' }
-        format.json { render :show, status: :created, location: @movimiento_mercaderia }
+      if @movimiento.save
+        format.html { redirect_to @movimiento, notice: 'Movimiento mercaderia was successfully created.' }
+        format.json { render :show, status: :created, location: @movimiento }
       else
         format.html { render :new }
-        format.json { render json: @movimiento_mercaderia.errors, status: :unprocessable_entity }
+        format.json { render json: @movimiento.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -81,6 +81,7 @@ class MovimientoMercaderiasController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def movimiento_mercaderia_params
-      params.require(:movimiento_mercaderia).permit(:fecha, :motivo, :tipo)
+      params.require(:movimiento_mercaderia).permit(:fecha, :motivo, :tipo,
+                                                    detalles_attributes: [:mercaderia_id, :cantidad, :_destroy])
     end
 end

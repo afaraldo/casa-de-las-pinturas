@@ -8,6 +8,12 @@ class MercaderiasController < ApplicationController
     @menu_setup[:side_menu] = :mercaderias_sidemenu
   end
 
+  # buscador de mercaderias
+  def buscar
+    get_mercaderias
+    render json: {items: @mercaderias, total_count: @mercaderias.total_count}
+  end
+
   def index
     get_mercaderias
     get_categorias

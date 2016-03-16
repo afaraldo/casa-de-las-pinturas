@@ -8,10 +8,10 @@ table.table.table-bordered
   tbody
     - @movimientos.each do |movimiento|
       tr
-        td = movimiento.fecha
+        td = localize(movimiento.fecha.to_date)
         td = movimiento.motivo
         td = movimiento.tipo
-        td
+        td.text-right
           = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_movimiento_mercaderia_path(movimiento), remote: true, class: 'btn btn-default btn-sm'
           | #{' '}
-          = link_to ' <i class="fa fa-trash"></i>'.html_safe, movimiento_mercaderia(movimiento), method: 'delete', data: {confirm: "¿Desea eliminar el movimiento?"}, remote: true, class: 'btn btn-danger btn-sm'
+          = link_to ' <i class="fa fa-trash"></i>'.html_safe, movimiento_mercaderia_path(movimiento), method: 'delete', data: {confirm: "¿Desea eliminar el movimiento?"}, remote: true, class: 'btn btn-danger btn-sm'
