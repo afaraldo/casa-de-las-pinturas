@@ -7,6 +7,9 @@ es:
       user:
         username: "Nombre de usuario"
         password: "Contraseña"
+        email: "Correo electrónico"
+      empleado:
+        user: "Usuario"
     errors:
       messages:
         record_invalid: "La validación falló: %{errors}"
