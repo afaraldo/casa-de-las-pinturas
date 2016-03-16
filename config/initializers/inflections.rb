@@ -11,6 +11,8 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'proveedor', 'proveedores'
   inflect.irregular 'categoria', 'categorias'
   inflect.irregular 'mercaderia', 'mercaderias'
+  inflect.irregular 'movimiento_mercaderia', 'movimiento_mercaderias'
+  inflect.irregular 'movimiento_mercaderia_detalle', 'movimiento_mercaderia_detalles'
 end
 
 # These inflection rules are supported but not enabled by default:

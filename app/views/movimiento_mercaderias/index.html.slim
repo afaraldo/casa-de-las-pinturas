@@ -1,0 +1,15 @@
+section.content-header
+  h1 Stock
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Movimientos de mercaderías
+          .box-tools.pull-right
+            = link_to 'Nuevo movimiento', new_movimiento_mercaderia_path, class: 'btn btn-primary'
+        .box-body#movimiento-mercaderias-lista
+          #movimiento-mercaderias-table.overlay-wrapper.buscador-resultados
+            = render partial: 'movimiento_mercaderias/list', locals: {movimientos: @movimientos}
+          #movimiento-mercaderias-paginate-container
+            = paginate @movimientos, remote: true

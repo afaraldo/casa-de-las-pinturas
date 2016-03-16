@@ -1,0 +1,10 @@
+section.content-header
+  h1 Stock
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Nuevo Movimiento de Mercadería
+        .box-body
+          = render partial: 'form', format: :html, locals: {movimiento: @movimiento}

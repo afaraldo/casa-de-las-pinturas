@@ -26,6 +26,7 @@
 //= require ./libs/select2/i18n/es.js
 //= require ./libs/jquery.inputmask.bundle.js
 //= require ./libs/libs.defaults.js
+//= require cocoon
 //= require_tree ./helpers
 //= require_tree ./modules
 

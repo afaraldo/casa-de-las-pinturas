@@ -1,0 +1,18 @@
+p#notice = notice
+
+p
+  strong Fecha:
+  = @movimiento_mercaderia.fecha
+p
+  strong Motivo:
+  = @movimiento_mercaderia.motivo
+p
+  strong Tipo:
+  = @movimiento_mercaderia.tipo
+p
+  strong Deleted at:
+  = @movimiento_mercaderia.deleted_at
+
+= link_to 'Edit', edit_movimiento_mercaderia_path(@movimiento_mercaderia)
+'|
+= link_to 'Back', movimiento_mercaderias_path

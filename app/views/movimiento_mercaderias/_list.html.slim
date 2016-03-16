@@ -1,0 +1,17 @@
+table.table.table-bordered
+  thead
+    tr
+      th Fecha
+      th Motivo
+      th Tipo
+      th
+  tbody
+    - @movimientos.each do |movimiento|
+      tr
+        td = movimiento.fecha
+        td = movimiento.motivo
+        td = movimiento.tipo
+        td
+          = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_movimiento_mercaderia_path(movimiento), remote: true, class: 'btn btn-default btn-sm'
+          | #{' '}
+          = link_to ' <i class="fa fa-trash"></i>'.html_safe, movimiento_mercaderia(movimiento), method: 'delete', data: {confirm: "¿Desea eliminar el movimiento?"}, remote: true, class: 'btn btn-danger btn-sm'
