@@ -1,6 +1,12 @@
 ---
 es:
   activerecord:
+    models:
+      user: "Usuario"
+    attributes:
+      user:
+        name: "Nombre de usuario"
+        password: "Contraseña"
     errors:
       messages:
         record_invalid: "La validación falló: %{errors}"
