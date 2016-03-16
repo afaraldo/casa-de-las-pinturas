@@ -5,7 +5,7 @@ es:
       user: "Usuario"
     attributes:
       user:
-        name: "Nombre de usuario"
+        username: "Nombre de usuario"
         password: "Contraseña"
     errors:
       messages:

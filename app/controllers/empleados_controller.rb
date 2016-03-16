@@ -15,60 +15,70 @@ class EmpleadosController < ApplicationController
   # GET /empleados/new
   def new
     @empleado = Empleado.new
+    @user = @empleado.build_user
+    render 'load_form', format: :js
   end
 
   # GET /empleados/1/edit
   def edit
+    render 'load_form', format: :js
   end
 
   # POST /empleados
   # POST /empleados.json
   def create
-    @empleado = Empleado.new(empleado_params)
-
-    respond_to do |format|
-      if @empleado.save
-        format.html { redirect_to @empleado, notice: 'Empleado was successfully created.' }
-        format.json { render :show, status: :created, location: @empleado }
-      else
-        format.html { render :new }
-        format.json { render json: @empleado.errors, status: :unprocessable_entity }
-      end
+    @empleado = Empleado.create(empleado_params)
+    if @empleado
+      @error = false
+      @message = "Se ha guardado el empleado"
+      @empleados = Empleado.all
+    else
+      @error = true
+      @message = "Ha ocurrido un problema al tratar de guardar el empleado. #{@empleado.errors.full_messages.to_sentence}"
     end
+
+    render 'reload_list', format: :js
   end
 
   # PATCH/PUT /empleados/1
   # PATCH/PUT /empleados/1.json
   def update
-    respond_to do |format|
-      if @empleado.update(empleado_params)
-        format.html { redirect_to @empleado, notice: 'Empleado was successfully updated.' }
-        format.json { render :show, status: :ok, location: @empleado }
-      else
-        format.html { render :edit }
-        format.json { render json: @empleado.errors, status: :unprocessable_entity }
-      end
+    if @empleado.update(empleado_params)
+      @error = false
+      @message = "Se ha guardado el empleado"
+      @empleados = Empleado.all
+    else
+      @error = true
+      @message = "Ha ocurrido un problema al tratar de guardar el empleado. #{@empleado.errors.full_messages.to_sentence}"
     end
+
+    render 'reload_list', format: :js
   end
 
   # DELETE /empleados/1
   # DELETE /empleados/1.json
   def destroy
-    @empleado.destroy
-    respond_to do |format|
-      format.html { redirect_to empleados_url, notice: 'Empleado was successfully destroyed.' }
-      format.json { head :no_content }
+    if @empleado.destroy
+      @error = false
+      @message = "Se ha eliminado el empleado"
+      @empleados = Empleado.all
+    else
+      @error = true
+      @message = "Ha ocurrido un problema al tratar de eliminar el empleado"
     end
+
+    render 'reload_list', format: :js
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_empleado
       @empleado = Empleado.find(params[:id])
+      @user = @empleado.user
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def empleado_params
-      params.require(:empleado).permit(:nombre, :telefono, :direccion, :ruc)
+      params.require(:empleado).permit(:nombre, :telefono, :direccion, :ruc, { user_attributes: [ :id, :username, :email, :password, :password_confirmation] })
     end
 end

@@ -7,6 +7,6 @@ section.content
         .box-header
           h3.box-title Listado de Usuarios
           .box-tools.pull-right
-            = link_to 'Nuevo Usuario', new_user_path, class: 'btn btn-primary', remote: true
+            = link_to 'Nuevo Usuario', new_empleado_path, class: 'btn btn-primary', remote: true
         .box-body#users-lista
-          = render partial: 'users/list', locals: {personas: @personas, users: @users}
+          = render partial: 'empleados/list', locals: {empleados:@empleados}

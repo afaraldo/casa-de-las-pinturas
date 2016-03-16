@@ -1,9 +1,9 @@
-var UsersUI = (function(){
+var EmpleadosUI = (function(){
     return {
         initFormEvents: function() {
             console.log('validation run');
             // Validate form
-            $('#user-form').validate();
+            $('#empleado-form').validate();
         }
     };
 

@@ -6,11 +6,11 @@ table.table.table-bordered
       th Direccion
       th
   tbody
-    - personas.each do |user|
+    - empleados.each do |empleado|
       tr
-        td = user.nombre
-        td = user.telefono
-        td = user.direccion
+        td = empleado.nombre
+        td = empleado.telefono
+        td = empleado.direccion
         td
-          = link_to '<i class="fa fa-edit"></i> '.html_safe, edit_user_path(user), remote: true, class: 'btn btn-default btn-sm'
-          = link_to ' <i class="fa fa-trash"></i>'.html_safe, user_path(user), method: 'delete', data: {confirm: "¿Desea eliminar el user #{user.nombre}?"}, remote: true, class: 'btn btn-danger btn-sm'
+          = link_to '<i class="fa fa-edit"></i> '.html_safe, edit_empleado_path(empleado), remote: true, class: 'btn btn-default btn-sm'
+          = link_to ' <i class="fa fa-trash"></i>'.html_safe, empleado_path(empleado), method: 'delete', data: {confirm: "¿Desea eliminar el user #{empleado.nombre}?"}, remote: true, class: 'btn btn-danger btn-sm'

@@ -4,4 +4,4 @@
 - else
   | noty({type: "success", text : "#{@message}"});
   | modal.modal('hide');
-  | $('#user-lista').html("#{escape_javascript(render partial: 'list', locals: {persona: @persona, user: @user})}");
+  | $('#users-lista').html("#{escape_javascript(render partial: 'list', locals: {empleados: @empleados})}");
