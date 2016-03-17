@@ -2,7 +2,7 @@
 	.login-box
 	  .login-logo
 	  .login-box-body
-	  	h3 Ingresar al Sistema
+	  	h3.text-center Ingresar al Sistema
 	  	br
 	  	.form-groups.has-feedback
 	  		= f.text_field :username, required: false, placeholder: "Nombre de Usuario", class: "form-control", autofocus: true
@@ -14,7 +14,7 @@
 	  		br
 	  		.row
 	  			.col-xs-8
-	  				= f.input :remember_me, as: :boolean if devise_mapping.rememberable?
+	  				= f.input :remember_me, label: 'Recordarme', as: :boolean if devise_mapping.rememberable?
 	  			.col-xs-4
 	  				.form-actions
 	  					br
