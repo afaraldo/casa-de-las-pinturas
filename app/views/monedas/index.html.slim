@@ -1,27 +1,22 @@
-h1 Listing monedas
-
-table
-  thead
-    tr
-      th Nombre
-      th Abreviatura
-      th Cotizacion
-      th Defecto
-      th
-      th
-      th
-
-  tbody
-    - @monedas.each do |moneda|
-      tr
-        td = moneda.nombre
-        td = moneda.abreviatura
-        td = moneda.cotizacion
-        td = moneda.defecto
-        td = link_to 'Show', moneda
-        td = link_to 'Edit', edit_moneda_path(moneda)
-        td = link_to 'Destroy', moneda, data: {:confirm => 'Are you sure?'}, :method => :delete
-
-br
-
-= link_to 'New Moneda', new_moneda_path
+section.content-header
+  h1 Cajas
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Listado de Monedas
+          .box-tools.pull-right
+            = link_to 'Nueva moneda', new_moneda_path, class: 'btn btn-primary', remote: true
+        .box-body#monedas-lista
+          #moneda-search.buscador-listado
+            = search_form_for @search, remote: true, class: 'remote-search' do |f|
+              .input-group
+                = f.text_field :nombre_or_abreviatura_cont, class: 'form-control', placeholder: 'Buscar por nombre o abreviatura.'
+                .input-group-btn
+                  button.btn.btn-default type="submit" name="commit"
+                    i.fa.fa-search
+          #monedas-table.overlay-wrapper.buscador-resultados
+            = render partial: 'monedas/list', locals: {monedas: @monedas}
+          #paginate-container
+            = paginate @monedas, remote: true

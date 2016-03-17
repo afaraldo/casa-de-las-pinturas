@@ -1,0 +1,3 @@
+| $("#monedas-table").html("#{escape_javascript(render partial: 'list', format: 'html', locals: {monedas: @monedas})}");
+| $('#paginate-container').html("#{escape_javascript(paginate(@monedas, remote: true)) }");
+| $('.buscador-resultados > .overlay').remove();

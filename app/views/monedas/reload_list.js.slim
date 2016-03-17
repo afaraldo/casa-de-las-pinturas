@@ -1,0 +1,8 @@
+| var modal = $('#main-modal');
+- if @error
+  | noty({type: "error", text : "#{@message}"});
+- else
+  | noty({type: "success", text : "#{@message}"});
+  | modal.modal('hide');
+  | $('#monedas-table').html("#{escape_javascript(render partial: 'list', locals: {monedas: @monedas})}");
+  | $('#paginate-container').html("#{escape_javascript(paginate(@monedas, params: {controller: :monedas, action: :index}, remote: true)) }");
