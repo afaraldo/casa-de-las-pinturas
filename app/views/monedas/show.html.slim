@@ -1,0 +1,18 @@
+p#notice = notice
+
+p
+  strong Nombre:
+  = @moneda.nombre
+p
+  strong Abreviatura:
+  = @moneda.abreviatura
+p
+  strong Cotizacion:
+  = @moneda.cotizacion
+p
+  strong Defecto:
+  = @moneda.defecto
+
+= link_to 'Edit', edit_moneda_path(@moneda)
+'|
+= link_to 'Back', monedas_path

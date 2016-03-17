@@ -18,3 +18,7 @@
 
 # ignore ide folder
 .idea/*
+.rvmrc
+
+/Gemfile.lock
+/db/schema.rb

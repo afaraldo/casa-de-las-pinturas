@@ -1,0 +1,27 @@
+h1 Listing monedas
+
+table
+  thead
+    tr
+      th Nombre
+      th Abreviatura
+      th Cotizacion
+      th Defecto
+      th
+      th
+      th
+
+  tbody
+    - @monedas.each do |moneda|
+      tr
+        td = moneda.nombre
+        td = moneda.abreviatura
+        td = moneda.cotizacion
+        td = moneda.defecto
+        td = link_to 'Show', moneda
+        td = link_to 'Edit', edit_moneda_path(moneda)
+        td = link_to 'Destroy', moneda, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Moneda', new_moneda_path

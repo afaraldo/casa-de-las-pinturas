@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
 
+  resources :monedas
+
   devise_for :users
 
   get 'proveedores/check_nombre' => 'proveedores#check_nombre'
