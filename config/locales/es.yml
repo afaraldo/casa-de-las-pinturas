@@ -1,5 +1,24 @@
 ---
 es:
+  views:
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      previous: "&lsaquo;"
+      next: "&rsaquo;"
+      truncate: "&hellip;"
+  simple_form:
+    labels:
+      proveedor:
+        numero_documento: 'RUC/CI'
+  proveedor:
+    unique_nombre_error: "Ya existe un proveedor con el nombre %{nombre}"
+  categoria:
+    unique_nombre_error: "Ya existe una categoría con el nombre %{nombre}"
+    tiene_subcategorias_error: "No se puede eliminar la categoria porque posee subcategorias"
+    mercaderias_dependientes_error: "No se puede eliminar la categoria porque hay mercaderias que dependen de ella"
+  mercaderia:
+    unique_codigo_error: "Ya existe una mercadería con el código %{codigo}"
   activerecord:
     errors:
       messages:
@@ -7,6 +26,11 @@ es:
         restrict_dependent_destroy:
           has_one: No se puede eliminar el registro porque existe un %{record} dependiente
           has_many: No se puede eliminar el registro porque existen %{record} dependientes
+  mensajes:
+    save_success: "Se ha guardado %{recurso}"
+    save_error: "Ha ocurrido un problema al tratar de guardar %{recurso}. %{errores}"
+    delete_success: "Se ha eliminado %{recurso}"
+    delete_error: "Ha ocurrido un problema al tratar de eliminar %{recurso}. %{errores}"
   date:
     abbr_day_names:
     - dom
@@ -152,18 +176,18 @@ es:
     currency:
       format:
         delimiter: "."
-        format: "%n %u"
-        precision: 2
+        format: "%u %n"
+        precision: 0
         separator: ","
         significant: false
         strip_insignificant_zeros: false
-        unit: "€"
+        unit: "Gs."
     format:
       delimiter: "."
       precision: 3
       separator: ","
       significant: false
-      strip_insignificant_zeros: false
+      strip_insignificant_zeros: true
     human:
       decimal_units:
         format: "%n %u"

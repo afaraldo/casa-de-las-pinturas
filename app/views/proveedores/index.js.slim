@@ -1,0 +1,3 @@
+| $("#proveedores-table").html("#{escape_javascript(render partial: 'list', format: 'html', locals: {proveedores: @proveedores})}");
+| $('#paginate-container').html("#{escape_javascript(paginate(@proveedores, remote: true)) }");
+| $('.buscador-resultados > .overlay').remove();

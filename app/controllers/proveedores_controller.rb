@@ -1,10 +1,17 @@
 class ProveedoresController < ApplicationController
   before_action :set_proveedor, only: [:show, :edit, :update, :destroy]
+  before_action :setup_menu, only: [:index]
+
+  # configuracion del menu
+  def setup_menu
+    @menu_setup[:main_menu] = :compras
+    @menu_setup[:side_menu] = :proveedores_sidemenu
+  end
 
   # GET /proveedores
   # GET /proveedores.json
   def index
-    @proveedores = Proveedor.all
+    get_proveedores
   end
 
   # GET /proveedores/1
@@ -31,7 +38,7 @@ class ProveedoresController < ApplicationController
     if @proveedor.save
       @error = false
       @message = "Se ha guardado el proveedor"
-      @proveedores = Proveedor.all
+      get_proveedores
     else
       @error = true
       @message = "Ha ocurrido un problema al tratar de guardar el proveedor. #{@proveedor.errors.full_messages.to_sentence}"
@@ -47,7 +54,7 @@ class ProveedoresController < ApplicationController
     if @proveedor.update(proveedor_params)
       @error = false
       @message = "Se ha guardado el proveedor"
-      @proveedores = Proveedor.all
+      get_proveedores
     else
       @error = true
       @message = "Ha ocurrido un problema al tratar de guardar el proveedor. #{@proveedor.errors.full_messages.to_sentence}"
@@ -63,13 +70,25 @@ class ProveedoresController < ApplicationController
     if @proveedor.destroy
       @error = false
       @message = "Se ha eliminado el proveedor"
-      @proveedores = Proveedor.all
+      get_proveedores
     else
       @error = true
       @message = "Ha ocurrido un problema al tratar de eliminar el proveedor"
     end
 
     render 'reload_list', format: :js
+  end
+
+  # Comprobar si ya existe el proveedor con el nombre dado
+  def check_nombre
+    proveedor = Proveedor.by_nombre(params[:nombre]).first
+
+    render json: (proveedor.nil? || proveedor.id == params[:id].to_i) ? true : t('proveedor.unique_nombre_error', nombre: params[:nombre]).to_json
+  end
+
+  def get_proveedores
+    @search = Proveedor.search(params[:q])
+    @proveedores = @search.result.page(params[:page])
   end
 
   private
@@ -80,6 +99,6 @@ class ProveedoresController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def proveedor_params
-      params.require(:proveedor).permit(:nombre, :direccion, :ruc, :telefono, :limite_credito)
+      params.require(:proveedor).permit(:nombre, :direccion, :numero_documento, :telefono, :limite_credito)
     end
 end

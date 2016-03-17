@@ -1,0 +1,3 @@
+| $("#categorias-table").html("#{escape_javascript(render partial: 'list', format: 'html', locals: {categorias: @categorias})}");
+| $('#categorias-paginate-container').html("#{escape_javascript(paginate(@categorias, remote: true)) }");
+| $('.buscador-resultados > .overlay').remove();

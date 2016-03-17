@@ -12,7 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
 //= require i18n
 //= require i18n/translations
 //= require ./libs/bootstrap.min.js
@@ -20,49 +19,61 @@
 //= require ./libs/jquery.validation/jquery.validate.js
 //= require ./libs/jquery.validation/additional-methods.js
 //= require ./libs/jquery.validation/messages_es_AR.js
+//= require ./libs/validationsConfig.js
 //= require ./libs/jquery.noty.packaged.js
+//= require ./libs/jquery.noty.defaults.js
+//= require ./libs/select2/select2.js
+//= require ./libs/select2/i18n/es.js
+//= require ./libs/jquery.inputmask.bundle.js
+//= require ./libs/libs.defaults.js
+//= require_tree ./helpers
 //= require_tree ./modules
-
-$.noty.defaults = {
-    layout: 'topRight',
-    theme: 'defaultTheme',
-    type: 'alert',
-    text: '', // can be html or string
-    dismissQueue: true, // If you want to use queue feature set this true
-    template: '<div class="noty_message"><span class="noty_text"></span><div class="noty_close"></div></div>',
-    animation: {
-        open: {height: 'toggle'},
-        close: {height: 'toggle'},
-        easing: 'swing',
-        speed: 500 // opening & closing animation speed
-    },
-    timeout: 5000, // delay for closing event. Set false for sticky notifications
-    force: false, // adds notification to the beginning of queue when set to true
-    modal: false,
-    maxVisible: 5, // you can set max visible notification for dismissQueue true option,
-    killer: false, // for close all notifications before show
-    closeWith: ['click'], // ['click', 'button', 'hover']
-    callback: {
-        onShow: function() {},
-        afterShow: function() {},
-        onClose: function() {},
-        afterClose: function() {}
-    },
-    buttons: false // an array of buttons
-};
-
 
 // Reference: http://viget.com/inspire/extending-paul-irishs-comprehensive-dom-ready-execution
 CasaDeLasPinturas = {
     common: {
         init: function() {
-            // application-wide code
 
+            // Delay para buscar en tiempo real
+            $('.remote-search').on('keyup change', 'input, select', function (event) {
+                if(event.type === 'change' && this.type === 'text') // Evitar que se haga la busqueda al hacer tab
+                    return false;
+
+                var form = $(this).parents('form');
+                delay(function () {
+                    // agregar icono de "recargando"
+                    var buscadorLista = form.parents('.buscador-listado').next('.buscador-resultados');
+                    buscadorLista.append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+                    // Enviar formulario
+                    form.submit();
+                }, 500);
+            });
+
+            // Para tener varios modals abiertos al mismo tiempo
+            $(document).on('show.bs.modal', '.modal', function (event) {
+                var zIndex = 1040 + (10 * $('.modal:visible').length);
+                $(this).css('z-index', zIndex);
+                setTimeout(function() {
+                    $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+                }, 0);
+            });
+            // fix para modal estatico
+            $(document).on('hidden.bs.modal', '.modal', function () {
+                $('.modal:visible').length && $(document.body).addClass('modal-open');
+            });
 
         }
     }
 
 };
+
+var delay = (function(){
+    var timer = 0;
+    return function(callback, ms){
+        clearTimeout (timer);
+        timer = setTimeout(callback, ms);
+    };
+})();
 
 UTIL = {
     exec: function( controller, action ) {

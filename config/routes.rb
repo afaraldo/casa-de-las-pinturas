@@ -1,8 +1,16 @@
 Rails.application.routes.draw do
 
+
   devise_for :users
 
+  get 'proveedores/check_nombre' => 'proveedores#check_nombre'
   resources :proveedores
+
+  get 'categorias/check_nombre' => 'categorias#check_nombre'
+  resources :categorias
+
+  get 'mercaderias/check_codigo' => 'mercaderias#check_codigo'
+  resources :mercaderias
 
   get 'welcome/index'
   get "logout" => "sessions#destroy", :as => "logout"
