@@ -50,7 +50,10 @@ end
   end
 }
 
-Configuracion.create(empresa_nombre:'Casa de las pinturas', 
-	empresa_direccion:'Avda. Caballero c/ Carlos A. Lopez', 
-	empresa_telefono:'071-203917',
-	empresa_email:'lcdpt@info.com')
+# Crear configuraciones si no existe
+if Configuracion.first.nil?
+  Configuracion.create( empresa_nombre:'Casa de las pinturas',
+                        empresa_direccion:'Avda. Caballero c/ Carlos A. Lopez',
+                        empresa_telefono:'071-203917',
+                        empresa_email:'lcdpt@info.com')
+end
