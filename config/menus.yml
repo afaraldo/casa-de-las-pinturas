@@ -28,7 +28,7 @@ menu:
     submenus:
       inventario:
         text: "Inventario"
-        url: ":inventarios"
+        url: :inventarios
         active_submenu: :inventario_sidemenu
       mercaderias:
         text: "Mercaderias"
