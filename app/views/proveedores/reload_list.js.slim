@@ -1,7 +1,8 @@
 | var modal = $('#main-modal');
 - if @error
-  | noty({type: "danger", text : "#{@message}"});
+  | noty({type: "error", text : "#{@message}"});
 - else
   | noty({type: "success", text : "#{@message}"});
   | modal.modal('hide');
-  | $('#proveedores-lista').html("#{escape_javascript(render partial: 'list', locals: {proveedores: @proveedores})}");
+  | $('#proveedores-table').html("#{escape_javascript(render partial: 'list', locals: {proveedores: @proveedores})}");
+  | $('#paginate-container').html("#{escape_javascript(paginate(@proveedores, params: {controller: :proveedores, action: :index}, remote: true)) }");

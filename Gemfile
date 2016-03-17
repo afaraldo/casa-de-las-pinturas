@@ -17,15 +17,25 @@ gem 'uglifier', '>= 1.3.0'
 gem 'slim'
 gem "slim-rails"
 
+# paginador
+gem 'kaminari'
+
+# buscador
+gem 'ransack'
+
 # para formularios
 gem 'simple_form'
 
 # enums
 gem 'enumerize'
 
+# para borrado ocioso
+gem "paranoia", "~> 2.0"
+
 # internacionalizacion del lado del cliente
 gem "i18n-js", ">= 3.0.0.rc11"
 
+gem 'devise'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -43,6 +53,10 @@ gem 'tzinfo-data'
 
 # See https://github.com/carrierwaveuploader/carrierwave
 gem 'carrierwave'
+
+# Para cargar datos de pruebas
+gem 'fabrication'
+gem 'faker'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -66,5 +80,7 @@ end
 
 group :development do
   gem 'better_errors'
+
+  gem "rails_best_practices"
 end
 

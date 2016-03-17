@@ -11,20 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160315155219) do
+ActiveRecord::Schema.define(version: 20160307165248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "configuraciones", force: :cascade do |t|
-    t.string   "empresa_nombre"
-    t.string   "empresa_direccion"
-    t.string   "empresa_telefono"
-    t.string   "empresa_email"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.string   "avatar"
-  end
 
   create_table "personas", force: :cascade do |t|
     t.string   "nombre"
@@ -35,6 +25,9 @@ ActiveRecord::Schema.define(version: 20160315155219) do
     t.decimal  "limite_credito"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.datetime "deleted_at"
   end
+
+  add_index "personas", ["deleted_at"], name: "index_personas_on_deleted_at", using: :btree
 
 end
