@@ -9,7 +9,8 @@
     .col-xs-5
       = f.input :empresa_email, label: 'Email'
     .col-xs-5
-      = f.file_field :avatars, multiple: true
+      = image_tag(@configuracion.avatar.to_s,:width => 90, :height => 80)
+      = f.input :avatar, :as => :file, :label => "Subir Imagen"
     .col-xs-12
       input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
 

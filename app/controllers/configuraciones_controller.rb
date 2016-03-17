@@ -4,6 +4,17 @@ class ConfiguracionesController < ApplicationController
   # GET /configuraciones/1/edit
   def edit
   end
+  def show
+  end
+
+  def upload_file(file)
+  # Declaring
+    uploader = FileUploader.new
+  # Upload it
+    uploader.store!(file)
+
+    return uploader.url
+  end
 
   # PATCH/PUT /configuraciones/1
   # PATCH/PUT /configuraciones/1.json
@@ -28,6 +39,6 @@ class ConfiguracionesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def configuracion_params
-      params.require(:configuracion).permit(:empresa_nombre, :logo, :empresa_direccion, :empresa_telefono, :empresa_email)
+      params.require(:configuracion).permit(:empresa_nombre, :logo, :empresa_direccion, :empresa_telefono, :empresa_email,:avatar)
     end
 end
