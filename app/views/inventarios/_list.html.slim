@@ -1,0 +1,14 @@
+table.table.table-bordered
+  thead
+    tr
+      th Código
+      th Nombre
+      th Categoría
+      th Cantidad
+  tbody
+    - inventarios.each do |m|
+      tr
+        td = m.codigo
+        td = m.nombre
+        td = m.categoria_nombre
+        td = m.unidad_de_medida

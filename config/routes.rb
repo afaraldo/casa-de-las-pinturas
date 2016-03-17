@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   get 'mercaderias/check_codigo' => 'mercaderias#check_codigo'
   resources :mercaderias
 
+  resources :inventarios
+
   get 'welcome/index'
 
   # The priority is based upon order of creation: first created -> highest priority.
