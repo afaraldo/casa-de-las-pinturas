@@ -5,4 +5,4 @@
   | noty({type: "success", text : "#{@message}"});
   | modal.modal('hide');
   | $('#proveedores-table').html("#{escape_javascript(render partial: 'list', locals: {proveedores: @proveedores})}");
-  | $('#paginate-container').html("#{escape_javascript(paginate(@proveedores, remote: true)) }");
+  | $('#paginate-container').html("#{escape_javascript(paginate(@proveedores, params: {controller: :proveedores, action: :index}, remote: true)) }");
