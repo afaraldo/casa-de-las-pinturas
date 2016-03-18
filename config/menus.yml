@@ -23,12 +23,12 @@ menu:
     submenus:
   stock:
     text: "Stock"
-    url: "#"
+    url: :inventarios
     active_menu: :stock
     submenus:
       inventario:
         text: "Inventario"
-        url: "#"
+        url: :inventarios
         active_submenu: :inventario_sidemenu
       mercaderias:
         text: "Mercaderias"
@@ -53,3 +53,11 @@ menu:
     url: "#"
     active_menu: :configuraciones
     submenus:
+      datos_empresa:
+        text: "Datos de la empresa"
+        url: "#"
+        active_submenu: :datos_empresa_sidemenu
+      empleados:
+        text: "Empleados"
+        url: :empleados
+        active_submenu: :empleados_sidemenu

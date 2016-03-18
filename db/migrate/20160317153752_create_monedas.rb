@@ -4,7 +4,7 @@ class CreateMonedas < ActiveRecord::Migration
       t.string :nombre
       t.string :abreviatura
       t.integer :cotizacion
-      t.boolean :defecto
+      t.boolean :defecto, default: false
 
       t.timestamps null: false
     end

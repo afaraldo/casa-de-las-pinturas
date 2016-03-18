@@ -1,8 +1,5 @@
 Rails.application.routes.draw do
 
-
-  resources :monedas
-
   devise_for :users
 
   get 'proveedores/check_nombre' => 'proveedores#check_nombre'
@@ -14,7 +11,14 @@ Rails.application.routes.draw do
   get 'mercaderias/check_codigo' => 'mercaderias#check_codigo'
   resources :mercaderias
 
+  resources :inventarios, only: [:index]
+
   get 'welcome/index'
+
+  resources :empleados
+
+  get 'monedas/check_nombre' => 'monedas#check_codigo'
+  resources :monedas
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

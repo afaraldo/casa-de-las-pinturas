@@ -7,13 +7,12 @@
     = moneda.new_record? ? 'Nueva moneda' : 'Editar moneda'
   .modal-body
     = f.input :id, as: :hidden, input_html: { id: 'moneda_id' }
-    = f.input :nombre,    input_html: {class: 'textoLargo'}
-    = f.input :abreviatura, input_html: {class: 'textoLargo'}
-    = f.input :cotizacion,  input_html: {class: 'textoMedio'}
-    = f.input :defecto,       input_html: {class: 'textoMedio'}
+    = f.input :nombre,    input_html: {class: 'textoMedio'}
+    = f.input :abreviatura, input_html: {class: 'textoAbreviatura'}
+    = f.input :cotizacion
   .modal-footer.text-right
     button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
     input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
 
 javascript:
-  MonedasUI.initFormEvents();
+  MonedasUI.initFormEvents("#{monedas_check_nombre_path}");

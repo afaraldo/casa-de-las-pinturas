@@ -77,6 +77,13 @@ class MonedasController < ApplicationController
     render 'reload_list', format: :js
   end
 
+  # Comprobar si ya existe una moneda con el nombre dado
+  def check_nombre
+    moneda = Moneda.by_nombre(params[:nombre]).first
+
+    render json: (moneda.nil? || moneda.id == params[:id].to_i) ? true : t('proveedor.unique_nombre_error', nombre: params[:nombre]).to_json
+  end
+
   def get_monedas
     @search = Moneda.search(params[:q])
     @monedas = @search.result.page(params[:page])
@@ -90,6 +97,6 @@ class MonedasController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def moneda_params
-      params.require(:moneda).permit(:nombre, :abreviatura, :cotizacion, :defecto)
+      params.require(:moneda).permit(:nombre, :abreviatura, :cotizacion)
     end
 end

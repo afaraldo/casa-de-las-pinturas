@@ -12,7 +12,7 @@ table.table.table-bordered
         td = moneda.nombre
         td = moneda.abreviatura
         td = number_to_currency(moneda.cotizacion)
-        td = moneda.defecto
+        td = moneda.defecto ? content_tag(:i, '', class: 'glyphicon glyphicon-ok') : ''
         td
           = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_moneda_path(moneda), remote: true, class: 'btn btn-default btn-sm'
           | #{' '}

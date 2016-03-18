@@ -1,4 +1,3 @@
-
 ################################
 # FABRICANDO DATOS DE EJEMPLO  #
 ################################
@@ -49,3 +48,12 @@ end
     next
   end
 }
+
+# Crear un empleado y usuario administrador del sistema
+@empleado = Persona.create nombre: 'Laura Perez', direccion:'Nuevo circuito comercial', telefono: '12345678', numero_documento: '1234567-8',  tipo: "Empleado", limite_credito: 0, user_attributes: { username: 'admin', email: 'admin@casadelaspinturas.com', password: '12345678' }
+
+# Crear monedas
+Moneda.create nombre: 'Guarani', abreviatura: 'Gs', cotizacion: 1, defecto: true
+Moneda.create nombre: 'Peso Argentino', abreviatura: 'Ps', cotizacion: 300, defecto: false
+Moneda.create nombre: 'Dolar', abreviatura: '$', cotizacion: 1, defecto: false
+Moneda.create nombre: 'Real Brasileño', abreviatura: 'R', cotizacion: 1, defecto: false
