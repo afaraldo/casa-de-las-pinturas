@@ -11,23 +11,49 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160307165248) do
+ActiveRecord::Schema.define(version: 20160314101727) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "personas", force: :cascade do |t|
-    t.string   "nombre"
-    t.string   "telefono"
-    t.string   "direccion"
-    t.string   "ruc"
-    t.string   "type",           null: false
+    t.string   "nombre",         limit: 40
+    t.string   "telefono",       limit: 20
+    t.string   "direccion",      limit: 200
+    t.string   "ruc",            limit: 30
+    t.string   "type",           limit: 15,  null: false
     t.decimal  "limite_credito"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.datetime "deleted_at"
   end
 
   add_index "personas", ["deleted_at"], name: "index_personas_on_deleted_at", using: :btree
 
+  create_table "users", force: :cascade do |t|
+    t.string   "username",                            null: false
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet     "current_sign_in_ip"
+    t.inet     "last_sign_in_ip"
+    t.integer  "failed_attempts",        default: 0,  null: false
+    t.string   "unlock_token"
+    t.datetime "locked_at"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "persona_id"
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["persona_id"], name: "index_users_on_persona_id", using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
+
+  add_foreign_key "users", "personas"
 end

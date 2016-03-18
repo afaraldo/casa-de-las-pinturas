@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-
   devise_for :users
 
   get 'proveedores/check_nombre' => 'proveedores#check_nombre'
@@ -15,6 +14,12 @@ Rails.application.routes.draw do
   resources :inventarios, only: [:index]
 
   get 'welcome/index'
+  resources :empleados
+  resources :proveedores
+
+  get "logout" => "sessions#destroy", :as => "logout"
+  get "login" => "sessions#new", :as => "login"
+  get "signup" => "users#new", :as => "signup"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -18,3 +18,11 @@
 
 # ignore ide folder
 .idea/*
+
+#ignore config file .rvmrc
+.rvmrc
+
+# ignore database file created for rake db:migrate
+/db/schema.rb
+# ignore file created for bundle
+Gemfile.lock

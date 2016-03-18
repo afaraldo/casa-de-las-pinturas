@@ -39,7 +39,8 @@ GEM
     arel (6.0.3)
     autoprefixer-rails (6.3.3.1)
       execjs
-    bcrypt (3.1.10)
+    bcrypt (3.1.11)
+    bcrypt (3.1.11-x86-mingw32)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -225,7 +226,6 @@ DEPENDENCIES
   i18n-js (>= 3.0.0.rc11)
   jbuilder (~> 2.0)
   jquery-rails
-  kaminari
   paranoia (~> 2.0)
   pg
   rails (= 4.2.0)

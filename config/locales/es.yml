@@ -20,6 +20,15 @@ es:
   mercaderia:
     unique_codigo_error: "Ya existe una mercadería con el código %{codigo}"
   activerecord:
+    models:
+      user: "Usuario"
+    attributes:
+      user:
+        username: "Nombre de usuario"
+        password: "Contraseña"
+        email: "Correo electrónico"
+      empleado:
+        user: "Usuario"
     errors:
       messages:
         record_invalid: "La validación falló: %{errors}"
