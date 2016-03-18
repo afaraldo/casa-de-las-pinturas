@@ -1,5 +1,12 @@
 class EmpleadosController < ApplicationController
   before_action :set_empleado, only: [:show, :edit, :update, :destroy]
+  before_action :setup_menu, only: [:index]
+
+  # configuracion del menu
+  def setup_menu
+    @menu_setup[:main_menu] = :configuraciones
+    @menu_setup[:side_menu] = :empleados_sidemenu
+  end
 
   # GET /empleados
   # GET /empleados.json
@@ -27,8 +34,8 @@ class EmpleadosController < ApplicationController
   # POST /empleados
   # POST /empleados.json
   def create
-    @empleado = Empleado.create(empleado_params)
-    if @empleado
+    @empleado = Empleado.new(empleado_params)
+    if @empleado.save
       @error = false
       @message = "Se ha guardado el empleado"
       @empleados = Empleado.all
@@ -79,6 +86,6 @@ class EmpleadosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def empleado_params
-      params.require(:empleado).permit(:nombre, :telefono, :direccion, :ruc, { user_attributes: [ :id, :username, :email, :password, :password_confirmation] })
+      params.require(:empleado).permit(:nombre, :telefono, :direccion, :numero_documento, { user_attributes: [ :id, :username, :email, :password, :password_confirmation] })
     end
 end
