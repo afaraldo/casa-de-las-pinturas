@@ -1,10 +1,6 @@
 class Persona < ActiveRecord::Base
   acts_as_paranoid
   has_one :user, dependent: :destroy
-  accepts_nested_attributes_for :user
-  validates_presence_of :user
-  validates_associated :user
-
   self.inheritance_column = 'tipo'
 
   after_initialize :set_limite_credito, if: :new_record?

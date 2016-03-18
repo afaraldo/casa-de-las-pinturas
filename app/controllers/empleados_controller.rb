@@ -50,6 +50,10 @@ class EmpleadosController < ApplicationController
   # PATCH/PUT /empleados/1
   # PATCH/PUT /empleados/1.json
   def update
+    if params[:empleado][:user_attributes][:password].blank? && params[:empleado][:user_attributes][:password_confirmation].blank?
+      params[:empleado][:user_attributes].delete(:password)
+      params[:empleado][:user_attributes].delete(:password_confirmation)
+    end
     if @empleado.update(empleado_params)
       @error = false
       @message = "Se ha guardado el empleado"

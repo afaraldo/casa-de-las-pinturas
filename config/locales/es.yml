@@ -27,6 +27,7 @@ es:
         username: "Nombre de usuario"
         password: "Contraseña"
         email: "Correo electrónico"
+        password_confirmation: "Confirmación de contraseña"
       empleado:
         user: "Usuario"
     errors:

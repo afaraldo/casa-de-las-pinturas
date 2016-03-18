@@ -6,5 +6,14 @@ class User < ActiveRecord::Base
 
   belongs_to :persona
   validates :username, presence: true
+  validates :username, length: {maximum: 45, minimum: 2}
   validates_uniqueness_of :username, :email, allow_blank: false
+
+  def email_required?
+    false
+  end
+
+  def email_changed?
+    false
+  end
 end

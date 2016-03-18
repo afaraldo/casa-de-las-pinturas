@@ -8,8 +8,7 @@
   .modal-body
     = f.input :nombre,    input_html: {data: {'rule-maxlength' => 40, 'rule-minlength' => 2}}
     = f.simple_fields_for :user do |u|
-      = u.input :username
-      = u.input :email
+      = u.input :username,    input_html: {data: {'rule-maxlength' => 45, 'rule-minlength' => 2}}
       = u.input :password
       = u.input :password_confirmation, label: 'Repetir contraseña'
     = f.input :direccion, input_html: {data: {'rule-maxlength' => 200}}
