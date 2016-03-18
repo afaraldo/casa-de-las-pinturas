@@ -50,4 +50,4 @@ end
 }
 
 # Crear un empleado
-@empleado = Persona.create nombre: 'Laura Perez', direccion:'Nuevo circuito comercial', telefono: '12345678', ruc: '1234567-8',  type: "Empleado", limite_credito: 0, user_attributes: { username: 'admin', email: 'admin@casadelaspinturas.com', password: '12345678' }
+@empleado = Persona.create nombre: 'Laura Perez', direccion:'Nuevo circuito comercial', telefono: '12345678', numero_documento: '1234567-8',  tipo: "Empleado", limite_credito: 0, user_attributes: { username: 'admin', email: 'admin@casadelaspinturas.com', password: '12345678' }
