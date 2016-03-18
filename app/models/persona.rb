@@ -4,10 +4,6 @@ class Persona < ActiveRecord::Base
   self.inheritance_column = 'tipo'
 
   after_initialize :set_limite_credito, if: :new_record?
-
-  validates :nombre, presence: true
-  validates :nombre, length: {maximum: 150, minimum: 2}
-  validates :nombre, uniqueness: true
   validates :telefono, length: {maximum: 50, minimum: 2}, allow_blank: true
   validates :direccion, length: {maximum: 150, minimum: 2}, allow_blank: true
   validates :numero_documento, length: {maximum: 50, minimum: 2}
