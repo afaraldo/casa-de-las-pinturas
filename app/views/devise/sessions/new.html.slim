@@ -3,6 +3,7 @@
 	  .login-logo
 	  .login-box-body
 	  	h3.text-center Ingresar al Sistema
+	  	br
         = render 'layouts/mensajes'
 	  	.form-groups.has-feedback
 	  		= f.text_field :username, required: false, placeholder: "Nombre de Usuario", class: "form-control", autofocus: true
