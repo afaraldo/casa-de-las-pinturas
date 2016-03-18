@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   get 'mercaderias/check_codigo' => 'mercaderias#check_codigo'
   resources :mercaderias
 
-  resources :inventarios
+  resources :inventarios, only: [:index]
 
   get 'welcome/index'
 

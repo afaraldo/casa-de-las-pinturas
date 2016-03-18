@@ -28,3 +28,5 @@ section.content
             = render partial: 'inventarios/list', locals: {inventarios: @mercaderias}
           #mercaderias-paginate-container
             = paginate @mercaderias, remote: true
+javascript:
+  MercaderiasUI.recargarCategoriaFiltro();
