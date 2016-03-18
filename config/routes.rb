@@ -14,12 +14,8 @@ Rails.application.routes.draw do
   resources :inventarios, only: [:index]
 
   get 'welcome/index'
-  resources :empleados
-  resources :proveedores
 
-  get "logout" => "sessions#destroy", :as => "logout"
-  get "login" => "sessions#new", :as => "login"
-  get "signup" => "users#new", :as => "signup"
+  resources :empleados
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
