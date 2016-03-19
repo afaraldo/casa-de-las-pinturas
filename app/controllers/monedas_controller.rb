@@ -81,7 +81,7 @@ class MonedasController < ApplicationController
   def check_nombre
     moneda = Moneda.by_nombre(params[:nombre]).first
 
-    render json: (moneda.nil? || moneda.id == params[:id].to_i) ? true : t('proveedor.unique_nombre_error', nombre: params[:nombre]).to_json
+    render json: (moneda.nil? || moneda.id == params[:id].to_i) ? true : t('moneda.unique_nombre_error', nombre: params[:nombre]).to_json
   end
 
   def get_monedas

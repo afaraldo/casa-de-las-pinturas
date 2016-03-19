@@ -19,6 +19,8 @@ es:
     mercaderias_dependientes_error: "No se puede eliminar la categoria porque hay mercaderias que dependen de ella"
   mercaderia:
     unique_codigo_error: "Ya existe una mercadería con el código %{codigo}"
+  moneda:
+    unique_nombre_error: "Ya existe una moneda con el nombre %{nombre}"
   activerecord:
     models:
       user: "Usuario"

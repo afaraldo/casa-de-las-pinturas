@@ -43,6 +43,10 @@ menu:
     url: "#"
     active_menu: :cajas
     submenus:
+      cotizacion:
+        text: "Cotizacion"
+        url: :monedas
+        active_submenu: :monedas_sidemenu
   reportes:
     text: "Reportes"
     url: "#"

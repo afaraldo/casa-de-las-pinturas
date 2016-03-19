@@ -3,7 +3,7 @@ class CreateMonedas < ActiveRecord::Migration
     create_table :monedas do |t|
       t.string :nombre
       t.string :abreviatura
-      t.integer :cotizacion
+      t.decimal :cotizacion, precision: 15, scale: 2, null: false, default: 0
       t.boolean :defecto, default: false
 
       t.timestamps null: false
