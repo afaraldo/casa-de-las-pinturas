@@ -35,7 +35,7 @@ var MercaderiasUI = (function(){
         var seleccionados = $.map($('input.mercaderia-select'), function(v,i){ return $(v).val();});
 
         for(var i = 0; i < items.length; i++) {
-            if($.inArray(items[0].id, seleccionados)) {
+            if($.inArray(items[0].id, seleccionados) > -1) {
                 items.splice(i, 1);
             }
         }
@@ -69,6 +69,9 @@ var MercaderiasUI = (function(){
                         more: more
                     };
                 }
+            },
+            initSelection: function(element, callback) {
+                callback($(element).data('mercaderia')); // Se setea la mercaderia si ya esta seleccionada
             },
             formatResult: formatMercaderias,
             formatSelection: formatMercaderiasSelection,

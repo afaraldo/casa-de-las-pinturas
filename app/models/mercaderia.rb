@@ -21,4 +21,10 @@ class Mercaderia < ActiveRecord::Base
   default_scope { order('lower(nombre)') } # Ordenar por nombre por defecto
   scope :by_codigo, lambda { |value| where('lower(codigo) = ?', value.downcase) } # buscar por codigo
 
+  def actualizar_stock(cantidad, tipo_movimiento)
+    self.stock += cantidad if tipo_movimiento == :ingreso
+    self.stock -= cantidad if tipo_movimiento == :egreso
+    save
+  end
+
 end

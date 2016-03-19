@@ -18,3 +18,11 @@
 @import "components/*";
 @import "modules/*";
 
+
+// Estilos generales para mostrar cabeceras/detalles
+.cabecera-info{
+  dd{
+    margin-bottom: 5px;
+  }
+}
+

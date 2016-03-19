@@ -29,6 +29,8 @@ es:
         email: "Correo electrónico"
       empleado:
         user: "Usuario"
+      movimiento_mercaderia:
+        tipo: "Tipo de movimiento"
     errors:
       messages:
         record_invalid: "La validación falló: %{errors}"

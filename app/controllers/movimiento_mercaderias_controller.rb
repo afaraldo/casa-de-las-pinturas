@@ -1,6 +1,6 @@
 class MovimientoMercaderiasController < ApplicationController
   before_action :set_movimiento_mercaderia, only: [:show, :edit, :update, :destroy]
-  before_action :setup_menu, only: [:index, :new, :edit, :show]
+  before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
 
   # configuracion del menu
   def setup_menu
@@ -23,10 +23,12 @@ class MovimientoMercaderiasController < ApplicationController
   def new
     @movimiento = MovimientoMercaderia.new
     @movimiento.detalles.build
+    render :form
   end
 
   # GET /movimiento_mercaderias/1/edit
   def edit
+    render :form
   end
 
   # POST /movimiento_mercaderias
@@ -35,12 +37,14 @@ class MovimientoMercaderiasController < ApplicationController
     @movimiento = MovimientoMercaderia.new(movimiento_mercaderia_params)
 
     respond_to do |format|
-      if @movimiento.save
-        format.html { redirect_to @movimiento, notice: 'Movimiento mercaderia was successfully created.' }
-        format.json { render :show, status: :created, location: @movimiento }
-      else
-        format.html { render :new }
-        format.json { render json: @movimiento.errors, status: :unprocessable_entity }
+      MovimientoMercaderia.transaction do
+        if @movimiento.save
+          format.html { redirect_to @movimiento, notice: t('mensajes.save_success', recurso: 'el movimiento') }
+          format.json { render :show, status: :created, location: @movimiento }
+        else
+          format.html { render :form }
+          format.json { render json: @movimiento.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -49,12 +53,12 @@ class MovimientoMercaderiasController < ApplicationController
   # PATCH/PUT /movimiento_mercaderias/1.json
   def update
     respond_to do |format|
-      if @movimiento_mercaderia.update(movimiento_mercaderia_params)
-        format.html { redirect_to @movimiento_mercaderia, notice: 'Movimiento mercaderia was successfully updated.' }
-        format.json { render :show, status: :ok, location: @movimiento_mercaderia }
+      if @movimiento.update(movimiento_mercaderia_params)
+        format.html { redirect_to @movimiento, notice: t('mensajes.save_success', recurso: 'el movimiento') }
+        format.json { render :show, status: :ok, location: @movimiento }
       else
-        format.html { render :edit }
-        format.json { render json: @movimiento_mercaderia.errors, status: :unprocessable_entity }
+        format.html { render :form }
+        format.json { render json: @movimiento.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -62,9 +66,9 @@ class MovimientoMercaderiasController < ApplicationController
   # DELETE /movimiento_mercaderias/1
   # DELETE /movimiento_mercaderias/1.json
   def destroy
-    @movimiento_mercaderia.destroy
+    @movimiento.destroy
     respond_to do |format|
-      format.html { redirect_to movimiento_mercaderias_url, notice: 'Movimiento mercaderia was successfully destroyed.' }
+      format.html { redirect_to movimiento_mercaderias_url, notice: t('mensajes.delete_success', recurso: 'el movimiento') }
       format.json { head :no_content }
     end
   end
@@ -77,12 +81,20 @@ class MovimientoMercaderiasController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_movimiento_mercaderia
-      @movimiento_mercaderia = MovimientoMercaderia.find(params[:id])
+      @movimiento = MovimientoMercaderia.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def movimiento_mercaderia_params
+      procesar_cantidades
       params.require(:movimiento_mercaderia).permit(:fecha, :motivo, :tipo,
-                                                    detalles_attributes: [:mercaderia_id, :cantidad, :_destroy])
+                                                    detalles_attributes: [:id, :mercaderia_id, :cantidad, :_destroy])
+    end
+
+    # reemplazar las comas por puntos en el caso de las cantidades decimales
+    def procesar_cantidades
+      params[:movimiento_mercaderia][:detalles_attributes].each do |i, d|
+        params[:movimiento_mercaderia][:detalles_attributes][i][:cantidad] = cantidad_a_numero(d[:cantidad])
+      end
     end
 end

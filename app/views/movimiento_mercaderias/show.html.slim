@@ -1,18 +1,29 @@
-p#notice = notice
-
-p
-  strong Fecha:
-  = @movimiento_mercaderia.fecha
-p
-  strong Motivo:
-  = @movimiento_mercaderia.motivo
-p
-  strong Tipo:
-  = @movimiento_mercaderia.tipo
-p
-  strong Deleted at:
-  = @movimiento_mercaderia.deleted_at
-
-= link_to 'Edit', edit_movimiento_mercaderia_path(@movimiento_mercaderia)
-'|
-= link_to 'Back', movimiento_mercaderias_path
+section.content-header
+  h1 Stock
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Movimiento de mercaderia
+        .box-body
+          dl.cabecera-info
+            dt Fecha
+            dd = localize(@movimiento.fecha.to_date)
+            dt Tipo de movimiento
+            dd = @movimiento.tipo_text
+            dt Motivo
+            dd = @movimiento.motivo
+          label.control-label Mercaderias
+          table.table.table-bordered
+            thead
+              tr
+                th Código
+                th Mercadería
+                th.text-right Cantidad
+            tbody
+              - @movimiento.detalles.each do |d|
+                tr
+                  td = d.mercaderia_codigo
+                  td = d.mercaderia_nombre
+                  td.text-right = number_with_precision(d.cantidad)
