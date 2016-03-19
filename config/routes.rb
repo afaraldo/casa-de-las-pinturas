@@ -14,7 +14,13 @@ Rails.application.routes.draw do
   get 'mercaderias/buscar' => 'mercaderias#buscar'
   resources :mercaderias
 
+  resources :inventarios, only: [:index]
+
   resources :movimiento_mercaderias
+
+  get 'welcome/index'
+
+  resources :empleados
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
