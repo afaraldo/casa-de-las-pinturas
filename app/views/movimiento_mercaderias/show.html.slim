@@ -6,6 +6,10 @@ section.content
       .box
         .box-header
           h3.box-title Movimiento de mercaderia
+          .box-tools
+            = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_movimiento_mercaderia_path(@movimiento), class: 'btn btn-default'
+            = " "
+            = link_to ' <i class="fa fa-trash"></i> Eliminar'.html_safe, movimiento_mercaderia_path(@movimiento), method: 'delete', data: {confirm: "¿Esta seguro que desea eliminar el movimiento?"}, class: 'btn btn-danger'
         .box-body
           dl.cabecera-info
             dt Fecha

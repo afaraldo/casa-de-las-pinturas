@@ -6,14 +6,14 @@ section.content
       .box
         = simple_form_for @movimiento, html: { id: 'movimiento-mercaderia-form' } do |f|
           .box-header
-            h3.box-title Nuevo Movimiento de Mercadería
+            h3.box-title = "#{ @movimiento.new_record? ? 'Nuevo Movimiento de Mercadería' : 'Editar Movimiento de Mercadería'}"
           .box-body
             = f.error_notification
             .row
               .col-sm-4
-                = f.input :fecha, as: :string, input_html: { class: 'datepicker', value: localize(f.object.fecha.to_date) }
-                = f.input :tipo, as: :radio_buttons, item_wrapper_class: 'radio-inline', label_html: {style: 'display: block;'}
-                = f.input :motivo
+                = f.input :fecha, as: :string, input_html: { class: 'datepicker', value: @movimiento.new_record? ? '' : localize(f.object.fecha.to_date)  }
+                = f.input :tipo,  as: :radio_buttons, item_wrapper_class: 'radio-inline', label_html: {style: 'display: block;'}
+                = f.input :motivo, input_html: { class: 'descripcion'}
             .links
               label.control-label Mercaderias
             br

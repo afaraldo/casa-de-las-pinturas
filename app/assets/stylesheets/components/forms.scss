@@ -18,10 +18,6 @@
   box-shadow: none;
 }
 
-.select2-drop-active{
-  border-color: $select2_border_color;
-}
-
 .select2-drop{
   box-shadow: none;
   border-radius: 0;
@@ -32,4 +28,23 @@
       background: transparent;
     }
   }
+}
+
+// Para cuando las opciones queda hacia arriba
+.select2-drop.select2-drop-above {
+  box-shadow: none;
+  border-radius: 0;
+  &.select2-drop-active {
+    border-color: $select2_border_color;
+  }
+}
+.select2-dropdown-open.select2-drop-above [class^="select2-choice"]{
+  border-radius: 0 !important;
+}
+.select2-dropdown-open.select2-drop-above .select2-choice{
+  border-color: $select2_border_color;
+}
+
+.select2-drop-active{
+  border-color: $select2_border_color;
 }

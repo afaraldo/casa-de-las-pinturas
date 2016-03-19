@@ -53,12 +53,14 @@ class MovimientoMercaderiasController < ApplicationController
   # PATCH/PUT /movimiento_mercaderias/1.json
   def update
     respond_to do |format|
-      if @movimiento.update(movimiento_mercaderia_params)
-        format.html { redirect_to @movimiento, notice: t('mensajes.save_success', recurso: 'el movimiento') }
-        format.json { render :show, status: :ok, location: @movimiento }
-      else
-        format.html { render :form }
-        format.json { render json: @movimiento.errors, status: :unprocessable_entity }
+      MovimientoMercaderia.transaction do
+        if @movimiento.update(movimiento_mercaderia_params)
+          format.html { redirect_to @movimiento, notice: t('mensajes.update_success', recurso: 'el movimiento') }
+          format.json { render :show, status: :ok, location: @movimiento }
+        else
+          format.html { render :form }
+          format.json { render json: @movimiento.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -66,10 +68,15 @@ class MovimientoMercaderiasController < ApplicationController
   # DELETE /movimiento_mercaderias/1
   # DELETE /movimiento_mercaderias/1.json
   def destroy
-    @movimiento.destroy
     respond_to do |format|
-      format.html { redirect_to movimiento_mercaderias_url, notice: t('mensajes.delete_success', recurso: 'el movimiento') }
-      format.json { head :no_content }
+      MovimientoMercaderia.transaction do
+        if @movimiento.destroy
+          format.html { redirect_to movimiento_mercaderias_url, notice: t('mensajes.delete_success', recurso: 'el movimiento') }
+          format.json { head :no_content }
+        else
+          format.html { redirect_to @movimiento, error: t('mensajes.delete_error', recurso: 'el movimiento') }
+        end
+      end
     end
   end
 

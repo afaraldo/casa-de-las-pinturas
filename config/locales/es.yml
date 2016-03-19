@@ -40,6 +40,8 @@ es:
   mensajes:
     save_success: "Se ha guardado %{recurso}"
     save_error: "Ha ocurrido un problema al tratar de guardar %{recurso}. %{errores}"
+    update_success: "Se ha actualizado %{recurso}"
+    update_error: "Ha ocurrido un problema al tratar de actualizar %{recurso}. %{errores}"
     delete_success: "Se ha eliminado %{recurso}"
     delete_error: "Ha ocurrido un problema al tratar de eliminar %{recurso}. %{errores}"
   date:
