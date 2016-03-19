@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   get 'proveedores/check_nombre' => 'proveedores#check_nombre'
   resources :proveedores
 
+  get 'empleados/check_nombre' => 'empleados#check_nombre'
+  resources :empleados
+
   get 'categorias/check_nombre' => 'categorias#check_nombre'
   resources :categorias
 
@@ -14,9 +17,6 @@ Rails.application.routes.draw do
   resources :inventarios, only: [:index]
 
   get 'welcome/index'
-
-  get 'empleados/check_nombre' => 'empleados#check_nombre'
-  resources :empleados
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
