@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
   get 'welcome/index'
 
+  get 'empleados/check_nombre' => 'empleados#check_nombre'
   resources :empleados
 
   # The priority is based upon order of creation: first created -> highest priority.

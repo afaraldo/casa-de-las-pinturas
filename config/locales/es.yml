@@ -13,6 +13,8 @@ es:
         numero_documento: 'RUC/CI'
   proveedor:
     unique_nombre_error: "Ya existe un proveedor con el nombre %{nombre}"
+  empleado:
+    unique_nombre_error: "Ya existe un empleado con el nombre %{nombre}"
   categoria:
     unique_nombre_error: "Ya existe una categoría con el nombre %{nombre}"
     tiene_subcategorias_error: "No se puede eliminar la categoria porque posee subcategorias"
