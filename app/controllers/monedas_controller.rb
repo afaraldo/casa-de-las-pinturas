@@ -1,5 +1,6 @@
 class MonedasController < ApplicationController
   before_action :set_moneda, only: [:show, :edit, :update, :destroy]
+  before_action :setup_menu, only: [:index]
 
   # configuracion del menu
   def setup_menu

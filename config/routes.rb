@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   resources :empleados
 
-  get 'monedas/check_nombre' => 'monedas#check_codigo'
+  get 'monedas/check_nombre' => 'monedas#check_nombre'
   resources :monedas
 
   # The priority is based upon order of creation: first created -> highest priority.

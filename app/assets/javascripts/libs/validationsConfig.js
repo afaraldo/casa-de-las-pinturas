@@ -30,7 +30,7 @@ jQuery.validator.setDefaults({
 $.validator.addClassRules({
     textoAbreviatura: {
         minlength: 1,
-        maxlength: 3
+        maxlength: 5
     },
     textoCorto: {
         minlength: 2,

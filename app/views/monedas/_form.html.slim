@@ -7,7 +7,7 @@
     = moneda.new_record? ? 'Nueva moneda' : 'Editar moneda'
   .modal-body
     = f.input :id, as: :hidden, input_html: { id: 'moneda_id' }
-    = f.input :nombre,    input_html: {class: 'textoMedio'}
+    = f.input :nombre,    input_html: {class: 'textoMedio  uniqueMonedaNombre'}
     = f.input :abreviatura, input_html: {class: 'textoAbreviatura'}
     = f.input :cotizacion, as: :string, input_html: {class: 'limiteNumero maskMoneda'}
   .modal-footer.text-right
