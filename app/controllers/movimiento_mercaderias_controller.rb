@@ -22,6 +22,7 @@ class MovimientoMercaderiasController < ApplicationController
   # GET /movimiento_mercaderias/new
   def new
     @movimiento = MovimientoMercaderia.new
+    @movimiento.detalles.build
   end
 
   # GET /movimiento_mercaderias/1/edit

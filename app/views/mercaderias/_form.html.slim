@@ -11,7 +11,7 @@
     = f.input :nombre,          input_html: {class: 'textoMedio'}
     .row
       .col-xs-10
-        = f.input :categoria_id, input_html: {style: 'width: 100%;'},
+        = f.input :categoria_id, input_html: {style: 'width: 100%;', title: 'Este campo es obligatorio'},
                              prompt: "Seleccione una categoría...",
                              collection: Categoria.agrupado.map{ |c| [c.nombre, c.id, {'data-espadre' => c.categoria_padre_id}] }
       .col-xs-2

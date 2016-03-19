@@ -1,8 +1,8 @@
 tr.nested-fields
   td.codigo-celda
-  td
-    = f.select :mercaderia_id, [], {}, { class: 'form-control mercaderia-select' }
-  td
-    = f.text_field :cantidad, class: 'form-control maskCantidad'
+  td.form-group
+    = f.text_field :mercaderia_id, class: 'form-control mercaderia-select required', data: {"msg-required" => 'Debe seleccionar una mercaderia' }
+  td.form-group
+    = f.text_field :cantidad, class: 'form-control maskCantidad required', data: { 'msg-required' => 'Debe ingresar una cantidad' }
   td
     = link_to_remove_association '<i class="fa fa-times"></i>'.html_safe, f, class: 'btn btn-default btn-sm'

@@ -3,56 +3,30 @@ var MovimientoMercaderiasUI = (function(){
         buscarMercaderiaUrl = '';
 
     function initFormEvents(){
-        elementos.movimientoForm.validate();
+        elementos.movimientoForm.validate({ignore: []});
 
         $('.datepicker').datepicker();
 
         $('#movimiento-detalles-body').on('cocoon:after-insert', function(e, insertedItem) {
-            initMercaderiaSelect();
+            MercaderiasUI.buscarMercaderia({elemento: insertedItem.find('.mercaderia-select'), url: buscarMercaderiaUrl});
             NumberHelper.mascaraCantidad('.maskCantidad');
+            // Se vuelve a mostar el boton de eliminar si es que se escondio en algun momento
+            $('.remove_fields').removeClass('hide');
+        }).on('cocoon:after-remove', function(e, removedItem) {
+            // Se esconde el boton de eliminar si es que ya queda solo uno
+            var tBody = $(this);
+            if(tBody.find('.nested-fields').length == 1){
+                $('.remove_fields').addClass('hide');
+            }
         });
-    }
 
-    function formatMercaderias(m) {
-        if (m.loading) return 'Buscando...';
+        MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: buscarMercaderiaUrl});
 
-        return '<span>' + m.nombre + '</span> <br> <strong>Cod. </strong>' + m.codigo;
-    }
+        NumberHelper.mascaraCantidad('.maskCantidad');
 
-    function formatMercaderiasSelection(m) {
-        $(m.element).parents('tr').find('.codigo-celda').text(m.codigo);
-        return m.nombre;
-    }
-
-    function initMercaderiaSelect(){
-        $(".mercaderia-select").select2({
-            ajax: {
-                url: buscarMercaderiaUrl,
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        q: { nombre_or_codigo_cont: params.term }, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-                    params.page = params.page || 1;
-
-                    return {
-                        results: data.items,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 1,
-            templateResult: formatMercaderias, // omitted for brevity, see the source of this page
-            templateSelection: formatMercaderiasSelection // omitted for brevity, see the source of this page
-        });
+        if($('.nested-fields').length == 1){
+            $('.remove_fields').addClass('hide');
+        }
 
     }
 
@@ -65,7 +39,9 @@ var MovimientoMercaderiasUI = (function(){
         'new': function() {
             initFormEvents();
         },
-        initMercaderiaSelect: initMercaderiaSelect,
+        'create': function(){
+            initFormEvents();
+        },
         setBuscarMercaderiaUrl: function(url) {
             buscarMercaderiaUrl = url;
         }
