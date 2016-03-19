@@ -1,0 +1,35 @@
+.radio-inline{
+  &.radio{
+    margin-top: 0;
+    padding-left: 0;
+  }
+}
+
+// Sobreescribir estilos de select2
+.select2-container{
+  .select2-choice{
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+.select2-container-active .select2-choice, .select2-container-multi.select2-container-active .select2-choices{
+  border-color: $select2_border_color;
+  box-shadow: none;
+}
+
+.select2-drop-active{
+  border-color: $select2_border_color;
+}
+
+.select2-drop{
+  box-shadow: none;
+  border-radius: 0;
+  .select2-search{
+    input{
+      border-radius: 0;
+      box-shadow: none;
+      background: transparent;
+    }
+  }
+}
