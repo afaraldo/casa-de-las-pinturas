@@ -40,6 +40,13 @@ var MovimientoMercaderiasUI = (function(){
                 movimientoForm: $('#movimiento-mercaderia-form')
             }
         },
+        index: function() {
+            $('.input-daterange')
+                .datepicker({autoclose: false}) // inicializar rango de fechas del buscador
+                .on('changeDate', function(e){ // Evento para hacer submit al formulario cuando se cambia la fecha
+                    $(this).parents('.remote-search').submit();
+                });
+        },
         'new': function() {
             initFormEvents();
         },

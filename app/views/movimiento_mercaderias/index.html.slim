@@ -9,6 +9,26 @@ section.content
           .box-tools.pull-right
             = link_to 'Nuevo movimiento', new_movimiento_mercaderia_path, class: 'btn btn-primary'
         .box-body#movimiento-mercaderias-lista
+          #mercaderias-search.buscador-listado
+            = search_form_for @search, remote: true, class: 'remote-search' do |f|
+              .row
+                .col-xs-4
+                  .input-group.input-daterange
+                    = f.text_field :fecha_gt, class: 'form-control', placeholder: 'Desde'
+                    span.input-group-addon
+                      i.fa.fa-calendar
+                    = f.text_field :fecha_lt, class: 'form-control', placeholder: 'Hasta'
+                .col-xs-5
+                  .input-group
+                    = f.text_field :motivo_cont, class: 'form-control', placeholder: 'Buscar por motivo...'
+                    .input-group-btn
+                      button.btn.btn-default type="submit" name="commit"
+                        i.fa.fa-search
+                .col-xs-3
+                  .form-group
+                    = f.select :tipo_eq, MovimientoMercaderia.tipo.options,
+                                         {include_blank: 'Todos las tipos...'},
+                                         class: 'form-control'
           #movimiento-mercaderias-table.overlay-wrapper.buscador-resultados
             = render partial: 'movimiento_mercaderias/list', locals: {movimientos: @movimientos}
           #movimiento-mercaderias-paginate-container
