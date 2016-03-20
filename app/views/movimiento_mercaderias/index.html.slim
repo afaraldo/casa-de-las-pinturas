@@ -27,7 +27,7 @@ section.content
                 .col-xs-3
                   .form-group
                     = f.select :tipo_eq, MovimientoMercaderia.tipo.options,
-                                         {include_blank: 'Todos las tipos...'},
+                                         {include_blank: 'Todos los tipos...'},
                                          class: 'form-control'
           #movimiento-mercaderias-table.overlay-wrapper.buscador-resultados
             = render partial: 'movimiento_mercaderias/list', locals: {movimientos: @movimientos}
