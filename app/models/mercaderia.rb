@@ -16,15 +16,9 @@ class Mercaderia < ActiveRecord::Base
   validates :precio_venta_contado, numericality: { greater_than_or_equal_to: 0 }
   validates :precio_venta_credito, numericality: { greater_than_or_equal_to: 0 }
   validates :stock_minimo,         numericality: { greater_than_or_equal_to: 0 }
-  validates :stock, numericality: true
+  validates :stock, numericality: { greater_than_or_equal_to: 0 }
 
   default_scope { order('lower(nombre)') } # Ordenar por nombre por defecto
   scope :by_codigo, lambda { |value| where('lower(codigo) = ?', value.downcase) } # buscar por codigo
-
-  def actualizar_stock(cantidad, tipo_movimiento)
-    self.stock += cantidad if tipo_movimiento == :ingreso
-    self.stock -= cantidad if tipo_movimiento == :egreso
-    save
-  end
 
 end

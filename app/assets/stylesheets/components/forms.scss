@@ -5,6 +5,12 @@
   }
 }
 
+td{
+  > .form_group{
+    margin-bottom: 0;
+  }
+}
+
 // Sobreescribir estilos de select2
 .select2-container{
   .select2-choice{

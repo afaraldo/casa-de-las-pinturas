@@ -19,6 +19,9 @@ es:
     mercaderias_dependientes_error: "No se puede eliminar la categoria porque hay mercaderias que dependen de ella"
   mercaderia:
     unique_codigo_error: "Ya existe una mercadería con el código %{codigo}"
+  movimiento_mercaderia:
+    eliminar_stock_negativo: "Eliminar este movimiento va a provocar stock negativo en las siguientes mercaderias: %{mercaderias}"
+    detalle_cantidad_stock_negativo: "Esta cantidad va a provocar stock negativo en el sistema"
   activerecord:
     models:
       user: "Usuario"

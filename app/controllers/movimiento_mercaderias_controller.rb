@@ -74,13 +74,15 @@ class MovimientoMercaderiasController < ApplicationController
           format.html { redirect_to movimiento_mercaderias_url, notice: t('mensajes.delete_success', recurso: 'el movimiento') }
           format.json { head :no_content }
         else
-          format.html { redirect_to @movimiento, error: t('mensajes.delete_error', recurso: 'el movimiento') }
+          flash[:error] = t('mensajes.delete_error', recurso: 'el movimiento', errores: @movimiento.errors.full_messages.to_sentence)
+          format.html { redirect_to @movimiento }
         end
       end
     end
   end
 
   def get_movimientos
+    procesar_fechas
     @search = MovimientoMercaderia.search(params[:q])
     @movimientos = @search.result.page(params[:page])
   end
@@ -104,4 +106,12 @@ class MovimientoMercaderiasController < ApplicationController
         params[:movimiento_mercaderia][:detalles_attributes][i][:cantidad] = cantidad_a_numero(d[:cantidad])
       end
     end
+
+  # Setear las fechas "hasta" para que incluya el dia entero
+  # 01/03/2016 => 2016-03-01 23:59:59
+  def procesar_fechas
+    if params[:q].present? && params[:q][:fecha_lt].present?
+      params[:q][:fecha_lt] = params[:q][:fecha_lt].to_datetime.end_of_day
+    end
+  end
 end
