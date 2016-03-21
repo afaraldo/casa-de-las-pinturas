@@ -6,6 +6,7 @@
       span &times;
     = empleado.new_record? ? 'Nuevo Usuario' : 'Editar Usuario'
   .modal-body
+    = f.input :id, as: :hidden, input_html: { id: 'empleado_id' }
     = f.input :nombre,    input_html: {class: 'textoLargo uniqueEmpleadoNombre'}
     = f.simple_fields_for :user do |u|
       = u.input :username, input_html: {class: 'textoMedio'}
