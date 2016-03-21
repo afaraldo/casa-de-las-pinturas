@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+
   devise_for :users
 
   get 'proveedores/check_nombre' => 'proveedores#check_nombre'
@@ -10,6 +11,9 @@ Rails.application.routes.draw do
 
   get 'mercaderias/check_codigo' => 'mercaderias#check_codigo'
   resources :mercaderias
+
+  get 'clientes/check_nombre' => 'clientes#check_nombre'
+  resources :clientes
 
   get 'welcome/index'
 

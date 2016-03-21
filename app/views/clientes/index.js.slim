@@ -1,0 +1,4 @@
+
+| $("#clientes-table").html("#{escape_javascript(render partial: 'list', format: 'html', locals: {clientes: @clientes})}");
+| $('#paginate-container').html("#{escape_javascript(paginate(@clientes, remote: true)) }");
+| $('.buscador-resultados > .overlay').remove();
