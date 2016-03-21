@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20160317153752) do
+=======
+ActiveRecord::Schema.define(version: 20160314101727) do
+>>>>>>> development
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +48,7 @@ ActiveRecord::Schema.define(version: 20160317153752) do
   add_index "mercaderias", ["codigo"], name: "index_mercaderias_on_codigo", using: :btree
   add_index "mercaderias", ["nombre"], name: "index_mercaderias_on_nombre", using: :btree
 
+<<<<<<< HEAD
   create_table "monedas", force: :cascade do |t|
     t.string   "nombre"
     t.string   "abreviatura"
@@ -53,6 +58,8 @@ ActiveRecord::Schema.define(version: 20160317153752) do
     t.datetime "updated_at",  null: false
   end
 
+=======
+>>>>>>> development
   create_table "personas", force: :cascade do |t|
     t.string   "nombre",           limit: 40
     t.string   "telefono",         limit: 20
