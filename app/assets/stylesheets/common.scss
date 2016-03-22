@@ -8,6 +8,7 @@
 // Librerias
 @import "libs/fontawesome/font-awesome";
 @import "libs/select2";
+@import "libs/bootstrap-datepicker3";
 
 // AdminLTE
 @import "adminlte/AdminLTE";
@@ -16,4 +17,12 @@
 @import "common/forms";
 @import "components/*";
 @import "modules/*";
+
+
+// Estilos generales para mostrar cabeceras/detalles
+.cabecera-info{
+  dd{
+    margin-bottom: 5px;
+  }
+}
 

@@ -1,22 +1,24 @@
 = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-	.login-box
-	  .login-logo
-	  .login-box-body
-	  	h3.text-center Ingresar al Sistema
-        = render 'layouts/mensajes'
-	  	.form-groups.has-feedback
-	  		= f.text_field :username, required: false, placeholder: "Nombre de Usuario", class: "form-control", autofocus: true
-	  		span.glyphicon.glyphicon-user.form-control-feedback
-	  		br
-	  	.form-groups.has-feedback
-	  		= f.password_field :password, required: false, placeholder: "Contraseña", class: "form-control"
-	  		span.glyphicon.glyphicon-lock.form-control-feedback
-	  		br
-	  		.row
-	  			.col-xs-8
-	  				= f.input :remember_me, label: 'Recordarme', as: :boolean if devise_mapping.rememberable?
-	  			.col-xs-4
-	  				.form-actions
-	  					br
-	  					br
-	  					= f.button :submit, "Ingresar"
+  .login-box
+    .login-box-body
+      .login-logo
+        = cl_image_tag(Configuracion.first.avatar, :width => 90, :height => 90, :crop => :fill, :gravity => :face, :radius => :max)
+      h3.text-center Ingresar al Sistema
+      br
+      = render 'layouts/mensajes'
+      .form-groups.has-feedback
+          = f.text_field :username, required: false, placeholder: "Nombre de Usuario", class: "form-control", autofocus: true
+          span.glyphicon.glyphicon-user.form-control-feedback
+          br
+      .form-groups.has-feedback
+          = f.password_field :password, required: false, placeholder: "Contraseña", class: "form-control"
+          span.glyphicon.glyphicon-lock.form-control-feedback
+          br
+          .row
+              .col-xs-8
+                  = f.input :remember_me, label: 'Recordarme', as: :boolean if devise_mapping.rememberable?
+              .col-xs-4
+                  .form-actions
+                      br
+                      br
+                      = f.button :submit, "Ingresar"

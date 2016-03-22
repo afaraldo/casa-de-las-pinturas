@@ -1,0 +1,41 @@
+section.content-header
+  h1 Stock
+section.content
+  .row
+    .col-xs-12
+      .box
+        = simple_form_for @movimiento, html: { id: 'movimiento-mercaderia-form' } do |f|
+          .box-header
+            h3.box-title = "#{ @movimiento.new_record? ? 'Nuevo Movimiento de Mercadería' : 'Editar Movimiento de Mercadería'}"
+          .box-body
+            = f.error_notification
+            .row
+              .col-sm-4
+                = f.input :fecha, as: :string, input_html: { class: 'datepicker', value: @movimiento.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)  }
+                = f.input :tipo,  as: :radio_buttons, item_wrapper_class: 'radio-inline', label_html: {style: 'display: block;'}
+                = f.input :motivo, input_html: { class: 'descripcion'}
+            .links
+              label.control-label Mercaderias
+            br
+            table.table.table-bordered.detalles-table
+              thead
+                tr
+                  td Código
+                  td Mercadería
+                  td Cantidad
+                  td
+              tbody#movimiento-detalles-body
+                = f.simple_fields_for :detalles do |detalle|
+                  = render 'detalle_fields', f: detalle
+
+            = link_to_add_association '<i class="fa fa-plus"></i> Agregar mercaderia'.html_safe, f, :detalles, class: 'btn btn-default pull-right',
+                                            'data-association-insertion-node' => '#movimiento-detalles-body',
+                                            'data-association-insertion-method' => 'append'
+          .box-footer
+            .text-right.form-actions
+              a.btn.btn-default href="#" Cancelar
+              | #{' '}
+              button.btn.btn-primary type="submit" Guardar movimiento
+
+javascript:
+  MovimientoMercaderiasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");

@@ -1,0 +1,32 @@
+section.content-header
+  h1 Stock
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Inventario
+          .box-tools.pull-right
+        .box-body#mercaderias-lista
+          #mercaderias-search.buscador-listado
+            = search_form_for @search_mercaderias, url: inventarios_path, remote: true, class: 'remote-search' do |f|
+              .row
+                .col-xs-7
+                  .input-group
+                    = f.text_field :nombre_or_codigo_cont, class: 'form-control', placeholder: 'Buscar por nombre o codigo...'
+                    .input-group-btn
+                      button.btn.btn-default type="submit" name="commit"
+                        i.fa.fa-search
+                .col-xs-5
+                  .form-group
+                    = f.select :categoria_id_eq_any,
+                                Categoria.agrupado.map{ |c| [c.nombre, c.id, {'data-espadre' => c.categoria_padre_id}] },
+                                {include_blank: 'Todas las categorías...'},
+                                class: 'form-control',
+                                id: 'mercaderias_categorias_buscador'
+          #mercaderias-table.overlay-wrapper.buscador-resultados
+            = render partial: 'inventarios/list', locals: {inventarios: @mercaderias}
+          #mercaderias-paginate-container
+            = paginate @mercaderias, remote: true
+javascript:
+  MercaderiasUI.recargarCategoriaFiltro();

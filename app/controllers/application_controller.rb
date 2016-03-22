@@ -6,9 +6,8 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   before_action :authenticate_user!
-  protect_from_forgery with: :exception
-
   before_filter :set_menu_config
+  protect_from_forgery with: :exception
 
   # Esta variable de instancia sse utilizara para saber que menus colocar como active y que submenus mostrar
   def set_menu_config

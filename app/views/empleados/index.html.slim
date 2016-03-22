@@ -1,0 +1,22 @@
+section.content-header
+  h1 Usuarios
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Listado de Usuarios
+          .box-tools.pull-right
+            = link_to 'Nuevo Usuario', new_empleado_path, class: 'btn btn-primary', remote: true
+        .box-body#users-lista
+          #empleado-search.buscador-listado
+            = search_form_for @search, remote: true, class: 'remote-search' do |f|
+              .input-group
+                = f.text_field :nombre_cont, class: 'form-control', placeholder: 'Buscar por nombre o CI...'
+                .input-group-btn
+                  button.btn.btn-default type="submit" name="commit"
+                    i.fa.fa-search
+          #empleados-table.overlay-wrapper.buscador-resultados
+            = render partial: 'empleados/list', locals: {empleados: @empleados}
+          #paginate-container
+            = paginate @empleados, remote: true

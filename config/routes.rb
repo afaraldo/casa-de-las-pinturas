@@ -3,17 +3,31 @@ Rails.application.routes.draw do
 
   devise_for :users
 
+  get 'configuraciones/check_empresa_nombre' => 'configuraciones#check_empresa_nombre'
+  resources :configuraciones, only: [:index, :edit, :update]
+
   get 'proveedores/check_nombre' => 'proveedores#check_nombre'
   resources :proveedores
+
+  get 'clientes/check_nombre' => 'clientes#check_nombre'
+  resources :clientes
+
+  get 'empleados/check_nombre' => 'empleados#check_nombre'
+  resources :empleados
 
   get 'categorias/check_nombre' => 'categorias#check_nombre'
   resources :categorias
 
   get 'mercaderias/check_codigo' => 'mercaderias#check_codigo'
+  get 'mercaderias/buscar' => 'mercaderias#buscar'
   resources :mercaderias
 
-  get 'clientes/check_nombre' => 'clientes#check_nombre'
-  resources :clientes
+  resources :inventarios, only: [:index]
+
+  resources :movimiento_mercaderias
+  
+  get 'monedas/check_nombre' => 'monedas#check_nombre'
+  resources :monedas
 
   get 'welcome/index'
 

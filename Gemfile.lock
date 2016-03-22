@@ -40,6 +40,7 @@ GEM
     autoprefixer-rails (6.3.3.1)
       execjs
     bcrypt (3.1.10)
+    bcrypt-ruby (3.0.1)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -51,6 +52,12 @@ GEM
       sass (>= 3.3.4)
     builder (3.2.2)
     byebug (8.2.2)
+    carrierwave (0.10.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      json (>= 1.7)
+      mime-types (>= 1.16)
+    cocoon (1.2.8)
     code_analyzer (0.4.5)
       sexp_processor
     coderay (1.1.1)
@@ -78,6 +85,9 @@ GEM
       activesupport (>= 3.2)
     erubis (2.7.0)
     execjs (2.6.0)
+    fabrication (2.15.0)
+    faker (1.6.3)
+      i18n (~> 0.5)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     i18n (0.7.0)
@@ -215,12 +225,17 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bcrypt-ruby (~> 3.0.0)
   better_errors
   bootstrap-sass (~> 3.3.6)
   byebug
+  carrierwave
+  cocoon
   devise
   devise_security_extension
   enumerize
+  fabrication
+  faker
   i18n-js (>= 3.0.0.rc11)
   jbuilder (~> 2.0)
   jquery-rails

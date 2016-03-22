@@ -27,26 +27,30 @@ menu:
         active_submenu: :compras_sidemenu
   stock:
     text: "Stock"
-    url: "#"
+    url: :inventarios
     active_menu: :stock
     submenus:
       inventario:
         text: "Inventario"
-        url: "#"
+        url: :inventarios
         active_submenu: :inventario_sidemenu
       mercaderias:
         text: "Mercaderias"
         url: :mercaderias
         active_submenu: :mercaderias_sidemenu
       movimientos_inventario:
-        text: "Movimientos de inventario"
-        url: "#"
-        active_submenu: :movimientos_inventario_sidemenu
+        text: "Movimientos de mercaderias"
+        url: :movimiento_mercaderias
+        active_submenu: :movimientos_mercaderias_sidemenu
   cajas:
     text: "Cajas"
     url: "#"
     active_menu: :cajas
     submenus:
+      cotizacion:
+        text: "Cotizacion"
+        url: :monedas
+        active_submenu: :monedas_sidemenu
   reportes:
     text: "Reportes"
     url: "#"
@@ -54,6 +58,14 @@ menu:
     submenus:
   configuraciones:
     text: "Configuraciones"
-    url: "#"
+    url: :configuraciones
     active_menu: :configuraciones
     submenus:
+      datos_empresa:
+        text: "Datos de la empresa"
+        url: :configuraciones
+        active_submenu: :datos_empresa_sidemenu
+      empleados:
+        text: "Empleados"
+        url: :empleados
+        active_submenu: :empleados_sidemenu
