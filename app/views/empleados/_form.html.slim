@@ -14,7 +14,7 @@
       = u.input :password_confirmation, label: 'Repetir contraseña'
     = f.input :direccion, input_html: {class: 'textoLargo'}
     = f.input :telefono, input_html: {class: 'textoMedio'}
-    = f.input :numero_documento, label: 'Nro. de documento', input_html: {class: 'textoMedio'}
+    = f.input :numero_documento, label: 'Nro. de documento', input_html: {class: 'textoCorto'}
   .modal-footer.text-right
     button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
     input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."

@@ -5,8 +5,9 @@ class Persona < ActiveRecord::Base
 
   after_initialize :set_limite_credito, if: :new_record?
   validates :telefono, length: {maximum: 50, minimum: 2}, allow_blank: true
+  validates :telefono, format: {with: /\A[^a-zA-Z]+\z/, message: :only_telephone_numbers_is_allowed }
   validates :direccion, length: {maximum: 150, minimum: 2}, allow_blank: true
-  validates :numero_documento, length: {maximum: 50, minimum: 2}
+  validates :numero_documento, length: {maximum: 20, minimum: 2}
   validates :numero_documento, presence: true
   validates :limite_credito, numericality: { greater_than_or_equal_to: 0 }
 
