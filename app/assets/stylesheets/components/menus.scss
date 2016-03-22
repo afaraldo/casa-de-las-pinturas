@@ -24,6 +24,12 @@
 }
 
 .sidebar-menu{
+  &> li {
+    &> a{
+      padding-right: 30px;
+      white-space: pre-wrap;
+    }
+  }
   &> li:hover, &> li.active{
     &> a{
       background: #E8E8E8 !important;

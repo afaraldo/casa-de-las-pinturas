@@ -1,0 +1,20 @@
+table.table.table-bordered
+  thead
+    tr
+      th Nombre
+      th Nombre de usuario
+      th Rol
+      th Telefono
+      th Direccion
+      th
+  tbody
+    - empleados.each do |empleado|
+      tr
+        td = empleado.nombre
+        td = empleado.user.username
+        td
+        td = empleado.telefono
+        td = empleado.direccion
+        td
+          = link_to '<i class="fa fa-edit"></i> '.html_safe, edit_empleado_path(empleado), remote: true, class: 'btn btn-default btn-sm'
+          = link_to ' <i class="fa fa-trash"></i>'.html_safe, empleado_path(empleado), method: 'delete', data: {confirm: "¿Desea eliminar el user #{empleado.nombre}?"}, remote: true, class: 'btn btn-danger btn-sm'

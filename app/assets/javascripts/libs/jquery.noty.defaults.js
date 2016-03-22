@@ -36,6 +36,9 @@ $.noty.themes.bootstrapTheme = {
             case 'information':
                 this.$bar.addClass("alert-info");
                 break;
+            case 'notice':
+                this.$bar.addClass("alert-success");
+                break;
             case 'success':
                 this.$bar.addClass( "alert-success" );
                 break;
@@ -66,12 +69,12 @@ $.noty.defaults = {
         easing: 'swing',
         speed: 500 // opening & closing animation speed
     },
-    timeout: 5000, // delay for closing event. Set false for sticky notifications
+    timeout: 8000, // delay for closing event. Set false for sticky notifications
     force: false, // adds notification to the beginning of queue when set to true
     modal: false,
     maxVisible: 5, // you can set max visible notification for dismissQueue true option,
     killer: false, // for close all notifications before show
-    closeWith: ['click'], // ['click', 'button', 'hover']
+    closeWith: ['click', 'button'], // ['click', 'button', 'hover']
     callback: {
         onShow: function() {},
         afterShow: function() {},

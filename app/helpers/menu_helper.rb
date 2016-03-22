@@ -9,7 +9,7 @@ module MenuHelper
 
     menu.each do |item, opciones|
       active = is_active_main_menu?(opciones['active_menu'])
-      html << content_tag(:li, link_to(opciones['text'], opciones['url']), class: active ? 'active' : '')
+      html << content_tag(:li, link_to(content_tag(:span, opciones['text']), opciones['url']), class: active ? 'active' : '')
     end
 
     html.html_safe

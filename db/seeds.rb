@@ -1,4 +1,3 @@
-
 ################################
 # FABRICANDO DATOS DE EJEMPLO  #
 ################################
@@ -57,3 +56,12 @@ if Configuracion.first.nil?
                         empresa_telefono:'071-203917',
                         empresa_email:'lcdpt@info.com')
 end
+
+# Crear un empleado
+@empleado = Persona.create nombre: 'Laura Perez', direccion:'Nuevo circuito comercial', telefono: '12345678', numero_documento: '1234567-8',  tipo: "Empleado", limite_credito: 0, user_attributes: { username: 'admin', password: '12345678' } if User.find_by_username('admin').nil?
+
+# Crear monedas
+Moneda.create nombre: 'Guarani', abreviatura: 'Gs', cotizacion: 1, defecto: true
+Moneda.create nombre: 'Peso Argentino', abreviatura: 'Ps', cotizacion: 300, defecto: false
+Moneda.create nombre: 'Dolar', abreviatura: '$', cotizacion: 5000, defecto: false
+Moneda.create nombre: 'Real Brasileño', abreviatura: 'R', cotizacion: 3000, defecto: false
