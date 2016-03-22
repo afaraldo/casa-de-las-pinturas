@@ -1,17 +1,26 @@
-.col-xs-12
-  = simple_form_for @configuracion do |f|
-    .col-xs-5
-      = f.input :empresa_nombre, label: 'Nombre'
-    .col-xs-5
-      = f.input :empresa_direccion, label: 'Direccion'
-    .col-xs-5
-      = f.input :empresa_telefono, label: 'Telefono'
-    .col-xs-5
-      = f.input :empresa_email, label: 'Email'
-    .col-xs-5
-      = image_tag(@configuracion.avatar.to_s,:width => 90, :height => 80)
-      = f.input :avatar, :as => :file, :label => "Subir Imagen"
+section.content-header
+  h1 Configuraciones
+section.content
+  .row
     .col-xs-12
-      input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
-
+      .box
+        .box-header
+          h3.box-title Datos de la empresa
+        .box-body
+          = simple_form_for @configuracion, html: {id: 'configuracion-form'} do |f|
+            .col-xs-5
+              = f.input :empresa_nombre, label: 'Nombre',     input_html: {class: 'textoMedio'}
+            .col-xs-5
+              = f.input :empresa_direccion, label: 'Direccion',     input_html: {class: 'textoLargo'}
+            .col-xs-5
+              = f.input :empresa_telefono, label: 'Telefono',     input_html: {class: 'textoLargo'}
+            .col-xs-5
+              = f.input :empresa_email, label: 'Email',     input_html: {class: 'textoMedio'}
+            .col-xs-5
+              = image_tag(@configuracion.avatar.to_s,:width => 90, :height => 80)
+              = f.input :avatar, :as => :file, :label => "Subir Imagen"
+            .col-xs-12
+              input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
+javascript:
+  ConfiguracionesUI.initFormEvents("#{configuraciones_check_empresa_nombre_path}");
     

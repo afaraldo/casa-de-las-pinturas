@@ -50,6 +50,6 @@ menu:
     submenus:
   configuraciones:
     text: "Configuraciones"
-    url: "#"
+    url: :configuraciones
     active_menu: :configuraciones
     submenus:

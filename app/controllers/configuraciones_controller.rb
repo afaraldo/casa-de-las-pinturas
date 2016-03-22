@@ -7,13 +7,11 @@ class ConfiguracionesController < ApplicationController
   def show
   end
 
-  def upload_file(file)
-  # Declaring
-    uploader = FileUploader.new
-  # Upload it
-    uploader.store!(file)
 
-    return uploader.url
+  def index
+
+    redirect_to edit_configuracion_path(Configuracion.first)
+
   end
 
   # PATCH/PUT /configuraciones/1
@@ -25,8 +23,8 @@ class ConfiguracionesController < ApplicationController
         flash.now[:notice] = "Configuraciones actualizados correctamente"
         format.html { render action: "edit"}
       else
-        @error = true
-        @message = "Ha ocurrido un problema al tratar de guardar la configuracion"
+        flash.now[:error] = "Ha ocurrido un problema al tratar de guardar la configuracion"
+        format.html { render action: "edit"}
       end
     end
   end

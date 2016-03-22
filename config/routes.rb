@@ -3,7 +3,8 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :configuraciones
+  get 'configuraciones/check_empresa_nombre' => 'configuraciones#check_empresa_nombre'
+  resources :configuraciones, only: [:index, :edit, :update]
 
   get 'proveedores/check_nombre' => 'proveedores#check_nombre'
   resources :proveedores
