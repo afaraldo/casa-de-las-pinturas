@@ -55,6 +55,7 @@ gem 'tzinfo-data'
 
 # See https://github.com/carrierwaveuploader/carrierwave
 gem 'carrierwave'
+gem 'cloudinary' # para usar las imagenes en heroku
 
 # Para cargar datos de pruebas
 gem 'fabrication'

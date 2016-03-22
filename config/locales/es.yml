@@ -171,6 +171,7 @@ es:
       odd: debe ser impar
       required: debe existir
       taken: ya está en uso
+      extension_white_list_error: "El formato de la imagen es inválido. Los formatos válidos son: jpg, jpeg, gif y png."
       too_long:
         one: "es demasiado largo (1 carácter máximo)"
         other: "es demasiado largo (%{count} caracteres máximo)"

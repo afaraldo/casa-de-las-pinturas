@@ -1,5 +1,10 @@
 header.main-header
-  a.logo LCDP
+  a.logo
+    - logo = Configuracion.first.avatar
+    - unless logo.url.nil?
+      = cl_image_tag(Configuracion.first.avatar, :width => 50, :height => 50, :crop => :fill, :radius => :max)
+    - else
+      | LCDP
   nav.navbar
     .pull-left data-toggle="tooltip" title="Mostrar/Esconder Menu lateral" data-placement="bottom" data-trigger="hover"
       a.sidebar-toggle href="#" data-toggle="offcanvas" role="button"
