@@ -35,7 +35,11 @@ gem "paranoia", "~> 2.0"
 # internacionalizacion del lado del cliente
 gem "i18n-js", ">= 3.0.0.rc11"
 
+gem "cocoon"
+
 gem 'devise'
+
+gem 'devise_security_extension'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -50,6 +54,10 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # needed for some windows environments
 gem 'tzinfo-data'
+
+# See https://github.com/carrierwaveuploader/carrierwave
+gem 'carrierwave'
+gem 'cloudinary' # para usar las imagenes en heroku
 
 # Para cargar datos de pruebas
 gem 'fabrication'

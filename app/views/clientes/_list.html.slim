@@ -1,0 +1,23 @@
+table.table.table-bordered
+  thead
+    tr
+      th Nombre
+      th RUC/CI
+      th Dirección
+      th Teléfono
+      th Límite de crédito
+      th
+      th
+  tbody
+    - clientes.each do |cliente|
+      tr
+        td = cliente.nombre
+        td = cliente.numero_documento
+        td = cliente.direccion
+        td = cliente.telefono
+        td = number_to_currency(cliente.limite_credito)
+        td = link_to 'Movimientos', '#', class: 'btn btn-default btn-sm'
+        td
+          = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_cliente_path(cliente), remote: true, class: 'btn btn-default btn-sm'
+          | #{' '}
+          = link_to ' <i class="fa fa-trash"></i>'.html_safe, cliente_path(cliente), method: 'delete', data: {confirm: "¿Desea eliminar el cliente #{cliente.nombre}?"}, remote: true, class: 'btn btn-danger btn-sm'

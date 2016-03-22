@@ -1,0 +1,20 @@
+= simple_form_for cliente, url: !cliente.new_record? ? cliente_path(cliente) : clientes_path,
+                              html: {id: 'cliente-form'},
+                              remote: true do |f|
+  .modal-header
+    button.close type="button" data-dismiss="modal"
+      span &times;
+    = cliente.new_record? ? 'Nuevo cliente' : 'Editar cliente'
+  .modal-body
+    = f.input :id, as: :hidden, input_html: { id: 'cliente_id' }
+    = f.input :nombre,    input_html: {class: 'textoLargo uniqueClienteNombre'}
+    = f.input :direccion, input_html: {class: 'textoLargo'}
+    = f.input :telefono,  input_html: {class: 'textoMedio'}
+    = f.input :numero_documento,       input_html: {class: 'textoMedio'}
+    = f.input :limite_credito, as: :string, input_html: {class: 'limiteNumero maskMoneda'}
+  .modal-footer.text-right
+    button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
+    input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
+
+javascript:
+  ClientesUI.initFormEvents("#{clientes_check_nombre_path}");
