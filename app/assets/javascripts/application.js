@@ -25,7 +25,10 @@
 //= require ./libs/select2/select2.js
 //= require ./libs/select2/i18n/es.js
 //= require ./libs/jquery.inputmask.bundle.js
+//= require ./libs/bootstrap-datepicker/bootstrap-datepicker.js
+//= require ./libs/bootstrap-datepicker/bootstrap-datepicker.es.min.js
 //= require ./libs/libs.defaults.js
+//= require cocoon
 //= require_tree ./helpers
 //= require_tree ./modules
 
@@ -63,7 +66,9 @@ CasaDeLasPinturas = {
             });
 
         }
-    }
+    },
+
+    movimiento_mercaderias: MovimientoMercaderiasUI
 
 };
 

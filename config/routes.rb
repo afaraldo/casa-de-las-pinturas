@@ -12,10 +12,13 @@ Rails.application.routes.draw do
   resources :categorias
 
   get 'mercaderias/check_codigo' => 'mercaderias#check_codigo'
+  get 'mercaderias/buscar' => 'mercaderias#buscar'
   resources :mercaderias
 
   resources :inventarios, only: [:index]
 
+  resources :movimiento_mercaderias
+  
   get 'monedas/check_nombre' => 'monedas#check_nombre'
   resources :monedas
 
