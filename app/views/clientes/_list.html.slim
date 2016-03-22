@@ -16,6 +16,7 @@ table.table.table-bordered
         td = cliente.direccion
         td = cliente.telefono
         td = number_to_currency(cliente.limite_credito)
+        td = link_to 'Movimientos', '#', class: 'btn btn-default btn-sm'
         td
           = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_cliente_path(cliente), remote: true, class: 'btn btn-default btn-sm'
           | #{' '}
