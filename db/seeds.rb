@@ -25,12 +25,6 @@ Fabricator(:mercaderia) do
   unidad_de_medida { :unidad }
 end
 
-Fabricator(:moneda) do
-  nombre { Faker::Name.last_name }
-  abreviatura { Faker::Lorem.characters(2) }
-  cotizacion { Faker::Number.between(400000, 2000000) }
-end
-
 15.times {
   begin
     Fabricate(:categoria)
@@ -50,14 +44,6 @@ end
 30.times {
   begin
     Fabricate(:proveedor)
-  rescue
-    next
-  end
-}
-
-30.times {
-  begin
-    Fabricate(:moneda)
   rescue
     next
   end
