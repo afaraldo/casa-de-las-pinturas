@@ -59,7 +59,7 @@ menu:
     submenus:
       datos_empresa:
         text: "Datos de la empresa"
-        url: "#"
+        url: :configuraciones
         active_submenu: :datos_empresa_sidemenu
       empleados:
         text: "Empleados"
