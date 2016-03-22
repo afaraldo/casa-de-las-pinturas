@@ -1,4 +1,5 @@
 class Moneda < ActiveRecord::Base
+  acts_as_paranoid
   validates :nombre, presence: true
   validates :nombre, length: {maximum: 50, minimum: 2}
   validates :nombre, uniqueness: true
