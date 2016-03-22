@@ -21,6 +21,10 @@ menu:
     url: "#"
     active_menu: :ventas
     submenus:
+      ventas:
+        text: "Ventas"
+        url: "#"
+        active_submenu: :compras_sidemenu
   stock:
     text: "Stock"
     url: :inventarios

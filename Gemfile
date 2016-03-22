@@ -38,6 +38,8 @@ gem "i18n-js", ">= 3.0.0.rc11"
 gem "cocoon"
 
 gem 'devise'
+
+gem 'devise_security_extension'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 

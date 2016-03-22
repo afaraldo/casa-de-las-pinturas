@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+
   devise_for :users
 
   get 'configuraciones/check_empresa_nombre' => 'configuraciones#check_empresa_nombre'
@@ -7,6 +8,9 @@ Rails.application.routes.draw do
 
   get 'proveedores/check_nombre' => 'proveedores#check_nombre'
   resources :proveedores
+
+  get 'clientes/check_nombre' => 'clientes#check_nombre'
+  resources :clientes
 
   get 'empleados/check_nombre' => 'empleados#check_nombre'
   resources :empleados
