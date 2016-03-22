@@ -52,6 +52,7 @@ GEM
       sass (>= 3.3.4)
     builder (3.2.2)
     byebug (8.2.2)
+    cocoon (1.2.8)
     code_analyzer (0.4.5)
       sexp_processor
     coderay (1.1.1)
@@ -220,6 +221,7 @@ DEPENDENCIES
   better_errors
   bootstrap-sass (~> 3.3.6)
   byebug
+  cocoon
   devise
   enumerize
   fabrication
