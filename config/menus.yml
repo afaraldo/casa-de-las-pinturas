@@ -25,6 +25,10 @@ menu:
         text: "Ventas"
         url: "#"
         active_submenu: :compras_sidemenu
+      clientes:
+        text: "Clientes"
+        url: :clientes
+        active_submenu: :clientes_sidemenu
   stock:
     text: "Stock"
     url: :inventarios

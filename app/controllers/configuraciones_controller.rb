@@ -1,6 +1,6 @@
 class ConfiguracionesController < ApplicationController
   before_action :set_configuracion, only: [:edit, :update]
-  before_action :setup_menu, only: [:index]
+  before_action :setup_menu, only: [:index, :edit, :update]
 
   # configuracion del menu
   def setup_menu

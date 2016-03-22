@@ -11,7 +11,7 @@ class MovimientoMercaderiaDetalle < ActiveRecord::Base
   delegate :nombre, to: :mercaderia, prefix: true
   delegate :codigo, to: :mercaderia, prefix: true
 
-  validates :cantidad, numericality: { greater_than_or_equal_to: 0.001 }
+  validates :cantidad, numericality: { greater_than: 0 }
   validate  :check_stock_negativo
 
   # Comprobar que la cantidad no provoque stock negativo
