@@ -82,9 +82,6 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
-    devise_security_extension (0.10.0)
-      devise (>= 3.0.0, < 4.0)
-      railties (>= 3.2.6, < 5.0)
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
     enumerize (0.11.0)
@@ -249,7 +246,6 @@ DEPENDENCIES
   cloudinary
   cocoon
   devise
-  devise_security_extension
   enumerize
   fabrication
   faker
