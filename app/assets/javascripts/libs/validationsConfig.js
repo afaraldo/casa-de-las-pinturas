@@ -51,7 +51,7 @@ $.validator.addClassRules({
         maxlength: 255
     },
     limiteNumero: {
-        maxlength: 25
+        maxlength: 20
     },
     passwordLength: {
         minlength: 8

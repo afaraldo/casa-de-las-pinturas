@@ -8,6 +8,7 @@ class CreatePersonas < ActiveRecord::Migration
       t.string :type, null: false, limit: 15
       t.decimal :limite_credito
 
+
       t.timestamps null: false
     end
   end
