@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160320193854) do
+ActiveRecord::Schema.define(version: 20160322083744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,16 @@ ActiveRecord::Schema.define(version: 20160320193854) do
     t.datetime "deleted_at"
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
+  end
+
+  create_table "configuraciones", force: :cascade do |t|
+    t.string   "empresa_nombre"
+    t.string   "empresa_direccion"
+    t.string   "empresa_telefono"
+    t.string   "empresa_email"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "avatar"
   end
 
   create_table "mercaderias", force: :cascade do |t|
@@ -51,7 +61,10 @@ ActiveRecord::Schema.define(version: 20160320193854) do
     t.boolean  "defecto",                              default: false
     t.datetime "created_at",                                           null: false
     t.datetime "updated_at",                                           null: false
+    t.datetime "deleted_at"
   end
+
+  add_index "monedas", ["deleted_at"], name: "index_monedas_on_deleted_at", using: :btree
 
   create_table "movimiento_mercaderia_detalles", force: :cascade do |t|
     t.integer  "movimiento_mercaderia_id"
@@ -75,10 +88,10 @@ ActiveRecord::Schema.define(version: 20160320193854) do
   end
 
   create_table "personas", force: :cascade do |t|
-    t.string   "nombre",           limit: 40
-    t.string   "telefono",         limit: 20
+    t.string   "nombre",           limit: 150
+    t.string   "telefono",         limit: 50
     t.string   "direccion",        limit: 200
-    t.string   "numero_documento", limit: 30
+    t.string   "numero_documento", limit: 20
     t.string   "tipo",             limit: 15,  null: false
     t.decimal  "limite_credito"
     t.datetime "created_at",                   null: false
