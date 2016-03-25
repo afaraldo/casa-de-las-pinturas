@@ -12,7 +12,7 @@ es:
       invalid: "Nombre de usuario o contraseña inválidos."
       locked: "Tu cuenta ha sido bloqueada."
       last_attempt: "Tienes un último intento antes de que tu cuenta sea bloqueada."
-      not_found_in_database: "Nombre de usuario o contraseña inválidos."
+      not_found_in_database: "Nombre de usuario o contraseña inválidos o no se han ingresado."
       timeout: "Tu sesión ha expirado, por favor inicia sesión nuevamente para continuar."
       unauthenticated: "Necesitas iniciar sesión o registrarte para continuar."
       unconfirmed: "Debes confirmar tu cuenta para continuar."
