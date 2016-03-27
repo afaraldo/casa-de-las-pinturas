@@ -40,6 +40,7 @@ es:
         tipo: "Tipo de movimiento"
     errors:
       messages:
+        email_invalido: "Por favor, escribí una dirección de correo válida"
         record_invalid: "La validación falló: %{errors}"
         restrict_dependent_destroy:
           has_one: No se puede eliminar el registro porque existe un %{record} dependiente

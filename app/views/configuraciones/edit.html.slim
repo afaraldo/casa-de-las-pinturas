@@ -17,7 +17,7 @@ section.content
               .col-xs-5
                 = f.input :empresa_telefono, label: 'Telefono',     input_html: {class: 'textoLargo'}
               .col-xs-5
-                = f.input :empresa_email, label: 'Email', id: 'hidden-user-email' ,input_html: {class: 'textoMedio'}
+                = f.input :empresa_email, label: 'Email', id: 'hidden-user-email' ,input_html: {class: 'textoMedio email'}
             .row
               .col-xs-5
                 = image_tag(@configuracion.avatar.to_s,:width => 90, :height => 80)
@@ -27,8 +27,5 @@ section.content
                 input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
 javascript:
   ConfiguracionesUI.initFormEvents("#{configuraciones_check_empresa_nombre_path}");
-  function email(e) {
-        var elemento = e;
-        document.getElementById("hidden-user-email").value = (elemento.value + '@email.com');
-  } 
+
     
