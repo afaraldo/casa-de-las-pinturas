@@ -1,0 +1,3 @@
+| var modal = $('#main-modal');
+| modal.find('.modal-content').html("#{escape_javascript(render partial: 'form', format: :html, locals: {empleado: @empleado, user: @user})}");
+| modal.modal('show');

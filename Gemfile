@@ -35,6 +35,8 @@ gem "paranoia", "~> 2.0"
 # internacionalizacion del lado del cliente
 gem "i18n-js", ">= 3.0.0.rc11"
 
+gem "cocoon"
+
 gem 'devise'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
@@ -53,10 +55,13 @@ gem 'tzinfo-data'
 
 # See https://github.com/carrierwaveuploader/carrierwave
 gem 'carrierwave'
+gem 'cloudinary' # para usar las imagenes en heroku
 
 # Para cargar datos de pruebas
 gem 'fabrication'
 gem 'faker'
+
+gem "bcrypt-ruby", '~> 3.0.0'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

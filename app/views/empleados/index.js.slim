@@ -1,0 +1,3 @@
+| $("#empleados-table").html("#{escape_javascript(render partial: 'list', format: 'html', locals: {empleados: @empleados})}");
+| $('#paginate-container').html("#{escape_javascript(paginate(@empleados, remote: true)) }");
+| $('.buscador-resultados > .overlay').remove();

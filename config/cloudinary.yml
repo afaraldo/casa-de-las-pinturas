@@ -1,0 +1,19 @@
+---
+development:
+  cloud_name: carlosleite
+  api_key: '878697462641227'
+  api_secret: HmMuY8lsg2Cehp9QJNNHrjnyudk
+  enhance_image_tag: true
+  static_image_support: false
+production:
+  cloud_name: carlosleite
+  api_key: '878697462641227'
+  api_secret: HmMuY8lsg2Cehp9QJNNHrjnyudk
+  enhance_image_tag: true
+  static_image_support: true
+test:
+  cloud_name: carlosleite
+  api_key: '878697462641227'
+  api_secret: HmMuY8lsg2Cehp9QJNNHrjnyudk
+  enhance_image_tag: true
+  static_image_support: false

@@ -13,22 +13,43 @@ es:
         numero_documento: 'RUC/CI'
   proveedor:
     unique_nombre_error: "Ya existe un proveedor con el nombre %{nombre}"
+  empleado:
+    unique_nombre_error: "Ya existe un empleado con el nombre %{nombre}"
   categoria:
     unique_nombre_error: "Ya existe una categoría con el nombre %{nombre}"
     tiene_subcategorias_error: "No se puede eliminar la categoria porque posee subcategorias"
     mercaderias_dependientes_error: "No se puede eliminar la categoria porque hay mercaderias que dependen de ella"
   mercaderia:
     unique_codigo_error: "Ya existe una mercadería con el código %{codigo}"
+  movimiento_mercaderia:
+    eliminar_stock_negativo: "Eliminar este movimiento va a provocar stock negativo en las siguientes mercaderias: %{mercaderias}"
+    detalle_cantidad_stock_negativo: "Esta cantidad va a provocar stock negativo en el sistema"
+  moneda:
+    unique_nombre_error: "Ya existe una moneda con el nombre %{nombre}"
   activerecord:
+    models:
+      user: "Usuario"
+    attributes:
+      user:
+        username: "Nombre de usuario"
+        password: "Contraseña"
+        password_confirmation: "Confirmación de contraseña"
+      empleado:
+        user: "Usuario"
+      movimiento_mercaderia:
+        tipo: "Tipo de movimiento"
     errors:
       messages:
         record_invalid: "La validación falló: %{errors}"
         restrict_dependent_destroy:
           has_one: No se puede eliminar el registro porque existe un %{record} dependiente
           has_many: No se puede eliminar el registro porque existen %{record} dependientes
+        only_letters_is_allowed: "solo permite letras"
   mensajes:
     save_success: "Se ha guardado %{recurso}"
     save_error: "Ha ocurrido un problema al tratar de guardar %{recurso}. %{errores}"
+    update_success: "Se ha actualizado %{recurso}"
+    update_error: "Ha ocurrido un problema al tratar de actualizar %{recurso}. %{errores}"
     delete_success: "Se ha eliminado %{recurso}"
     delete_error: "Ha ocurrido un problema al tratar de eliminar %{recurso}. %{errores}"
   date:
@@ -150,6 +171,7 @@ es:
       odd: debe ser impar
       required: debe existir
       taken: ya está en uso
+      extension_white_list_error: "El formato de la imagen es inválido. Los formatos válidos son: jpg, jpeg, gif y png."
       too_long:
         one: "es demasiado largo (1 carácter máximo)"
         other: "es demasiado largo (%{count} caracteres máximo)"

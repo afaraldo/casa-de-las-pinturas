@@ -1,0 +1,14 @@
+tr.nested-fields
+  td.codigo-celda
+  td.form-group
+    = f.input :mercaderia_id, as: :string,
+                              label: false,
+                              input_html: { class: 'form-control mercaderia-select required',
+                                            data: {"msg-required" => 'Debe seleccionar una mercaderia',
+                                                   mercaderia: f.object.mercaderia.to_json } }
+  td.form-group
+    = f.input :cantidad,      as: :string,
+                              label: false,
+                              input_html: { class: 'form-control maskCantidad required', data: { 'msg-required' => 'Debe ingresar una cantidad' }, value: number_with_precision(f.object.cantidad) }
+  td
+    = link_to_remove_association '<i class="fa fa-times"></i>'.html_safe, f, class: 'btn btn-default btn-sm'

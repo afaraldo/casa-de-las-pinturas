@@ -1,5 +1,12 @@
 class ConfiguracionesController < ApplicationController
   before_action :set_configuracion, only: [:edit, :update]
+  before_action :setup_menu, only: [:index]
+
+  # configuracion del menu
+  def setup_menu
+    @menu_setup[:main_menu] = :configuraciones
+    @menu_setup[:side_menu] = :datos_empresa_sidemenu
+  end
 
   # GET /configuraciones/1/edit
   def edit
