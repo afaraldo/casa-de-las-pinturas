@@ -74,7 +74,7 @@ if Configuracion.first.nil?
 end
 
 # Crear un empleado
-@empleado = Persona.create nombre: 'Laura Perez', direccion:'Nuevo circuito comercial', telefono: '12345678', numero_documento: '1234567-8',  tipo: "Empleado", limite_credito: 0, user_attributes: { username: 'admin', password: '12345678' } if User.find_by_username('admin').nil?
+@empleado = Persona.create nombre: 'Laura Perez', direccion:'Nuevo circuito comercial', telefono: '12345678', numero_documento: '1234567-8',  tipo: "Empleado", limite_credito: 0, user_attributes: { username: 'admin', password: 'Admin+123' } if User.find_by_username('admin').nil?
 
 # Crear monedas
 Moneda.create nombre: 'Guarani',        abreviatura: 'Gs',  cotizacion: 1,    defecto: true   if Moneda.find_by_nombre('Guarani').nil?

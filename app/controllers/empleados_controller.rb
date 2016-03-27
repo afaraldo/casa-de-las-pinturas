@@ -37,11 +37,11 @@ class EmpleadosController < ApplicationController
     @empleado = Empleado.new(empleado_params)
     if @empleado.save
       @error = false
-      @message = "Se ha guardado el empleado"
+      @message = "Se ha guardado el usuario"
       get_empleados
     else
       @error = true
-      @message = "Ha ocurrido un problema al tratar de guardar el empleado. #{@empleado.errors.full_messages.to_sentence}"
+      @message = "Ha ocurrido un problema al tratar de guardar el usuario. #{@empleado.errors.full_messages.to_sentence}"
     end
 
     render 'reload_list', format: :js
@@ -56,11 +56,11 @@ class EmpleadosController < ApplicationController
     end
     if @empleado.update(empleado_params)
       @error = false
-      @message = "Se ha guardado el empleado"
+      @message = "Se ha guardado el usuario"
       get_empleados
     else
       @error = true
-      @message = "Ha ocurrido un problema al tratar de guardar el empleado. #{@empleado.errors.full_messages.to_sentence}"
+      @message = "Ha ocurrido un problema al tratar de guardar el usuario. #{@empleado.errors.full_messages.to_sentence}"
     end
 
     render 'reload_list', format: :js
@@ -71,11 +71,11 @@ class EmpleadosController < ApplicationController
   def destroy
     if @empleado.destroy
       @error = false
-      @message = "Se ha eliminado el empleado"
+      @message = "Se ha eliminado el usuario"
       get_empleados
     else
       @error = true
-      @message = "Ha ocurrido un problema al tratar de eliminar el empleado"
+      @message = "Ha ocurrido un problema al tratar de eliminar el usuario"
     end
 
     render 'reload_list', format: :js

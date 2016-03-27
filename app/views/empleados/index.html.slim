@@ -12,7 +12,7 @@ section.content
           #empleado-search.buscador-listado
             = search_form_for @search, remote: true, class: 'remote-search' do |f|
               .input-group
-                = f.text_field :nombre_or_numero_documento_cont, class: 'form-control', placeholder: 'Buscar por nombre o CI...'
+                = f.text_field :nombre_or_numero_documento_or_user_username_cont, class: 'form-control', placeholder: 'Buscar por nombre o nombre de usuario o número de documento...'
                 .input-group-btn
                   button.btn.btn-default type="submit" name="commit"
                     i.fa.fa-search
