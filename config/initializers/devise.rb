@@ -145,7 +145,7 @@ Devise.setup do |config|
 
   # ==> Configuration for :validatable
   # Range for password length.
-  #config.password_length = 8..20
+  config.password_length = 8..20
   # Need 1 char of A-Z, a-z 0-9 and $
   #config.password_regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,20}.*$/
   # Email regex used to validate email formats. It simply asserts that
