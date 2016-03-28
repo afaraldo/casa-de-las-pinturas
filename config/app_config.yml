@@ -1,4 +1,4 @@
-version: 'v0.2.10-'  # Nro de version de la app.
+version: 'v0.3.0-'  # Nro de version de la app.
                     # v1.2.3-rev  1: release con cambios importantes a produccion,
                     #             2: release despues de cada sprints,
                     #             3: builds periodicos y fixes a releases
