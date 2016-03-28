@@ -29,7 +29,7 @@ section.content
                     = f.select :tipo_eq, MovimientoMercaderia.tipo.options,
                                          {include_blank: 'Todos los tipos...'},
                                          class: 'form-control'
-          #movimiento-mercaderias-table.overlay-wrapper.buscador-resultados
+          #movimiento-mercaderias-table.overlay-wrapper.buscador-resultados.table-responsive
             = render partial: 'movimiento_mercaderias/list', locals: {movimientos: @movimientos}
           #movimiento-mercaderias-paginate-container
             = paginate @movimientos, remote: true

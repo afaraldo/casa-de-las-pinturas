@@ -25,7 +25,7 @@ section.content
                                 {include_blank: 'Todas las categorías...'},
                                 class: 'form-control',
                                 id: 'mercaderias_categorias_buscador'
-          #mercaderias-table.overlay-wrapper.buscador-resultados
+          #mercaderias-table.overlay-wrapper.buscador-resultados.table-responsive
             = render partial: 'mercaderias/list', locals: {mercaderias: @mercaderias}
           #mercaderias-paginate-container
             = paginate @mercaderias, remote: true

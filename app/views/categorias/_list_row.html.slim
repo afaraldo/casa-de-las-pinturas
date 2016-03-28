@@ -1,5 +1,5 @@
 tr
-  td = (categoria.categoria_padre_id.nil? ? '' : '--- ') + categoria.nombre
+  td = (categoria.categoria_padre_id.nil? ? '' : '--- ').html_safe + cortar_texto(categoria.nombre)
   td.text-right
     = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_categoria_path(categoria), remote: true, class: 'btn btn-default btn-sm'
     | #{' '}

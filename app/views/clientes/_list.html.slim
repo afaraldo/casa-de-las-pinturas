@@ -1,4 +1,4 @@
-table.table.table-bordered
+table.table.table-bordered.table-hover
   thead
     tr
       th Nombre
@@ -7,13 +7,13 @@ table.table.table-bordered
       th Teléfono
       th Límite de crédito
       th
-      th
+      th.table-actions
   tbody
     - clientes.each do |cliente|
       tr
-        td = cliente.nombre
+        td = cortar_texto(cliente.nombre)
         td = cliente.numero_documento
-        td = cliente.direccion
+        td = cortar_texto(cliente.direccion)
         td = cliente.telefono
         td = number_to_currency(cliente.limite_credito)
         td = link_to 'Movimientos', '#', class: 'btn btn-default btn-sm'

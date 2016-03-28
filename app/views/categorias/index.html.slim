@@ -11,7 +11,7 @@
           .input-group-btn
             button.btn.btn-default type="submit" name="commit"
               i.fa.fa-search
-    #categorias-table.overlay-wrapper.buscador-resultados
+    #categorias-table.overlay-wrapper.buscador-resultados.table-responsive
       = render partial: 'categorias/list', locals: {categorias: categorias}
     #categorias-paginate-container
       = paginate categorias, params: {controller: :categorias}, remote: true

@@ -16,7 +16,7 @@ section.content
                 .input-group-btn
                   button.btn.btn-default type="submit" name="commit"
                     i.fa.fa-search
-          #empleados-table.overlay-wrapper.buscador-resultados
+          #empleados-table.overlay-wrapper.buscador-resultados.table-responsive
             = render partial: 'empleados/list', locals: {empleados: @empleados}
           #paginate-container
             = paginate @empleados, remote: true
