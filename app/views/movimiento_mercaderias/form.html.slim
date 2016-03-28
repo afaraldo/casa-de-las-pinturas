@@ -13,7 +13,7 @@ section.content
               .col-sm-4
                 = f.input :fecha, as: :string, input_html: { class: 'datepicker', value: @movimiento.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)  }
                 = f.input :tipo,  as: :radio_buttons, item_wrapper_class: 'radio-inline', label_html: {style: 'display: block;'}
-                = f.input :motivo, input_html: { class: 'descripcion'}
+                = f.input :motivo
             .links
               label.control-label Mercaderias
             br

@@ -7,7 +7,7 @@
     = categoria.new_record? ? 'Nueva categoría' : 'Editar categoría'
   .modal-body
     = f.input :id, as: :hidden, input_html: { id: 'categoria_id' }
-    = f.input :nombre,    input_html: {class: 'textoCorto uniqueCategoriaNombre'}, autofocus: true
+    = f.input :nombre,    input_html: {class: 'uniqueCategoriaNombre'}, autofocus: true
     / si tiene subcategorias no se puede asignar a otra categoria
     = f.input :categoria_padre_id,
               as: :select,

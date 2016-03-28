@@ -7,14 +7,14 @@
     = empleado.new_record? ? 'Nuevo Usuario' : 'Editar Usuario'
   .modal-body
     = f.input :id, as: :hidden, input_html: { id: 'empleado_id' }
-    = f.input :nombre,    input_html: {class: 'textoLargo uniqueEmpleadoNombre'}
+    = f.input :nombre,    input_html: {class: 'uniqueEmpleadoNombre'}
     = f.simple_fields_for :user do |u|
-      = u.input :username, input_html: {class: 'textoMedio'}
+      = u.input :username
       = u.input :password
       = u.input :password_confirmation, label: 'Repetir contraseña', input_html: {class: 'passwordConfirmation'}
-    = f.input :direccion, input_html: {class: 'textoLargo'}
-    = f.input :telefono, input_html: {class: 'textoMedio'}
-    = f.input :numero_documento, label: 'Nro. de documento', input_html: {class: 'textoCorto'}
+    = f.input :direccion
+    = f.input :telefono
+    = f.input :numero_documento, label: 'Nro. de documento'
   .modal-footer.text-right
     button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
     input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
