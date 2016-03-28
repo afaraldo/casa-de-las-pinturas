@@ -11,9 +11,9 @@ jQuery.validator.setDefaults({
         $(element).next('.server-error-msg').html('');
     },
     errorPlacement: function(error, element) {
-        if(element.parents('.buttons-group').length > 0){
+        if(element.parents('.btn-group').length > 0){
             // Place the error after the buttons
-            element.parents('.buttons-group').append(error);
+            element.parents('.btn-group').after(error);
         }else if(element.parents('.radio').length > 0){
             if(element.parents('.form-horizontal').length > 0){
                 element.closest('.col-sm-9').append(error);
