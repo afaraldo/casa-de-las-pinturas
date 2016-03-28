@@ -27,7 +27,7 @@ class ConfiguracionesController < ApplicationController
     @configuracion = Configuracion.find(params[:id])
     respond_to do |format|
       if @configuracion.update_attributes(configuracion_params)
-        flash.now[:notice] = "Configuraciones actualizados correctamente"
+        flash.now[:notice] = "Configuraciones actualizadas correctamente"
         format.html { render action: "edit"}
       else
         flash.now[:error] = "Ha ocurrido un problema al tratar de guardar la configuracion"
