@@ -1,3 +1,11 @@
+// Color para el abbr de campos obligatorios
+.control-label{
+  abbr{
+    color: $alert-danger-text;
+  }
+}
+
+// Ajuste para radio y checkboxes
 .radio-inline{
   &.radio{
     margin-top: 0;
@@ -5,6 +13,13 @@
   }
 }
 
+.radio_buttons{
+  &.control-label{
+    display: block;
+  }
+}
+
+// Ajuste para campos dentro de celdas
 td{
   > .form_group{
     margin-bottom: 0;
@@ -36,7 +51,7 @@ td{
   }
 }
 
-// Para cuando las opciones queda hacia arriba
+// Para cuando las opciones de select2 queda hacia arriba
 .select2-drop.select2-drop-above {
   box-shadow: none;
   border-radius: 0;
