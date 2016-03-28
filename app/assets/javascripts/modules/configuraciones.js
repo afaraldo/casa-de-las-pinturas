@@ -3,7 +3,6 @@
 var ConfiguracionesUI = (function(){
     return {
         initFormEvents: function() {
-            console.log('sdfds');
             // Validate form
             $('#configuracion-form').validate();
         }
