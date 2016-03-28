@@ -57,6 +57,6 @@ $.validator.addClassRules({
         minlength: 8
     },
     passwordConfirmation: {
-        equalTo: '#user_password'
+        equalTo: '#empleado_user_attributes_password'
     }
 });

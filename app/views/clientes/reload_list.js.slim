@@ -5,3 +5,4 @@
   | noty({type: "success", text : "#{@message}"});
   | modal.modal('hide');
   | $('#clientes-table').html("#{escape_javascript(render partial: 'list', locals: {clientes: @clientes})}");
+  | $('#paginate-container').html("#{escape_javascript(paginate(@clientes, remote: true)) }");
