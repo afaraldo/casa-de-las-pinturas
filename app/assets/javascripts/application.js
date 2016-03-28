@@ -65,6 +65,14 @@ CasaDeLasPinturas = {
                 $('.modal:visible').length && $(document.body).addClass('modal-open');
             });
 
+            // para inicializar los popover
+            $('body').popover({
+                selector: '.on-hover[data-toggle=popover]',
+                trigger: 'hover'
+            });
+
+            TablasHelper.filasClickeablesEvent();
+
         }
     },
 
