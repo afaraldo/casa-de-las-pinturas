@@ -6,7 +6,7 @@ class Configuracion < ActiveRecord::Base
 	validates :empresa_nombre, presence: true, length: {maximum: 50, minimum: 2}
 	validates :empresa_direccion, presence: true, length: {maximum: 150, minimum: 2}
 	validates :empresa_telefono, length: {maximum: 150}
-	validates :empresa_email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: :email_invalido} 
+	validates :empresa_email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: :email_invalido}, length: {maximum: 150} 
 	validate :validacion_tamanho_logo
 
   def validacion_tamanho_logo
