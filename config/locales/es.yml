@@ -26,6 +26,7 @@ es:
   movimiento_mercaderia:
     eliminar_stock_negativo: "Eliminar este movimiento va a provocar stock negativo en las siguientes mercaderias: %{mercaderias}"
     detalle_cantidad_stock_negativo: "Esta cantidad va a provocar stock negativo en el sistema"
+    detalle_cantidad_stock_superior: "Esta cantidad va a provocar stock mayor a %{limite} que es limite"
   moneda:
     unique_nombre_error: "Ya existe una moneda con el nombre %{nombre}"
   activerecord:
@@ -42,6 +43,7 @@ es:
         tipo: "Tipo de movimiento"
     errors:
       messages:
+        fecha_futura: "La fecha no puede ser superior a la actual"
         email_invalido: "Por favor, escribí una dirección de correo válida"
         record_invalid: "La validación falló: %{errors}"
         restrict_dependent_destroy:

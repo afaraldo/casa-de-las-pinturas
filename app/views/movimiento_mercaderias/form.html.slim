@@ -33,7 +33,7 @@ section.content
                                             'data-association-insertion-method' => 'append'
           .box-footer
             .text-right.form-actions
-              a.btn.btn-default href="#" Cancelar
+              = link_to 'Cancelar', movimiento_mercaderias_path, class: 'btn btn-default'
               | #{' '}
               button.btn.btn-primary type="submit" Guardar movimiento
 

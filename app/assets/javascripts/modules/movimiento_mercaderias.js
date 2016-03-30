@@ -5,7 +5,7 @@ var MovimientoMercaderiasUI = (function(){
     function initFormEvents(){
         elementos.movimientoForm.validate({ignore: []});
 
-        $('.datepicker').datepicker();
+        $('.datepicker').datepicker({endDate: '0d'});
 
         $('#movimiento-detalles-body').on('cocoon:after-insert', function(e, insertedItem) {
 
