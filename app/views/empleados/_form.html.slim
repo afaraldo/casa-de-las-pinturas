@@ -11,7 +11,7 @@
     = f.simple_fields_for :user do |u|
       = u.input :username
       = u.input :password
-      = u.input :password_confirmation, label: 'Repetir contraseña', input_html: {class: 'passwordConfirmation'}
+      = u.input :password_confirmation, label: 'Repetir contraseña', input_html: {class: 'passwordConfirmation'},  maxlength: 20, size: 20
     = f.input :direccion
     = f.input :telefono
     = f.input :numero_documento, label: 'Nro. de documento'
