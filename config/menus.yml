@@ -18,7 +18,7 @@ menu:
         active_submenu: :proveedores_sidemenu
   ventas:
     text: "Ventas"
-    url: "#"
+    url: :clientes
     active_menu: :ventas
     submenus:
       ventas:
@@ -82,6 +82,6 @@ menu:
         url: :configuraciones
         active_submenu: :datos_empresa_sidemenu
       empleados:
-        text: "Empleados"
+        text: "Usuarios"
         url: :empleados
         active_submenu: :empleados_sidemenu

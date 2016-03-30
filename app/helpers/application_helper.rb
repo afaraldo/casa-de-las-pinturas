@@ -1,6 +1,6 @@
 module ApplicationHelper
 
-  TEXTO_LIMITE = 25 # longitud maxima mostrar de los textos
+  TEXTO_LIMITE = 30 # longitud maxima mostrar de los textos
 
   # Metodo para cortar los textos a mostrar en las tablas.
   # Se agrega un popover al texto si es necesario

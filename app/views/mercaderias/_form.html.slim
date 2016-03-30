@@ -7,8 +7,8 @@
     = mercaderia.new_record? ? 'Nueva mercadería' : 'Editar mercadería'
   .modal-body
     = f.input :id, as: :hidden, input_html: { id: 'mercaderia_id' }
-    = f.input :codigo,          input_html: {class: 'textoCorto uniqueMercaderiaCodigo'}
-    = f.input :nombre,          input_html: {class: 'textoMedio'}
+    = f.input :codigo,          input_html: {class: 'uniqueMercaderiaCodigo'}
+    = f.input :nombre
     .row
       .col-xs-10
         = f.input :categoria_id, input_html: {style: 'width: 100%;', title: 'Este campo es obligatorio'},
@@ -23,7 +23,7 @@
                   style: 'margin-top: 25px;',
                   remote: true
     = f.input :unidad_de_medida
-    = f.input :descripcion,     input_html: {class: 'textoLargo'}
+    = f.input :descripcion
     .row
       .col-xs-6
         = f.input :precio_venta_contado, as: :string, input_html: {class: 'maskMoneda'}

@@ -15,6 +15,13 @@ class MovimientoMercaderia < ActiveRecord::Base
   validates :motivo, presence: true, length: {maximum: 255, minimum: 2}
   validates :tipo,   presence: true
   validates :detalles, length: { minimum: 1 }
+  validate  :fecha_futura
+
+  def fecha_futura
+    if fecha > Date.today
+      errors.add(:fecha, I18n.t('activerecord.errors.messages.fecha_futura'))
+    end
+  end
 
   def check_detalles_negativos
     m = []

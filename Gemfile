@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.0'
 
 # Postgres adapter
-gem 'pg'
+gem 'pg', '0.18.1'
 
 # Use SCSS for stylesheets
 gem 'bootstrap-sass', '~> 3.3.6'
@@ -18,24 +18,24 @@ gem 'slim'
 gem "slim-rails"
 
 # paginador
-gem 'kaminari'
+gem 'kaminari', '~> 0.16.3'
 
 # buscador
-gem 'ransack'
+gem 'ransack', '~> 1.6.4'
 
 # para formularios
-gem 'simple_form'
+gem 'simple_form', '~> 3.2.0'
 
 # enums
-gem 'enumerize'
+gem 'enumerize', '~> 0.11.0'
 
 # para borrado ocioso
-gem "paranoia", "~> 2.0"
+gem "paranoia", "~> 2.1.0"
 
 # internacionalizacion del lado del cliente
 gem "i18n-js", ">= 3.0.0.rc11"
 
-gem "cocoon"
+gem "cocoon", '~> 1.2.8'
 
 gem 'devise'
 
@@ -84,9 +84,17 @@ group :development, :test do
   gem 'spring'
 end
 
+gem 'rollbar', '~> 2.8.3'
+gem 'oj', '~> 2.12.14'
+
 group :development do
   gem 'better_errors'
 
   gem "rails_best_practices"
 end
 
+group :production do
+
+  gem 'rails_12factor'
+
+end

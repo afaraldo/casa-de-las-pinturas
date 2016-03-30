@@ -120,6 +120,7 @@ GEM
     netrc (0.10.3)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
+    oj (2.12.14)
     orm_adapter (0.5.0)
     paranoia (2.1.5)
       activerecord (~> 4.0)
@@ -148,6 +149,9 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
+    rails_12factor (0.0.3)
+      rails_serve_static_assets
+      rails_stdout_logging
     rails_best_practices (1.15.7)
       activesupport
       code_analyzer (>= 0.4.3)
@@ -157,6 +161,8 @@ GEM
       json
       require_all
       ruby-progressbar
+    rails_serve_static_assets (0.0.4)
+    rails_stdout_logging (0.0.3)
     railties (4.2.0)
       actionpack (= 4.2.0)
       activesupport (= 4.2.0)
@@ -178,6 +184,8 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
+    rollbar (2.8.3)
+      multi_json
     ruby-progressbar (1.7.5)
     sass (3.4.21)
     sass-rails (5.0.4)
@@ -190,9 +198,9 @@ GEM
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     sexp_processor (4.5.0)
-    simple_form (3.1.0)
-      actionpack (~> 4.0)
-      activemodel (~> 4.0)
+    simple_form (3.2.1)
+      actionpack (> 4, < 5.1)
+      activemodel (> 4, < 5.1)
     slim (3.0.6)
       temple (~> 0.7.3)
       tilt (>= 1.3.3, < 2.1)
@@ -244,23 +252,26 @@ DEPENDENCIES
   byebug
   carrierwave
   cloudinary
-  cocoon
+  cocoon (~> 1.2.8)
   devise
-  enumerize
+  enumerize (~> 0.11.0)
   fabrication
   faker
   i18n-js (>= 3.0.0.rc11)
   jbuilder (~> 2.0)
   jquery-rails
-  kaminari
-  paranoia (~> 2.0)
-  pg
+  kaminari (~> 0.16.3)
+  oj (~> 2.12.14)
+  paranoia (~> 2.1.0)
+  pg (= 0.18.1)
   rails (= 4.2.0)
+  rails_12factor
   rails_best_practices
-  ransack
+  ransack (~> 1.6.4)
+  rollbar (~> 2.8.3)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
-  simple_form
+  simple_form (~> 3.2.0)
   slim
   slim-rails
   spring

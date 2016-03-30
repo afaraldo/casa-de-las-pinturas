@@ -68,7 +68,16 @@ CasaDeLasPinturas = {
             // para inicializar los popover
             $('body').popover({
                 selector: '.on-hover[data-toggle=popover]',
-                trigger: 'hover'
+                trigger: 'hover',
+                placement: function(pop,ele){
+                    if($(ele).parent().is('td:first-child')) {
+                        return 'right'
+                    } else if($(ele).parents('tr').is(':first-child')){
+                        return 'bottom';
+                    }else{
+                        return 'top'
+                    }
+                }
             });
 
             TablasHelper.filasClickeablesEvent();
