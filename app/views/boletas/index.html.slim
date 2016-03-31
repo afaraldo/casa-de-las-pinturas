@@ -1,0 +1,41 @@
+h1 Listing boletas
+
+table
+  thead
+    tr
+      th Persona
+      th Numero
+      th Numero factura
+      th Fecha
+      th Fecha vencimiento
+      th Estado
+      th Tipo
+      th Condicion
+      th Importe total
+      th Importe pendiente
+      th Importe descontado
+      th
+      th
+      th
+
+  tbody
+    - @boletas.each do |boleta|
+      tr
+        td = boleta.persona
+        td = boleta.numero
+        td = boleta.numero_factura
+        td = boleta.fecha
+        td = boleta.fecha_vencimiento
+        td = boleta.estado
+        td = boleta.tipo
+        td = boleta.condicion
+        td = boleta.importe_total
+        td = boleta.importe_pendiente
+        td = boleta.importe_descontado
+        td = link_to 'Show', boleta
+        td = link_to 'Edit', edit_boleta_path(boleta)
+        td = link_to 'Destroy', boleta, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Boleta', new_boleta_path

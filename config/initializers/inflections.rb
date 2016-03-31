@@ -14,6 +14,10 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'movimiento_mercaderia', 'movimiento_mercaderias'
   inflect.irregular 'movimiento_mercaderia_detalle', 'movimiento_mercaderia_detalles'
   inflect.irregular 'configuracion', 'configuraciones'
+  inflect.irregular 'boleta', 'boletas'
+  inflect.irregular 'boleta_detalle', 'boleta_detalles'
+  inflect.irregular 'pago', 'pagos'
+  inflect.irregular 'pago_detalle', 'pago_detalles'
 end
 
 # These inflection rules are supported but not enabled by default:

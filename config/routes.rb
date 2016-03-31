@@ -1,6 +1,14 @@
 Rails.application.routes.draw do
 
 
+  resources :pago_detalles
+
+  resources :pagos
+
+  resources :boleta_detalles
+
+  resources :boletas
+
   devise_for :users
 
   get 'configuraciones/check_empresa_nombre' => 'configuraciones#check_empresa_nombre'

@@ -1,0 +1,27 @@
+h1 Listing boleta_detalles
+
+table
+  thead
+    tr
+      th Boleta
+      th Mercaderia
+      th Cantidad
+      th Precio unitario
+      th
+      th
+      th
+
+  tbody
+    - @boleta_detalles.each do |boleta_detalle|
+      tr
+        td = boleta_detalle.boleta
+        td = boleta_detalle.mercaderia
+        td = boleta_detalle.cantidad
+        td = boleta_detalle.precio_unitario
+        td = link_to 'Show', boleta_detalle
+        td = link_to 'Edit', edit_boleta_detalle_path(boleta_detalle)
+        td = link_to 'Destroy', boleta_detalle, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Boleta detalle', new_boleta_detalle_path

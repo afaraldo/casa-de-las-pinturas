@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  numero: 1
+  fecha: 2016-03-31 04:53:47
+  total_efectivo: 9.99
+  total_tarjeta: 9.99
+  total_credito_utilizado: 9.99
+  tipo: 
+  deleted_at: 2016-03-31 04:53:47
+
+two:
+  numero: 1
+  fecha: 2016-03-31 04:53:47
+  total_efectivo: 9.99
+  total_tarjeta: 9.99
+  total_credito_utilizado: 9.99
+  tipo: 
+  deleted_at: 2016-03-31 04:53:47

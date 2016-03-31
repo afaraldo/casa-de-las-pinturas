@@ -1,0 +1,1 @@
+json.extract! @boleta, :id, :persona_id, :numero, :numero_factura, :fecha, :fecha_vencimiento, :estado, :tipo, :condicion, :importe_total, :importe_pendiente, :importe_descontado, :created_at, :updated_at

@@ -1,0 +1,27 @@
+p#notice = notice
+
+p
+  strong Numero:
+  = @pago.numero
+p
+  strong Fecha:
+  = @pago.fecha
+p
+  strong Total efectivo:
+  = @pago.total_efectivo
+p
+  strong Total tarjeta:
+  = @pago.total_tarjeta
+p
+  strong Total credito utilizado:
+  = @pago.total_credito_utilizado
+p
+  strong Tipo:
+  = @pago.tipo
+p
+  strong Deleted at:
+  = @pago.deleted_at
+
+= link_to 'Edit', edit_pago_path(@pago)
+'|
+= link_to 'Back', pagos_path

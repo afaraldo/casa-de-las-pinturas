@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  pago_id: 
+  forma: MyString
+  monto: 9.99
+  moneda_id: 
+  cotizacion: 9.99
+
+two:
+  pago_id: 
+  forma: MyString
+  monto: 9.99
+  moneda_id: 
+  cotizacion: 9.99

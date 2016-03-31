@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  boleta_id: 
+  mercaderia_id: 
+  cantidad: 9.99
+  precio_unitario: 9.99
+
+two:
+  boleta_id: 
+  mercaderia_id: 
+  cantidad: 9.99
+  precio_unitario: 9.99
