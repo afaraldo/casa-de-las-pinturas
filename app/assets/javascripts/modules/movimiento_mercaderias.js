@@ -51,6 +51,8 @@ var MovimientoMercaderiasUI = (function(){
                 .on('changeDate', function(e){ // Evento para hacer submit al formulario cuando se cambia la fecha
                     $(this).parents('.remote-search').submit();
                 });
+
+            DatepickerHelper.initDateRangePicker('#rango-de-fecha');
         },
         'new': function() {
             initFormEvents();

@@ -7,9 +7,9 @@ table.table.table-bordered.table-hover
       th.table-actions
   tbody
     - @movimientos.each do |movimiento|
-      tr
+      tr.fila-clickeable data-url="#{movimiento_mercaderia_path(movimiento)}"
         td = localize(movimiento.fecha.to_date)
-        td = link_to movimiento.motivo, movimiento_mercaderia_path(movimiento)
+        td = movimiento.motivo
         td = movimiento.tipo_text
         td.text-right
           = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_movimiento_mercaderia_path(movimiento), class: 'btn btn-default btn-sm'
