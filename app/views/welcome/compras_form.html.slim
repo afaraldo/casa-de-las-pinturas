@@ -1,0 +1,83 @@
+section.content-header
+  h1 Compras
+section.content
+  .row
+    .col-xs-12
+      .box
+        = simple_form_for @movimiento, html: { id: 'movimiento-mercaderia-form' } do |f|
+          .box-header
+            h3.box-title Nueva Compra
+          .box-body
+            = f.error_notification
+            .row
+              .col-sm-3
+                = f.input :fecha, wrapper: :vertical_input_group do
+                  = f.input_field :fecha, as: :string, class: 'datepicker form-control', value: '30/03/2016'
+                  .input-group-btn
+                    .btn.btn-default
+                      i.fa.fa-calendar
+              .col-sm-3
+                .form-group
+                  label.control-label Proveedor
+                  select#proveedor.form-control data-placeholder="Buscar proveedor..."
+                    option Arrabal Rosa 79
+              .col-sm-3
+                = f.input :tipo, as: :radio_buttons, label: 'Condición de pago', wrapper: :button_radio_and_checkboxes, item_wrapper_tag: nil, item_label_class: 'btn btn-default'
+              .col-sm-3
+                .alert.alert-info
+                  strong Crédito disponible:
+                  br
+                  h4.text-center style="margin-top: 10px; font-size: 16px;" 500.000 de 2.300.000
+                  p.text-center
+                    a Actualizar límite
+            .row
+              .col-sm-3
+                = f.input :fecha, wrapper: :vertical_input_group, label: 'Fecha de vencimiento', required: false do
+                  = f.input_field :fecha, as: :string, class: 'datepicker form-control', value: '30/04/2016'
+                  .input-group-btn
+                    .btn.btn-default
+                      i.fa.fa-calendar
+              .col-sm-3
+                = f.input :motivo, label: 'Número de comprobante', required: false, input_html: { value: '001-001-00232434' }
+              .col-xs-12
+                p
+                  a Agregar Crédito de devoluciones
+            .links
+              label.control-label Mercaderias
+            br
+            table.table.table-bordered.detalles-table.calcular-total
+              thead
+                tr
+                  th Código
+                  th Mercadería
+                  th Cantidad
+                  th Precio Unitario
+                  th Subtotal
+                  th
+              tbody#movimiento-detalles-body
+                = f.simple_fields_for :detalles do |detalle|
+                  = render 'detalle_fields', f: detalle
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right
+                    span
+                  td
+
+            = link_to_add_association '<i class="fa fa-plus"></i> Agregar mercaderia'.html_safe, f, :detalles, class: 'btn btn-default pull-right',
+                                            'data-association-insertion-node' => '#movimiento-detalles-body',
+                                            'data-association-insertion-method' => 'append'
+          .box-footer
+            .text-right.form-actions
+              = link_to 'Cancelar', movimiento_mercaderias_path, class: 'btn btn-default'
+              | #{' '}
+              button.btn.btn-primary type="submit" Guardar Compra
+
+  javascript:
+    MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: "#{mercaderias_buscar_path}"});
+    NumberHelper.mascaraCantidad('.maskCantidad');
+    NumberHelper.mascaraMoneda('.maskMoneda');
+    $('#proveedor').select2();
+    TablasHelper.calcularTotalEvent('.calcular-total');
