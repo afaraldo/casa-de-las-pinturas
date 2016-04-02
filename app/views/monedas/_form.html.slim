@@ -1,10 +1,11 @@
 = simple_form_for moneda, url: !moneda.new_record? ? moneda_path(moneda) : monedas_path,
                               html: {id: 'moneda-form'},
-                              remote: true do |f|
+                           remote: true do |f|
   .modal-header
     button.close type="button" data-dismiss="modal"
       span &times;
-    = moneda.new_record? ? 'Nueva moneda' : 'Editar moneda'
+    h3.modal-title
+      = moneda.new_record? ? 'Nueva moneda' : 'Editar moneda'
   .modal-body
     = f.input :id, as: :hidden, input_html: { id: 'moneda_id' }
     = f.input :nombre,    input_html: {class: 'uniqueMonedaNombre'}
