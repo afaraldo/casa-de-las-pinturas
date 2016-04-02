@@ -26,7 +26,7 @@ section.content
                 .col-xs-3
                   .form-group
                     label.control-label Agrupar por:
-                    = select_tag 'agrupar', options_for_select(['Día', 'Mes', 'Año'], 'Día'), class: 'form-control'
+                    = select_tag 'agrupar', options_for_select(['Día', 'Mes', 'Año', 'Proveedor'], 'Proveedor'), class: 'form-control'
                 .col-xs-3
                   .form-group
                     .btn-group data-toggle="buttons" style="margin-top: 24px;"
@@ -35,7 +35,8 @@ section.content
           #movimiento-mercaderias-table.overlay-wrapper.buscador-resultados.table-responsive
             //= render partial: 'reporte_dia'
             //= render partial: 'reporte_dia_resumido'
-            = render partial: 'reporte_mes_resumido'
+            //= render partial: 'reporte_mes_resumido'
+            = render partial: 'reporte_proveedor'
 
 javascript:
   DatepickerHelper.initDateRangePicker('#date-range');
