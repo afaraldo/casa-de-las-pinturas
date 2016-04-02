@@ -17,4 +17,8 @@ class WelcomeController < ApplicationController
   def compras_reporte
 
   end
+
+  def reporte_ventas_index
+
+  end
 end
