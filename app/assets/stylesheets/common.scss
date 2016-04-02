@@ -26,6 +26,19 @@
   }
 }
 
+.volver-link{
+  display: block;
+  i{
+    margin-right: 5px;
+  }
+}
+
+.form-subtitle{
+  border-bottom: 1px solid #eee;
+  margin-top: 10px;
+  text-transform: uppercase;
+  color: #555;
+}
 
 .popover-content{
   word-break: break-word;

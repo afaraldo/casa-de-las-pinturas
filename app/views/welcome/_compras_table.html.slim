@@ -15,7 +15,7 @@ table.table.table-bordered.table-hover
         td = Faker::Code.ean(8)
         td = ['Contado', 'Crédito'][rand(2)]
         td = Proveedor.offset(rand(Proveedor.count)).first.nombre
-        td = number_to_currency(Faker::Number.between(300000, 2500000))
+        td.text-right = number_to_currency(Faker::Number.between(300000, 2500000))
         td = ['<label class="label label-success">Pagado</label>', '<label class="label label-warning">Pendiente</label>'][rand(2)].html_safe
         td.text-right
           = link_to '<i class="fa fa-edit"></i>'.html_safe, '#', class: 'btn btn-default btn-sm'
