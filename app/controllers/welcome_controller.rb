@@ -13,4 +13,8 @@ class WelcomeController < ApplicationController
     @movimiento.detalles.build(mercaderia: Mercaderia.offset(rand(Mercaderia.count)).first, cantidad: 10)
 
   end
+
+  def compras_reporte
+
+  end
 end

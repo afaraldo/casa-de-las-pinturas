@@ -1,0 +1,37 @@
+#compras-chart style="height: 200px;"
+
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Mes
+      th Total
+  tbody
+    - day = Date.today - 5.months
+    - total = 0
+    - chart = [] # para el chart
+    - 10.times do |d|
+      tr
+        td = localize(day, format: :month).capitalize
+        td.text-right
+          - n = Faker::Number.between(20000000, 55000000)
+          - total += n
+          = number_to_currency(n)
+      - chart[d] = {y: localize(day, format: :month).capitalize, total: n}
+      - day += 1.month
+  tfoot
+    tr
+      td.text-right.text-bold Total reporte:
+      td.text-right.text-bold = number_to_currency(total)
+
+javascript:
+
+  var line = new Morris.Bar({
+    element: 'compras-chart',
+    resize: true,
+    data: #{chart.to_json.html_safe},
+    xkey: 'y',
+    ykeys: ['total'],
+    labels: ['Total'],
+    lineWidth: 2,
+    hideHover: 'auto'
+  });
