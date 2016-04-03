@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   resources :inventarios, only: [:index]
 
   resources :movimiento_mercaderias
-  
+
   get 'monedas/check_nombre' => 'monedas#check_nombre'
   resources :monedas
 
@@ -48,6 +48,7 @@ Rails.application.routes.draw do
   get 'welcome/devoluciones_compra'
   get 'welcome/devoluciones_venta_index'
   get 'welcome/devoluciones_compra_index'
+  get 'welcome/gastos_reporte'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

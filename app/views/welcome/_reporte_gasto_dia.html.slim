@@ -1,0 +1,29 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Fecha
+      th Motivo
+      th Monto
+      th Categoria
+  tbody
+    - day = Date.today
+    - total = 0
+    - 5.times do |d|
+      tr.active
+        td.text-bold colspan="5"
+          = localize(day)
+      - (rand(6) + 1).times do |i|
+        tr
+          td = Faker::Code.ean(8)
+          td = Faker::Lorem.sentences.first
+          td.text-right
+            - n = Faker::Number.between(300000, 2500000)
+            - total += n
+            = number_to_currency(n)
+          td = Faker::Lorem.words.first
+      - day += 1
+  tfoot
+    tr
+      td.text-right.text-bold colspan="3" Total reporte:
+      td.text-right.text-bold = number_to_currency(total)
+      td

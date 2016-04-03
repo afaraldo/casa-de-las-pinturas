@@ -50,4 +50,8 @@ class WelcomeController < ApplicationController
   def reporte_ventas_index
 
   end
+
+  def gastos_reporte
+
+  end
 end
