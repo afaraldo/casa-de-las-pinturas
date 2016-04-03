@@ -4,7 +4,8 @@
   .modal-header
     button.close type="button" data-dismiss="modal"
       span &times;
-    = empleado.new_record? ? 'Nuevo Usuario' : 'Editar Usuario'
+    .h3.modal-title
+      = empleado.new_record? ? 'Nuevo Usuario' : 'Editar Usuario'
   .modal-body
     = f.input :id, as: :hidden, input_html: { id: 'empleado_id' }
     = f.input :nombre,    input_html: {class: 'uniqueEmpleadoNombre'}

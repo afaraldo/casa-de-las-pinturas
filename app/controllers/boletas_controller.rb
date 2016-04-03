@@ -4,7 +4,7 @@ class BoletasController < ApplicationController
   # GET /boletas
   # GET /boletas.json
   def index
-    @boletas = Boleta.all
+    get_boletas
   end
 
   # GET /boletas/1
@@ -62,6 +62,11 @@ class BoletasController < ApplicationController
   end
 
   private
+
+    def get_boletas
+      @search = Boleta.search(params[:q])
+      @boletas = @search.result.page(params[:page])
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_boleta
       @boleta = Boleta.find(params[:id])
