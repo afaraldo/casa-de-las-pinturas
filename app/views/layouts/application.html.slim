@@ -6,5 +6,26 @@ html
     = stylesheet_link_tag    'application', media: 'all'
     = javascript_include_tag 'application'
     = csrf_meta_tags
-  body data-controller="#{controller_name}" data-action="#{action_name}"
-    == yield
+  body.skin-blue-light data-controller="#{controller_name}" data-action="#{action_name}"
+    .wrapper
+      = render 'layouts/main_menu'
+      aside.main-sidebar
+        section.sidebar
+          ul.sidebar-menu
+            = side_menu
+      .content-wrapper
+        //= render 'layouts/mensajes'
+        == yield
+      footer.main-footer
+        strong &nbsp;
+        .pull-right.hidden-xs
+          b Version
+          = " " + APP_CONFIG['version'] + Rails.application.secrets.git_rev
+    #main-modal.modal.fade
+      .modal-dialog
+        .modal-content
+    #main-modal-sm.modal.fade
+      .modal-dialog.modal-sm
+        .modal-content
+    javascript:
+      MensajesHelper.mostrarMensajes(#{flash.to_json.html_safe});

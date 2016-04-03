@@ -12,23 +12,90 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
 //= require i18n
 //= require i18n/translations
 //= require ./libs/bootstrap.min.js
-
+//= require ./adminlte/app.js
+//= require ./libs/jquery.validation/jquery.validate.js
+//= require ./libs/jquery.validation/additional-methods.js
+//= require ./libs/jquery.validation/messages_es_AR.js
+//= require ./libs/validationsConfig.js
+//= require ./libs/jquery.noty.packaged.js
+//= require ./libs/jquery.noty.defaults.js
+//= require ./libs/select2/select2.js
+//= require ./libs/select2/i18n/es.js
+//= require ./libs/jquery.inputmask.bundle.js
+//= require ./libs/bootstrap-datepicker/bootstrap-datepicker.js
+//= require ./libs/bootstrap-datepicker/bootstrap-datepicker.es.min.js
+//= require ./libs/libs.defaults.js
+//= require cocoon
+//= require_tree ./helpers
+//= require_tree ./modules
 
 // Reference: http://viget.com/inspire/extending-paul-irishs-comprehensive-dom-ready-execution
 CasaDeLasPinturas = {
     common: {
         init: function() {
-            // application-wide code
 
+            // Delay para buscar en tiempo real
+            $('.remote-search').on('keyup change', 'input, select', function (event) {
+                if(event.type === 'change' && this.type === 'text') // Evitar que se haga la busqueda al hacer tab
+                    return false;
+
+                var form = $(this).parents('form');
+                delay(function () {
+                    // agregar icono de "recargando"
+                    var buscadorLista = form.parents('.buscador-listado').next('.buscador-resultados');
+                    buscadorLista.append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+                    // Enviar formulario
+                    form.submit();
+                }, 500);
+            });
+
+            // Para tener varios modals abiertos al mismo tiempo
+            $(document).on('show.bs.modal', '.modal', function (event) {
+                var zIndex = 1040 + (10 * $('.modal:visible').length);
+                $(this).css('z-index', zIndex);
+                setTimeout(function() {
+                    $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+                }, 0);
+            });
+            // fix para modal estatico
+            $(document).on('hidden.bs.modal', '.modal', function () {
+                $('.modal:visible').length && $(document.body).addClass('modal-open');
+            });
+
+            // para inicializar los popover
+            $('body').popover({
+                selector: '.on-hover[data-toggle=popover]',
+                trigger: 'hover',
+                placement: function(pop,ele){
+                    if($(ele).parent().is('td:first-child')) {
+                        return 'right'
+                    } else if($(ele).parents('tr').is(':first-child')){
+                        return 'bottom';
+                    }else{
+                        return 'top'
+                    }
+                }
+            });
+
+            TablasHelper.filasClickeablesEvent();
 
         }
-    }
+    },
+
+    movimiento_mercaderias: MovimientoMercaderiasUI
 
 };
+
+var delay = (function(){
+    var timer = 0;
+    return function(callback, ms){
+        clearTimeout (timer);
+        timer = setTimeout(callback, ms);
+    };
+})();
 
 UTIL = {
     exec: function( controller, action ) {
@@ -52,3 +119,4 @@ UTIL = {
 };
 
 $( document ).on('ready', UTIL.init );
+

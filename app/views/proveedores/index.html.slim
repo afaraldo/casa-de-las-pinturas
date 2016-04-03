@@ -1,0 +1,22 @@
+section.content-header
+  h1 Compras
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Listado de Proveedores
+          .box-tools.pull-right
+            = link_to 'Nuevo proveedor', new_proveedor_path, class: 'btn btn-primary', remote: true
+        .box-body#proveedores-lista
+          #proveedor-search.buscador-listado
+            = search_form_for @search, remote: true, class: 'remote-search' do |f|
+              .input-group
+                = f.text_field :nombre_or_numero_documento_cont, class: 'form-control', placeholder: 'Buscar por nombre o RUC/CI...'
+                .input-group-btn
+                  button.btn.btn-default type="submit" name="commit"
+                    i.fa.fa-search
+          #proveedores-table.overlay-wrapper.buscador-resultados.table-responsive
+            = render partial: 'proveedores/list', locals: {proveedores: @proveedores}
+          #paginate-container
+            = paginate @proveedores, remote: true

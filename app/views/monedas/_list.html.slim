@@ -1,0 +1,19 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Nombre
+      th Abreviatura
+      th Cotización
+      th Por defecto
+      th.table-actions
+  tbody
+    - monedas.each do |moneda|
+      tr
+        td = moneda.nombre
+        td = moneda.abreviatura
+        td = number_to_currency(moneda.cotizacion)
+        td = moneda.defecto ? content_tag(:i, '', class: 'glyphicon glyphicon-ok') : ''
+        td
+          = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_moneda_path(moneda), remote: true, class: 'btn btn-default btn-sm'
+          | #{' '}
+          = !moneda.defecto ? (link_to ' <i class="fa fa-trash"></i>'.html_safe, moneda_path(moneda), method: 'delete', data: {confirm: "¿Desea eliminar el moneda #{moneda.nombre}?"}, remote: true, class: 'btn btn-danger btn-sm') : " "

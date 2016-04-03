@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="description" content="">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Documentacion de instrucciones para IISS2 2016</title>
+<link rel="alternate" type="application/rss+xml" title="frittt.com" href="feed/index.html">
+<link href="http://fonts.googleapis.com/css?family=Raleway:700,300" rel="stylesheet"
+        type="text/css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/prettify.css">
+</head>
+<body>
+<div class="wrapper">
+<nav>
+
+  	<div class="pull-left">
+    	<h1><a href="#"> <span>La Casa de las Pinturas</span></a></h1>
+    </div>
+
+</nav>
+<header>
+  <div class="container">
+    <h2 class="lone-header">Documentacion de instrucciones y convenciones varias</h2>
+  </div>
+</header>
+<section>
+  <div class="container">
+    <ul class="docs-nav">
+      <li><strong>Politicas</strong></li>
+      <li><a href="#welcome" class="cc-active">Bienvenido</a></li>
+      <li class="separator"></li>
+      <li><strong>Git</strong></li>
+      <li><a href="#workflow" class="cc-active">Workflow</a></li>
+      <li><a href="#pull_push" class="cc-active">Pull, Push, Checkout</a></li>
+      <li><a href="#stash" class="cc-active">Stash</a></li>
+      <li><a href="#merge" class="cc-active">Merge</a></li>
+      <li><a href="#conflictos" class="cc-active">Conflictos</a></li>
+      <li><a href="#ask_pull_request" class="cc-active">Solicitar pull request</a></li>
+      <li><a href="#merge_pull_request" class="cc-active">Merge de pull request</a></li>
+      <li class="separator"></li>
+      <li>
+        <string>Frontend</string>
+      </li>
+      <li><a href="#main-layout" class="cc-active">Layout general</a></li>
+      <li><a href="#components" class="cc-active">Componentes</a></li>
+      <li><a href="#forms" class="cc-active">Formularios</a></li>
+      <li><a href="#alertas" class="cc-active">Alertas</a></li>
+      <li><a href="#validations" class="cc-active">Validaciones</a></li>
+      <li><a href="#i18n" class="cc-active">Internacionalización</a></li>
+    </ul>
+    <div class="docs-content">
+      <h2> Politicas</h2>
+      <h3 id="welcome"> Bienvenido</h3>
+      <p> Si estas en este grupo sos lo mas.</p>
+      <h2>Git</h2>
+      <h3 id="workflow"> Workflow</h3>
+      <ol>
+<li><p>Existen dos branches permanentes:</p>
+
+<p><strong>master:</strong> es el branch de producción que contiene el último release. No se agregarán cambios a él sino hasta el final del sprint.</p>
+
+<p><strong>development:</strong> es el branch en donde todos los cambios serán agregados durante el sprint.</p></li>
+<li><p>Por cada tarea se deberá crear un branch, cuyo nombre tendrá el siguiente formato: issue-numero-funcionalidad. Esto permitirá que cada desarrollador pueda trabajar en forma independiente sin afectar el trabajo de los demás, además se reducirá el riesgo de integrar bugs y errores a development.</p></li>
+<li><p>En el caso de que exista una relación de dependencia entre tareas, se deberá hacer un branch para la tarea dependiente a partir del branch independiente.</p></li>
+<li><p>Una vez que se haya terminado un feature y este haya pasado el testeo se podrá realizar el merge con development. Estos branches serán eliminados al final del sprint, para evitar la pérdida del historial en el caso de que se encuentren bugs que obliguen la reapertura de la tarea.</p></li>
+<li><p>El último día del sprint se integrarán los cambios realizados en development al master (una vez que hayan pasado todos los tests) y se eliminarán los branches secundarios. </p></li>
+<li><p>Habrá una persona por proyecto encargada de hacer los builds así como también será la única persona autorizada a hacer push a los branches master y development. </p></li>
+<li><p>Los demás developers solo harán push a sus respectivos branches y cuando la tarea/issue/fix esté terminada en el branch harán un Pull request del branch correspondiente a development. Esto es básicamente solo un aviso para el que mantiene el master y development que hay cambios listos para hacer merge. </p></li>
+<li><p>El que mantiene descarga los cambios, hará un merge localmente y probará que todo esté bien, de ser así hará push a development. </p></li>
+<li><p>Los desarrolladores periódicamente deben hacer merge del branch development al branch en el que está trabajando para tener los últimos cambios integrados a development.</p></li>
+</ol>
+      <h3 id="pull_push">Pull, Push, Checkout</h3>
+      <p>Para saber en que branch estas:</p>
+      <pre class="prettyprint">git branch</pre>
+      <p>Para cambiarse a un branch:</p>
+      <pre class="prettyprint">git checkout nombre_del_branch</pre>
+      <p>Para actualizar branch (deben estar en el branch):</p>
+      <pre class="prettyprint">git pull</pre>
+      <p>Para subir cambios al branch (sube solo al branch en el que estan):</p>
+      <pre class="prettyprint">git push</pre>
+      <p>Para crear un nuevo branch:</p>
+      <pre class="prettyprint">git checkout -b nombre_del_nuevo_branch</pre>
+      <h3 id="stash">Stash</h3>
+      <p>A veces tenemos cambios locales y queremos hacer pull pero no se puede porque pueden haber conflictos. Para no revertir estos cambios locales necesarios (ej.: credenciales en el database.yml) se puede usar el siguiente comando antes de hacer pull:</p>
+      <pre class="prettyprint">git stash</pre>
+      <p>Esto lo que hace es de alguna forma "esconder" los cambios locales que tenes. Luego haces el pull y para volver a ver los cambios que tenias antes haces:</p>
+      <pre class="prettyprint">git stash apply</pre>
+      <h3 id="merge">Merge</h3>
+      <p>Supongamos que van a continuar trabajando en un tarea y necesitan incluir los cambios agregados al branch development. Deben de hacer un merge de development a su branch en el que estan trabajando.</p>
+      <p>Primero se van a development y hacen pull:</p>
+      <pre class="prettyprint">
+        git checkout development
+        git pull
+      </pre>
+      <p>Luego vuelven a su branch:</p>
+      <pre class="prettyprint">git checkout nombre_del_branch</pre>
+      <p>Hacen el merge de development (incluir los cambios de development al actual branch):</p>
+      <pre class="prettyprint">git merge development</pre>
+      <p>Su branch ya debe estar actualizado con los ultimos cambios de development. Puede haber un paso extra si hay conflictos explicados en la siguiente seccion.</p>
+      <p>Dependiendo de los cambios incluidos a veces git automaticamente crea un commit que contiene estos cambios. Asi que podes ver un commit que diga algo asi como: "Merge branch development into nombre_del_branch".</p>
+      <h3 id="conflictos">Conflictos</h3>
+      <p>Al hacer pull o merge podemos tener conflictos. En consola van a ver un mensaje indicando que no termino la operacion por ese motivo. Para ver las lista de archivos que tienen conflicto:</p>
+      <pre class="prettyprint">git status</pre>
+      <p>Luego editan los archivos solucionando los conflictos, guardan y hacen "git add archivo". Luego de solucionar conflictos de todos los archivos correspondientes:</p>
+      <pre class="prettyprint">git commit</pre>
+      <p>Y git va a crear un commit especificando estos conflictos y ya esta todo listo para trabajar.</p>
+
+      <h3 id="ask_pull_request">Solicitar pull request</h3>
+      <p>Primero hacen push de sus cambios a su branch. Para crear un pull request se van al repositorio en github y en la seccion de Code seleccionan su branch y hacen click en el boton "New pull request"</p>
+      <img src="img/pull-request-start-review-button.png">
+      <p>Luego le va a aparecer un formulario como el siguiente:</p>
+      <img src="img/pull-request-review-page.png" alt="">
+      <p>En la parte donde dice: "base:update-readme" tienen que seleccionar el branch development. Pueden colocar un titulo para el pull request y luego hacen click en el boton "Create pull request"</p>
+      <h3 id="merge_pull_request">Merge de pull request</h3>
+      <p>Pendiente...</p>
+
+      <h2>Frontend</h2>
+
+      <h3 id="main-layout">Layout general</h3>
+      <p>Para el layout general usamos la estructura de la plantilla <a href="https://almsaeedstudio.com/themes/AdminLTE/index.html">AdminLTE</a></p>
+      <p>Esta es una plantilla basada en bootsrap. Solo le da un estilo diferente a los estilos de bootstrap y ademas incorpora algunos componentes mas como el .box. Al hacer la vista de cada contenido usan esa estructura(pueden ver el ABM de proveedores como referencia):</p>
+
+      <pre class="prettyprint">
+section.content-header
+  h1 Compras (TITULO_DE_SECCION_PRINCIPAL)
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Listado de Proveedores (TITULO_DE_SUBSECCION)
+          .box-tools.pull-right (BOTONES_DE_ACCIONES_PRINCIPALES)
+            = link_to 'Nuevo proveedor', new_proveedor_path, class: 'btn btn-primary', remote: true
+        .box-body#proveedores-lista (CONTENIDO)
+          = render partial: 'proveedores/list', locals: {proveedores: @proveedores}
+      </pre>
+
+      <h3 id="components">Componentes</h3>
+      <p>En el repositorio esta la plantilla completa con su documentacion donde pueden ver como usar los componentes. En la carpeta /docs/AdminLTE/index.html</p>
+
+      <h3 id="forms">Formularios</h3>
+      <p>Usamos la gema <a href="https://github.com/plataformatec/simple_form">simple_form</a> para hacer los formularios. Es bastante simple y configurable. Ya esta configurado para que use el html de bootstrap por defecto.</p>
+
+      <h3 id="alertas">Alertas</h3>
+      <p>Para los mensajes principales a mostrar en la aplicacion (los que estan en la variable :flash) se pondran al comenzar el .content-wrapper.</p>
+      <p>Para mostrar mensajes que vienen por ajax se usará la libreria js <a href="http://ned.im/noty/#/about">noty</a>. Se usa de la siguiente forma:</p>
+
+      <pre class="prettyprint">&lt;script&gt;
+    noty({type: "error", text : "Mensaje de error"});
+&lt;/script&gt;</pre>
+
+      <h3 id="validations">Validaciones</h3>
+      <p>Para las validaciones del lado del cliente se usará la libreria js <a href="http://jqueryvalidation.org/">jquery.Validation</a> </p>
+
+      <h3 id="i18n">Internacionalización</h3>
+      <p>Para usar los locales usados del lado del servidor del lado del cliente usamos la gema <a href="https://github.com/fnando/i18n-js">i18n-js</a>. En javascript se usa de la siguiente forma:</p>
+      <pre class="prettyprint">&lt;script&gt;
+    I18n.t("some.scoped.translation");
+&lt;/script&gt;</pre>
+    </div>
+  </div>
+</section>
+<section class="vibrant centered">
+
+</section>
+<footer>
+  <div class="">
+  </div>
+</footer>
+</div>
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/prettify/prettify.js"></script>
+<script src="js/prettify/run_prettify.js?lang=css&skin=desert"></script>
+<script src="js/layout.js"></script>
+</body>
+</html>

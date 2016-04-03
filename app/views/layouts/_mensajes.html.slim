@@ -1,0 +1,7 @@
+#page-mensajes
+  - flash.each do |name, msg|
+    - if msg.is_a?(String) && msg.present?
+      .alert class="alert-#{name.to_s == 'notice' ? 'success' : 'danger'}"
+        button.close type="button" data-dismiss="alert" aria-hidden="true"
+          i.fa.fa-times-circle
+        = content_tag :div, msg.html_safe, :id => "flash_#{name}"

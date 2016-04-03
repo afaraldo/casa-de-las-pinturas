@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nombre: MyString
+  telefono: MyString
+  direccion: MyString
+  ruc: MyString
+  limite_credito: 9.99
+  type: 
+
+two:
+  nombre: MyString
+  telefono: MyString
+  direccion: MyString
+  ruc: MyString
+  limite_credito: 9.99
+  type: 

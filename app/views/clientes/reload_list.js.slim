@@ -1,0 +1,8 @@
+| var modal = $('#main-modal');
+- if @error
+  | noty({type: "error", text : "#{@message}"});
+- else
+  | noty({type: "success", text : "#{@message}"});
+  | modal.modal('hide');
+  | $('#clientes-table').html("#{escape_javascript(render partial: 'list', locals: {clientes: @clientes})}");
+  | $('#paginate-container').html("#{escape_javascript(paginate(@clientes, params: {controller: :clientes, action: :index}, remote: true)) }");

@@ -1,0 +1,14 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Código
+      th Nombre
+      th Categoría
+      th Cantidad
+  tbody
+    - inventarios.each do |m|
+      tr
+        td = m.codigo
+        td = m.nombre
+        td = m.categoria_nombre
+        td = number_with_precision(m.stock)

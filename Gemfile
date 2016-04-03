@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.0'
 
 # Postgres adapter
-gem 'pg'
+gem 'pg', '0.18.1'
 
 # Use SCSS for stylesheets
 gem 'bootstrap-sass', '~> 3.3.6'
@@ -15,15 +15,29 @@ gem 'uglifier', '>= 1.3.0'
 
 # template engine
 gem 'slim'
+gem "slim-rails"
+
+# paginador
+gem 'kaminari', '~> 0.16.3'
+
+# buscador
+gem 'ransack', '~> 1.6.4'
 
 # para formularios
-gem 'simple_form'
+gem 'simple_form', '~> 3.2.0'
 
 # enums
-gem 'enumerize'
+gem 'enumerize', '~> 0.11.0'
+
+# para borrado ocioso
+gem "paranoia", "~> 2.1.0"
 
 # internacionalizacion del lado del cliente
 gem "i18n-js", ">= 3.0.0.rc11"
+
+gem "cocoon", '~> 1.2.8'
+
+gem 'devise'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
@@ -36,6 +50,19 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
+
+# needed for some windows environments
+gem 'tzinfo-data'
+
+# See https://github.com/carrierwaveuploader/carrierwave
+gem 'carrierwave'
+gem 'cloudinary' # para usar las imagenes en heroku
+
+# Para cargar datos de pruebas
+gem 'fabrication'
+gem 'faker'
+
+gem "bcrypt-ruby", '~> 3.0.0'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -57,7 +84,17 @@ group :development, :test do
   gem 'spring'
 end
 
+gem 'rollbar', '~> 2.8.3'
+gem 'oj', '~> 2.12.14'
+
 group :development do
   gem 'better_errors'
+
+  gem "rails_best_practices"
 end
 
+group :production do
+
+  gem 'rails_12factor'
+
+end

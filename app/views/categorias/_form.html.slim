@@ -1,0 +1,23 @@
+= simple_form_for categoria, url: !categoria.new_record? ? categoria_path(categoria) : categorias_path(from_mercaderias: params[:from_mercaderias]),
+                                html: {id: 'categoria-form'},
+                                remote: true do |f|
+  .modal-header
+    button.close type="button" data-dismiss="modal"
+      span &times;
+    = categoria.new_record? ? 'Nueva categoría' : 'Editar categoría'
+  .modal-body
+    = f.input :id, as: :hidden, input_html: { id: 'categoria_id' }
+    = f.input :nombre,    input_html: {class: 'uniqueCategoriaNombre'}, autofocus: true
+    / si tiene subcategorias no se puede asignar a otra categoria
+    = f.input :categoria_padre_id,
+              as: :select,
+              collection: Categoria.padres(categoria.id),
+              value_method: :id,
+              label_method: :nombre,
+              disabled: categoria.subcategorias.size > 0
+  .modal-footer.text-right
+    button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
+    input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
+
+  javascript:
+    CategoriasUI.initFormEvents("#{categorias_check_nombre_path}");

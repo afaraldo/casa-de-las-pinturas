@@ -1,0 +1,23 @@
+= simple_form_for empleado, url: !empleado.new_record? ? empleado_path(empleado) : empleados_path,
+                              html: {id: 'empleado-form'},
+                              remote: true do |f|
+  .modal-header
+    button.close type="button" data-dismiss="modal"
+      span &times;
+    = empleado.new_record? ? 'Nuevo Usuario' : 'Editar Usuario'
+  .modal-body
+    = f.input :id, as: :hidden, input_html: { id: 'empleado_id' }
+    = f.input :nombre,    input_html: {class: 'uniqueEmpleadoNombre'}
+    = f.simple_fields_for :user do |u|
+      = u.input :username
+      = u.input :password
+      = u.input :password_confirmation, label: 'Repetir contraseña', input_html: {class: 'passwordConfirmation'},  maxlength: 20, size: 20
+    = f.input :direccion
+    = f.input :telefono
+    = f.input :numero_documento, label: 'Nro. de documento'
+  .modal-footer.text-right
+    button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
+    input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
+
+javascript:
+  EmpleadosUI.initFormEvents("#{empleados_check_nombre_path}");

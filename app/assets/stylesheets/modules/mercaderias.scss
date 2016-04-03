@@ -1,0 +1,16 @@
+.select2-results{
+  span{
+    &.parent-categoria{
+      font-weight: 500;
+    }
+    &.subcategoria{
+      margin-left: 20px;
+    }
+  }
+  li{
+    color: #444;
+  }
+  .select2-result-label{
+    border-bottom: 1px solid #ddd;
+  }
+}

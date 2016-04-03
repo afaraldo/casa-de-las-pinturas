@@ -1,0 +1,18 @@
+= simple_form_for moneda, url: !moneda.new_record? ? moneda_path(moneda) : monedas_path,
+                              html: {id: 'moneda-form'},
+                              remote: true do |f|
+  .modal-header
+    button.close type="button" data-dismiss="modal"
+      span &times;
+    = moneda.new_record? ? 'Nueva moneda' : 'Editar moneda'
+  .modal-body
+    = f.input :id, as: :hidden, input_html: { id: 'moneda_id' }
+    = f.input :nombre,    input_html: {class: 'uniqueMonedaNombre'}
+    = f.input :abreviatura, input_html: {class: 'textoAbreviatura'}
+    = f.input :cotizacion, as: :string, input_html: {class: 'limiteNumero maskMoneda'}, disabled: (moneda.new_record? || ! moneda.defecto) ? false : true 
+  .modal-footer.text-right
+    button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
+    input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
+
+javascript:
+  MonedasUI.initFormEvents("#{monedas_check_nombre_path}");

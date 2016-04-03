@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nombre: MyString
+  abreviatura: MyString
+  cotizacion: 1
+  defecto: false
+
+two:
+  nombre: MyString
+  abreviatura: MyString
+  cotizacion: 1
+  defecto: false

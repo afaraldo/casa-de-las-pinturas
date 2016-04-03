@@ -1,0 +1,6 @@
+tr
+  td = (categoria.categoria_padre_id.nil? ? '' : '--- ').html_safe + cortar_texto(categoria.nombre)
+  td.text-right
+    = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_categoria_path(categoria), remote: true, class: 'btn btn-default btn-sm'
+    | #{' '}
+    = link_to ' <i class="fa fa-trash"></i>'.html_safe, categoria_path(categoria), method: 'delete', data: {confirm: "¿Desea eliminar la categoria #{categoria.nombre}?"}, remote: true, class: 'btn btn-danger btn-sm'

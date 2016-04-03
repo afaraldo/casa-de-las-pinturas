@@ -1,0 +1,42 @@
+= simple_form_for mercaderia, url: !mercaderia.new_record? ? mercaderia_path(mercaderia) : mercaderias_path,
+                              html: {id: 'mercaderia-form'},
+                              remote: true do |f|
+  .modal-header
+    button.close type="button" data-dismiss="modal"
+      span &times;
+    = mercaderia.new_record? ? 'Nueva mercadería' : 'Editar mercadería'
+  .modal-body
+    = f.input :id, as: :hidden, input_html: { id: 'mercaderia_id' }
+    = f.input :codigo,          input_html: {class: 'uniqueMercaderiaCodigo'}
+    = f.input :nombre
+    .row
+      .col-xs-10
+        = f.input :categoria_id, input_html: {style: 'width: 100%;', title: 'Este campo es obligatorio'},
+                             prompt: "Seleccione una categoría...",
+                             collection: Categoria.agrupado.map{ |c| [c.nombre, c.id, {'data-espadre' => c.categoria_padre_id}] }
+      .col-xs-2
+        = link_to '<i class="fa fa-plus"></i>'.html_safe,
+                  new_categoria_path(from_mercaderias: true),
+                  data: {toggle: 'tooltip'},
+                  title: 'Nueva categoría',
+                  class: 'btn btn-default',
+                  style: 'margin-top: 25px;',
+                  remote: true
+    = f.input :unidad_de_medida
+    = f.input :descripcion
+    .row
+      .col-xs-6
+        = f.input :precio_venta_contado, as: :string, input_html: {class: 'maskMoneda'}
+      .col-xs-6
+        = f.input :precio_venta_credito, as: :string, input_html: {class: 'maskMoneda'}
+    .row
+      .col-xs-6
+        = f.input :stock_minimo, as: :string, input_html: {class: 'maskCantidad', value: number_with_precision(f.object.stock_minimo)}
+      .col-xs-6
+        = f.input :stock,        as: :string, input_html: {class: 'maskCantidad', value: number_with_precision(f.object.stock)}
+  .modal-footer.text-right
+    button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
+    input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
+
+javascript:
+  MercaderiasUI.initFormEvents("#{mercaderias_check_codigo_path}");
