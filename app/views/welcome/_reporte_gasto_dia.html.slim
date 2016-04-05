@@ -3,8 +3,8 @@ table.table.table-bordered.table-hover
     tr
       th Fecha
       th Motivo
-      th Monto
       th Categoria
+      th Monto
   tbody
     - day = Date.today
     - total = 0
@@ -16,11 +16,11 @@ table.table.table-bordered.table-hover
         tr
           td = Faker::Code.ean(8)
           td = Faker::Lorem.sentences.first
+          td = Faker::Lorem.words.first
           td.text-right
             - n = Faker::Number.between(300000, 2500000)
             - total += n
             = number_to_currency(n)
-          td = Faker::Lorem.words.first
       - day += 1
   tfoot
     tr

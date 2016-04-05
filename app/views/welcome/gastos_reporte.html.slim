@@ -33,10 +33,10 @@ section.content
                       a.btn.btn-default Modo resumido
 
           #movimiento-mercaderias-table.overlay-wrapper.buscador-resultados.table-responsive
-            //= render partial: 'reporte_gasto_dia'
+            = render partial: 'reporte_gasto_dia'
             //= render partial: 'reporte_gasto_dia_resumido'
             //=render partial: 'reporte_mes_resumido'
-            = render partial: 'reporte_gasto'
+            //= render partial: 'reporte_gasto'
 
 javascript:
   DatepickerHelper.initDateRangePicker('#date-range');
