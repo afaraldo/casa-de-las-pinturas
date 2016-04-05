@@ -6,6 +6,14 @@ class WelcomeController < ApplicationController
 
   end
 
+  def compras_show
+
+  end
+
+  def compras_show_credito
+    
+  end
+
   def compras_form
     @movimiento = MovimientoMercaderia.new
     @movimiento.detalles.build(mercaderia: Mercaderia.offset(rand(Mercaderia.count)).first, cantidad: 23)

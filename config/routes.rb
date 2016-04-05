@@ -32,6 +32,8 @@ Rails.application.routes.draw do
   get 'welcome/index'
   get 'welcome/compras_index'
   get 'welcome/compras_form'
+  get 'welcome/compras_show'
+  get 'welcome/compras_show_credito'
   get 'welcome/compras_reporte'
   get 'welcome/reporte_ventas_index'
   get 'welcome/devoluciones_venta'

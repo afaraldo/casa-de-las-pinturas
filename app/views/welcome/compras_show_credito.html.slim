@@ -1,0 +1,119 @@
+section.content-header
+  h1 Compras
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          a.volver-link
+            i.fa.fa-angle-double-left style="margin-right: 5px;"
+            | Volver al listado de compras
+          h3.box-title Compra Nro. 00002
+          .box-tools
+            .btn.btn-default Editar
+            .btn.btn-danger Eliminar
+        .box-body
+          .row
+            .col-sm-9
+              .row
+                .col-sm-4
+                  label.control-label Fecha
+                  p 02/04/2016
+                .col-sm-4
+                  label.control-label Proveedor
+                  p Arrabal Rosa 79
+                .col-sm-4
+                  label.control-label Condición de pago
+                  p Creédito
+              .row
+                .col-sm-4
+                  label.control-label Fecha de vencimiento
+                  p 17/04/2016
+                .col-sm-4
+                  label.control-label Nro. de Comprobante
+                  p 001-002-030303
+                .col-sm-4
+                  label.control-label Estado
+                  p
+                    label.label.label-warning Pendiente
+  .row
+    .col-xs-12
+      .nav-tabs-custom
+        ul.nav.nav-tabs
+          li.active
+            a href="#mercaderias" data-toggle="tab" Mercaderías
+          li
+            a href="#pagos" data-toggle="tab" Pago
+          li
+            a href="#creditos" data-toggle="tab" Credito utilizado
+        .tab-content
+          .tab-pane.active#mercaderias
+            table.table.table-bordered.detalles-table.calcular-total
+              thead
+                tr
+                  th Código
+                  th Mercadería
+                  th Cantidad
+                  th Precio Unitario
+                  th Subtotal
+              tbody#movimiento-detalles-body
+                - total = 0
+                - Mercaderia.take(5).each do |m|
+                  - n = Faker::Number.between(1, 10)
+                  tr
+                    td = m.codigo
+                    td = m.nombre
+                    td.text-right = n
+                    td.text-right = number_to_currency(m.precio_venta_contado)
+                    td.text-right = number_to_currency(n * m.precio_venta_contado)
+                  - total += n * m.precio_venta_contado
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total)
+                  td
+          .tab-pane#pagos
+            table.table.table-bordered.detalles-table.calcular-pagos-total
+              thead
+                tr
+                  th Forma
+                  th Moneda
+                  th Cotización
+                  th Monto
+                  th Subtotal
+              tbody#movimiento-detalles-body
+                tr
+                  td Efectivo
+                  td Guaraní
+                  td.text-right 1
+                  td.text-right = number_to_currency(total)
+                  td.text-right = number_to_currency(total)
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total)
+                  td
+  .row
+    .col-sm-offset-8.col-sm-4
+      .box.box-solid
+        .box-body
+          table.table.bg-warning
+            tbody
+              tr
+                td Total mercaderias:
+                td.text-right Gs. 528.200
+              tr
+                td Crédito utilizado:
+                td.text-right Gs. 200.000
+              tr
+                td.text-bold Total pagado:
+                td.text-right.text-bold Gs. 328.200
+              tr.bg-yellow
+                td.text-bold Total pendiente:
+                td.text-right.text-bold Gs. 328.200
