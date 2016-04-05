@@ -15,10 +15,6 @@
           span.glyphicon.glyphicon-lock.form-control-feedback
           br
           .row
-              .col-xs-8
-                  = f.input :remember_me, label: 'Recordarme', as: :boolean if devise_mapping.rememberable?
-              .col-xs-4
+              .col-xs-12
                   .form-actions
-                      br
-                      br
-                      = f.button :submit, "Ingresar"
+                      = f.button :submit, "Ingresar", class: "btn btn-primary btn-lg btn-block"

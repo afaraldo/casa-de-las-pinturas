@@ -19,8 +19,14 @@ var EmpleadosUI = (function(){
                 }
             });
             console.log('validation run');
+            
             // Validate form
             $('#empleado-form').validate();
+
+            // Auto focus
+            $('.modal').on('shown.bs.modal', function() {
+              $(this).find('[autofocus]').focus();
+            });
         }
     }
 }());
