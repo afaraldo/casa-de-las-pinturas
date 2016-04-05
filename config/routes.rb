@@ -33,6 +33,11 @@ Rails.application.routes.draw do
   get 'welcome/compras_index'
   get 'welcome/compras_form'
   get 'welcome/compras_reporte'
+  get 'welcome/reporte_ventas_index'
+  get 'welcome/devoluciones_venta'
+  get 'welcome/devoluciones_compra'
+  get 'welcome/devoluciones_venta_index'
+  get 'welcome/devoluciones_compra_index'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
