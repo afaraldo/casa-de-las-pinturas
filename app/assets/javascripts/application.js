@@ -32,6 +32,7 @@
 //= require ./libs/libs.defaults.js
 //= require ./libs/raphael.js
 //= require ./libs/morris.js
+//= require ./libs/Chart.js
 //= require cocoon
 //= require_tree ./helpers
 //= require_tree ./modules
