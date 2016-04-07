@@ -4,10 +4,11 @@
   .modal-header
     button.close type="button" data-dismiss="modal"
       span &times;
-    = empleado.new_record? ? 'Nuevo Usuario' : 'Editar Usuario'
+    h4.modal-title
+      = empleado.new_record? ? 'Nuevo Usuario' : 'Editar Usuario'
   .modal-body
     = f.input :id, as: :hidden, input_html: { id: 'empleado_id' }
-    = f.input :nombre,    input_html: {class: 'uniqueEmpleadoNombre'}
+    = f.input :nombre, autofocus: true,    input_html: {class: 'uniqueEmpleadoNombre'}
     = f.simple_fields_for :user do |u|
       = u.input :username
       = u.input :password

@@ -27,7 +27,12 @@
 //= require ./libs/jquery.inputmask.bundle.js
 //= require ./libs/bootstrap-datepicker/bootstrap-datepicker.js
 //= require ./libs/bootstrap-datepicker/bootstrap-datepicker.es.min.js
+//= require ./libs/moment.js
+//= require ./libs/daterangepicker.js
 //= require ./libs/libs.defaults.js
+//= require ./libs/raphael.js
+//= require ./libs/morris.js
+//= require ./libs/Chart.js
 //= require cocoon
 //= require_tree ./helpers
 //= require_tree ./modules
@@ -81,6 +86,8 @@ CasaDeLasPinturas = {
             });
 
             TablasHelper.filasClickeablesEvent();
+
+            I18n.locale = 'es';
 
         }
     },

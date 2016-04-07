@@ -1,0 +1,29 @@
+h1 Listing pago_detalles
+
+table
+  thead
+    tr
+      th Pago
+      th Forma
+      th Monto
+      th Moneda
+      th Cotizacion
+      th
+      th
+      th
+
+  tbody
+    - @pago_detalles.each do |pago_detalle|
+      tr
+        td = pago_detalle.pago
+        td = pago_detalle.forma
+        td = pago_detalle.monto
+        td = pago_detalle.moneda
+        td = pago_detalle.cotizacion
+        td = link_to 'Show', pago_detalle
+        td = link_to 'Edit', edit_pago_detalle_path(pago_detalle)
+        td = link_to 'Destroy', pago_detalle, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Pago detalle', new_pago_detalle_path

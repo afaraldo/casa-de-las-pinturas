@@ -1,0 +1,76 @@
+section.content-header
+  h1 Ventas
+section.content
+  .row
+    .col-xs-12
+      .box
+        = simple_form_for @movimiento, html: { id: 'movimiento-mercaderia-form' } do |f|
+          .box-header
+            /a.volver-link
+            /  i.fa.fa-angle-double-left style="margin-right: 5px;"
+            /  | Volver al listado de compras
+            h3.box-title Editar Devolucion
+          .box-body
+            = f.error_notification
+            .row
+              .col-sm-9
+                .row
+                  .col-sm-4
+                    = f.input :fecha, wrapper: :vertical_input_group do
+                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', value: '30/03/2016'
+                      .input-group-btn
+                        .btn.btn-default
+                          i.fa.fa-calendar
+                  .col-sm-4
+                    .form-group
+                      label.control-label Cliente
+                      select#cliente.form-control data-placeholder="Buscar cliente..."
+                        option Alanis S.A.
+                  .col-sm-4
+                      label.control-label Venta
+                      select#venta.form-control data-placeholder="Buscar boleta de venta..."
+                        option 0000023455
+
+                .row
+                  .col-sm-12
+                    = f.input :motivo, label: 'Motivo'
+            
+            .form-subtitle
+              label Mercaderias
+            br
+            table.table.table-bordered.detalles-table.calcular-total
+              thead
+                tr
+                  th Código
+                  th Mercadería
+                  th Cantidad
+                  th Precio Unitario
+                  th Subtotal
+                  th
+              tbody#movimiento-detalles-body
+                = f.simple_fields_for :detalles do |detalle|
+                  = render 'detalle_fields', f: detalle
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span
+                  td
+
+            = link_to_add_association '<i class="fa fa-plus"></i> Agregar mercaderia'.html_safe, f, :detalles, class: 'btn btn-default pull-right',
+                                            'data-association-insertion-node' => '#movimiento-detalles-body',
+                                            'data-association-insertion-method' => 'append'
+            
+          .box-footer
+            .form-actions.text-right
+              = link_to 'Cancelar', movimiento_mercaderias_path, class: 'btn btn-default'
+              | #{' '}
+              button.btn.btn-primary type="submit" Guardar
+  /
+  javascript:
+    MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: "#{mercaderias_buscar_path}"});
+    NumberHelper.mascaraCantidad('.maskCantidad');
+    $('#cliente').select2();
+    TablasHelper.calcularTotalEvent('.calcular-total');

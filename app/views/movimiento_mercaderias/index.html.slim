@@ -13,11 +13,13 @@ section.content
             = search_form_for @search, remote: true, class: 'remote-search' do |f|
               .row
                 .col-xs-4
-                  .input-group.input-daterange
-                    = f.text_field :fecha_gt, class: 'form-control', placeholder: 'Desde'
-                    span.input-group-addon
-                      i.fa.fa-calendar
-                    = f.text_field :fecha_lt, class: 'form-control', placeholder: 'Hasta'
+
+                  div#rango-de-fecha.btn.btn-default.daterange.btn-block
+                    = f.hidden_field :fecha_gt, class: 'fecha-desde'
+                    = f.hidden_field :fecha_lt, class: 'fecha-hasta'
+                    i.fa.fa-calendar
+                    span Fecha
+                    b.caret
                 .col-xs-5
                   .input-group
                     = f.text_field :motivo_cont, class: 'form-control', placeholder: 'Buscar por motivo...'

@@ -1,0 +1,39 @@
+section.content-header
+  h1 Compra
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Listado de devoluciones
+          .box-tools.pull-right
+            = link_to 'Nueva devolucion', new_movimiento_mercaderia_path, class: 'btn btn-primary'
+        .box-body#movimiento-mercaderias-lista
+          #mercaderias-search.buscador-listado
+            = search_form_for MovimientoMercaderia.search, remote: true, class: 'remote-search' do |f|
+              .row
+                .col-xs-3
+                  a#date-range.btn.btn-default.daterange.btn-block
+                    i.fa.fa-calendar
+                    span style="margin: 10px;" 01/03/2016 - 30/03/2016
+                    b.caret
+                .col-xs-3
+                  .form-group
+                    = f.select :tipo_eq, MovimientoMercaderia.tipo.options,
+                                         {include_blank: 'Todos los Proveedores...'},
+                                         class: 'form-control'
+          #movimiento-mercaderias-table.overlay-wrapper.buscador-resultados.table-responsive
+            = render partial: 'dev_compra_table'
+          #movimiento-mercaderias-paginate-container
+            ul.pagination.pull-right
+              li.active
+                a 1
+              li
+                a 2
+              li
+                a ›
+              li
+                a »
+
+javascript:
+  DatepickerHelper.initDateRangePicker('#date-range');

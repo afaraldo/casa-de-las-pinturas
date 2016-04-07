@@ -43,12 +43,14 @@ var MercaderiasUI = (function(){
         return items;
     }
 
-    // Inicializador del buscador
-    // Recibe un objeto con:
-    // {
-    //   elemento: el elemento input al que se va a utilizar como buscador,
-    //   url: la url del metodo para buscar en el servidor
-    // }
+    /**
+     * Inicializador del buscador
+     * Recibe un objeto con:
+     * {
+     *   elemento: el objeto jquery del elemento input al que se va a utilizar como buscador,
+     *   url: la url del metodo para buscar en el servidor
+     * }
+     */
     function buscarMercaderia(opciones){
         opciones.elemento.select2({
             placeholder: 'Buscar mercadería...',

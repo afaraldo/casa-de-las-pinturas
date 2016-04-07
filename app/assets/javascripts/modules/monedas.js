@@ -23,6 +23,11 @@ var MonedasUI = (function(){
 
           // Validate form
           $('#moneda-form').validate();
+
+          // Auto focus
+          $('.modal').on('shown.bs.modal', function() {
+            $(this).find('[autofocus]').focus();
+          });
       }
   };
 

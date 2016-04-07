@@ -1,0 +1,211 @@
+section.content-header
+  h1 Cobros
+section.content
+  .row
+    .col-xs-12
+      .box
+        = simple_form_for @movimiento, html: { id: 'movimiento-mercaderia-form' } do |f|
+          .box-header
+            a.volver-link
+              i.fa.fa-angle-double-left style="margin-right: 5px;"
+              | Volver al listado de cobros
+            h3.box-title Nuevo cobro
+          .box-body
+            = f.error_notification
+            .row
+              .col-sm-9
+                .row
+                  .col-sm-4
+                    = f.input :fecha, wrapper: :vertical_input_group do
+                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', value: '30/03/2016'
+                      .input-group-btn
+                        .btn.btn-default
+                          i.fa.fa-calendar
+                  .col-sm-4
+                    .form-group
+                      label.control-label Proveedor
+                      select#proveedor.form-control data-placeholder="Buscar proveedor..."
+                        option Arrabal Rosa 79
+                  /.col-sm-4
+                  /  = f.input :tipo, as: :radio_buttons, label: 'Condición de pago', wrapper: :button_radio_and_checkboxes, item_wrapper_tag: nil, item_label_class: 'btn btn-default'
+                .row
+                  /// FECHA DE VENCIMENTO
+                  /.col-sm-4
+                  /  = f.input :fecha, wrapper: :vertical_input_group, label: 'Fecha de vencimiento', required: false do
+                  /    = f.input_field :fecha, as: :string, class: 'datepicker form-control', value: '30/04/2016'
+                  /    .input-group-btn
+                  /      .btn.btn-default
+                  /        i.fa.fa-calendar
+                  .col-sm-4
+                    = f.input :motivo, label: 'Número de comprobante', required: false, input_html: { value: '001-001-00232434' }
+                  .col-xs-12
+                    p
+                      a href="#modal-credito" data-toggle="modal" Agregar Crédito de devoluciones
+            /////////////
+              CREDITO DISPONIBLE
+            /////////////
+              /.col-sm-3
+              /  .alert.alert-info
+              /    strong Crédito disponible:
+              /    br
+              /    h4.text-center style="margin-top: 10px; font-size: 16px;" 500.000 de 2.300.000
+              /    p.text-center
+              /      a Actualizar límite
+            /////////////
+              DEVOLUCIONES
+            /////////////
+            /.form-subtitle
+            /  label Crédito de devoluciones
+            /br
+            /table.table.table-bordered.detalles-table
+            /  thead
+            /    tr
+            /      th Número
+            /      th Monto
+            /      th Crédito disponible
+            /      th Crédito a usar
+            /      th
+            /  tbody#movimiento-detalles-body
+            /    tr
+            /      td
+            /        a 00034
+            /      td.text-right 200.000
+            /      td.text-right 200.000
+            /      td
+            /        input.form-control type="text" value="200.000"
+            /      td
+            /        a.btn.btn-default
+            /          i.fa.fa-times
+            /  tfoot
+            /    tr
+            /      td colspan="2"
+            /      td.text-right.text-bold
+            /        | Total:
+            /      td.table-total.text-right.text-bold
+            /        span 200.000
+            /      td
+            .form-subtitle
+              label Boletas
+            br
+            table.table.table-bordered.detalles-table.calcular-total
+              thead
+                tr
+                  th Código
+                  th Fecha
+                  th Fecha de vencimiento
+                  th Saldo Deudor
+                  th Cantidad a pagar
+                  th
+              tbody#movimiento-detalles-body
+                = f.simple_fields_for :detalles do |detalle|
+                  = render 'pago_detalle_fields', f: detalle
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span
+                  td
+
+            = link_to_add_association '<i class="fa fa-plus"></i> Agregar boleta'.html_safe, f, :detalles, class: 'btn btn-default pull-right',
+                                            'data-association-insertion-node' => '#movimiento-detalles-body',
+                                            'data-association-insertion-method' => 'append'
+            .clearfix
+            /////////////
+              RESUMEN DE TOTALES
+            /////////////
+            /.row
+            /  .col-sm-offset-8.col-sm-4
+            /    table.table.bg-warning
+            /      tbody
+            /        tr
+            /          td Total mercaderias:
+            /          td.text-right Gs. 528.200
+            /        tr
+            /          td Crédito utilizado:
+            /          td.text-right Gs. 200.000
+            /        tr
+            /          td.text-bold Total a pagar:
+            /          td.text-right.text-bold Gs. 328.200
+
+            .form-subtitle
+              label Formas de cobro
+            br
+            table.table.table-bordered.detalles-table.calcular-pagos-total
+              thead
+                tr
+                  th Forma
+                  th Moneda
+                  th Cotización
+                  th Monto
+                  th Subtotal
+                  th
+              tbody#movimiento-detalles-body
+                = render 'pago_fields'
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span
+                  td
+            = link_to_add_association '<i class="fa fa-plus"></i> Agregar forma de cobro'.html_safe, f, :detalles, class: 'btn btn-default pull-right',
+                                            'data-association-insertion-node' => '#movimiento-detalles-body',
+                                            'data-association-insertion-method' => 'append'
+          .box-footer
+            /.alert.alert-warning
+            /  p
+            /    | La operación va a provocar existencia negativa en los siguientes productos: %{productos}.
+            /  p Esta seguro que quiere continuar?
+            /  .form-actions
+            /    = link_to 'Cancelar', movimiento_mercaderias_path, class: 'btn btn-default'
+            /    | #{' '}
+            /    button.btn.btn-primary type="submit" Continuar
+            .form-actions.text-right
+              = link_to 'Cancelar', movimiento_mercaderias_path, class: 'btn btn-default'
+              | #{' '}
+              button.btn.btn-primary type="submit" Guardar cobro
+  //// MODAL DE DEVOLUCIONES
+  #modal-credito.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close type="button" data-dismiss="modal"
+            span &times;
+          h4.modal-title Crédito disponible de Arrabal Rosa 79
+        .modal-body
+          table.table-bordered.table
+            thead
+              tr
+                th Número
+                th Monto
+                th Crédito disponible
+                th
+            tbody
+              tr
+                td
+                  a href="#" 00034
+                td.text-right 200.000
+                td.text-right 200.000
+                td.text-right
+                  a.btn.btn-default.btn-sm Usar crédito
+              tr
+                td
+                  a href="#" 00049
+                td.text-right 100.000
+                td.text-right 100.000
+                td.text-right
+                  a.btn.btn-default.btn-sm Usar crédito
+        .modal-footer
+          button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
+
+
+  javascript:
+    MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: "#{mercaderias_buscar_path}"});
+    NumberHelper.mascaraCantidad('.maskCantidad');
+    NumberHelper.mascaraMoneda('.maskMoneda');
+    $('#proveedor').select2();
+    TablasHelper.calcularTotalEvent('.calcular-total');
+    TablasHelper.calcularTotalEvent('.calcular-pagos-total');

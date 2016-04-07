@@ -1,0 +1,33 @@
+h1 Listing pagos
+
+table
+  thead
+    tr
+      th Numero
+      th Fecha
+      th Total efectivo
+      th Total tarjeta
+      th Total credito utilizado
+      th Tipo
+      th Deleted at
+      th
+      th
+      th
+
+  tbody
+    - @pagos.each do |pago|
+      tr
+        td = pago.numero
+        td = pago.fecha
+        td = pago.total_efectivo
+        td = pago.total_tarjeta
+        td = pago.total_credito_utilizado
+        td = pago.tipo
+        td = pago.deleted_at
+        td = link_to 'Show', pago
+        td = link_to 'Edit', edit_pago_path(pago)
+        td = link_to 'Destroy', pago, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Pago', new_pago_path

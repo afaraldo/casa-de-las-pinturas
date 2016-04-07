@@ -1,0 +1,39 @@
+p#notice = notice
+
+p
+  strong Persona:
+  = @boleta.persona
+p
+  strong Numero:
+  = @boleta.numero
+p
+  strong Numero factura:
+  = @boleta.numero_factura
+p
+  strong Fecha:
+  = @boleta.fecha
+p
+  strong Fecha vencimiento:
+  = @boleta.fecha_vencimiento
+p
+  strong Estado:
+  = @boleta.estado
+p
+  strong Tipo:
+  = @boleta.tipo
+p
+  strong Condicion:
+  = @boleta.condicion
+p
+  strong Importe total:
+  = @boleta.importe_total
+p
+  strong Importe pendiente:
+  = @boleta.importe_pendiente
+p
+  strong Importe descontado:
+  = @boleta.importe_descontado
+
+= link_to 'Edit', edit_boleta_path(@boleta)
+'|
+= link_to 'Back', boletas_path
