@@ -4,7 +4,7 @@
   .modal-header
     button.close type="button" data-dismiss="modal"
       span &times;
-    h3.modal-title
+    h4.modal-title
       = moneda.new_record? ? 'Nueva moneda' : 'Editar moneda'
   .modal-body
     = f.input :id, as: :hidden, input_html: { id: 'moneda_id' }

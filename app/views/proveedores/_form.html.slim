@@ -4,7 +4,7 @@
   .modal-header
     button.close type="button" data-dismiss="modal"
       span &times;
-    .h3.modal-title
+    h4.modal-title
       = proveedor.new_record? ? 'Nuevo proveedor' : 'Editar proveedor'
   .modal-body
     = f.input :id, as: :hidden, input_html: { id: 'proveedor_id' }
