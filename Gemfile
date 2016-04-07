@@ -39,6 +39,9 @@ gem "cocoon", '~> 1.2.8'
 
 gem 'devise'
 
+# log de auditoria
+gem 'paper_trail', '~> 4'
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 

@@ -1,5 +1,6 @@
 class Persona < ActiveRecord::Base
   acts_as_paranoid
+  has_paper_trail
   has_one :user, dependent: :destroy
   self.inheritance_column = 'tipo'
 
