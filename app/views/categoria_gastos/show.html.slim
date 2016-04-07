@@ -1,0 +1,9 @@
+p#notice = notice
+
+p
+  strong Nombre:
+  = @categoria_gasto.nombre
+
+= link_to 'Edit', edit_categoria_gasto_path(@categoria_gasto)
+'|
+= link_to 'Back', categoria_gastos_path

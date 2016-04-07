@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
 
+  resources :categoria_gastos
+
   resources :pago_detalles
 
   resources :pagos

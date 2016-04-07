@@ -1,0 +1,21 @@
+h1 Listing categoria_gastos
+
+table
+  thead
+    tr
+      th Nombre
+      th
+      th
+      th
+
+  tbody
+    - @categoria_gastos.each do |categoria_gasto|
+      tr
+        td = categoria_gasto.nombre
+        td = link_to 'Show', categoria_gasto
+        td = link_to 'Edit', edit_categoria_gasto_path(categoria_gasto)
+        td = link_to 'Destroy', categoria_gasto, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Categoria gasto', new_categoria_gasto_path
