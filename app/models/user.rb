@@ -14,10 +14,11 @@ class User < ActiveRecord::Base
   validates :username, presence: true
   validates :username, length: {maximum: 20, minimum: 2}
   validates :password, presence: true, on: :create
-  validates :password, format: {with: /\A(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+\z/, message: :password_format },  on: :create
-  validates :password, format: {with: /\A(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+\z/, message: :password_format },  on: :update, allow_blank: true
+  validates :password, format: {with: /\A(?=.*[a-z])(?=.*[A-Z]).+\z/, message: :password_format },  on: :create
+  validates :password, format: {with: /\A(?=.*[a-z])(?=.*[A-Z]).+\z/, message: :password_format },  on: :update, allow_blank: true
   validates_uniqueness_of :username, allow_blank: false
-  validates :rol, inclusion: { in: %w(administrador superusuario), message: "%{value} no es un rol valido" }
+
+  validate :exists_superuser?
 
   def email_required?
     false
@@ -25,5 +26,13 @@ class User < ActiveRecord::Base
 
   def email_changed?
     false
+  end
+
+  private
+
+  def exists_superuser?
+    if self.rol == :superusuario && User.find_by_rol(:superusuario)
+      errors.add(:rol, "de superusuario ya existe y sólo puede existir uno")
+    end
   end
 end

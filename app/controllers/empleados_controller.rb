@@ -90,7 +90,7 @@ class EmpleadosController < ApplicationController
 
   def get_empleados
     @search = Empleado.search(params[:q])
-    @empleados = @search.result.page(params[:page])
+    @empleados = @search.result.includes(:user).page(params[:page])
   end
 
   private
@@ -102,6 +102,6 @@ class EmpleadosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def empleado_params
-      params.require(:empleado).permit(:nombre, :telefono, :direccion, :numero_documento, { user_attributes: [ :id, :username, :password, :password_confirmation] })
+      params.require(:empleado).permit(:nombre, :telefono, :direccion, :numero_documento, { user_attributes: [ :id, :username, :password, :password_confirmation, :rol] })
     end
 end
