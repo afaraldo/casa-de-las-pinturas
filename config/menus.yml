@@ -60,6 +60,18 @@ menu:
     url: "#"
     active_menu: :reportes
     submenus:
+      reporte_compras:
+        text: "Reporte de compras"
+        url: "#"
+        active_submenu: :reporte_compras
+      reporte_ventas:
+        text: "Reporte de ventas"
+        url: "#"
+        active_submenu: :reporte_ventas
+      reporte_gastos:
+        text: "Reporte de gastos"
+        url: "#"
+        active_submenu: :reporte_gastos
   configuraciones:
     text: "Configuraciones"
     url: :configuraciones

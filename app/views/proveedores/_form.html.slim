@@ -4,10 +4,11 @@
   .modal-header
     button.close type="button" data-dismiss="modal"
       span &times;
-    = proveedor.new_record? ? 'Nuevo proveedor' : 'Editar proveedor'
+    .h3.modal-title
+      = proveedor.new_record? ? 'Nuevo proveedor' : 'Editar proveedor'
   .modal-body
     = f.input :id, as: :hidden, input_html: { id: 'proveedor_id' }
-    = f.input :nombre,    input_html: {class: 'uniqueProveedorNombre'}
+    = f.input :nombre, autofocus: true, input_html: {class: 'uniqueProveedorNombre'}
     = f.input :direccion
     = f.input :telefono
     = f.input :numero_documento

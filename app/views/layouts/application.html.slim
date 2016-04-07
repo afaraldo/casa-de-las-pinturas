@@ -9,10 +9,6 @@ html
   body.skin-blue-light data-controller="#{controller_name}" data-action="#{action_name}"
     .wrapper
       = render 'layouts/main_menu'
-      aside.main-sidebar
-        section.sidebar
-          ul.sidebar-menu
-            = side_menu
       .content-wrapper
         //= render 'layouts/mensajes'
         == yield

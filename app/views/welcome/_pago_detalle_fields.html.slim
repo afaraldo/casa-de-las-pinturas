@@ -1,0 +1,10 @@
+tr.nested-fields
+  td = Faker::Code.ean
+  td = localize(Date.today + rand()%3)
+  td = localize(Date.today + rand()%5 - rand()%5 )
+  td.maskMoneda = Faker::Number.number(6)
+  td = f.input :cantidad,      as: :string,
+                              label: false,
+                              input_html: { class: 'form-control maskMoneda required precio-unitario', data: { 'msg-required' => 'Debe ingresar una cantidad' }, value: number_with_precision(f.object.cantidad) }
+  td
+    = link_to_remove_association '<i class="fa fa-times"></i>'.html_safe, f, class: 'btn btn-default btn-sm'

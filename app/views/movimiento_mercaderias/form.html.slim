@@ -10,9 +10,16 @@ section.content
           .box-body
             = f.error_notification
             .row
-              .col-sm-4
-                = f.input :fecha, as: :string, input_html: { class: 'datepicker', value: @movimiento.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)  }
-                = f.input :tipo,  as: :radio_buttons, item_wrapper_class: 'radio-inline', label_html: {style: 'display: block;'}
+              .col-sm-3
+                = f.input :fecha, wrapper: :vertical_input_group do
+                  = f.input_field :fecha, as: :string, class: 'datepicker form-control', value: @movimiento.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                  .input-group-btn
+                    .btn.btn-default
+                      i.fa.fa-calendar
+              .col-sm-3
+                = f.input :tipo, as: :radio_buttons, wrapper: :button_radio_and_checkboxes, item_wrapper_tag: nil, item_label_class: 'btn btn-default'
+            .row
+              .col-sm-6
                 = f.input :motivo
             .links
               label.control-label Mercaderias

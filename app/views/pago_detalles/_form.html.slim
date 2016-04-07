@@ -1,0 +1,12 @@
+= simple_form_for(@pago_detalle) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.association :pago
+    = f.input :forma
+    = f.input :monto
+    = f.association :moneda
+    = f.input :cotizacion
+
+  .form-actions
+    = f.button :submit

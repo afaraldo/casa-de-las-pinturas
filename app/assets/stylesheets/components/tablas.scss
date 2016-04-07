@@ -5,3 +5,9 @@ th.table-actions{
 tr.fila-clickeable{
   cursor: pointer;
 }
+
+td{
+  .form-group{
+    margin-bottom: 0;
+  }
+}

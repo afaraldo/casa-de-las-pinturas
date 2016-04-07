@@ -23,6 +23,11 @@ var ProveedoresUI = (function(){
 
             // Validate form
             $('#proveedor-form').validate();
+
+            // Auto focus
+            $('.modal').on('shown.bs.modal', function() {
+              $(this).find('[autofocus]').focus();
+            });
         }
     };
 
