@@ -1,13 +1,6 @@
 Rails.application.routes.draw do
 
-
-  resources :pago_detalles
-
-  resources :pagos
-
-  resources :boleta_detalles
-
-  resources :boletas
+  resources :compras
 
   devise_for :users
 

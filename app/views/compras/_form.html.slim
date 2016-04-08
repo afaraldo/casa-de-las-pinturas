@@ -1,0 +1,18 @@
+= simple_form_for(@compra) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.association :persona
+    = f.input :numero
+    = f.input :numero_factura
+    = f.input :fecha
+    = f.input :fecha_vencimiento
+    = f.input :estado
+    = f.input :tipo
+    = f.input :condicion
+    = f.input :importe_total
+    = f.input :importe_pendiente
+    = f.input :importe_descontado
+
+  .form-actions
+    = f.button :submit

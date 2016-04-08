@@ -6,7 +6,7 @@ menu:
     submenus:
       compras:
         text: "Compras"
-        url: "#"
+        url: :compras
         active_submenu: :compras_sidemenu
       pedidos_compras:
         text: "Pedido de compras"

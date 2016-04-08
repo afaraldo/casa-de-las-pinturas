@@ -32,6 +32,23 @@ Fabricator(:mercaderia) do
   stock_minimo { Faker::Number.positive(20, 30) }
   unidad_de_medida { :unidad }
 end
+Fabricator(:boleta_detalle) do
+  mercaderia_id { Mercaderia.offset(rand(Mercaderia.count)).first.id }
+  cantidad { Faker::Number.between(1, 20) }
+  precio_unitario { Faker::Number.between(1000, 2000000) }
+end
+
+Fabricator(:compra) do
+  fecha { Faker::Date.backward(30) }
+  numero { Faker::Number.between(1, 20) }
+  persona_id { Proveedor.offset(rand(Proveedor.count)).first.id }
+  numero_factura { Faker::Company.ein }
+  estado { [:pendiente, :pagado][rand(2)] }
+  condicion { [:contado, :credito][rand(2)] }
+  detalles(rand: 3, fabricator: :boleta_detalle)
+  importe_total { Faker::Number.between(400000, 2000000) }
+  importe_pendiente { Faker::Number.between(400000, 2000000) }
+end
 
 15.times {
   begin
@@ -62,6 +79,12 @@ end
     Fabricate(:cliente)
   rescue
     next
+  end
+}
+
+30.times {
+  begin
+    Fabricate(:compra)
   end
 }
 
