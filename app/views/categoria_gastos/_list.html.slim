@@ -1,0 +1,8 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Nombre
+      th
+  tbody
+    - categoria_gastos.each do |cat|
+      = render partial: 'categoria_gastos/list_row', locals: {categoria_gasto: cat}
