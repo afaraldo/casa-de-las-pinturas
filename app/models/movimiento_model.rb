@@ -51,7 +51,7 @@ class MovimientoModel < ActiveRecord::Base
 
     # si el periodo es nuevo usar el balance del periodo anterior
     if periodo.new_record?
-      periodo.balance = get_balance_anterior(buscar_por, periodo)
+      periodo.balance = get_balance_periodo_anterior(buscar_por, periodo)
       periodo.save
     end
 
@@ -85,24 +85,31 @@ class MovimientoModel < ActiveRecord::Base
   end
 
   # Retorna el balance anterior al periodo dado
-  def self.get_balance_anterior(buscar_por, periodo)
+  # Ej.: Si el periodo pasado es Marzo de 2016 retorna el balance de Febrero de 2016
+  def self.get_balance_periodo_anterior(buscar_por, periodo)
     buscar_por.delete(:anho)
     buscar_por.delete(:mes)
     periodos = @balances_class.where(buscar_por)
                               .where('anho <= ?', periodo.anho)
                               .order('anho DESC').order('mes DESC')
+                              .reject{|p| p.anho == periodo.anho && p.mes > periodo.mes }
 
-    periodos.size > 0 ? periodos[0].balance : 0
+
+    index_del_periodo = periodo.new_record? ? 0 : 1 # si el periodo todavia no existe usar el primero
+    periodos.size > index_del_periodo ? periodos[index_del_periodo].balance : 0
   end
 
-  # eliminar movimiento y actualizar balances
+  # Elimina movimiento y actualizar balances
+  # objeto => es el objeto al que corresponde le movimiento. Ej.: MovimientoMercaderiaDetalle
+  # fecha => la fecha a la que correspondia el movimiento
+  # cantidad => la cantidad a sumar a los balances
   def self.eliminar_movimiento(objeto, fecha, cantidad)
     init_variables
 
     movimiento = self.find_or_initialize_by(movimiento_tipo: objeto.class,
                                             objeto.class.to_s.underscore.concat('_id') => objeto.id)
 
-    movimiento.destroy
+    movimiento.destroy # elimina movimiento
 
     buscar_por = {}
 
@@ -110,16 +117,29 @@ class MovimientoModel < ActiveRecord::Base
       buscar_por[k] = objeto[k]
     end
 
+    # se ajusta los balances
     ajustar_balances(buscar_por, fecha, cantidad)
 
   end
 
-  # TODO
-  # Debe retornar el balance anterior a un rango dado y los movimientos del rango
-  # y filtrar por tipo
+  # Retorna los movimientos a mostrar en la vista
+  # recibe => {elemento_a_buscar(mercaderia, persona, caja, moneda), desde_fecha, hasta_fecha}
+  #
+  # Ej 1.: MercaderiaExtracto.get_movimientos(mercaderia_id: 31,
+  #                                         desde: DateTime.now - 1.month,
+  #                                         hasta: DateTime.now)
+  #
+  # Ej 2.: CajaExtracto.get_movimientos(caja_id: 1, moneda_id: 2,
+  #                                     desde: DateTime.now - 1.month,
+  #                                     hasta: DateTime.now)
+  #
+  # Retorna: {balance_anterior: 230, movimientos: movimientos formateados para la vista - VER MovimientosHelper.formatear_movimientos}
   def self.get_movimientos(*args)
+    init_variables
 
     opciones = args.extract_options!
+
+    resultado = {balance_anterior: 0, movimientos: []}
 
     buscar_por = {}
 
@@ -127,10 +147,44 @@ class MovimientoModel < ActiveRecord::Base
       buscar_por[k] = opciones[k]
     end
 
-    movimientos = self.where(buscar_por)
-                      .order(:fecha).includes(self.reflect_on_all_associations.map { |assoc| assoc.name})
+    # configurar fechas
+    desde = opciones[:desde] || DateTime.now.beginning_of_month
+    hasta = opciones[:hasta] || DateTime.now.end_of_month
 
-    formatear_movimientos(movimientos)
+    resultado[:balance_anterior] = get_balance_anterior(buscar_por, desde)
 
+    resultado[:movimientos] = formatear_movimientos(filtrar_movimientos(buscar_por, desde, hasta))
+
+    resultado
+  end
+
+  # retorna el balance anterior a una fecha dada
+  # Ej.: Si se pasa 15/03/2016 retorna el balance hasta el dia anterior
+  def self.get_balance_anterior(buscar_por, desde)
+    buscar_por[:anho] = desde.year
+    buscar_por[:mes] = desde.month
+
+    periodo_inicial = @balances_class.find_or_initialize_by(buscar_por) # periodo al que corresponde la fecha dada
+    balance = get_balance_periodo_anterior(buscar_por, periodo_inicial) # balance del periodo anterior
+
+    # movimientos desde el principio del mes hasta la fecha dada
+    movimientos_hasta = formatear_movimientos(filtrar_movimientos(buscar_por, desde.beginning_of_month, (desde.end_of_day - 1.day)))
+
+    # hacer la suma/resta de los movimeintos hasta la fecha dada
+    movimientos_hasta.each do |m|
+      balance += m[:ingreso]
+      balance -= m[:egreso]
+    end
+
+    balance
+
+  end
+
+  # filtra los movimientos dependiendo de la instancia y dechas
+  def self.filtrar_movimientos(buscar_por, desde, hasta)
+    self.where(buscar_por)
+        .where('fecha > ? AND fecha < ?', desde, hasta)
+        .order(:fecha)
+        .includes(self.reflect_on_all_associations.map { |assoc| assoc.name})
   end
 end
