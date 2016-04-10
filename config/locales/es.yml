@@ -29,6 +29,8 @@ es:
     detalle_cantidad_stock_superior: "Esta cantidad va a provocar stock mayor a %{limite} que es limite"
   moneda:
     unique_nombre_error: "Ya existe una moneda con el nombre %{nombre}"
+  categoria_gasto:
+    unique_nombre_error: "Ya existe una categoría con el nombre %{nombre}"    
   activerecord:
     models:
       user: "Usuario"
