@@ -2,7 +2,9 @@ class Boleta < ActiveRecord::Base
   extend Enumerize
   acts_as_paranoid
   self.inheritance_column = 'tipo'
+
   has_many :detalles, class_name: 'BoletaDetalle', dependent: :destroy, inverse_of: :boleta
+  accepts_nested_attributes_for :detalles, reject_if: :all_blank, allow_destroy: true
 
   enumerize :condicion, in: [:contado, :credito], predicates: true
   enumerize :estado, in: [:pendiente, :pagado], predicates: true
@@ -12,6 +14,10 @@ class Boleta < ActiveRecord::Base
   validates :fecha,  presence: true
   validates :detalles, length: { minimum: 1 }
   validate  :fecha_futura
+
+  def numero
+    id
+  end
 
   private
 
