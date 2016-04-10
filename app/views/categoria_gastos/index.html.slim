@@ -5,14 +5,14 @@ section.content
     .col-xs-12
       .box
         .box-header
-          h3.box-title Categorias de Gastos
+          h3.box-title Categorías de Gastos
           .box-tools.pull-right
-            = link_to 'Nueva categoria de gasto', new_categoria_gasto_path, class: 'btn btn-primary', remote: true
+            = link_to 'Nueva categoría', new_categoria_gasto_path, class: 'btn btn-primary', remote: true
         .box-body#categoria_gastos-lista
           #categoria_gasto-search.buscador-listado
             = search_form_for @search, remote: true, class: 'remote-search' do |f|
               .input-group
-                = f.text_field :nombre, class: 'form-control', placeholder: 'Buscar por nombre...', autofocus: true
+                = f.text_field :nombre_cont, class: 'form-control', placeholder: 'Buscar por nombre...', autofocus: true
                 .input-group-btn
                   button.btn.btn-default type="submit" name="commit"
                     i.fa.fa-search
