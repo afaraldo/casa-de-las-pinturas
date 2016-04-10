@@ -55,6 +55,10 @@ menu:
         text: "Cotizacion"
         url: :monedas
         active_submenu: :monedas_sidemenu
+      categoria_gastos:
+        text: "Categoria de Gastos"
+        url: :categoria_gastos
+        active_submenu: :categoria_gastos_sidemenu
   reportes:
     text: "Reportes"
     url: "#"

@@ -4,7 +4,7 @@ class CategoriaGastosController < ApplicationController
   # GET /categoria_gastos
   # GET /categoria_gastos.json
   def index
-    @categoria_gastos = CategoriaGasto.all
+    get_categoria_gastos
   end
 
   # GET /categoria_gastos/1
@@ -15,10 +15,12 @@ class CategoriaGastosController < ApplicationController
   # GET /categoria_gastos/new
   def new
     @categoria_gasto = CategoriaGasto.new
+    render 'load_form', format: :js
   end
 
   # GET /categoria_gastos/1/edit
   def edit
+    render 'load_form', format: :js
   end
 
   # POST /categoria_gastos
@@ -26,39 +28,58 @@ class CategoriaGastosController < ApplicationController
   def create
     @categoria_gasto = CategoriaGasto.new(categoria_gasto_params)
 
-    respond_to do |format|
-      if @categoria_gasto.save
-        format.html { redirect_to @categoria_gasto, notice: 'Categoria gasto was successfully created.' }
-        format.json { render :show, status: :created, location: @categoria_gasto }
-      else
-        format.html { render :new }
-        format.json { render json: @categoria_gasto.errors, status: :unprocessable_entity }
-      end
+    if @categoria_gasto.save
+      @error = false
+      @message = t('mensajes.save_success', recurso: 'la categoria')
+      get_categoria_gastos
+    else
+      @error = true
+      @message = t('mensajes.save_error', recurso: 'la categoria', errores: @categoria_gasto.errors.full_messages.to_sentence)
     end
+
+    render 'reload_list', format: :js
   end
 
   # PATCH/PUT /categoria_gastos/1
   # PATCH/PUT /categoria_gastos/1.json
   def update
-    respond_to do |format|
-      if @categoria_gasto.update(categoria_gasto_params)
-        format.html { redirect_to @categoria_gasto, notice: 'Categoria gasto was successfully updated.' }
-        format.json { render :show, status: :ok, location: @categoria_gasto }
-      else
-        format.html { render :edit }
-        format.json { render json: @categoria_gasto.errors, status: :unprocessable_entity }
-      end
+    if @categoria_gasto.update(categoria_gasto_params)
+      @error = false
+      @message = t('mensajes.save_success', recurso: 'la categoria')
+      get_categoria_gastos
+    else
+      @error = true
+      @message = t('mensajes.save_error', recurso: 'la categoria', errores: @categoria_gasto.errors.full_messages.to_sentence)
     end
+
+    render 'reload_list', format: :js
   end
 
   # DELETE /categoria_gastos/1
   # DELETE /categoria_gastos/1.json
   def destroy
-    @categoria_gasto.destroy
-    respond_to do |format|
-      format.html { redirect_to categoria_gastos_url, notice: 'Categoria gasto was successfully destroyed.' }
-      format.json { head :no_content }
+    if @categoria_gasto.destroy
+      @error = false
+      @message = t('mensajes.delete_success', recurso: 'la categoria')
+      get_categoria_gastos
+    else
+      @error = true
+      @message = t('mensajes.delete_error', recurso: 'la categoria', errores: @categoria_gasto.errors.full_messages.to_sentence)
     end
+
+    render 'reload_list', format: :js
+  end
+
+  def check_nombre
+    categoria_gasto = CategoriaGasto.by_nombre(params[:nombre]).first
+
+    render json: (categoria_gasto.nil? || categoria_gasto.id == params[:id].to_i) ? true : t('categoria_gasto.unique_nombre_error', nombre: params[:nombre]).to_json
+  end
+
+  def get_categoria_gastos
+    # si la llamada es desde el buscador incluir las subcategorias tambien
+    @search = CategoriaGasto.search(params[:q])
+    @categoria_gastos = @search.result.page(params[:page])
   end
 
   private
