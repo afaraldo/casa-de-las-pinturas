@@ -4,6 +4,8 @@ class Mercaderia < ActiveRecord::Base
 
   belongs_to :categoria, -> { with_deleted }
 
+  has_one :stock_balance, -> { order('anho DESC').order('mes DESC') }, class_name: 'MercaderiaPeriodoBalance'
+
   delegate :nombre, to: :categoria, prefix: true
 
   enumerize :unidad_de_medida, in: [:unidad, :metro, :litro, :kilo], predicates: true
@@ -20,5 +22,9 @@ class Mercaderia < ActiveRecord::Base
 
   default_scope { order('lower(nombre)') } # Ordenar por nombre por defecto
   scope :by_codigo, lambda { |value| where('lower(codigo) = ?', value.downcase) } # buscar por codigo
+
+  def stock_actual
+    stock_balance.nil? ? 0 : stock_balance.balance
+  end
 
 end
