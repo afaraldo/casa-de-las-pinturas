@@ -1,7 +1,7 @@
 class AddDetailsToUsers < ActiveRecord::Migration
   def change
     User.transaction do
-      User.all.each do |u|
+      User.with_deleted.each do |u|
         u.update(rol: (u.username == 'admin' ? 'superusuario' : 'administrador'))
       end
     end
