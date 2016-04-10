@@ -37,6 +37,7 @@ es:
         username: "Nombre de usuario"
         password: "Contraseña"
         password_confirmation: "Confirmación de contraseña"
+        rol: "Rol"
       empleado:
         user: "Usuario"
       movimiento_mercaderia:
@@ -52,7 +53,7 @@ es:
         only_letters_is_allowed: "solo permite letras"
         only_numbers_is_allowed: "solo permite numeros"
         only_telephone_numbers_is_allowed: "solo permite numeros de teléfono. Ej. 0985123456"
-        password_format: "debe contener una combinación de números, letras (minúsculas y mayúsculas) y símbolos"
+        password_format: "debe contener una combinación de letras (minúsculas y mayúsculas)"
   mensajes:
     save_success: "Se ha guardado %{recurso}"
     save_error: "Ha ocurrido un problema al tratar de guardar %{recurso}. %{errores}"

@@ -14,9 +14,11 @@ table.table.table-bordered.table-hover
         td = cortar_texto(empleado.nombre)
         td = empleado.user_username
         td = empleado.numero_documento
-        td
+        td = empleado.user_rol
         td = empleado.telefono
         td = cortar_texto(empleado.direccion)
         td
-          = link_to '<i class="fa fa-edit"></i> '.html_safe, edit_empleado_path(empleado), remote: true, class: 'btn btn-default btn-sm'
-          = link_to ' <i class="fa fa-trash"></i>'.html_safe, empleado_path(empleado), method: 'delete', data: {confirm: "¿Desea eliminar el usuario #{empleado.user_username}?"}, remote: true, class: 'btn btn-danger btn-sm'
+          - unless empleado.user.superusuario? && !current_user.superusuario?
+            = link_to '<i class="fa fa-edit"></i> '.html_safe, edit_empleado_path(empleado), remote: true, class: 'btn btn-default btn-sm'
+          - unless empleado.user.id == current_user.id || empleado.user.superusuario?
+              = link_to ' <i class="fa fa-trash"></i>'.html_safe, empleado_path(empleado), method: 'delete', data: {confirm: "¿Desea eliminar el usuario #{empleado.user_username}?"}, remote: true, class: 'btn btn-danger btn-sm'

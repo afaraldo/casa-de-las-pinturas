@@ -13,6 +13,10 @@
       = u.input :username
       = u.input :password
       = u.input :password_confirmation, label: 'Repetir contraseña', input_html: {class: 'passwordConfirmation'},  maxlength: 20, size: 20
+      - if current_user.id != empleado.user.id
+          = u.input :rol, include_blank: false, disabled: false
+      - else
+        = u.input :rol, include_blank: false, disabled: true
     = f.input :direccion
     = f.input :telefono
     = f.input :numero_documento, label: 'Nro. de documento'

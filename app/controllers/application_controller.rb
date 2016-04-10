@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   before_action :authenticate_user!
   before_filter :set_menu_config
+  before_filter :set_paper_trail_whodunnit
   protect_from_forgery with: :exception
 
   # Esta variable de instancia sse utilizara para saber que menus colocar como active y que submenus mostrar
