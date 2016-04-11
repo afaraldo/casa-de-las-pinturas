@@ -10,6 +10,10 @@ var ComprasUI = (function(){
         MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: buscarMercaderiaUrl});
 
         NumberHelper.mascaraCantidad('.maskCantidad');
+        NumberHelper.mascaraMoneda('.maskMoneda');
+
+        TablasHelper.calcularTotalEvent('.calcular-total');
+        TablasHelper.calcularTotalEvent('.calcular-pagos-total');
 
         DatepickerHelper.initDatepicker('.datepicker');
 
@@ -25,6 +29,7 @@ var ComprasUI = (function(){
             // Se inicializa el buscador de mercaderias y se agrega mascara a los campos del nuevo detalle
             MercaderiasUI.buscarMercaderia({elemento: insertedItem.find('.mercaderia-select'), url: buscarMercaderiaUrl});
             NumberHelper.mascaraCantidad('.maskCantidad');
+            NumberHelper.mascaraMoneda('.maskMoneda');
 
             // Se vuelve a mostar el boton de eliminar si es que se escondio en algun momento
             $('.remove_fields').removeClass('hide');

@@ -12,7 +12,6 @@ class ComprasController < ApplicationController
   # GET /compras.json
   def index
     get_compras
-
   end
 
   # GET /compras/1
@@ -37,16 +36,18 @@ class ComprasController < ApplicationController
   def create
     @compra = Compra.new(compra_params)
 
-    if @compra.save
-      @error = false
-      @message = t('mensajes.save_success', recurso: 'la compra')
-      get_compras
-    else
-      @error = true
-      @message = t('mensajes.save_error', recurso: 'la compra', errores: @compra.errors.full_messages.to_sentence)
+    respond_to do |format|
+      Compra.transaction do
+        if @compra.save
+          format.html { redirect_to @compra, notice: t('mensajes.save_success', recurso: 'la compra') }
+          format.json { render :show, status: :created, location: @compra }
+        else
+          format.html { render :form }
+          format.json { render json: @compra.errors, status: :unprocessable_entity }
+        end
+      end
     end
 
-    render 'reload_list', format: :js
   end
 
   # PATCH/PUT /compras/1
@@ -94,6 +95,6 @@ class ComprasController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def compra_params
-      params.require(:compra).permit(:persona_id, :numero, :numero_factura, :fecha, :fecha_vencimiento, :estado, :tipo, :condicion, :importe_total, :importe_pendiente, :importe_descontado, detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy])
+      params.require(:compra).permit(:persona_id, :numero, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :tipo, :condicion, detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy])
     end
 end

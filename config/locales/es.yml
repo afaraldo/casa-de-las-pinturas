@@ -30,7 +30,7 @@ es:
   moneda:
     unique_nombre_error: "Ya existe una moneda con el nombre %{nombre}"
   categoria_gasto:
-    unique_nombre_error: "Ya existe una categoría con el nombre %{nombre}"    
+    unique_nombre_error: "Ya existe una categoría con el nombre %{nombre}"
   activerecord:
     models:
       user: "Usuario"
@@ -47,6 +47,7 @@ es:
     errors:
       messages:
         fecha_futura: "La fecha no puede ser superior a la actual"
+        fecha_vencimiento: "La fecha de vencimiento no puede ser inferior a la fecha creación"
         email_invalido: "Por favor, escribí una dirección de correo válida"
         record_invalid: "La validación falló: %{errors}"
         restrict_dependent_destroy:

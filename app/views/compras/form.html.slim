@@ -17,7 +17,7 @@ section.content
                 .row
                   .col-sm-4
                     = f.input :fecha, wrapper: :vertical_input_group do
-                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: true, value: @compra.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: true, value: @compra.new_record? && f.object.fecha.nil? ? '' : localize(@compra.fecha.to_date)
                       .input-group-btn
                         .btn.btn-default
                           i.fa.fa-calendar
@@ -26,17 +26,19 @@ section.content
                       label.control-label Proveedor
                       = f.text_field :persona_id, id: 'proveedores-buscador', class: 'proveedor-select form-control', placeholder: 'Todos los proveedores...' 
                   .col-sm-4
-                    = f.input :condicion, as: :radio_buttons, label: 'Condición de pago', wrapper: :button_radio_and_checkboxes, item_wrapper_tag: nil, item_label_class: 'btn btn-default'
+                    .form-group
+                      label.control-label Condición de pago
+                      = f.input :condicion, as: :radio_buttons, label:'', wrapper: :button_radio_and_checkboxes, item_wrapper_tag: nil, item_label_class: 'btn btn-default'
                 .row
                   /// FECHA DE VENCIMENTO
                   .col-sm-4
-                    = f.input :fecha, wrapper: :vertical_input_group, label: 'Fecha de vencimiento', required: false do
-                      = f.input_field :fecha_vencimiento, as: :string, class: 'datepicker form-control', value: @compra.new_record? && f.object.fecha_vencimiento.nil? ? '' : localize(f.object.fecha_vencimiento.to_date)
+                    = f.input :fecha, wrapper: :vertical_input_group, label: 'Fecha de vencimiento', required: true do
+                      = f.input_field :fecha_vencimiento, as: :string, class: 'datepicker form-control', value: @compra.new_record? && f.object.fecha_vencimiento.nil? ? '' : localize(@compra.fecha_vencimiento.to_date)
                       .input-group-btn
                         .btn.btn-default
                           i.fa.fa-calendar
                   .col-sm-4
-                    = f.input :numero_comprobante, label: 'Número de Comprobante', value: @compra.new_record? && f.object.fecha.nil? ? '' : localize(f.object.numero_factura.to_date)
+                    = f.input :numero_comprobante, label: 'Número de Comprobante', value: @compra.new_record? && f.object.numero_comprobante.nil? ? '' : f.object.numero_comprobante
                   .col-xs-12
                     p
                       /a href="#modal-credito" data-toggle="modal" Agregar Crédito de devoluciones
