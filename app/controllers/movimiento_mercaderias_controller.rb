@@ -35,15 +35,23 @@ class MovimientoMercaderiasController < ApplicationController
   # POST /movimiento_mercaderias.json
   def create
     @movimiento = MovimientoMercaderia.new(movimiento_mercaderia_params)
-
-    respond_to do |format|
-      MovimientoMercaderia.transaction do
-        if @movimiento.save
-          format.html { redirect_to @movimiento, notice: t('mensajes.save_success', recurso: 'el movimiento') }
-          format.json { render :show, status: :created, location: @movimiento }
-        else
-          format.html { render :form }
-          format.json { render json: @movimiento.errors, status: :unprocessable_entity }
+    @stock_negativo = @movimiento.check_detalles_negativos
+    if @stock_negativo  then # cuando hubo stock negativo
+      respond_to do |format|
+        format.html { render :form }
+        format.json { render json: @stock_negativo, status: :unprocessable_entity }
+        format.json { render json: @movimiento.errors, status: :unprocessable_entity }
+      end
+    else #  cuando no hubo stock negativo
+      respond_to do |format|
+        MovimientoMercaderia.transaction do
+          if @movimiento.save
+            format.html { redirect_to @movimiento, notice: t('mensajes.save_success', recurso: 'el movimiento') }
+            format.json { render :show, status: :created, location: @movimiento }
+          else
+            format.html { render :form }
+            format.json { render json: @movimiento.errors, status: :unprocessable_entity }
+          end
         end
       end
     end

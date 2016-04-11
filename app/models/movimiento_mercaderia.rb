@@ -34,7 +34,7 @@ class MovimientoMercaderia < ActiveRecord::Base
 
     if m.size > 0
       errors.add(:base, I18n.t('movimiento_mercaderia.eliminar_stock_negativo', mercaderias: m.map{|me| me.nombre}.to_sentence))
-      false
+      true
     end
   end
 

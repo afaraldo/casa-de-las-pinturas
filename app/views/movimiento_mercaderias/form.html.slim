@@ -39,10 +39,20 @@ section.content
                                             'data-association-insertion-node' => '#movimiento-detalles-body',
                                             'data-association-insertion-method' => 'append'
           .box-footer
-            .text-right.form-actions
-              = link_to 'Cancelar', movimiento_mercaderias_path, class: 'btn btn-default'
-              | #{' '}
-              button.btn.btn-primary type="submit" Guardar movimiento
-
+            - unless @movimiento.errors[:base] 
+              .alert.alert-warning
+                p
+                  | La operación va a provocar existencia negativa en los siguientes productos: %{productos}.
+                p Esta seguro que quiere continuar?
+                .form-actions
+                  = link_to 'Cancelar', movimiento_mercaderias_path, class: 'btn btn-default'
+                  | #{' '}
+                  button.btn.btn-primary type="submit" Continuar
+            - else
+              .text-right.form-actions
+                = link_to 'Cancelar', movimiento_mercaderias_path, class: 'btn btn-default'
+                | #{' '}
+                button.btn.btn-primary type="submit" Guardar movimiento
+            
 javascript:
   MovimientoMercaderiasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");
