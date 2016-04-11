@@ -9,7 +9,7 @@ section.content
             a.volver-link href= compras_path
               i.fa.fa-angle-double-left style="margin-right: 5px;"
               | Volver al listado de compras
-            h3.box-title Nueva Compra
+            h3.box-title = @compra.new_record? ? 'Nueva Compra' : 'Editar Compra'
           .box-body
             = f.error_notification
             .row
@@ -24,11 +24,9 @@ section.content
                   .col-sm-4
                     .form-group
                       label.control-label Proveedor
-                      = f.text_field :persona_id, id: 'proveedores-buscador', class: 'proveedor-select form-control', placeholder: 'Todos los proveedores...' 
+                      = f.input_field :persona_id, id: 'proveedores-buscador', class: 'proveedor-select form-control require', placeholder: 'Todos los proveedores...', data: { proveedor: f.object.proveedor.to_json }
                   .col-sm-4
-                    .form-group
-                      label.control-label Condición de pago
-                      = f.input :condicion, as: :radio_buttons, label:'', wrapper: :button_radio_and_checkboxes, item_wrapper_tag: nil, item_label_class: 'btn btn-default'
+                      = f.input :condicion, as: :radio_group_buttons
                 .row
                   /// FECHA DE VENCIMENTO
                   .col-sm-4

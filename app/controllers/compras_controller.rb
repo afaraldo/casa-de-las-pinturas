@@ -53,15 +53,18 @@ class ComprasController < ApplicationController
   # PATCH/PUT /compras/1
   # PATCH/PUT /compras/1.json
   def update
-    if @compra.update(compra_params)
-      @error = false
-      @message = t('mensajes.save_success', recurso: 'la compra')
-      get_compras
-    else
-      @error = true
-      @message = t('mensajes.save_error', recurso: 'la compra', errores: @compra.errors.full_messages.to_sentence)
+    
+    respond_to do |format|
+      Compra.transaction do
+        if @compra.update(compra_params)
+          format.html { redirect_to @compra, notice: t('mensajes.save_success', recurso: 'la compra') }
+          format.json { render :show, status: :created, location: @compra }
+        else
+          format.html { render :form }
+          format.json { render json: @compra.errors, status: :unprocessable_entity }
+        end
+      end
     end
-    render 'reload_list', format: :js
   end
 
   # DELETE /compra/1

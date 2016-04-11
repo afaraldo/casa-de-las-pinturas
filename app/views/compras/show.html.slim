@@ -8,7 +8,8 @@ section.content
           a.volver-link href= compras_path
             i.fa.fa-angle-double-left style="margin-right: 5px;"
             | Volver al listado de compras
-          h3.box-title Compra Nro. 00002
+          h3.box-title 
+            = "Compra Nro. #{@compra.numero}".html_safe
           .box-tools
             = link_to :Editar, edit_compra_path(@compra),  html_options = {class: 'btn btn-default'}
             = link_to :Eliminar, compra_path(@compra), method: 'delete', data: {confirm: "¿Desea eliminar la compra?"}, class: 'btn btn-danger'
@@ -18,24 +19,25 @@ section.content
               .row
                 .col-sm-4
                   label.control-label Fecha
-                  p 02/04/2016
+                  p = localize(@compra.fecha.to_date)
                 .col-sm-4
                   label.control-label Proveedor
-                  p Arrabal Rosa 79
+                  p = @compra.proveedor_nombre
                 .col-sm-4
                   label.control-label Condición de pago
-                  p Creédito
+                  p = @compra.condicion.capitalize
               .row
                 .col-sm-4
-                  label.control-label Fecha de vencimiento
-                  p 17/04/2016
+                  - if @compra.credito?
+                    label.control-label Fecha de vencimiento
+                    p = localize(@compra.fecha_vencimiento.to_date) 
                 .col-sm-4
                   label.control-label Nro. de Comprobante
-                  p 001-002-030303
+                  p = @compra.numero_comprobante
                 .col-sm-4
                   label.control-label Estado
                   p
-                    label.label.label-warning Pendiente
+                    = ['<label class="label label-success">Pagado</label>', '<label class="label label-warning">Pendiente</label>'][@compra.estado == 'pagado' ? 0 : 1].html_safe
   .row
     .col-xs-12
       .nav-tabs-custom
@@ -58,15 +60,15 @@ section.content
                   th Subtotal
               tbody#movimiento-detalles-body
                 - total = 0
-                - Mercaderia.take(5).each do |m|
-                  - n = Faker::Number.between(1, 10)
+                - @compra.detalles.each do |m|
+                  - n = m.cantidad
                   tr
-                    td = m.codigo
-                    td = m.nombre
+                    td = m.mercaderia.codigo
+                    td = m.mercaderia.nombre
                     td.text-right = n
-                    td.text-right = number_to_currency(m.precio_venta_contado)
-                    td.text-right = number_to_currency(n * m.precio_venta_contado)
-                  - total += n * m.precio_venta_contado
+                    td.text-right = number_to_currency(m.precio_unitario)
+                    td.text-right = number_to_currency(n * m.precio_unitario)
+                  - total += n * m.precio_unitario
               tfoot
                 tr
                   td colspan="3"
