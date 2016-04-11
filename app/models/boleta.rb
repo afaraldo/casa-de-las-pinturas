@@ -20,6 +20,10 @@ class Boleta < ActiveRecord::Base
     id
   end
 
+  def importe_pagado
+    self.importe_total - self.importe_pendiente
+  end
+
   def set_importe_total
     self.importe_total = 0
     self.detalles.each do |detalle|
