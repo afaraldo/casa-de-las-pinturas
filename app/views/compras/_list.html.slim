@@ -1,0 +1,25 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Fecha
+      th Número de compra
+      th Nro. de comprobante
+      th Condición de pago
+      th Proveedor
+      th Monto
+      th Estado
+      th.table-actions
+  tbody
+    - compras.each do |compra|
+      tr
+        td = localize(compra.fecha.to_date)
+        td = compra.numero
+        td = compra.numero_factura
+        td = compra.condicion
+        td = compra.proveedor.nombre
+        td.text-right = number_to_currency(compra.importe_total)
+        td = ['<label class="label label-success">Pagado</label>', '<label class="label label-warning">Pendiente</label>'][compra.estado == 'pagado' ? 0 : 1].html_safe
+        td.text-right
+          = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_compra_path(compra), class: 'btn btn-default btn-sm'
+          | #{' '}
+          = link_to ' <i class="fa fa-trash"></i>'.html_safe, compra_path(compra), method: 'delete', data: {confirm: "¿Desea eliminar la compra?"}, class: 'btn btn-danger btn-sm'

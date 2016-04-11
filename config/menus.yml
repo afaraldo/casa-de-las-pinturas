@@ -6,7 +6,7 @@ menu:
     submenus:
       compras:
         text: "Compras"
-        url: "#"
+        url: :compras
         active_submenu: :compras_sidemenu
       pagos:
         text: "Pagos"
@@ -24,7 +24,7 @@ menu:
       ventas:
         text: "Ventas"
         url: "#"
-        active_submenu: :compras_sidemenu
+        active_submenu: :ventas_sidemenu
       clientes:
         text: "Clientes"
         url: :clientes
