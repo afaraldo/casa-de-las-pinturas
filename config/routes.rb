@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :configuraciones, only: [:index, :edit, :update]
 
   get 'proveedores/check_nombre' => 'proveedores#check_nombre'
+  get 'proveedores/buscar' => 'proveedores#buscar'
   resources :proveedores
 
   get 'clientes/check_nombre' => 'clientes#check_nombre'
