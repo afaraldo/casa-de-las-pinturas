@@ -66,7 +66,7 @@ section.content
             /      th Crédito disponible
             /      th Crédito a usar
             /      th
-            /  tbody#movimiento-detalles-body
+            /  tbody#compra-detalles-body
             /    tr
             /      td
             /        a 00034
@@ -142,7 +142,7 @@ section.content
             /      th Monto
             /      th Subtotal
             /      th
-            /  tbody#movimiento-detalles-body
+            /  tbody#compra-detalles-body
             /    = render 'pago_fields'
             /  tfoot
             /    tr
@@ -153,7 +153,7 @@ section.content
             /        span
             /      td
             /= link_to_add_association '<i class="fa fa-plus"></i> Agregar forma de pago'.html_safe, f, :detalles, class: 'btn btn-default pull-right',
-            /                                'data-association-insertion-node' => '#movimiento-detalles-body',
+            /                                'data-association-insertion-node' => '#compra-detalles-body',
             /                                'data-association-insertion-method' => 'append'
           .box-footer
             /.alert.alert-warning
@@ -161,7 +161,7 @@ section.content
             /    | La operación va a provocar existencia negativa en los siguientes productos: %{productos}.
             /  p Esta seguro que quiere continuar?
             /  .form-actions
-            /    = link_to 'Cancelar', movimiento_mercaderias_path, class: 'btn btn-default'
+            /    = link_to 'Cancelar', compras_path, class: 'btn btn-default'
             /    | #{' '}
             /    button.btn.btn-primary type="submit" Continuar
             .form-actions.text-right
@@ -203,10 +203,5 @@ section.content
           button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
 
 
-  javascript:
-    MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: "#{mercaderias_buscar_path}"});
-    NumberHelper.mascaraCantidad('.maskCantidad');
-    NumberHelper.mascaraMoneda('.maskMoneda');
-    $('#proveedor').select2();
-    TablasHelper.calcularTotalEvent('.calcular-total');
-    TablasHelper.calcularTotalEvent('.calcular-pagos-total');
+javascript:
+  ComprasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");

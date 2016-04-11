@@ -28,10 +28,10 @@ section.content
                 .col-xs-3
                   .form-group
                     = f.select :proveedor_id_eq_any,
-                               Proveedor.all.map{ |c| [c.nombre, c.id] },
-                               {include_blank: 'Todos los proveedores...'},
-                               class: 'form-control',
-                               id: 'proveedores_buscador'
+                              Proveedor.all.map{ |p| [p.nombre, p.id] },
+                              {include_blank: 'Todos los proveedores...'},
+                              class: 'form-control',
+                              id: 'proveedores_buscador'
                 .col-xs-2
                   .form-group
                     = f.select :estado_eq, Compra.estado.options,
