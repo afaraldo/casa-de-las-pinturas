@@ -38,6 +38,12 @@ class MovimientoMercaderiaDetalle < ActiveRecord::Base
 
   # Actualizar el stock si es que cambio la cantidad o se elimino el detalle
   def update_stock
+    operador = self.movimiento_mercaderia.tipo.ingreso? ? 1 : -1
+    if deleted?
+      MercaderiaExtracto.eliminar_movimiento(self, self.movimiento_mercaderia.fecha, cantidad * operador * -1)
+    else
+      MercaderiaExtracto.crear_o_actualizar_extracto(self, self.movimiento_mercaderia.fecha, cantidad_was.to_f * operador, cantidad * operador)
+    end
     mercaderia.update(stock: nueva_cantidad) if cantidad_changed? || deleted?
   end
 

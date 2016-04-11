@@ -1,0 +1,3 @@
+| $("#categoria_gastos-table").html("#{escape_javascript(render partial: 'list', format: 'html', locals: {categoria_gastos: @categoria_gastos})}");
+| $('paginate-container').html("#{escape_javascript(paginate(@categoria_gastos, remote: true)) }");
+| $('.buscador-resultados > .overlay').remove();
