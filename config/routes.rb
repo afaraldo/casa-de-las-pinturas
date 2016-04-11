@@ -1,8 +1,5 @@
 Rails.application.routes.draw do
 
-  
-  resources :pago_detalles
-
   resources :pagos
 
   resources :boleta_detalles
@@ -39,7 +36,6 @@ Rails.application.routes.draw do
 
   get 'categoria_gastos/check_nombre' => 'categoria_gastos#check_nombre'
   resources :categoria_gastos
-
 
   get 'welcome/index'
   get 'welcome/compras_index'

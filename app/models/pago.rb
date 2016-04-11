@@ -1,2 +1,2 @@
-class Pago < ActiveRecord::Base
+class Pago < Recibo
 end
