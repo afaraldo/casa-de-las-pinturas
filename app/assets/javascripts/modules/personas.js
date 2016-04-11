@@ -11,7 +11,7 @@ var PersonasUI = (function(){
     }
 
     return {
-        buscador: function buscarPersona(opciones){
+        buscador: function(opciones){
             opciones.elemento.select2({
                 minimumInputLength: 2,
                 allowClear: true,
@@ -38,5 +38,4 @@ var PersonasUI = (function(){
             });
         }
     };
-
-}());
+  }());

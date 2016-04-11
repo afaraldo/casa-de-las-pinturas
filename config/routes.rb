@@ -1,15 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :compras
-
-  resources :pago_detalles
-
-  resources :pagos
-
-  resources :boleta_detalles
-
-  resources :boletas
-
   devise_for :users
 
   get 'configuraciones/check_empresa_nombre' => 'configuraciones#check_empresa_nombre'
@@ -42,6 +32,9 @@ Rails.application.routes.draw do
   get 'categoria_gastos/check_nombre' => 'categoria_gastos#check_nombre'
   resources :categoria_gastos
 
+  resources :compras
+
+  resources :pagos
 
   get 'welcome/index'
   get 'welcome/compras_index'
