@@ -27,7 +27,6 @@ class MovimientoMercaderia < ActiveRecord::Base
   def check_detalles_negativos
     m = []
     detalles.each do |d|
-      puts "##### #{d.nueva_cantidad}"
       if d.nueva_cantidad() < 0
         m << d.mercaderia
 
