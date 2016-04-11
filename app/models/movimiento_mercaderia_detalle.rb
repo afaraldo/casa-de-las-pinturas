@@ -18,8 +18,8 @@ class MovimientoMercaderiaDetalle < ActiveRecord::Base
   def check_stock_rango
     c = nueva_cantidad
     if c < 0
-      errors.add(:cantidad, I18n.t('movimiento_mercaderia.detalle_cantidad_stock_negativo'))
-      false
+     # errors.add(:cantidad, I18n.t('movimiento_mercaderia.detalle_cantidad_stock_negativo'))
+      #false
     elsif c > DECIMAL_LIMITE[:superior]
       errors.add(:cantidad, I18n.t('movimiento_mercaderia.detalle_cantidad_stock_superior', limite: DECIMAL_LIMITE[:superior]))
       false
