@@ -2,7 +2,7 @@ class FixUsernameLimit < ActiveRecord::Migration
   def change
     # Acortar los nombres de usuarios que sean muy largos
     User.transaction do
-      User.all.each do |u|
+      User.with_deleted.each do |u|
         u.update(username: u.username[0..18])
       end
     end
