@@ -11,10 +11,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160407053856) do
+ActiveRecord::Schema.define(version: 20160411030303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "boleta_detalles", force: :cascade do |t|
+    t.integer  "boleta_id"
+    t.integer  "mercaderia_id"
+    t.decimal  "cantidad",        precision: 15, scale: 3, null: false
+    t.decimal  "precio_unitario", precision: 15, scale: 2, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
+
+  add_index "boleta_detalles", ["boleta_id"], name: "index_boleta_detalles_on_boleta_id", using: :btree
+  add_index "boleta_detalles", ["mercaderia_id"], name: "index_boleta_detalles_on_mercaderia_id", using: :btree
+
+  create_table "boletas", force: :cascade do |t|
+    t.integer  "persona_id"
+    t.string   "numero_comprobante"
+    t.datetime "fecha",                                                                null: false
+    t.datetime "fecha_vencimiento"
+    t.string   "estado",             limit: 20,                                        null: false
+    t.string   "tipo",               limit: 20,                                        null: false
+    t.string   "condicion",          limit: 20,                                        null: false
+    t.decimal  "importe_total",                 precision: 15, scale: 2,               null: false
+    t.decimal  "importe_pendiente",             precision: 15, scale: 2,               null: false
+    t.decimal  "importe_descontado",            precision: 15, scale: 2, default: 0.0, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at",                                                           null: false
+    t.datetime "updated_at",                                                           null: false
+  end
+
+  add_index "boletas", ["persona_id"], name: "index_boletas_on_persona_id", using: :btree
 
   create_table "categoria_gastos", force: :cascade do |t|
     t.string   "nombre",     limit: 50, null: false
@@ -117,6 +148,32 @@ ActiveRecord::Schema.define(version: 20160407053856) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "pago_detalles", force: :cascade do |t|
+    t.integer  "pago_id"
+    t.string   "forma",      limit: 20,                          null: false
+    t.decimal  "monto",                 precision: 15, scale: 2, null: false
+    t.integer  "moneda_id"
+    t.decimal  "cotizacion",            precision: 15, scale: 2, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+  end
+
+  add_index "pago_detalles", ["moneda_id"], name: "index_pago_detalles_on_moneda_id", using: :btree
+  add_index "pago_detalles", ["pago_id"], name: "index_pago_detalles_on_pago_id", using: :btree
+
+  create_table "pagos", force: :cascade do |t|
+    t.integer  "numero",                                                      null: false
+    t.datetime "fecha",                                                       null: false
+    t.decimal  "total_efectivo",                     precision: 15, scale: 2, null: false
+    t.decimal  "total_tarjeta",                      precision: 15, scale: 2, null: false
+    t.decimal  "total_credito_utilizado",            precision: 15, scale: 2, null: false
+    t.string   "tipo",                    limit: 20,                          null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
+  end
+
   create_table "personas", force: :cascade do |t|
     t.string   "nombre",           limit: 150
     t.string   "telefono",         limit: 50
@@ -168,11 +225,17 @@ ActiveRecord::Schema.define(version: 20160407053856) do
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
+  add_foreign_key "boleta_detalles", "boletas"
+  add_foreign_key "boleta_detalles", "mercaderias"
+  add_foreign_key "boletas", "personas"
+  add_foreign_key "boletas", "personas"
   add_foreign_key "mercaderia_extractos", "mercaderias"
   add_foreign_key "mercaderia_extractos", "movimiento_mercaderia_detalles"
   add_foreign_key "mercaderia_periodo_balances", "mercaderias"
   add_foreign_key "mercaderias", "categorias"
   add_foreign_key "movimiento_mercaderia_detalles", "mercaderias"
   add_foreign_key "movimiento_mercaderia_detalles", "movimiento_mercaderias"
+  add_foreign_key "pago_detalles", "monedas"
+  add_foreign_key "pago_detalles", "pagos"
   add_foreign_key "users", "personas"
 end

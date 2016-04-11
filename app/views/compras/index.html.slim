@@ -21,17 +21,13 @@ section.content
                     b.caret
                 .col-xs-2
                   .input-group
-                    = f.search_field :id_or_numero_factura_eq, class: 'form-control', placeholder: 'Nro. de compra o de comprobante...'
+                    = f.search_field :id_or_numero_comprobante_eq, class: 'form-control', placeholder: 'Nro. de compra o de comprobante...'
                     .input-group-btn
                       button.btn.btn-default type="submit" name="commit"
                         i.fa.fa-search
                 .col-xs-3
                   .form-group
-                    = f.select :proveedor_id_eq_any,
-                              Proveedor.all.map{ |p| [p.nombre, p.id] },
-                              {include_blank: 'Todos los proveedores...'},
-                              class: 'form-control',
-                              id: 'proveedores_buscador'
+                    = f.search_field :proveedor_id_eq_any, id: 'proveedores-buscador', class: 'form-control', placeholder: 'Todos los proveedores...'
                 .col-xs-2
                   .form-group
                     = f.select :estado_eq, Compra.estado.options,
@@ -45,15 +41,6 @@ section.content
           #compras-table.overlay-wrapper.buscador-resultados.table-responsive
             = render partial: 'compras/list', locals: {compras: @compras}
           #compras-paginate-container
-            ul.pagination.pull-right
-              li.active
-                a 1
-              li
-                a 2
-              li
-                a ›
-              li
-                a »
-
+            = paginate @compras, remote: true
 javascript:
-  DatepickerHelper.initDateRangePicker('#date-range');
+  ComprasUI.setbuscarProveedorUrl("#{proveedores_buscar_path}"); 

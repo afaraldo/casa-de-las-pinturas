@@ -41,7 +41,7 @@ end
 Fabricator(:compra) do
   fecha { Faker::Date.backward(30) }
   persona_id { Proveedor.offset(rand(Proveedor.count)).first.id }
-  numero_factura { Faker::Company.ein }
+  numero_comprobante { Faker::Company.ein }
   estado { [:pendiente, :pagado][rand(2)] }
   condicion { [:contado, :credito][rand(2)] }
   detalles(rand: 3, fabricator: :boleta_detalle)

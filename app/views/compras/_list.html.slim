@@ -14,7 +14,7 @@ table.table.table-bordered.table-hover
       tr
         td = localize(compra.fecha.to_date)
         td = compra.numero
-        td = compra.numero_factura
+        td = compra.numero_comprobante
         td = compra.condicion
         td = compra.proveedor.nombre
         td.text-right = number_to_currency(compra.importe_total)

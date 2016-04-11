@@ -24,9 +24,7 @@ section.content
                   .col-sm-4
                     .form-group
                       label.control-label Proveedor
-                      = f.select :proveedor, Proveedor.all.map{ |c| [c.nombre, c.id] },
-                        {include_blank: 'Todos los proveedores...'},
-                        class: 'form-control'
+                      = f.text_field :persona_id, id: 'proveedores-buscador', class: 'proveedor-select form-control', placeholder: 'Todos los proveedores...' 
                   .col-sm-4
                     = f.input :condicion, as: :radio_buttons, label: 'Condición de pago', wrapper: :button_radio_and_checkboxes, item_wrapper_tag: nil, item_label_class: 'btn btn-default'
                 .row
@@ -38,7 +36,7 @@ section.content
                         .btn.btn-default
                           i.fa.fa-calendar
                   .col-sm-4
-                    = f.input :numero_factura, label: 'Número de Factura', value: @compra.new_record? && f.object.fecha.nil? ? '' : localize(f.object.numero_factura.to_date)
+                    = f.input :numero_comprobante, label: 'Número de Comprobante', value: @compra.new_record? && f.object.fecha.nil? ? '' : localize(f.object.numero_factura.to_date)
                   .col-xs-12
                     p
                       /a href="#modal-credito" data-toggle="modal" Agregar Crédito de devoluciones
@@ -205,3 +203,4 @@ section.content
 
 javascript:
   ComprasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");
+  ComprasUI.setBuscarProveedorUrl("#{proveedores_buscar_path}");

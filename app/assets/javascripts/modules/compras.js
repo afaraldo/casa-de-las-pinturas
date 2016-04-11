@@ -1,23 +1,12 @@
 var ComprasUI = (function(){
     var elementos = null,
-        buscarMercaderiaUrl = '';
-
-    // Retorna como se muestra cada opcion: Nombre de la proveedor
-    function formatProveedores(m) {
-        return '<span>' + m.nombre + '</span>';
-    }
-
-    function recargarProveedoresFiltro(){
-      var proveedoresFiltro = $('#proveedores_buscador');
-      proveedoresFiltro.select2({
-          formatResult: formatProveedores,
-          escapeMarkup: function(m) { return m; }
-        });
-    }
+        buscarMercaderiaUrl = '',
+        buscarProveedorUrl = '';
 
     function initFormEvents(){
         elementos.compraForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
 
+        PersonasUI.buscador({elemento: $('.proveedor-select'), url: buscarProveedorUrl});
         MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: buscarMercaderiaUrl});
 
         NumberHelper.mascaraCantidad('.maskCantidad');
@@ -52,21 +41,32 @@ var ComprasUI = (function(){
 
     }
 
+    // Recibe una lista de mercaderias y elimina si alguno ya esta seleccionado entre los detalles
+    // se asume que los inputs tengan las clase .mercaderia-select
+    function eliminarItemsSeleccionados(items) {
+        var seleccionados = $.map($('input.proveedor-select'), function(v,i){ return $(v).val();});
+
+        for(var i = 0; i < items.length; i++) {
+            if($.inArray(items[0].id, seleccionados) > -1) {
+                items.splice(i, 1);
+            }
+        }
+
+        return items;
+    }
+
+
+
     return {
         init: function() {
             elementos = {
-                compraForm: $('#compra-form')
+                compraForm: $('#compra-form'),
+                proveedorBuscador: $('#proveedores-buscador')
             }
         },
         index: function() {
-            $('.input-daterange')
-                .datepicker({autoclose: false}) // inicializar rango de fechas del buscador
-                .on('changeDate', function(e){ // Evento para hacer submit al formulario cuando se cambia la fecha
-                    $(this).parents('.remote-search').submit();
-                });
-
-            DatepickerHelper.initDateRangePicker('#rango-de-fecha');
-            recargarProveedoresFiltro();
+          DatepickerHelper.initDateRangePicker('#date-range');
++         PersonasUI.buscador({elemento: elementos.proveedorBuscador, url: buscarProveedorUrl});
         },
         'new': function() {
             initFormEvents();
@@ -82,6 +82,9 @@ var ComprasUI = (function(){
         },
         setBuscarMercaderiaUrl: function(url) {
             buscarMercaderiaUrl = url;
+        },
+        setBuscarProveedorUrl: function(url) {
+            buscarProveedorUrl = url;
         }
     };
 
