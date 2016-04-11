@@ -24,10 +24,10 @@ class MovimientoMercaderia < ActiveRecord::Base
     end
   end
 
-  def check_detalles_negativos
+  def check_detalles_negativos(borrado = false)
     m = []
     detalles.each do |d|
-      if d.nueva_cantidad() < 0
+      if d.nueva_cantidad(borrado) < 0
         m << d.mercaderia
 
       end
