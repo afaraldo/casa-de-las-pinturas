@@ -1,11 +1,14 @@
-- Moneda.all.each do |m|
-  tr.nested-fields
-    td Efectivo
-    td
-      = m.nombre
-    td
-      input.form-control.cantidad.maskMoneda type="text" value="0" readonly=""
-    td
-      input.form-control.precio-unitario.maskMoneda type="text" value="#{m.cotizacion}"
-    td.subtotal-col.text-right
-      span
+tr.nested-fields
+  td = f.object.forma.capitalize
+  td
+    = f.object.moneda.nombre
+  td
+    = f.input :monto, as: :string,
+                         label: false,
+                         input_html: { class: 'form-control maskMoneda', value: number_with_precision(f.object.monto) }
+  td
+    = f.input :cotizacion, as: :string,
+                         label: false,
+                         input_html: { disabled: f.object.moneda.defecto, class: 'form-control maskMoneda', value: number_with_precision(f.object.cotizacion) }
+  td.subtotal-col.text-right
+    span

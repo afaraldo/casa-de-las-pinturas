@@ -8,7 +8,7 @@ class ProveedoresController < ApplicationController
     @menu_setup[:side_menu] = :proveedores_sidemenu
   end
 
-  # buscador de mercaderias
+  # buscador de proveedores
   def buscar
     get_proveedores
     render json: {items: @proveedores, total_count: @proveedores.total_count}

@@ -4,4 +4,10 @@ class Pago < Recibo
   delegate :nombre, to: :proveedor, prefix: true
 
   validates :proveedor, presence: true
+
+  def build_detalles
+    Moneda.all.each do |m|
+      detalles.build(moneda: m, forma: :efectivo, monto: 0, cotizacion: m.cotizacion)
+    end
+  end
 end

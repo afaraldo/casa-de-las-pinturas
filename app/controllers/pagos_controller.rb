@@ -10,6 +10,14 @@ class PagosController < ApplicationController
     @menu_setup[:side_menu] = :pagos_sidemenu
   end
 
+  # busca las compras y devoluciones pendientes de un proveedor dado
+  def buscar_pendientes
+    @proveedor = Proveedor.find(params[:proveedor_id])
+
+    @compras = @proveedor.compras_pendientes
+    @devoluciones = []
+  end
+
   # GET /pagos
   # GET /pagos.json
   def index
@@ -24,6 +32,7 @@ class PagosController < ApplicationController
   # GET /pagos/new
   def new
     @pago = Pago.new
+    @pago.build_detalles
     render :form
   end
 

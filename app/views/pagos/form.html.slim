@@ -26,111 +26,80 @@ section.content
                 .row
                   .col-sm-4
                     = f.input :numero_comprobante, label: 'Número de Comprobante'
-            .row
+            .row#pago-mensajes
               .col-xs-12
                 .well.seleccionar-panel.text-center
                   i.fa.fa-search
                   h3 Seleccione un proveedor para ver las boletas y devoluciones pendientes
+            .row#pago-boletas-devoluciones.hide
+              .col-xs-12
+                /.form-subtitle
+                /  label Crédito de devoluciones
+                /br
+                /table.table.table-bordered.detalles-table
+                /  thead
+                /    tr
+                /      th Número
+                /      th Monto
+                /      th Crédito disponible
+                /      th Crédito a usar
+                /      th
+                /  tbody#compra-detalles-body
+                /
+                /  tfoot
+                /    tr
+                /      td colspan="2"
+                /      td.text-right.text-bold
+                /        | Total:
+                /      td.table-total.text-right.text-bold
+                /        span 200.000
+                /      td
+
+                .form-subtitle
+                  label Boletas pendientes
+                br
+                table.table.table-bordered.detalles-table#compra-detalles-tabla
 
 
+            /.row
+            /  .col-sm-offset-8.col-sm-4
+            /    table.table.bg-warning
+            /      tbody
+            /        tr
+            /          td Total mercaderias:
+            /          td.text-right Gs. 528.200
+            /        tr
+            /          td Crédito utilizado:
+            /          td.text-right Gs. 200.000
+            /        tr
+            /          td.text-bold Total a pagar:
+            /          td.text-right.text-bold Gs. 328.200
 
-            /////////////
-              DEVOLUCIONES
-            /////////////
-            /.form-subtitle
-            /  label Crédito de devoluciones
-            /br
-            /table.table.table-bordered.detalles-table
-            /  thead
-            /    tr
-            /      th Número
-            /      th Monto
-            /      th Crédito disponible
-            /      th Crédito a usar
-            /      th
-            /  tbody#compra-detalles-body
-            /    tr
-            /      td
-            /        a 00034
-            /      td.text-right 200.000
-            /      td.text-right 200.000
-            /      td
-            /        input.form-control type="text" value="200.000"
-            /      td
-            /        a.btn.btn-default
-            /          i.fa.fa-times
-            /  tfoot
-            /    tr
-            /      td colspan="2"
-            /      td.text-right.text-bold
-            /        | Total:
-            /      td.table-total.text-right.text-bold
-            /        span 200.000
-            /      td
-
-            .form-subtitle
-              label Boletas pendientes
-            br
-            table.table.table-bordered.detalles-table.calcular-total
-              thead
-                tr
-                  th Nuúmero
-                  th Fecha
-                  th Fecha de vencimiento
-                  th Total Pendiente
-                  th Total a pagar
-                  th
-              tbody#compra-detalles-body
-
-              tfoot
-                tr
-                  td colspan="3"
-                  td.text-right.text-bold
-                    | Total:
-                  td.table-total.text-right.text-bold
-                    span
-                  td
-
-            .clearfix
-          /////////////
-              RESUMEN DE TOTALES
-          /////////////
-          /.row
-          /  .col-sm-offset-8.col-sm-4
-          /    table.table.bg-warning
-          /      tbody
-          /        tr
-          /          td Total mercaderias:
-          /          td.text-right Gs. 528.200
-          /        tr
-          /          td Crédito utilizado:
-          /          td.text-right Gs. 200.000
-          /        tr
-          /          td.text-bold Total a pagar:
-          /          td.text-right.text-bold Gs. 328.200
-
-          .form-subtitle
-            label Formas de pago
-          br
-          table.table.table-bordered.detalles-table.calcular-pagos-total
-            thead
-              tr
-                th Forma
-                th Moneda
-                th Cotización
-                th Monto
-                th Subtotal
-                th
-            tbody#pago-detalles-body
-              = render 'detalles'
-            tfoot
-              tr
-                td colspan="3"
-                td.text-right.text-bold
-                  | Total:
-                td.table-total.text-right.text-bold
-                  span
-                td
+            .row#pago-detalles.hide
+              .col-xs-12
+                .form-subtitle
+                  label Formas de pago
+                br
+                table.table.table-bordered.detalles-table.calcular-pagos-total
+                  thead
+                    tr
+                      th Forma
+                      th Moneda
+                      th Cotización
+                      th Monto
+                      th Subtotal
+                      th
+                  tbody#pago-detalles-body
+                    = f.simple_fields_for :detalles do |detalle|
+                      = render 'detalles', f: detalle
+                  tfoot
+                    tr
+                      td colspan="3"
+                      td.text-right.text-bold
+                        | Total:
+                      td.table-total.text-right.text-bold
+                        span
+                      td
           .box-footer
             - if @monedas_negativas
               .alert.alert-warning
@@ -150,3 +119,4 @@ section.content
 
 javascript:
   PagosUI.setbuscarProveedorUrl("#{proveedores_buscar_path}");
+  PagosUI.setboletasPendientesUrl("#{pagos_buscar_pendientes_path}");

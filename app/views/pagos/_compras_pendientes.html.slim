@@ -1,0 +1,31 @@
+thead
+  tr
+    th Número
+    th Fecha
+    th Fecha de vencimiento
+    th Total Pendiente
+    th Total a pagar
+    th
+tbody
+  - total = 0
+  - compras.each do |c|
+    - total += c.importe_pendiente
+    tr
+      td = c.numero
+      td = localize(c.fecha.to_date)
+      td = localize(c.fecha_vencimiento.to_date) if c.fecha_vencimiento
+      td.text-right = number_to_currency(c.importe_pendiente)
+      td
+        = text_field :detalles, :monto, value: number_with_precision(c.importe_pendiente), class: 'form-control mascaraMoneda monto-a-sumar'
+      td
+        input type="checkbox" name="pagado" class="pagar-boleta"
+tfoot
+  tr
+    td colspan="2"
+    td.text-right.text-bold
+      | Total:
+    td.text-right.text-bold
+      = number_to_currency(total)
+    td.table-total.text-right.text-bold
+      span 0
+    td

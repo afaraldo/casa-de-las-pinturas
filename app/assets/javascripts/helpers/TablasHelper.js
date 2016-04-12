@@ -23,5 +23,22 @@ var TablasHelper = {
 
         });
 
+    },
+    calcularSeleccionados: function(selector) {
+        var tabla = $(selector);
+
+        tabla.on('keyup, change', '.monto-a-sumar, .pagar-boleta', function(e){
+            var total = 0;
+
+            tabla.find('.monto-a-sumar').each(function(){
+                var campo = $(this);
+                if(campo.parents('tr').find('.pagar-boleta').is(':checked')) {
+                    total += NumberHelper.aNumero($(this).val());
+                }
+            });
+
+            tabla.find('.table-total span').text(NumberHelper.aMoneda(total));
+
+        });
     }
 };

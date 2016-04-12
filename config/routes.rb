@@ -34,6 +34,7 @@ Rails.application.routes.draw do
 
   resources :compras
 
+  get 'pagos/buscar_pendientes' => 'pagos#buscar_pendientes'
   resources :pagos
 
   get 'welcome/index'
