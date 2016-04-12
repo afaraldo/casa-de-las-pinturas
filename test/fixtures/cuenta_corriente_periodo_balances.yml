@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  persona_id: 
+  mes: 1
+  anho: 1
+  saldo: 9.99
+
+two:
+  persona_id: 
+  mes: 1
+  anho: 1
+  saldo: 9.99

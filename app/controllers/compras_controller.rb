@@ -53,7 +53,7 @@ class ComprasController < ApplicationController
   # PATCH/PUT /compras/1
   # PATCH/PUT /compras/1.json
   def update
-    
+
     respond_to do |format|
       Compra.transaction do
         if @compra.update(compra_params)
@@ -98,6 +98,6 @@ class ComprasController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def compra_params
-      params.require(:compra).permit(:persona_id, :numero, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :tipo, :condicion, detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy])
+      params.require(:compra).permit(:persona_id, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :condicion, detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy])
     end
 end

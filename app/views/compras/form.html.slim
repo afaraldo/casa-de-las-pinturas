@@ -23,8 +23,14 @@ section.content
                           i.fa.fa-calendar
                   .col-sm-4
                     .form-group
-                      label.control-label Proveedor
-                      = f.input_field :persona_id, id: 'proveedores-buscador', class: 'proveedor-select form-control require', placeholder: 'Todos los proveedores...', data: { proveedor: f.object.proveedor.to_json }
+                      = f.input :proveedor, as: :string, input_html: { id: 'proveedores-buscador', placeholder: 'Buscar proveedor...' }             
+                      /= link_to '<i class="fa fa-plus"></i>'.html_safe,
+                      /          new_categoria_path(from_mercaderias: true),
+                      /          data: {toggle: 'tooltip'},
+                      /          title: 'Nueva categoría',
+                      /          class: 'btn btn-default',
+                      /          style: 'margin-top: 25px;',
+                      /          remote: true
                   .col-sm-4
                       = f.input :condicion, as: :radio_group_buttons
                 .row
