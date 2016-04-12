@@ -1,0 +1,11 @@
+- Moneda.all.each do |m|
+  tr.nested-fields
+    td Efectivo
+    td
+      = m.nombre
+    td
+      input.form-control.cantidad.maskMoneda type="text" value="0" readonly=""
+    td
+      input.form-control.precio-unitario.maskMoneda type="text" value="#{m.cotizacion}"
+    td.subtotal-col.text-right
+      span

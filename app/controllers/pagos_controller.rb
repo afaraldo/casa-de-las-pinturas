@@ -6,7 +6,7 @@ class PagosController < ApplicationController
 
   # configuracion del menu
   def setup_menu
-    @menu_setup[:main_menu] = :pagos
+    @menu_setup[:main_menu] = :compras
     @menu_setup[:side_menu] = :pagos_sidemenu
   end
 
@@ -24,6 +24,7 @@ class PagosController < ApplicationController
   # GET /pagos/new
   def new
     @pago = Pago.new
+    render :form
   end
 
   # GET /pagos/1/edit

@@ -44,3 +44,12 @@
 .popover-content{
   word-break: break-word;
 }
+
+
+.seleccionar-panel{
+  cursor: pointer;
+  color: #666;
+  .fa-search{
+    font-size: 32px;
+  }
+}

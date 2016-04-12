@@ -1,0 +1,152 @@
+section.content-header
+  h1 Compras
+section.content
+  .row
+    .col-xs-12
+      .box
+        = simple_form_for @pago, html: { id: 'pago-form' } do |f|
+          .box-header
+            a.volver-link href= pagos_path
+              i.fa.fa-angle-double-left
+              | Volver al listado de pagos
+            h3.box-title Nuevo Pago
+          .box-body
+            = f.error_notification
+            .row
+              .col-sm-9
+                .row
+                  .col-sm-4
+                    = f.input :fecha, wrapper: :vertical_input_group do
+                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: true, value: @pago.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                      .input-group-btn
+                        .btn.btn-default
+                          i.fa.fa-calendar
+                  .col-sm-4
+                    = f.input :proveedor, as: :string, input_html: { id: 'proveedores-buscador', placeholder: 'Buscar proveedor...' }
+                .row
+                  .col-sm-4
+                    = f.input :numero_comprobante, label: 'Número de Comprobante'
+            .row
+              .col-xs-12
+                .well.seleccionar-panel.text-center
+                  i.fa.fa-search
+                  h3 Seleccione un proveedor para ver las boletas y devoluciones pendientes
+
+
+
+            /////////////
+              DEVOLUCIONES
+            /////////////
+            /.form-subtitle
+            /  label Crédito de devoluciones
+            /br
+            /table.table.table-bordered.detalles-table
+            /  thead
+            /    tr
+            /      th Número
+            /      th Monto
+            /      th Crédito disponible
+            /      th Crédito a usar
+            /      th
+            /  tbody#compra-detalles-body
+            /    tr
+            /      td
+            /        a 00034
+            /      td.text-right 200.000
+            /      td.text-right 200.000
+            /      td
+            /        input.form-control type="text" value="200.000"
+            /      td
+            /        a.btn.btn-default
+            /          i.fa.fa-times
+            /  tfoot
+            /    tr
+            /      td colspan="2"
+            /      td.text-right.text-bold
+            /        | Total:
+            /      td.table-total.text-right.text-bold
+            /        span 200.000
+            /      td
+
+            .form-subtitle
+              label Boletas pendientes
+            br
+            table.table.table-bordered.detalles-table.calcular-total
+              thead
+                tr
+                  th Nuúmero
+                  th Fecha
+                  th Fecha de vencimiento
+                  th Total Pendiente
+                  th Total a pagar
+                  th
+              tbody#compra-detalles-body
+
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span
+                  td
+
+            .clearfix
+          /////////////
+              RESUMEN DE TOTALES
+          /////////////
+          /.row
+          /  .col-sm-offset-8.col-sm-4
+          /    table.table.bg-warning
+          /      tbody
+          /        tr
+          /          td Total mercaderias:
+          /          td.text-right Gs. 528.200
+          /        tr
+          /          td Crédito utilizado:
+          /          td.text-right Gs. 200.000
+          /        tr
+          /          td.text-bold Total a pagar:
+          /          td.text-right.text-bold Gs. 328.200
+
+          .form-subtitle
+            label Formas de pago
+          br
+          table.table.table-bordered.detalles-table.calcular-pagos-total
+            thead
+              tr
+                th Forma
+                th Moneda
+                th Cotización
+                th Monto
+                th Subtotal
+                th
+            tbody#pago-detalles-body
+              = render 'detalles'
+            tfoot
+              tr
+                td colspan="3"
+                td.text-right.text-bold
+                  | Total:
+                td.table-total.text-right.text-bold
+                  span
+                td
+          .box-footer
+            - if @monedas_negativas
+              .alert.alert-warning
+                p
+                  | La operación va a provocar que los fondos de la caja quede en negativo para las siguientes monedas: %{@monedas_negativas}.
+                p Esta seguro que quiere continuar?
+                .form-actions
+                  = link_to 'Cancelar', pagos_path, class: 'btn btn-default'
+                  | #{' '}
+                  button.btn.btn-primary type="submit" Continuar
+            - else
+              .form-actions.text-right
+                = link_to 'Cancelar', pagos_path, class: 'btn btn-default'
+                | #{' '}
+                button.btn.btn-primary type="submit" Guardar Pago
+
+
+javascript:
+  PagosUI.setbuscarProveedorUrl("#{proveedores_buscar_path}");

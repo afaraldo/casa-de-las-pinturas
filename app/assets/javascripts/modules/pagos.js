@@ -4,6 +4,18 @@ var PagosUI = (function(){
 
     function initFormEvents(){
 
+        PersonasUI.buscador({elemento: elementos.proveedorBuscador, url: buscarProveedorUrl});
+
+        elementos.pagosForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
+
+        NumberHelper.mascaraMoneda('.maskMoneda');
+
+        DatepickerHelper.initDatepicker('.datepicker');
+
+        elementos.pagosForm.on('click', '.seleccionar-panel', function(e){
+            elementos.proveedorBuscador.select2('open');
+        });
+
     }
 
     return {
