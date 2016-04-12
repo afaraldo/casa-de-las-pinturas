@@ -1,0 +1,17 @@
+= simple_form_for categoria_gasto, url: !categoria_gasto.new_record? ? categoria_gasto_path(categoria_gasto) : categoria_gastos_path,
+                                html: {id: 'categoria_gasto-form'},
+                                remote: true do |f|
+  .modal-header
+    button.close type="button" data-dismiss="modal"
+      span &times;
+    h4.modal-title
+      = categoria_gasto.new_record? ? 'Nueva categoría de gastos' : 'Editar categoría'
+  .modal-body
+    = f.input :id, as: :hidden, input_html: { id: 'categoria_gasto_id' }
+    = f.input :nombre,    input_html: {class: 'uniqueCategoriaGastoNombre'}, autofocus: true
+  .modal-footer.text-right
+    button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
+    input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
+
+  javascript:
+    CategoriaGastosUI.initFormEvents("#{categoria_gastos_check_nombre_path}");

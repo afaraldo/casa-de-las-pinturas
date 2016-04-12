@@ -2,6 +2,7 @@ class MovimientoMercaderia < ActiveRecord::Base
   extend Enumerize
   acts_as_paranoid
   before_destroy :check_detalles_negativos
+  after_save :actualizar_extracto
 
   has_many :detalles, class_name: 'MovimientoMercaderiaDetalle', dependent: :destroy, inverse_of: :movimiento_mercaderia
 
@@ -23,17 +24,27 @@ class MovimientoMercaderia < ActiveRecord::Base
     end
   end
 
-  def check_detalles_negativos
+  def check_detalles_negativos(borrado = false)
     m = []
     detalles.each do |d|
-      if d.nueva_cantidad(true) < 0
+      if d.nueva_cantidad(borrado) < 0
         m << d.mercaderia
+
       end
     end
 
     if m.size > 0
-      errors.add(:base, I18n.t('movimiento_mercaderia.eliminar_stock_negativo', mercaderias: m.map{|me| me.nombre}.to_sentence))
-      false
+      #errors.add(:base, I18n.t('movimiento_mercaderia.eliminar_stock_negativo', mercaderias: m.map{|me| me.nombre}.to_sentence))
+    end
+
+    m
+  end
+
+  def actualizar_extracto
+    if fecha_changed?
+      detalles.each do |d|
+        MercaderiaExtracto.crear_o_actualizar_extracto(d, fecha, d.cantidad, d.cantidad)
+      end
     end
   end
 end

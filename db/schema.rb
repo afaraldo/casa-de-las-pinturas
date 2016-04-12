@@ -11,10 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160406212429) do
+ActiveRecord::Schema.define(version: 20160407053856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "categoria_gastos", force: :cascade do |t|
+    t.string   "nombre",     limit: 50, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
 
   create_table "categorias", force: :cascade do |t|
     t.string   "nombre",             limit: 50, null: false
@@ -33,6 +40,29 @@ ActiveRecord::Schema.define(version: 20160406212429) do
     t.datetime "updated_at",        null: false
     t.string   "avatar"
   end
+
+  create_table "mercaderia_extractos", force: :cascade do |t|
+    t.integer  "mercaderia_id"
+    t.integer  "movimiento_mercaderia_detalle_id"
+    t.datetime "fecha"
+    t.string   "movimiento_tipo",                  limit: 50
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+  end
+
+  add_index "mercaderia_extractos", ["mercaderia_id"], name: "index_mercaderia_extractos_on_mercaderia_id", using: :btree
+  add_index "mercaderia_extractos", ["movimiento_mercaderia_detalle_id"], name: "index_mercaderia_extractos_on_movimiento_mercaderia_detalle_id", using: :btree
+
+  create_table "mercaderia_periodo_balances", force: :cascade do |t|
+    t.integer  "mercaderia_id"
+    t.integer  "mes"
+    t.integer  "anho"
+    t.decimal  "balance",       precision: 15, scale: 3
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+  end
+
+  add_index "mercaderia_periodo_balances", ["mercaderia_id"], name: "index_mercaderia_periodo_balances_on_mercaderia_id", using: :btree
 
   create_table "mercaderias", force: :cascade do |t|
     t.string   "codigo",               limit: 20
@@ -127,6 +157,20 @@ ActiveRecord::Schema.define(version: 20160406212429) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
+  create_table "versions", force: :cascade do |t|
+    t.string   "item_type",  null: false
+    t.integer  "item_id",    null: false
+    t.string   "event",      null: false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.datetime "created_at"
+  end
+
+  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
+
+  add_foreign_key "mercaderia_extractos", "mercaderias"
+  add_foreign_key "mercaderia_extractos", "movimiento_mercaderia_detalles"
+  add_foreign_key "mercaderia_periodo_balances", "mercaderias"
   add_foreign_key "mercaderias", "categorias"
   add_foreign_key "movimiento_mercaderia_detalles", "mercaderias"
   add_foreign_key "movimiento_mercaderia_detalles", "movimiento_mercaderias"
