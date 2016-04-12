@@ -24,18 +24,20 @@ class MovimientoMercaderia < ActiveRecord::Base
     end
   end
 
-  def check_detalles_negativos
+  def check_detalles_negativos(borrado = false)
     m = []
     detalles.each do |d|
-      if d.nueva_cantidad(true) < 0
+      if d.nueva_cantidad(borrado) < 0
         m << d.mercaderia
+
       end
     end
 
     if m.size > 0
-      errors.add(:base, I18n.t('movimiento_mercaderia.eliminar_stock_negativo', mercaderias: m.map{|me| me.nombre}.to_sentence))
-      false
+      #errors.add(:base, I18n.t('movimiento_mercaderia.eliminar_stock_negativo', mercaderias: m.map{|me| me.nombre}.to_sentence))
     end
+
+    m
   end
 
   def actualizar_extracto

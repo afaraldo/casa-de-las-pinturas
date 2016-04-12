@@ -30,7 +30,7 @@ es:
   moneda:
     unique_nombre_error: "Ya existe una moneda con el nombre %{nombre}"
   categoria_gasto:
-    unique_nombre_error: "Ya existe una categoría con el nombre %{nombre}"    
+    unique_nombre_error: "Ya existe una categoría con el nombre %{nombre}"
   activerecord:
     models:
       user: "Usuario"
