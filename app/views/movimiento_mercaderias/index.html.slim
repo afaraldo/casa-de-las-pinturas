@@ -13,10 +13,9 @@ section.content
             = search_form_for @search, remote: true, class: 'remote-search' do |f|
               .row
                 .col-xs-4
-
                   div#rango-de-fecha.btn.btn-default.daterange.btn-block
-                    = f.hidden_field :fecha_gt, class: 'fecha-desde'
-                    = f.hidden_field :fecha_lt, class: 'fecha-hasta'
+                    = f.hidden_field :fecha_gteq, class: 'fecha-desde'
+                    = f.hidden_field :fecha_lteq, class: 'fecha-hasta'
                     i.fa.fa-calendar
                     span Fecha
                     b.caret

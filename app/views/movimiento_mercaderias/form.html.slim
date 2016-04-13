@@ -39,7 +39,7 @@ section.content
                                             'data-association-insertion-node' => '#movimiento-detalles-body',
                                             'data-association-insertion-method' => 'append'
           .box-footer
-            - if @stock_negativo
+            - if @stock_negativo && @stock_negativo.size > 0
               input.hidden name="guardar_si_o_si" value= "true"
               .alert.alert-warning
                 p

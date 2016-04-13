@@ -7,6 +7,8 @@ var DatepickerHelper = {
         $(selector + ' + .input-group-btn').on('click', function(e){
             $(this).siblings('.datepicker').datepicker('show');
         });
+
+        
     },
 
     initDateRangePicker: function(selector) {
@@ -36,15 +38,18 @@ var DatepickerHelper = {
                 separator: ' hasta ',
                 locale: {
                     applyLabel: 'Aplicar',
-                    cancelLabel: 'Cancelar',
+                    cancelLabel: 'Limpiar',
                     fromLabel: 'Desde',
                     toLabel: 'Hasta',
                     customRangeLabel: 'Rango',
                     daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi','Sa'],
                     monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                     firstDay: 1
+                    
                 }
+
             },
+
             function(start, end) {
                 var el = $(selector);
                 el.find('.fecha-desde').val(start.format('DD/MM/YYYY')).trigger('change');
@@ -52,6 +57,13 @@ var DatepickerHelper = {
                 el.find('span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
             }
         );
+
+        $(selector).on('cancel.daterangepicker', function(ev, picker) {
+            var el = $(selector);
+            el.find('.fecha-desde').val("").trigger('change');
+            el.find('.fecha-hasta').val("").trigger('change');
+            el.find('span').html("Fecha");
+        });
 
     }
 };
