@@ -1,3 +1,3 @@
 DECIMAL_LIMITE = {
-    superior: 999999999999.999
+    superior: 1000000000000
 }

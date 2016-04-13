@@ -1,20 +1,18 @@
 var DatepickerHelper = {
     // Funcion para inicializar un datepicker simple a partir de un selector
     initDatepicker: function(selector) {
-        $(selector).datepicker();
+        $(selector).datepicker({endDate: '0d'});
 
         // Evento para el boton al lado del campo datepicker
         $(selector + ' + .input-group-btn').on('click', function(e){
             $(this).siblings('.datepicker').datepicker('show');
         });
-
-        
     },
 
     initDateRangePicker: function(selector) {
         $(selector).daterangepicker(
             {
-                startDate: moment(),
+                startDate: moment().subtract(30, 'days'),
                 endDate: moment(),
                 //minDate: '01/01/2012',
                 //maxDate: '31/12/2014',
