@@ -27,13 +27,14 @@ section.content
                   label.control-label Condición de pago
                   p = @compra.condicion.capitalize
               .row
-                .col-sm-4
-                  - if @compra.credito?
+                - if @compra.credito?
+                  .col-sm-4  
                     label.control-label Fecha de vencimiento
-                    p = localize(@compra.fecha_vencimiento.to_date) 
-                .col-sm-4
-                  label.control-label Nro. de Comprobante
-                  p = @compra.numero_comprobante
+                    p = localize(@compra.fecha_vencimiento.to_date)
+                - if !@compra.numero_comprobante.blank?
+                  .col-sm-4
+                    label.control-label Nro. de Comprobante
+                    p = @compra.numero_comprobante
                 .col-sm-4
                   label.control-label Estado
                   p

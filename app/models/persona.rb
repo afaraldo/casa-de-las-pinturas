@@ -2,7 +2,8 @@ class Persona < ActiveRecord::Base
   acts_as_paranoid
   has_paper_trail
   has_one :user, dependent: :destroy
-  has_many :boletas
+
+  has_many :boletas, foreign_key: 'persona_id', inverse_of: :persona
   self.inheritance_column = 'tipo'
 
   has_one :cuenta_corriente_balance, -> { order('anho DESC').order('mes DESC') }, class_name: 'CuentaCorrientePeriodoBalance'

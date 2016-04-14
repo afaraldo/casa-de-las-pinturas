@@ -3,9 +3,9 @@ class Boleta < ActiveRecord::Base
   acts_as_paranoid
   self.inheritance_column = 'tipo'
 
-  belongs_to :persona, foreign_key: "persona_id", inverse_of: :boletas
+  belongs_to :persona, foreign_key: "persona_id", inverse_of: :boletas#, counter_cache: true
 
-  has_many :detalles, class_name: 'BoletaDetalle', dependent: :destroy, inverse_of: :boleta
+  has_many :detalles, class_name: 'BoletaDetalle', dependent: :destroy, inverse_of: :boleta, autosave: true
   accepts_nested_attributes_for :detalles, reject_if: :all_blank, allow_destroy: true
 
   enumerize :condicion, in: [:contado, :credito], predicates: true
@@ -14,9 +14,9 @@ class Boleta < ActiveRecord::Base
   default_scope { order('fecha DESC') } # Ordenar por fecha por defecto
 
   #Callbacks
-  before_validation :set_importe_total
-  before_validation :set_importe_pendiente
-  before_validation :set_estado
+  before_save :set_importe_total
+  before_save :set_importe_pendiente
+  before_save :set_estado
 
   #after_save :actualizar_extracto
   #after_save :actualizar_cuenta_corriente
@@ -24,17 +24,18 @@ class Boleta < ActiveRecord::Base
 
   # Validations
   validates :fecha,  presence: true
-  validate  :fecha_futura
   validates :numero_comprobante, length: { minimum: 2, maximum: 50 }, allow_blank: true
   validates :tipo,   presence: true
-  validates :persona_id, presence: true
-  validates :detalles, length: { minimum: 1 }
+  validates :persona, presence: true
+  validates :detalles, length: { minimum: 1 }, on: :update
   validates :condicion, presence: true
-  #validate  :condicion_changed?, on: :update
+  validate  :condicion_cambiada?, on: :update
+
+  validates :detalles, presence: true
 
   with_options if: :credito? do |b|
     b.validates :fecha_vencimiento, presence: true
-    b.validate  :fecha_vencimiento_menor_a_fecha
+    b.validate  :fecha_vencimiento_es_menor_a_fecha?
     b.validate  :supera_limite_de_credito?
   end
 
@@ -94,14 +95,11 @@ class Boleta < ActiveRecord::Base
     end
   end
 
-  def fecha_vencimiento_menor_a_fecha
-
-    if fecha_vencimiento && fecha > fecha_vencimiento
+  def fecha_vencimiento_es_menor_a_fecha?
+    if fecha_vencimiento < fecha
       errors.add(:fecha_vencimiento, I18n.t('activerecord.errors.messages.fecha_vencimiento'))
     end
   end
-
-
 
   def condicion_cambiada?
     if condicion_changed? && self.persisted?
@@ -117,7 +115,8 @@ class Boleta < ActiveRecord::Base
   end
 
   def supera_limite_de_credito?
-    if importe_total > self.persona.limite_credito - self.persona.saldo_actual
+    persona = Persona.find(self.persona_id)
+    if importe_total > persona.limite_credito - persona.saldo_actual
       errors.add(:persona, I18n.t('activerecord.errors.messages.supera_limite_de_credito'))
       true
     end
