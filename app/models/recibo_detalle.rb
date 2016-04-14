@@ -6,4 +6,6 @@ class ReciboDetalle < ActiveRecord::Base
 
   enumerize :forma, in: [:efectivo, :tarjeta], predicates: true
 
+  delegate :nombre, to: :moneda, prefix: true
+
 end

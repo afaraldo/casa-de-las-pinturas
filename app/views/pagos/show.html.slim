@@ -1,6 +1,94 @@
-p#notice = notice
-
-
-= link_to 'Edit', edit_pago_path(@pago)
-'|
-= link_to 'Back', pagos_path
+section.content-header
+  h1 Compras
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          a.volver-link href="#{pagos_path}"
+            i.fa.fa-angle-double-left
+            | Volver al listado de pagos
+          h3.box-title Pago Nro. #{@pago.numero}
+          .box-tools
+            = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_pago_path(@pago), class: 'btn btn-default'
+            = ' '
+            = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, pago_path(@pago), method: 'delete', data: {confirm: "¿Desea eliminar el pago?"}, class: 'btn btn-danger'
+        .box-body
+          .row
+            .col-sm-9
+              .row
+                .col-sm-4
+                  label.control-label Fecha
+                  p = localize(@pago.fecha.to_date)
+                .col-sm-4
+                  label.control-label Proveedor
+                  p = @pago.proveedor_nombre
+              .row
+                .col-sm-4
+                  label.control-label Nro. de Comprobante
+                  p = @pago.numero_comprobante
+  .row
+    .col-xs-12
+      .nav-tabs-custom
+        ul.nav.nav-tabs
+          li.active
+            a href="#detalles" data-toggle="tab" Formas de pago
+          li
+            a href="#compras" data-toggle="tab" Compras Pagadas
+          li
+            a href="#creditos" data-toggle="tab" Credito utilizado
+        .tab-content
+          .tab-pane.active#detalle
+            table.table.table-bordered.detalles-table.calcular-total
+              thead
+                tr
+                  th Forma
+                  th Moneda
+                  th Monto
+                  th Cotización
+                  th Subtotal
+              tbody#movimiento-detalles-body
+                - total = 0
+                - @pago.detalles.each do |d|
+                  tr
+                    td = d.forma_text
+                    td = d.moneda_nombre
+                    td.text-right = number_to_currency(d.monto, unit: '')
+                    td.text-right = number_to_currency(d.cotizacion, unit: '')
+                    td.text-right = number_to_currency(d.monto * d.cotizacion, unit: '')
+                  - total += d.monto * d.cotizacion
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total)
+          .tab-pane#compras
+            table.table.table-bordered.detalles-table.calcular-pagos-total
+              thead
+                tr
+                  th Número
+                  th Nro. de comprobante
+                  th Fecha
+                  th Importe total
+                  th Importe pagado
+              tbody
+                - total_compras = 0
+                - @pago.boletas_detalles.each do |bd|
+                  - compra = bd.boleta
+                  - total_compras += bd.monto_utilizado
+                  tr
+                    td = compra.numero
+                    td = compra.numero_comprobante
+                    td = localize(compra.fecha.to_date)
+                    td.text-right = number_to_currency(compra.importe_total, unit: '')
+                    td.text-right = number_to_currency(bd.monto_utilizado, unit: '')
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total_compras)
+          .tab-pane#creditos
