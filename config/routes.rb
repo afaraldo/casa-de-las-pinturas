@@ -37,6 +37,12 @@ Rails.application.routes.draw do
   get 'pagos/buscar_pendientes' => 'pagos#buscar_pendientes'
   resources :pagos
 
+  resources :caja_movimiento_detalles
+
+  
+  resources :caja_movimientos
+
+
   get 'welcome/index'
   get 'welcome/compras_index'
   get 'welcome/compras_form'
