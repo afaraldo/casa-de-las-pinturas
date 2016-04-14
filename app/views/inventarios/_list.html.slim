@@ -11,4 +11,4 @@ table.table.table-bordered.table-hover
         td = m.codigo
         td = m.nombre
         td = m.categoria_nombre
-        td = number_with_precision(m.stock)
+        td.text-right = number_with_precision(m.stock, delimiter: '.')

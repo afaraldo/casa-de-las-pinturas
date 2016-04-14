@@ -11,14 +11,14 @@ class MovimientoMercaderiaDetalle < ActiveRecord::Base
   delegate :nombre, to: :mercaderia, prefix: true
   delegate :codigo, to: :mercaderia, prefix: true
 
-  validates :cantidad, numericality: { greater_than: 0, less_than_or_equal_to: DECIMAL_LIMITE[:superior] }
+  validates :cantidad, numericality: { greater_than: 0, less_than: DECIMAL_LIMITE[:superior] }
   validate  :check_stock_rango
 
   # Comprobar que la cantidad no provoque stock negativo o que sea mayor al limite definido
   def check_stock_rango
     c = nueva_cantidad
  
-    if c > DECIMAL_LIMITE[:superior]
+    unless c < DECIMAL_LIMITE[:superior]
       errors.add(:cantidad, I18n.t('movimiento_mercaderia.detalle_cantidad_stock_superior', limite: DECIMAL_LIMITE[:superior]))
       false
     end

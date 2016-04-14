@@ -46,6 +46,7 @@ es:
         tipo: "Tipo de movimiento"
     errors:
       messages:
+        no_editable: "no es editable"
         fecha_futura: "La fecha no puede ser superior a la actual"
         email_invalido: "Por favor, escribí una dirección de correo válida"
         record_invalid: "La validación falló: %{errors}"

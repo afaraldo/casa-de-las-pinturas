@@ -36,16 +36,15 @@ class MovimientoMercaderiasController < ApplicationController
  def create
     @movimiento = MovimientoMercaderia.new(movimiento_mercaderia_params)
     @stock_negativo = params[:guardar_si_o_si].present? ? [] : @movimiento.check_detalles_negativos
-
       respond_to do |format|
         MovimientoMercaderia.transaction do
-          if @stock_negativo.size <= 0 && @movimiento.save
-            format.html { redirect_to @movimiento, notice: t('mensajes.save_success', recurso: 'el movimiento') }
-            format.json { render :show, status: :created, location: @movimiento }
-          else
-            format.html { render :form }
-            format.json { render json: @stock_negativo, status: :unprocessable_entity }
-          end
+            if @stock_negativo.size <= 0  && @movimiento.save
+              format.html { redirect_to @movimiento, notice: t('mensajes.save_success', recurso: 'el movimiento') }
+              format.json { render :show, status: :created, location: @movimiento }
+            else
+              format.html { render :form }
+              format.json { render json: @stock_negativo, status: :unprocessable_entity }              
+            end
         end
       end
   end

@@ -1,6 +1,6 @@
 var TablasHelper = {
     filasClickeablesEvent: function() {
-        $('tr.fila-clickeable').on('click', function(e){
+        $('body').on('click','tr.fila-clickeable', function(e){
             window.location = $(this).data('url');
         });
     },

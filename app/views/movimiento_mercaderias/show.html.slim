@@ -36,4 +36,4 @@ section.content
                 tr
                   td = d.mercaderia_codigo
                   td = d.mercaderia_nombre
-                  td.text-right = number_with_delimiter(d.cantidad)
+                  td.text-right = number_with_precision(d.cantidad, delimiter: '.')
