@@ -6,16 +6,11 @@ table.table.table-bordered.table-hover
       th Nro. de comprobante
       th Proveedor
       th Monto
-      th.table-actions
   tbody
     - pagos.each do |pago|
-      tr
+      tr.fila-clickeable data-url="#{pago_path(pago)}"
         td = localize(pago.fecha.to_date)
         td = pago.numero
         td = pago.numero_comprobante
         td = pago.proveedor_nombre
-        td.text-right = number_to_currency(pago.importe_total)
-        td.text-right
-          = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_compra_path(pago), class: 'btn btn-default btn-sm'
-          | #{' '}
-          = link_to ' <i class="fa fa-trash"></i>'.html_safe, compra_path(pago), method: 'delete', data: {confirm: "¿Desea eliminar el pago?"}, class: 'btn btn-danger btn-sm'
+        td.text-right = number_to_currency(pago.total_pagado)

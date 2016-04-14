@@ -1,14 +1,17 @@
 tr.nested-fields
-  td = f.object.forma.capitalize
+  td
+    = f.object.forma.capitalize
+    = f.input :forma, as: :hidden
   td
     = f.object.moneda.nombre
+    = f.association :moneda, as: :hidden
   td
     = f.input :monto, as: :string,
                          label: false,
-                         input_html: { class: 'form-control maskMoneda', value: number_with_precision(f.object.monto) }
+                         input_html: { class: "cantidad form-control maskMoneda #{'moneda-por-defecto' if f.object.moneda.defecto}", value: number_with_precision(f.object.monto) }
   td
     = f.input :cotizacion, as: :string,
                          label: false,
-                         input_html: { disabled: f.object.moneda.defecto, class: 'form-control maskMoneda', value: number_with_precision(f.object.cotizacion) }
+                         input_html: { readonly: f.object.moneda.defecto, class: 'precio-unitario form-control maskMoneda', value: number_with_precision(f.object.cotizacion) }
   td.subtotal-col.text-right
     span

@@ -46,12 +46,14 @@ class PagosController < ApplicationController
     @pago = Pago.new(pago_params)
 
     respond_to do |format|
-      if @pago.save
-        format.html { redirect_to @pago, notice: 'Pago was successfully created.' }
-        format.json { render :show, status: :created, location: @pago }
-      else
-        format.html { render :new }
-        format.json { render json: @pago.errors, status: :unprocessable_entity }
+      Pago.transaction do
+        if @pago.save
+          format.html { redirect_to @pago, notice: 'Pago was successfully created.' }
+          format.json { render :show, status: :created, location: @pago }
+        else
+          format.html { render :form }
+          format.json { render json: @pago.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -102,7 +104,15 @@ class PagosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def pago_params
-      params.fetch(:pago, {})
+      # se eliminan de params las boletas que no se seleccionaron
+      params[:pago][:boletas_detalles_attributes].each do |k, valor|
+        params[:pago][:boletas_detalles_attributes].delete(k) unless valor[:pagado].present?
+      end
+
+      params.require(:pago).permit(:persona_id, :numero_comprobante, :fecha,
+                                   detalles_attributes: [:monto, :cotizacion, :moneda_id, :forma],
+                                   boletas_detalles_attributes: [:monto_utilizado, :boleta_id])
+
     end
 
 end

@@ -8,7 +8,7 @@ thead
     th
 tbody
   - total = 0
-  - compras.each do |c|
+  - compras.each_with_index do |c, i|
     - total += c.importe_pendiente
     tr
       td = c.numero
@@ -16,9 +16,10 @@ tbody
       td = localize(c.fecha_vencimiento.to_date) if c.fecha_vencimiento
       td.text-right = number_to_currency(c.importe_pendiente)
       td
-        = text_field :detalles, :monto, value: number_with_precision(c.importe_pendiente), class: 'form-control mascaraMoneda monto-a-sumar'
+        = hidden_field "pago[boletas_detalles_attributes][#{i}]", :boleta_id, value: c.id
+        = text_field "pago[boletas_detalles_attributes][#{i}]", :monto_utilizado, value: number_with_precision(c.importe_pendiente), class: 'form-control mascaraMoneda monto-a-sumar'
       td
-        input type="checkbox" name="pagado" class="pagar-boleta"
+        input type="checkbox" name="pago[boletas_detalles_attributes][#{i}][pagado]" class="pagar-boleta"
 tfoot
   tr
     td colspan="2"

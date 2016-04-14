@@ -27,7 +27,7 @@ section.content
                         i.fa.fa-search
                 .col-xs-4
                   .form-group
-                    = f.text_field :proveedor_id_eq_any, id: 'proveedores-buscador', class: 'form-control', placeholder: 'Todos los proveedores...'
+                    = f.search_field :proveedor_id_eq_any, id: 'proveedores-buscador', class: 'form-control', placeholder: 'Todos los proveedores...'
           #pagos-table.overlay-wrapper.buscador-resultados.table-responsive
             = render partial: 'list', locals: {pagos: @pagos}
           #pagos-paginate-container

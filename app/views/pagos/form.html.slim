@@ -22,7 +22,7 @@ section.content
                         .btn.btn-default
                           i.fa.fa-calendar
                   .col-sm-4
-                    = f.input :proveedor, as: :string, input_html: { id: 'proveedores-buscador', placeholder: 'Buscar proveedor...' }
+                    = f.association :proveedor, as: :string, input_html: { id: 'proveedores-buscador', placeholder: 'Buscar proveedor...' }
                 .row
                   .col-sm-4
                     = f.input :numero_comprobante, label: 'Número de Comprobante'
@@ -85,8 +85,8 @@ section.content
                     tr
                       th Forma
                       th Moneda
-                      th Cotización
                       th Monto
+                      th Cotización
                       th Subtotal
                       th
                   tbody#pago-detalles-body

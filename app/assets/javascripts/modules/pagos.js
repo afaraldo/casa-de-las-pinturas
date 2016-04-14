@@ -3,11 +3,18 @@ var PagosUI = (function(){
         buscarProveedorUrl = '',
         boletasPendientesUrl = '';
 
+    /**
+     * Mensaje que indica que el proveedor seleccionado no tiene boletas pendientes
+     * @param proveedor
+     */
     function noHayPendientes(proveedor){
         elementos.mensajePanel.find('h3').text('No hay boletas pendientes para el proveedor ' + proveedor);
         elementos.mensajePanel.find('i').removeClass('fa-search').addClass('fa-list');
     }
 
+    /**
+     * Mensaje que muestra un mensaje para indicar que debe seleccionar un proveedor
+     */
     function seleccioneProveedor(){
         elementos.mensajePanel.find('h3').text('Seleccione un proveedor para ver las boletas y devoluciones pendientes');
         elementos.mensajePanel.find('i').removeClass('fa-list').addClass('fa-search');
@@ -16,10 +23,15 @@ var PagosUI = (function(){
         elementos.detallesPanel.addClass('hide');
     }
 
+    /**
+     * Muestra el panel de las boletas y los detalles del pago
+     * Esconde el panel del mensaje inicial
+     */
     function mostrarBoletas() {
         elementos.mensajePanel.addClass('hide');
         elementos.boletasPanel.removeClass('hide');
         elementos.detallesPanel.removeClass('hide');
+        elementos.detallesPanel.find('.cantidad').val('0');
         NumberHelper.mascaraMoneda('.mascaraMoneda');
     }
 
@@ -53,7 +65,8 @@ var PagosUI = (function(){
             })
         });
 
-        TablasHelper.calcularSeleccionados('#compra-detalles-tabla');
+        TablasHelper.calcularSeleccionados('#compra-detalles-tabla', $('.moneda-por-defecto'));
+        TablasHelper.calcularTotalEvent('.calcular-pagos-total');
 
     }
 
@@ -92,7 +105,6 @@ var PagosUI = (function(){
         setboletasPendientesUrl: function(url) {
             boletasPendientesUrl = url;
         }
-
     };
 
 }());

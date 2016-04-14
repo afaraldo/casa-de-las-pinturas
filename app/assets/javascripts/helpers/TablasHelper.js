@@ -1,13 +1,22 @@
 var TablasHelper = {
+    /**
+     * Evento para que las filas de las tablas sean clickeables
+     */
     filasClickeablesEvent: function() {
         $('body').on('click','tr.fila-clickeable', function(e){
             window.location = $(this).data('url');
         });
     },
+    /**
+     * Evento para calcular subtotales y total en una tabla
+     * cada fila debe tener un campo con la clase .cantidad y otro con la clase .precio-unitario
+     *
+     * @param selector el selector de la tabla
+     */
     calcularTotalEvent: function(selector) {
         var tabla = $(selector);
 
-        tabla.on('keyup', '.cantidad, .precio-unitario', function(){
+        tabla.on('keyup change', '.cantidad, .precio-unitario', function(){
             var fila = $(this).parents('tr'),
                 cantidad = NumberHelper.aNumero(fila.find('.cantidad').val()),
                 precio =   NumberHelper.aNumero(fila.find('.precio-unitario').val()),
@@ -24,10 +33,17 @@ var TablasHelper = {
         });
 
     },
-    calcularSeleccionados: function(selector) {
+    /**
+     * Evento para sumar los totales de recibos/boletas seleccionadas en una tabla.
+     * cada fila debe tener un campo con clase .monto-a-sumar y un checkbox con clase .pagar-boleta
+     *
+     * @param selector selector de la table
+     * @param totalPorDefecto objeto jquery del elemento a donde se tiene que poner el total. Ej.: el monto de la moneda por defecto
+     */
+    calcularSeleccionados: function(selector, totalPorDefecto) {
         var tabla = $(selector);
 
-        tabla.on('keyup, change', '.monto-a-sumar, .pagar-boleta', function(e){
+        tabla.on('keyup change', '.monto-a-sumar, .pagar-boleta', function(e){
             var total = 0;
 
             tabla.find('.monto-a-sumar').each(function(){
@@ -38,6 +54,8 @@ var TablasHelper = {
             });
 
             tabla.find('.table-total span').text(NumberHelper.aMoneda(total));
+
+            totalPorDefecto.val(NumberHelper.aMoneda(total)).trigger('change');
 
         });
     }

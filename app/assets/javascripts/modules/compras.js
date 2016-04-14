@@ -71,7 +71,7 @@ var ComprasUI = (function(){
         },
         index: function() {
           DatepickerHelper.initDateRangePicker('#date-range');
-+         PersonasUI.buscador({elemento: elementos.proveedorBuscador, url: buscarProveedorUrl});
+          PersonasUI.buscador({elemento: elementos.proveedorBuscador, url: buscarProveedorUrl});
         },
         'new': function() {
             initFormEvents();
