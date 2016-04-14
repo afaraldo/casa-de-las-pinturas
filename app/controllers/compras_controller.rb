@@ -34,6 +34,7 @@ class ComprasController < ApplicationController
   # POST /compras
   # POST /compras.json
   def create
+    #binding.pry
     @compra = Compra.new(compra_params)
 
     respond_to do |format|
@@ -53,7 +54,7 @@ class ComprasController < ApplicationController
   # PATCH/PUT /compras/1
   # PATCH/PUT /compras/1.json
   def update
-    
+
     respond_to do |format|
       Compra.transaction do
         if @compra.update(compra_params)
@@ -88,16 +89,16 @@ class ComprasController < ApplicationController
 
     def get_compras
       @search = Compra.search(params[:q])
-      @compras = @search.result.includes(:proveedor).page(params[:page])
+      @compras = @search.result.includes(:persona).page(params[:page])
     end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_compra
-      @compra = Compra.find(params[:id])
+      @compra = Compra.find(params[:id]).includes(:persona, :boleta_detalle)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def compra_params
-      params.require(:compra).permit(:persona_id, :numero, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :tipo, :condicion, detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy])
+      params.require(:compra).permit(:persona_id, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :condicion, detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy])
     end
 end

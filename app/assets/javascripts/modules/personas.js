@@ -7,7 +7,8 @@ var PersonasUI = (function(){
 
     // Lo que se muestra despues de seleccionar
     function formatPersonasSelection(m) {
-        return m.nombre;
+      $("#limite_credito").html(NumberHelper.aMoneda(m.limite_credito));
+      return m.nombre;
     }
 
     return {
@@ -31,6 +32,9 @@ var PersonasUI = (function(){
                             more: more
                         };
                     }
+                },
+                initSelection: function(element, callback) {
+                    callback($(element).data('proveedor')); // Se setea la mercaderia si ya esta seleccionada
                 },
                 formatResult: formatPersonas,
                 formatSelection: formatPersonasSelection,

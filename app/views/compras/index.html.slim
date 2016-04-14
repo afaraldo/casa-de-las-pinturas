@@ -27,7 +27,7 @@ section.content
                         i.fa.fa-search
                 .col-xs-3
                   .form-group
-                    = f.search_field :proveedor_id_eq_any, id: 'proveedores-buscador', class: 'form-control', placeholder: 'Todos los proveedores...'
+                    = f.search_field :persona_id_eq_any, id: 'proveedores-buscador', class: 'form-control', placeholder: 'Todos los proveedores...'
                 .col-xs-2
                   .form-group
                     = f.select :estado_eq, Compra.estado.options,

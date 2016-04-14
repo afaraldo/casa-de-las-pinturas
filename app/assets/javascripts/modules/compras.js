@@ -3,10 +3,12 @@ var ComprasUI = (function(){
         buscarMercaderiaUrl = '',
         buscarProveedorUrl = '';
 
+
+
     function initFormEvents(){
         elementos.compraForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
 
-        PersonasUI.buscador({elemento: $('.proveedor-select'), url: buscarProveedorUrl});
+        PersonasUI.buscador({elemento: $('#proveedores-buscador'), url: buscarProveedorUrl});
         MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: buscarMercaderiaUrl});
 
         NumberHelper.mascaraCantidad('.maskCantidad');
@@ -47,7 +49,7 @@ var ComprasUI = (function(){
     }
 
     // Recibe una lista de mercaderias y elimina si alguno ya esta seleccionado entre los detalles
-    // se asume que los inputs tengan las clase .mercaderia-select
+    // se asume que los inputs tengan las clase .proveedor-select
     function eliminarItemsSeleccionados(items) {
         var seleccionados = $.map($('input.proveedor-select'), function(v,i){ return $(v).val();});
 

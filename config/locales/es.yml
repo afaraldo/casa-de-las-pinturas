@@ -46,6 +46,7 @@ es:
         tipo: "Tipo de movimiento"
     errors:
       messages:
+        supera_limite_de_credito: "ha superado el límite de crédito permitido"
         no_editable: "no es editable"
         fecha_futura: "La fecha no puede ser superior a la actual"
         fecha_vencimiento: "La fecha de vencimiento no puede ser inferior a la fecha creación"

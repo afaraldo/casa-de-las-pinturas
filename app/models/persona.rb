@@ -2,7 +2,11 @@ class Persona < ActiveRecord::Base
   acts_as_paranoid
   has_paper_trail
   has_one :user, dependent: :destroy
+
+  has_many :boletas, foreign_key: 'persona_id', inverse_of: :persona
   self.inheritance_column = 'tipo'
+
+  has_one :cuenta_corriente_balance, -> { order('anho DESC').order('mes DESC') }, class_name: 'CuentaCorrientePeriodoBalance'
 
   after_initialize :set_limite_credito, if: :new_record?
   validates :telefono, length: {maximum: 50, minimum: 2}, allow_blank: true
@@ -17,5 +21,9 @@ class Persona < ActiveRecord::Base
 
   def set_limite_credito
     self.limite_credito ||= 0
+  end
+
+  def saldo_actual
+    cuenta_corriente_balance.nil? ? 0 : cuenta_corriente_balance.balance
   end
 end

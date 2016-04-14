@@ -9,7 +9,7 @@ section.content
             a.volver-link href= compras_path
               i.fa.fa-angle-double-left style="margin-right: 5px;"
               | Volver al listado de compras
-            h3.box-title = @compra.new_record? ? 'Nueva Compra' : 'Editar Compra'
+            h3.box-title = @compra.new_record? ? 'Nueva Compra' : "Editar Compra Nro. #{@compra.numero}"
           .box-body
             = f.error_notification
             .row
@@ -23,14 +23,21 @@ section.content
                           i.fa.fa-calendar
                   .col-sm-4
                     .form-group
-                      label.control-label Proveedor
-                      = f.input_field :persona_id, id: 'proveedores-buscador', class: 'proveedor-select form-control require', placeholder: 'Todos los proveedores...', data: { proveedor: f.object.proveedor.to_json }
+                      = f.association :persona, as: :string, input_html: { id: 'proveedores-buscador', data: {"msg-required" => 'Debe seleccionar un proveedor', class: 'form-control required',
+                             proveedor: f.object.persona.to_json }, placeholder: 'Buscar proveedor...' }
+                      /= link_to '<i class="fa fa-plus"></i>'.html_safe,
+                      /          new_categoria_path(from_mercaderias: true),
+                      /          data: {toggle: 'tooltip'},
+                      /          title: 'Nueva categoría',
+                      /          class: 'btn btn-default',
+                      /          style: 'margin-top: 25px;',
+                      /          remote: true
                   .col-sm-4
                       = f.input :condicion, as: :radio_group_buttons
                 .row
                   /// FECHA DE VENCIMENTO
                   .col-sm-4
-                    = f.input :fecha, wrapper: :vertical_input_group, label: 'Fecha de vencimiento', required: true do
+                    = f.input :fecha_vencimiento, wrapper: :vertical_input_group, label: 'Fecha de vencimiento' do
                       = f.input_field :fecha_vencimiento, as: :string, class: 'datepicker form-control', value: @compra.new_record? && f.object.fecha_vencimiento.nil? ? '' : localize(@compra.fecha_vencimiento.to_date)
                       .input-group-btn
                         .btn.btn-default
@@ -46,7 +53,10 @@ section.content
                 .alert.alert-info
                   strong Crédito disponible:
                   br
-                  h4.text-center style="margin-top: 10px; font-size: 16px;" 500.000 de 2.300.000
+                  h4.text-center style="margin-top: 10px; font-size: 16px;"
+                    span#saldo 0
+                    span de
+                    span#limite_credito 0
                   p.text-center
                     a Actualizar límite
 
