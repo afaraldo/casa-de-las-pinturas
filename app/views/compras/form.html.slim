@@ -9,7 +9,7 @@ section.content
             a.volver-link href= compras_path
               i.fa.fa-angle-double-left style="margin-right: 5px;"
               | Volver al listado de compras
-            h3.box-title Nueva Compra
+            h3.box-title = @compra.new_record? ? 'Nueva Compra' : 'Editar Compra'
           .box-body
             = f.error_notification
             .row
@@ -17,28 +17,26 @@ section.content
                 .row
                   .col-sm-4
                     = f.input :fecha, wrapper: :vertical_input_group do
-                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: true, value: @compra.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: true, value: @compra.new_record? && f.object.fecha.nil? ? '' : localize(@compra.fecha.to_date)
                       .input-group-btn
                         .btn.btn-default
                           i.fa.fa-calendar
                   .col-sm-4
                     .form-group
                       label.control-label Proveedor
-                      = f.select :proveedor, Proveedor.all.map{ |c| [c.nombre, c.id] },
-                        {include_blank: 'Todos los proveedores...'},
-                        class: 'form-control'
+                      = f.input_field :persona_id, id: 'proveedores-buscador', class: 'proveedor-select form-control require', placeholder: 'Todos los proveedores...', data: { proveedor: f.object.proveedor.to_json }
                   .col-sm-4
-                    = f.input :condicion, as: :radio_buttons, label: 'Condición de pago', wrapper: :button_radio_and_checkboxes, item_wrapper_tag: nil, item_label_class: 'btn btn-default'
+                      = f.input :condicion, as: :radio_group_buttons
                 .row
                   /// FECHA DE VENCIMENTO
                   .col-sm-4
-                    = f.input :fecha, wrapper: :vertical_input_group, label: 'Fecha de vencimiento', required: false do
-                      = f.input_field :fecha_vencimiento, as: :string, class: 'datepicker form-control', value: @compra.new_record? && f.object.fecha_vencimiento.nil? ? '' : localize(f.object.fecha_vencimiento.to_date)
+                    = f.input :fecha, wrapper: :vertical_input_group, label: 'Fecha de vencimiento', required: true do
+                      = f.input_field :fecha_vencimiento, as: :string, class: 'datepicker form-control', value: @compra.new_record? && f.object.fecha_vencimiento.nil? ? '' : localize(@compra.fecha_vencimiento.to_date)
                       .input-group-btn
                         .btn.btn-default
                           i.fa.fa-calendar
                   .col-sm-4
-                    = f.input :numero_factura, label: 'Número de Factura', value: @compra.new_record? && f.object.fecha.nil? ? '' : localize(f.object.numero_factura.to_date)
+                    = f.input :numero_comprobante, label: 'Número de Comprobante', value: @compra.new_record? && f.object.numero_comprobante.nil? ? '' : f.object.numero_comprobante
                   .col-xs-12
                     p
                       /a href="#modal-credito" data-toggle="modal" Agregar Crédito de devoluciones
@@ -205,3 +203,4 @@ section.content
 
 javascript:
   ComprasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");
+  ComprasUI.setBuscarProveedorUrl("#{proveedores_buscar_path}");

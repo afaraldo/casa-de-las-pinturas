@@ -48,6 +48,7 @@ es:
       messages:
         no_editable: "no es editable"
         fecha_futura: "La fecha no puede ser superior a la actual"
+        fecha_vencimiento: "La fecha de vencimiento no puede ser inferior a la fecha creación"
         email_invalido: "Por favor, escribí una dirección de correo válida"
         record_invalid: "La validación falló: %{errors}"
         restrict_dependent_destroy:

@@ -1,8 +1,0 @@
-| var modal = $('#main-modal');
-- if @error
-  | noty({type: "error", text : "#{@message}"});
-- else
-  | noty({type: "success", text : "#{@message}"});
-  | modal.modal('hide');
-  | $('#compras-table').html("#{escape_javascript(render partial: 'list', locals: {compras: @compras})}");
-  | $('#compras-paginate-container').html("#{escape_javascript(paginate(@compras, params: {controller: :compras, action: :index}, remote: true)) }");

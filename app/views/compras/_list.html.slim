@@ -13,8 +13,8 @@ table.table.table-bordered.table-hover
     - compras.each do |compra|
       tr
         td = localize(compra.fecha.to_date)
-        td = compra.numero
-        td = compra.numero_factura
+        td = link_to compra.numero, compra_path(compra.id)
+        td = compra.numero_comprobante
         td = compra.condicion
         td = compra.proveedor.nombre
         td.text-right = number_to_currency(compra.importe_total)
