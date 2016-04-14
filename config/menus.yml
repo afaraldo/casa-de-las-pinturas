@@ -59,6 +59,10 @@ menu:
         text: "Categoria de Gastos"
         url: :categoria_gastos
         active_submenu: :categoria_gastos_sidemenu
+      caja_movimientos:
+        text: "Movimientos de cajas"
+        url: :caja_movimientos
+        active_submenu: :caja_movimientos_sidemenu
   reportes:
     text: "Reportes"
     url: "#"

@@ -1,0 +1,17 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Fecha
+      th Motivo
+      th Tipo
+      th.table-actions
+  tbody
+    - @caja_movimientos.each do |caja_movimiento|
+      tr.fila-clickeable data-url="#{caja_movimiento_path(caja_movimiento)}"
+        td = localize(caja_movimiento.fecha.to_date)
+        td = caja_movimiento.motivo
+        td = caja_movimiento.tipo_text
+        td.text-right
+          = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_caja_movimiento_path(caja_movimiento), class: 'btn btn-default btn-sm'
+          | #{' '}
+          = link_to ' <i class="fa fa-trash"></i>'.html_safe, caja_movimiento_path(caja_movimiento), method: 'delete', data: {confirm: "¿Desea eliminar el movimiento?"}, class: 'btn btn-danger btn-sm'

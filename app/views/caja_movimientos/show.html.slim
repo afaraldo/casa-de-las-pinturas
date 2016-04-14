@@ -1,0 +1,38 @@
+section.content-header
+  h1 Cajas
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          .row
+            .col-xs-12
+              = link_to '<i class="fa fa-angle-double-left"></i> Volver al listado de movimientos'.html_safe, caja_movimiento_path
+          .row
+            .col-xs-12
+              h3.box-title Movimiento de caja
+          .box-tools
+            = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_caja_movimiento_path(@caja_movimiento), class: 'btn btn-default'
+            = " "
+            = link_to ' <i class="fa fa-trash"></i> Eliminar'.html_safe, caja_movimiento_path(@caja_movimiento), method: 'delete', data: {confirm: "¿Esta seguro que desea eliminar el movimiento?"}, class: 'btn btn-danger'
+        .box-body
+          dl.cabecera-info
+            dt Fecha
+            dd = localize(@caja_movimiento.fecha.to_date)
+            dt Tipo de movimiento
+            dd = @caja_movimiento.tipo_text
+            dt Motivo
+            dd = @caja_movimiento.motivo
+          label.control-label Valores
+          table.table.table-bordered
+            thead
+              tr
+                th Tipo de Valor
+                th Moneda
+                th.text-right Monto
+            tbody
+              - @movimiento.detalles.each do |d|
+                tr
+                  td = d.caja_movimiento_forma
+                  td = d.moneda_nombre
+                  td.text-right = number_with_precision(d.cantidad)
