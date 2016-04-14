@@ -17,10 +17,19 @@ class MovimientoMercaderia < ActiveRecord::Base
   validates :tipo,   presence: true
   validates :detalles, length: { minimum: 1 }
   validate  :fecha_futura
+  validate  :tipo_cambiado?, on: :update
 
   def fecha_futura
     if fecha > Date.today
       errors.add(:fecha, I18n.t('activerecord.errors.messages.fecha_futura'))
+      futuro = true
+    end
+    futuro
+  end
+  def tipo_cambiado?
+    if tipo_changed? && self.persisted?
+      errors.add(:tipo, I18n.t('activerecord.errors.messages.no_editable'))
+      false
     end
   end
 

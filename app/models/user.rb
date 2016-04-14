@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   private
 
   def exists_superuser?
-    if self.rol == :superusuario && User.find_by_rol(:superusuario)
+    if self.rol_was != :superusuario && self.rol == :superusuario && User.find_by_rol(:superusuario)
       errors.add(:rol, "de superusuario ya existe y sólo puede existir uno")
     end
   end

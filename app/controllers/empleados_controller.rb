@@ -54,7 +54,9 @@ class EmpleadosController < ApplicationController
       params[:empleado][:user_attributes].delete(:password)
       params[:empleado][:user_attributes].delete(:password_confirmation)
     end
-    if @empleado.update(empleado_params)
+    @empleado.assign_attributes(empleado_params)
+    @redirect = true if @empleado.user.encrypted_password_changed? && @empleado.user.id == current_user.id
+    if @empleado.save
       @error = false
       @message = "Se ha guardado el usuario"
       get_empleados

@@ -1,7 +1,7 @@
 var DatepickerHelper = {
     // Funcion para inicializar un datepicker simple a partir de un selector
     initDatepicker: function(selector) {
-        $(selector).datepicker();
+        $(selector).datepicker({endDate: '0d'});
 
         // Evento para el boton al lado del campo datepicker
         $(selector + ' + .input-group-btn').on('click', function(e){
@@ -12,7 +12,7 @@ var DatepickerHelper = {
     initDateRangePicker: function(selector) {
         $(selector).daterangepicker(
             {
-                startDate: moment(),
+                startDate: moment().subtract(30, 'days'),
                 endDate: moment(),
                 //minDate: '01/01/2012',
                 //maxDate: '31/12/2014',
@@ -36,15 +36,18 @@ var DatepickerHelper = {
                 separator: ' hasta ',
                 locale: {
                     applyLabel: 'Aplicar',
-                    cancelLabel: 'Cancelar',
+                    cancelLabel: 'Limpiar',
                     fromLabel: 'Desde',
                     toLabel: 'Hasta',
                     customRangeLabel: 'Rango',
                     daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi','Sa'],
                     monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                     firstDay: 1
+                    
                 }
+
             },
+
             function(start, end) {
                 var el = $(selector);
                 el.find('.fecha-desde').val(start.format('DD/MM/YYYY')).trigger('change');
@@ -52,6 +55,13 @@ var DatepickerHelper = {
                 el.find('span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
             }
         );
+
+        $(selector).on('cancel.daterangepicker', function(ev, picker) {
+            var el = $(selector);
+            el.find('.fecha-desde').val("").trigger('change');
+            el.find('.fecha-hasta').val("").trigger('change');
+            el.find('span').html("Fecha");
+        });
 
     }
 };
