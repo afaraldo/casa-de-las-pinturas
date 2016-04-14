@@ -23,7 +23,7 @@ section.content
                           i.fa.fa-calendar
                   .col-sm-4
                     .form-group
-                      = f.association :persona, as: :string, input_html: { id: 'proveedores-buscador', data: {"msg-required" => 'Debe seleccionar un proveedor', class: 'form-control required',
+                      = f.association :persona, as: :string,  label: 'Proveedor', input_html: { id: 'proveedores-buscador', data: {"msg-required" => 'Debe seleccionar un proveedor', class: 'form-control required',
                              proveedor: f.object.persona.to_json }, placeholder: 'Buscar proveedor...' }
                       /= link_to '<i class="fa fa-plus"></i>'.html_safe,
                       /          new_categoria_path(from_mercaderias: true),
@@ -173,7 +173,7 @@ section.content
             /    | #{' '}
             /    button.btn.btn-primary type="submit" Continuar
             .form-actions.text-right
-              = link_to 'Cancelar', compras_path, class: 'btn btn-default'
+              = link_to 'Cancelar', @compra.new_record? ? compras_path : compra_path(@compra.id), class: 'btn btn-default'
               | #{' '}
               button.btn.btn-primary type="submit" Guardar Compra
   //// MODAL DE DEVOLUCIONES
