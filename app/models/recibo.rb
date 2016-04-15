@@ -4,7 +4,7 @@ class Recibo < ActiveRecord::Base
 
   self.inheritance_column = 'tipo'
 
-  before_save :set_importes
+  before_validation :set_importes
   after_save :actualizar_boletas, :actualizar_cuenta_corriente
 
   has_many :detalles, class_name: 'ReciboDetalle', dependent: :destroy, inverse_of: :recibo
@@ -21,6 +21,7 @@ class Recibo < ActiveRecord::Base
   validates :detalles, length: { minimum: 1 }
   validates :numero_comprobante, length: { minimum: 2, maximum: 50 }, allow_blank: true
   validate  :fecha_futura
+  validate  :pagos_boletas_seleccionadas
 
   def total_pagado
     total_efectivo + total_tarjeta - total_credito_utilizado
@@ -39,15 +40,13 @@ class Recibo < ActiveRecord::Base
       boleta = b.boleta
       pendiente = boleta.importe_pendiente - b.monto_utilizado
 
-      #binding.pry
-
       boleta.update_columns(importe_pendiente: pendiente, estado: pendiente == 0 ? :pagado : :pendiente)
 
     end
   end
 
   def actualizar_cuenta_corriente
-    # CuentaCorrienteExtracto.crear_o_actualizar_extracto(self, fecha, total_pagado, 0)
+    CuentaCorrienteExtracto.crear_o_actualizar_extracto(self, fecha, total_pagado, 0)
   end
 
   def set_importes
@@ -64,6 +63,19 @@ class Recibo < ActiveRecord::Base
   def fecha_futura
     if fecha > Date.today
       errors.add(:fecha, I18n.t('activerecord.errors.messages.fecha_futura'))
+    end
+  end
+
+  def pagos_boletas_seleccionadas
+    boletas_seleccionadas = 0
+
+    boletas_detalles.each do |b|
+      boletas_seleccionadas += b.monto_utilizado
+    end
+
+    if total_pagado != boletas_seleccionadas
+      errors.add(:importe_total, I18n.t('activerecord.errors.messages.total_pagado_diferente_de_boletas'))
+      false
     end
   end
 

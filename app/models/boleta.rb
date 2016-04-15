@@ -120,7 +120,7 @@ class Boleta < ActiveRecord::Base
 
   # Actualiza la cuenta corriente si es que se guardo o actualizo
   def actualizar_extracto_de_cuenta_corriente
-      CuentaCorrienteExtracto.crear_o_actualizar_extracto(self.becomes(Boleta), fecha, persona.saldo_actual, importe_pendiente)
+    CuentaCorrienteExtracto.crear_o_actualizar_extracto(self.becomes(Boleta), fecha, importe_pendiente_was.to_f, importe_pendiente)
   end
 
   # Actualiza el extracto de las mercaderias si se cambio de la fecha de la boleta

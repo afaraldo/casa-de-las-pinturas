@@ -47,6 +47,9 @@ es:
     errors:
       messages:
         supera_limite_de_credito: "ha superado el límite de crédito permitido"
+        monto_superior_a_pendiente: "El monto a pagar no puede ser mayor al monto pendiente."
+        monto_utilizado_cero: "El monto a pagar debe ser mayor a 0(cero)."
+        total_pagado_diferente_de_boletas: "El total de las formas de pago debe ser igual al total a pagar de las boletas seleccionadas."
         no_editable: "no es editable"
         fecha_futura: "La fecha no puede ser superior a la actual"
         fecha_vencimiento: "La fecha de vencimiento no puede ser inferior a la fecha creación"

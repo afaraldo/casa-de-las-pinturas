@@ -27,12 +27,19 @@ var PagosUI = (function(){
      * Muestra el panel de las boletas y los detalles del pago
      * Esconde el panel del mensaje inicial
      */
-    function mostrarBoletas() {
+    function mostrarBoletas(limpiarDetalles) {
         elementos.mensajePanel.addClass('hide');
         elementos.boletasPanel.removeClass('hide');
         elementos.detallesPanel.removeClass('hide');
-        elementos.detallesPanel.find('.cantidad').val('0');
+
         NumberHelper.mascaraMoneda('.mascaraMoneda');
+
+        if(limpiarDetalles) {
+            elementos.detallesPanel.find('.cantidad').val('0');
+        } else {
+            $(elementos.boletasPanel.find('.monto-a-sumar')[0]).trigger('change');
+            elementos.detallesPanel.find('.cantidad').trigger('change');
+        }
     }
 
     function initFormEvents(){
@@ -90,12 +97,14 @@ var PagosUI = (function(){
         },
         'create': function(){
             initFormEvents();
+            mostrarBoletas(false)
         },
         'edit': function() {
             initFormEvents();
         },
         'update': function(){
             initFormEvents();
+            mostrarBoletas(false);
         },
         noHayPendientes: noHayPendientes,
         mostrarBoletas: mostrarBoletas,

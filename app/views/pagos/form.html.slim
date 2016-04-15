@@ -22,7 +22,7 @@ section.content
                         .btn.btn-default
                           i.fa.fa-calendar
                   .col-sm-4
-                    = f.association :proveedor, as: :string, input_html: { id: 'proveedores-buscador', placeholder: 'Buscar proveedor...' }
+                    = f.association :persona, as: :string, input_html: { id: 'proveedores-buscador', placeholder: 'Buscar proveedor...', data: { proveedor: f.object.persona.to_json } }
                 .row
                   .col-sm-4
                     = f.input :numero_comprobante, label: 'Número de Comprobante'
@@ -59,7 +59,25 @@ section.content
                   label Boletas pendientes
                 br
                 table.table.table-bordered.detalles-table#compra-detalles-tabla
-
+                  thead
+                    tr
+                      th Número
+                      th Fecha
+                      th Fecha de vencimiento
+                      th Total Pendiente
+                      th Total a pagar
+                      th
+                  tbody#compra-detalles-body
+                    = render partial: 'compras_pendientes', locals: {compras: @pago.boletas_detalles, actualizando: true}
+                  tfoot
+                    tr
+                      td colspan="2"
+                      td.text-right.text-bold
+                        | Total:
+                      td.text-right.text-bold
+                      td.table-total.text-right.text-bold
+                        span 0
+                      td
 
             /.row
             /  .col-sm-offset-8.col-sm-4
@@ -80,6 +98,8 @@ section.content
                 .form-subtitle
                   label Formas de pago
                 br
+                - if @pago.errors.has_key?(:importe_total)
+                  p.text-danger = @pago.errors.get(:importe_total).to_sentence
                 table.table.table-bordered.detalles-table.calcular-pagos-total
                   thead
                     tr

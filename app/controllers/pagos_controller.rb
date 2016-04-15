@@ -47,6 +47,8 @@ class PagosController < ApplicationController
 
     respond_to do |format|
       Pago.transaction do
+        # @pago.valid?
+        #binding.pry
         if @pago.save
           format.html { redirect_to @pago, notice: 'Pago was successfully created.' }
           format.json { render :show, status: :created, location: @pago }
@@ -104,6 +106,7 @@ class PagosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def pago_params
+      procesar_cantidades
       # se eliminan de params las boletas que no se seleccionaron
       params[:pago][:boletas_detalles_attributes].each do |k, valor|
         params[:pago][:boletas_detalles_attributes].delete(k) unless valor[:pagado].present?
@@ -114,5 +117,12 @@ class PagosController < ApplicationController
                                    boletas_detalles_attributes: [:monto_utilizado, :boleta_id])
 
     end
+
+  def procesar_cantidades
+    params[:pago][:detalles_attributes].each do |i, d|
+      params[:pago][:detalles_attributes][i][:monto] = cantidad_a_numero(d[:monto])
+      params[:pago][:detalles_attributes][i][:cotizacion] = cantidad_a_numero(d[:cotizacion])
+    end
+  end
 
 end
