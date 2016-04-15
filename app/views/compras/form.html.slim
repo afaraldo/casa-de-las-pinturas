@@ -164,18 +164,21 @@ section.content
             /                                'data-association-insertion-node' => '#compra-detalles-body',
             /                                'data-association-insertion-method' => 'append'
           .box-footer
-            /.alert.alert-warning
-            /  p
-            /    | La operación va a provocar existencia negativa en los siguientes productos: %{productos}.
-            /  p Esta seguro que quiere continuar?
-            /  .form-actions
-            /    = link_to 'Cancelar', compras_path, class: 'btn btn-default'
-            /    | #{' '}
-            /    button.btn.btn-primary type="submit" Continuar
-            .form-actions.text-right
-              = link_to 'Cancelar', @compra.new_record? ? compras_path : compra_path(@compra.id), class: 'btn btn-default'
-              | #{' '}
-              button.btn.btn-primary type="submit" Guardar Compra
+            - if @stock_negativo && @stock_negativo.size > 0
+              input.hidden name="guardar_si_o_si" value= "true"
+              .alert.alert-warning
+                p
+                  | La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}.
+                p Esta seguro que quiere continuar?
+                .form-actions
+                  = link_to 'Cancelar', compras_path, class: 'btn btn-default'
+                  | #{' '}
+                  button.btn.btn-primary type="submit" Continuar
+            - else
+              .form-actions.text-right
+                = link_to 'Cancelar', @compra.new_record? ? compras_path : compra_path(@compra.id), class: 'btn btn-default'
+                | #{' '}
+                button.btn.btn-primary type="submit" Guardar Compra
   //// MODAL DE DEVOLUCIONES
   #modal-credito.modal.fade
     .modal-dialog

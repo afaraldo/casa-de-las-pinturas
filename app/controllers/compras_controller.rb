@@ -17,6 +17,7 @@ class ComprasController < ApplicationController
   # GET /compras/1
   # GET /compras/1.json
   def show
+    @stock_negativo = @compra.check_detalles_negativos(true)
   end
 
   # GET /compras/new
@@ -54,10 +55,11 @@ class ComprasController < ApplicationController
   # PATCH/PUT /compras/1
   # PATCH/PUT /compras/1.json
   def update
-
+    @compra.assign_attributes(compra_params)
+    @stock_negativo = params[:guardar_si_o_si].present? ? [] : @compra.check_detalles_negativos
     respond_to do |format|
       Compra.transaction do
-        if @compra.update(compra_params)
+        if @stock_negativo.size <= 0 && @compra.save
           format.html { redirect_to @compra, notice: t('mensajes.save_success', recurso: 'la compra') }
           format.json { render :show, status: :created, location: @compra }
         else
