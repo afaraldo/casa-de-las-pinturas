@@ -89,12 +89,12 @@ class ComprasController < ApplicationController
 
     def get_compras
       @search = Compra.search(params[:q])
-      @compras = @search.result.includes(:persona).page(params[:page])
+      @compras = @search.result.includes(:persona, :detalles).page(params[:page])
     end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_compra
-      @compra = Compra.find(params[:id]).includes(:persona, :boleta_detalle)
+      @compra = Compra.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

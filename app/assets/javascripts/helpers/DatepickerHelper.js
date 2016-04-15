@@ -1,7 +1,10 @@
 var DatepickerHelper = {
     // Funcion para inicializar un datepicker simple a partir de un selector
-    initDatepicker: function(selector) {
-        $(selector).datepicker({endDate: '0d'});
+    initDatepicker: function(selector, hasta) {
+        var opciones = {endDate: '0d'};
+        if (typeof(hasta) != "undefined")
+          opciones = {};
+        $(selector).datepicker(opciones);
 
         // Evento para el boton al lado del campo datepicker
         $(selector + ' + .input-group-btn').on('click', function(e){
@@ -43,7 +46,7 @@ var DatepickerHelper = {
                     daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi','Sa'],
                     monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                     firstDay: 1
-                    
+
                 }
 
             },

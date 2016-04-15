@@ -3,8 +3,6 @@ var ComprasUI = (function(){
         buscarMercaderiaUrl = '',
         buscarProveedorUrl = '';
 
-
-
     function initFormEvents(){
         elementos.compraForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
 
@@ -17,7 +15,8 @@ var ComprasUI = (function(){
         TablasHelper.calcularTotalEvent('.calcular-total');
         TablasHelper.calcularTotalEvent('.calcular-pagos-total');
 
-        DatepickerHelper.initDatepicker('.datepicker');
+        DatepickerHelper.initDatepicker('#compra_fecha');
+        DatepickerHelper.initDatepicker('#compra_fecha_vencimiento', 'nolimitar');
 
         if($('.nested-fields').length == 1){
             $('.remove_fields').addClass('hide');
@@ -40,7 +39,7 @@ var ComprasUI = (function(){
 
             // Se esconde el boton de eliminar si es que ya queda solo uno
             var tBody = $(this);
-            if(tBody.find('.nested-fields').length == 1){
+            if(tBody.find('.nested-fields:visible').length == 1){
                 $('.remove_fields').addClass('hide');
             }
 

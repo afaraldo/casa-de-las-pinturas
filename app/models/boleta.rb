@@ -5,8 +5,11 @@ class Boleta < ActiveRecord::Base
 
   belongs_to :persona, foreign_key: "persona_id", inverse_of: :boletas#, counter_cache: true
 
-  has_many :detalles, class_name: 'BoletaDetalle', dependent: :destroy, inverse_of: :boleta, autosave: true
+  has_many :detalles, class_name: 'BoletaDetalle', dependent: :destroy, inverse_of: :boleta
   accepts_nested_attributes_for :detalles, reject_if: :all_blank, allow_destroy: true
+
+  has_many :recibos_detalles, foreign_key: "recibo_id", inverse_of: :boleta, dependent: :restrict_with_error
+  has_many :recibos, class_name: 'Pago', dependent: :restrict_with_error, through: :pagos_detalles
 
   enumerize :condicion, in: [:contado, :credito], predicates: true
   enumerize :estado, in: [:pendiente, :cancelado], predicates: true
@@ -14,24 +17,26 @@ class Boleta < ActiveRecord::Base
   default_scope { order('fecha DESC') } # Ordenar por fecha por defecto
 
   #Callbacks
-  before_save :set_importe_total
-  before_save :set_importe_pendiente
-  before_save :set_estado
+  before_validation :set_importe_total
+  before_validation :set_importe_pendiente
+  before_validation :set_estado
 
-  #after_save :actualizar_extracto
-  #after_save :actualizar_cuenta_corriente
-  #after_destroy :actualizar_cuenta_corriente
+  after_save :actualizar_extracto_de_cuenta_corriente
+  after_destroy :actualizar_extracto_de_cuenta_corriente
+
+  after_save :actualizar_extractos_de_mercaderias
+  after_destroy :actualizar_extractos_de_mercaderias
 
   # Validations
+  # el monto de la compra debe ser mayor que 0?
+
   validates :fecha,  presence: true
   validates :numero_comprobante, length: { minimum: 2, maximum: 50 }, allow_blank: true
   validates :tipo,   presence: true
   validates :persona, presence: true
-  validates :detalles, length: { minimum: 1 }, on: :update
+  validates :detalles, length: { minimum: 1 }
   validates :condicion, presence: true
   validate  :condicion_cambiada?, on: :update
-
-  validates :detalles, presence: true
 
   with_options if: :credito? do |b|
     b.validates :fecha_vencimiento, presence: true
@@ -59,7 +64,7 @@ class Boleta < ActiveRecord::Base
 
   def set_importe_pendiente
     monto_pagado = 0
-    self.pagos_detalles.each do |p|
+    self.recibos_detalles.each do |p|
       monto_pagado += p.monto_utilizado
     end
     self.importe_pendiente = self.importe_total - monto_pagado
@@ -78,14 +83,11 @@ class Boleta < ActiveRecord::Base
     detalles.each do |d|
       if d.nueva_cantidad(borrado) < 0
         m << d.mercaderia
-
       end
     end
-
     if m.size > 0
       #errors.add(:base, I18n.t('movimiento_mercaderia.eliminar_stock_negativo', mercaderias: m.map{|me| me.nombre}.to_sentence))
     end
-
     m
   end
 
@@ -104,26 +106,30 @@ class Boleta < ActiveRecord::Base
   def condicion_cambiada?
     if condicion_changed? && self.persisted?
       errors.add(:condicion, I18n.t('activerecord.errors.messages.no_editable'))
-      true
-    end
-  end
-
-  def actualizar_extracto
-    if fecha_changed? ##### PORQUE SOLO POR FECHA??
-        CuentaCorrienteExtracto.crear_o_actualizar_extracto(self, fecha, 0, importe_pendiente)
+      false
     end
   end
 
   def supera_limite_de_credito?
     persona = Persona.find(self.persona_id)
-    if importe_total > persona.limite_credito - persona.saldo_actual
+    if importe_total > (persona.limite_credito - persona.saldo_actual)
       errors.add(:persona, I18n.t('activerecord.errors.messages.supera_limite_de_credito'))
-      true
+      false
     end
   end
 
-  # Actualizar la cuenta corriente si es que cambio el importe_pendiente
-  def actualizar_cuenta_corriente
-
+  # Actualiza la cuenta corriente si es que se guardo o actualizo
+  def actualizar_extracto_de_cuenta_corriente
+      CuentaCorrienteExtracto.crear_o_actualizar_extracto(self.becomes(Boleta), fecha, persona.saldo_actual, importe_pendiente)
   end
+
+  # Actualiza el extracto de las mercaderias si se cambio de la fecha de la boleta
+  def actualizar_extractos_de_mercaderias
+    if fecha_changed?
+      detalles.each do |d|
+        MercaderiaExtracto.crear_o_actualizar_extracto(d, fecha, d.cantidad, d.cantidad)
+      end
+    end
+  end
+
 end
