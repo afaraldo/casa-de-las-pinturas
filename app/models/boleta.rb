@@ -8,11 +8,11 @@ class Boleta < ActiveRecord::Base
   has_many :detalles, class_name: 'BoletaDetalle', dependent: :destroy, inverse_of: :boleta
   accepts_nested_attributes_for :detalles, reject_if: :all_blank, allow_destroy: true
 
-  has_many :recibos_detalles, foreign_key: "recibo_id", inverse_of: :boleta, dependent: :restrict_with_error
-  has_many :recibos, class_name: 'Pago', dependent: :restrict_with_error, through: :pagos_detalles
+  has_many :recibos_detalles, class_name: 'ReciboBoleta', foreign_key: "boleta_id", inverse_of: :boleta, dependent: :destroy
+  has_many :recibos, class_name: 'Recibo', dependent: :destroy, through: :recibos_detalles
 
   enumerize :condicion, in: [:contado, :credito], predicates: true
-  enumerize :estado, in: [:pendiente, :cancelado], predicates: true
+  enumerize :estado, in: [:pendiente, :pagado], predicates: true
 
   default_scope { order('fecha DESC') } # Ordenar por fecha por defecto
 
@@ -72,9 +72,9 @@ class Boleta < ActiveRecord::Base
 
   def set_estado
     if self.importe_pendiente == 0
-      self.estado = self.class.estado.values[1]
+      self.estado = :pagado
     else
-      self.estado = self.class.estado.values[0]
+      self.estado = :pendiente
     end
   end
 

@@ -10,4 +10,8 @@ class Pago < Recibo
     end
   end
 
+  def movimiento_motivo
+    "Pago Nro. #{numero}"
+  end
+
 end

@@ -37,8 +37,8 @@ class MovimientoModel < ActiveRecord::Base
 
     # setear los keys del movimiento
     self.movimiento_key.each do |k|
-      movimiento[k] = objeto[k]
-      buscar_por[k] = objeto[k]
+      movimiento[k] = objeto.send(k)
+      buscar_por[k] = objeto.send(k)
     end
 
     movimiento.fecha = fecha
@@ -114,7 +114,7 @@ class MovimientoModel < ActiveRecord::Base
     buscar_por = {}
 
     self.movimiento_key.each do |k|
-      buscar_por[k] = objeto[k]
+      buscar_por[k] = objeto.send(k)
     end
 
     # se ajusta los balances

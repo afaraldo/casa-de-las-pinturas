@@ -34,5 +34,3 @@ class CajaMovimientoDetalle < ActiveRecord::Base
   end
 
 end
-
-end

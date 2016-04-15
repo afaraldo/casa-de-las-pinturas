@@ -17,4 +17,4 @@ table.table.table-bordered.table-hover
         td = compra.condicion
         td = compra.persona_nombre
         td.text-right = number_to_currency(compra.importe_total)
-        td = ['<label class="label label-success">Pagado</label>', '<label class="label label-warning">Pendiente</label>'][compra.estado == 'pagado' ? 0 : 1].html_safe
+        td = "<label class='label label-#{compra.estado.pagado? ? 'success' : 'warning'}'>#{compra.estado_text}</label>".html_safe

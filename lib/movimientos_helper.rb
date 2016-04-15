@@ -17,6 +17,9 @@ module MovimientosHelper
 
       # Aca va cada movimiento
       case m.movimiento_tipo
+        # -------------------------------
+        # MOVIMIENTOS DE MERCADERIAS
+        # -------------------------------
         when 'MovimientoMercaderiaDetalle'
           detalle = m.movimiento_mercaderia_detalle
           es_ingreso = detalle.movimiento_mercaderia.tipo.ingreso?
@@ -25,6 +28,28 @@ module MovimientosHelper
                         motivo: detalle.movimiento_mercaderia.motivo,
                         ingreso: es_ingreso ? detalle.cantidad : 0,
                         egreso: es_ingreso ? 0 : detalle.cantidad}
+        # -------------------------------
+        # MOVIMIENTOS DE CUENTAS CORRIENTES - CLIENTES / PROVEEDORES
+        # -------------------------------
+        when 'Recibo'
+          recibo = m.recibo
+          es_ingreso = recibo.instance_of?(Pago)
+          resultado << {url: "/#{es_ingreso ? 'pagos' : 'cobros'}/#{recibo.id}",
+                        fecha: recibo.fecha,
+                        motivo: recibo.movimiento_motivo,
+                        ingreso: es_ingreso ? recibo.importe_pagado : 0,
+                        egreso: es_ingreso ? 0 : recibo.importe_pagado}
+        # -------------------------------
+        # MOVIMIENTOS DE CAJA
+        # -------------------------------
+        when 'ReciboDetalle'
+          detalle = m.recibo_detalle
+          es_ingreso = !detalle.recibo.instance_of?(Pago)
+          resultado << {url: "/#{es_ingreso ? 'cobros' : 'pagos'}/#{detalle.recibo_id}",
+                        fecha: detalle.recibo.fecha,
+                        motivo: detalle.recibo.movimiento_motivo,
+                        ingreso: es_ingreso ? detalle.monto : 0,
+                        egreso: es_ingreso ? 0 : detalle.monto}
         else
           logger.info "No existe el tipo #{m.movimiento_tipo}"
       end

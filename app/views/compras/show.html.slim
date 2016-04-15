@@ -11,8 +11,9 @@ section.content
           h3.box-title 
             = "Compra Nro. #{@compra.numero}".html_safe
           .box-tools
-            = link_to :Editar, edit_compra_path(@compra),  html_options = {class: 'btn btn-default'}
-            = link_to :Eliminar, compra_path(@compra), method: 'delete', data: {confirm: "¿Desea eliminar la compra?"}, class: 'btn btn-danger'
+            = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_compra_path(@compra),  html_options = {class: 'btn btn-default'}
+            = ' '
+            = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, compra_path(@compra), method: 'delete', data: {confirm: "¿Desea eliminar la compra?"}, class: 'btn btn-danger'
         .box-body
           .row
             .col-sm-9
@@ -46,7 +47,7 @@ section.content
           li.active
             a href="#mercaderias" data-toggle="tab" Mercaderías
           li
-            a href="#pagos" data-toggle="tab" Pago
+            a href="#pagos" data-toggle="tab" Pagos
           li
             a href="#creditos" data-toggle="tab" Credito utilizado
         .tab-content
@@ -66,7 +67,7 @@ section.content
                   tr
                     td = m.mercaderia.codigo
                     td = m.mercaderia.nombre
-                    td.text-right = n
+                    td.text-right = number_with_precision(n, delimiter: '.')
                     td.text-right = number_to_currency(m.precio_unitario)
                     td.text-right = number_to_currency(n * m.precio_unitario)
                   - total += n * m.precio_unitario
@@ -82,43 +83,42 @@ section.content
             table.table.table-bordered.detalles-table.calcular-pagos-total
               thead
                 tr
-                  th Forma
-                  th Moneda
-                  th Cotización
+                  th Fecha
+                  th Numero
                   th Monto
-                  th Subtotal
               tbody#movimiento-detalles-body
-              /  tr
-              /    td Efectivo
-              /    td Guaraní
-              /    td.text-right 1
-              /    td.text-right = number_to_currency(total)
-              /    td.text-right = number_to_currency(total)
+                - total = 0
+                - @compra.recibos_detalles.each do |p|
+                  - total += p.monto_utilizado
+                  tr
+                    td = localize(p.recibo.fecha.to_date)
+                    td = p.recibo.numero
+                    td.text-right = number_to_currency(p.monto_utilizado)
               tfoot
-              /  tr
-              /    td colspan="3"
-              /    td.text-right.text-bold
-              /      | Total:
-              /    td.table-total.text-right.text-bold
-              /      span = number_to_currency(total)
-              /    td
-  .row
-    .col-sm-offset-8.col-sm-4
-      .box.box-solid
-        .box-body
-          table.table.bg-warning
-            tbody
-              tr
-                td Total mercaderias:
-                td.text-right = "#{number_to_currency(@compra.importe_total)}"
-              - if @compra.importe_descontado > 0
-                  tr
-                    td Crédito utilizado:
-                    td.text-right = "#{number_to_currency(@compra.importe_descontado)}"
-              - if @compra.importe_pagado > 0
-                  tr
-                    td.text-bold Total pagado:
-                    td.text-right.text-bold Gs. 328.200
-              tr.bg-yellow
-                td.text-bold Total pendiente:
-                td.text-right.text-bold = "#{number_to_currency(@compra.importe_pendiente)}"
+                tr
+                  td
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total)
+  - if @compra.estado.pendiente?
+    .row
+      .col-sm-offset-8.col-sm-4
+        .box.box-solid
+          .box-body
+            table.table.bg-warning
+              tbody
+                tr
+                  td Total mercaderias:
+                  td.text-right = "#{number_to_currency(@compra.importe_total)}"
+                - if @compra.importe_descontado > 0
+                    tr
+                      td Crédito utilizado:
+                      td.text-right = "#{number_to_currency(@compra.importe_descontado)}"
+                - if @compra.importe_pagado > 0
+                    tr
+                      td.text-bold Total pagado:
+                      td.text-right.text-bold = number_to_currency(@compra.importe_pagado)
+                tr.bg-yellow
+                  td.text-bold Total pendiente:
+                  td.text-right.text-bold = "#{number_to_currency(@compra.importe_pendiente)}"
