@@ -30,9 +30,7 @@ class CajaMovimientoDetalle < ActiveRecord::Base
     else
       CajaExtracto.crear_o_actualizar_extracto(self, self.caja_movimiento.fecha, monto_was.to_f * operador, monto * operador)
     end
-    caja.update(caja_saldo: nueva_monto) if monto_changed? || deleted?
+    caja.update(caja_saldo: nuevo_monto) if monto_changed? || deleted?
   end
-
-end
 
 end
