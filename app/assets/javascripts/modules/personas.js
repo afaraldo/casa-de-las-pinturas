@@ -7,12 +7,21 @@ var PersonasUI = (function(){
 
     // Lo que se muestra despues de seleccionar
     function formatPersonasSelection(m) {
+      return m.nombre;
+    }
+
+    // Lo que se muestra despues de seleccionar
+    function formatproveedorSelection(m) {
       $("#limite_credito").html(NumberHelper.aMoneda(m.limite_credito));
+      $("#saldo").html(NumberHelper.aMoneda(m.saldo_actual));
       return m.nombre;
     }
 
     return {
         buscador: function(opciones){
+            if(!opciones.hasOwnProperty('proveedor')){
+              opciones.proveedor = false;
+            }
             opciones.elemento.select2({
                 minimumInputLength: 2,
                 allowClear: true,
@@ -37,7 +46,7 @@ var PersonasUI = (function(){
                     callback($(element).data('proveedor')); // Se setea la mercaderia si ya esta seleccionada
                 },
                 formatResult: formatPersonas,
-                formatSelection: formatPersonasSelection,
+                formatSelection: opciones.proveedor ? formatproveedorSelection : formatPersonasSelection,
                 escapeMarkup: function(m) { return m; }
             });
         }

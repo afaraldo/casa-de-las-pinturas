@@ -17,7 +17,7 @@ section.content
                 .row
                   .col-sm-4
                     = f.input :fecha, wrapper: :vertical_input_group do
-                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: true, value: @compra.new_record? && f.object.fecha.nil? ? '' : localize(@compra.fecha.to_date)
+                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: f.object.fecha.nil?, value: @compra.new_record? && f.object.fecha.nil? ? '' : localize(@compra.fecha.to_date)
                       .input-group-btn
                         .btn.btn-default
                           i.fa.fa-calendar

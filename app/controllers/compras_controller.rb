@@ -1,4 +1,5 @@
 class ComprasController < ApplicationController
+  layout 'imprimir', only: [:imprimir]
   before_action :set_compra, only: [:show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
 
@@ -6,6 +7,10 @@ class ComprasController < ApplicationController
   def setup_menu
     @menu_setup[:main_menu] = :compras
     @menu_setup[:side_menu] = :compras_sidemenu
+  end
+
+  def imprimir
+    get_compras
   end
 
   # GET /compras
@@ -91,9 +96,8 @@ class ComprasController < ApplicationController
 
     def get_compras
       @search = Compra.search(params[:q])
-      @compras = @search.result.includes(:persona, :detalles).page(params[:page])
+      @compras = @search.result.includes(:persona, :detalles).page(params[:page]).per(action_name == 'imprimir' ? LIMITE_REGISTROS_IMPRIMIR : 25)
     end
-
     # Use callbacks to share common setup or constraints between actions.
     def set_compra
       @compra = Compra.find(params[:id])
