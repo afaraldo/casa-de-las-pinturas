@@ -87,6 +87,8 @@ CasaDeLasPinturas = {
 
             TablasHelper.filasClickeablesEvent();
 
+            ImprimirHelper.imprimirEvento();
+
             I18n.locale = 'es';
 
         }

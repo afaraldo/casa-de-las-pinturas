@@ -9,7 +9,7 @@ section.content
             a.volver-link href= pagos_path
               i.fa.fa-angle-double-left
               | Volver al listado de pagos
-            h3.box-title Nuevo Pago
+            h3.box-title = @pago.new_record? ? 'Nuevo Pago' : "Editar Pago Nro. #{@pago.numero}"
           .box-body
             = f.error_notification
             .row
@@ -17,16 +17,18 @@ section.content
                 .row
                   .col-sm-4
                     = f.input :fecha, wrapper: :vertical_input_group do
-                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: true, value: @pago.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: f.object.fecha.nil?, value: @pago.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
                       .input-group-btn
                         .btn.btn-default
                           i.fa.fa-calendar
                   .col-sm-4
-                    = f.association :persona, as: :string, input_html: { id: 'proveedores-buscador', placeholder: 'Buscar proveedor...', data: { proveedor: f.object.persona.to_json } }
+                    = f.association :persona, as: :string, label: 'Proveedor', disabled: @pago.persisted?, input_html: { id: 'proveedores-buscador', placeholder: 'Buscar proveedor...', data: { proveedor: f.object.persona.to_json } }
                 .row
                   .col-sm-4
                     = f.input :numero_comprobante, label: 'Número de Comprobante'
-            .row#pago-mensajes
+            .row.overlay-wrapper#pago-mensajes
+              .overlay.hide
+                i.fa.fa-refresh.fa-spin
               .col-xs-12
                 .well.seleccionar-panel.text-center
                   i.fa.fa-search
@@ -58,6 +60,7 @@ section.content
                 .form-subtitle
                   label Boletas pendientes
                 br
+                p.text-danger.hide#boletas-seleccionadas-validation Debe seleccionar al menos una compra a pagar
                 table.table.table-bordered.detalles-table#compra-detalles-tabla
                   thead
                     tr
@@ -121,10 +124,11 @@ section.content
                         span
                       td
           .box-footer
-            - if @monedas_negativas
-              .alert.alert-warning
+            - if @saldo_negativo && @saldo_negativo.size > 0
+              input.hidden name="guardar_si_o_si" value= "true"
+              .alert.alert-warning#mensaje-saldo-negativo
                 p
-                  | La operación va a provocar que los fondos de la caja quede en negativo para las siguientes monedas: %{@monedas_negativas}.
+                  | La operación va a provocar que los fondos de la caja quede en negativo para las siguientes monedas: #{@saldo_negativo.map(&:nombre).to_sentence}.
                 p Esta seguro que quiere continuar?
                 .form-actions
                   = link_to 'Cancelar', pagos_path, class: 'btn btn-default'
@@ -140,3 +144,8 @@ section.content
 javascript:
   PagosUI.setbuscarProveedorUrl("#{proveedores_buscar_path}");
   PagosUI.setboletasPendientesUrl("#{pagos_buscar_pendientes_path}");
+
+- if @saldo_negativo && @saldo_negativo.size > 0
+  javascript:
+    MensajesHelper.irHasta($('#mensaje-saldo-negativo').offset().top);
+

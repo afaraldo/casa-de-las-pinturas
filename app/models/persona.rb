@@ -1,14 +1,15 @@
 class Persona < ActiveRecord::Base
-  acts_as_paranoid
-  has_paper_trail
-  has_one :user, dependent: :destroy
-
-  has_many :boletas, foreign_key: 'persona_id', inverse_of: :persona
   self.inheritance_column = 'tipo'
 
-  has_one :cuenta_corriente_balance, -> { order('anho DESC').order('mes DESC') }, class_name: 'CuentaCorrientePeriodoBalance'
+  acts_as_paranoid
+  has_paper_trail
 
   after_initialize :set_limite_credito, if: :new_record?
+
+  has_one :user, dependent: :destroy
+  has_many :boletas, foreign_key: 'persona_id', inverse_of: :persona
+  has_one :cuenta_corriente_balance, -> { order('anho DESC').order('mes DESC') }, class_name: 'CuentaCorrientePeriodoBalance'
+
   validates :telefono, length: {maximum: 50, minimum: 2}, allow_blank: true
   validates :telefono, format: {with: /\A[^a-zA-Z]+\z/, message: :only_telephone_numbers_is_allowed }, allow_blank: true
   validates :direccion, length: {maximum: 150, minimum: 2}, allow_blank: true
@@ -26,4 +27,10 @@ class Persona < ActiveRecord::Base
   def saldo_actual
     cuenta_corriente_balance.nil? ? 0 : cuenta_corriente_balance.balance
   end
+
+  # Incluir el saldo actual en las busquedas por ajax
+  def as_json(options={})
+    super(:methods => [:saldo_actual])
+  end
+
 end

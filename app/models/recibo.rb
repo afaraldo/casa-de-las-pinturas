@@ -1,11 +1,13 @@
 class Recibo < ActiveRecord::Base
+  include MovimientosHelper
 
   acts_as_paranoid
 
   self.inheritance_column = 'tipo'
 
   before_validation :set_importes
-  after_save :actualizar_boletas, :actualizar_cuenta_corriente
+  after_save :actualizar_cuenta_corriente, :actualizar_extracto_cajas
+  after_destroy :actualizar_cuenta_corriente
 
   has_many :detalles, class_name: 'ReciboDetalle', dependent: :destroy, inverse_of: :recibo
 
@@ -20,6 +22,7 @@ class Recibo < ActiveRecord::Base
   validates :fecha,  presence: true
   validates :detalles, length: { minimum: 1 }
   validates :numero_comprobante, length: { minimum: 2, maximum: 50 }, allow_blank: true
+  validates :persona_id, presence: true
   validate  :fecha_futura
   validate  :pagos_boletas_seleccionadas
 
@@ -27,26 +30,34 @@ class Recibo < ActiveRecord::Base
     total_efectivo + total_tarjeta - total_credito_utilizado
   end
 
+  def total_pagado_was
+    total_efectivo_was.to_f + total_tarjeta_was.to_f - total_credito_utilizado_was.to_f
+  end
+
   def numero
     id
   end
 
+  def movimiento_motivo
+    "#{tipo} Nro. #{numero}"
+  end
+
   private
 
-  # Luego de guardar los recibos se actualizan los importes y estado de las boletas
-  def actualizar_boletas
-    boletas_detalles.each do |b|
-
-      boleta = b.boleta
-      pendiente = boleta.importe_pendiente - b.monto_utilizado
-
-      boleta.update_columns(importe_pendiente: pendiente, estado: pendiente == 0 ? :pagado : :pendiente)
-
+  def actualizar_cuenta_corriente
+    if deleted?
+      CuentaCorrienteExtracto.eliminar_movimiento(self.becomes(Recibo), fecha, total_pagado)
+    else
+      CuentaCorrienteExtracto.crear_o_actualizar_extracto(self.becomes(Recibo), fecha, total_pagado_was.to_f * -1, total_pagado.to_f * -1)
     end
   end
 
-  def actualizar_cuenta_corriente
-    CuentaCorrienteExtracto.crear_o_actualizar_extracto(self, fecha, total_pagado, 0)
+  def actualizar_extracto_cajas
+    if !fecha_was.nil? && fecha_changed? && fecha_cambio_de_periodo?(fecha, fecha_was)
+      detalles.each do |d|
+        d.actualizar_extractos
+      end
+    end
   end
 
   def set_importes
@@ -66,6 +77,7 @@ class Recibo < ActiveRecord::Base
     end
   end
 
+  # Validar que el total de las formas de pago sea igual al total de las boletas seleccionadas
   def pagos_boletas_seleccionadas
     boletas_seleccionadas = 0
 

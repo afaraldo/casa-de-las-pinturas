@@ -64,6 +64,10 @@ class Boleta < ActiveRecord::Base
   end
 
 
+  def movimiento_motivo
+    "#{tipo} Nro. #{numero}"
+  end
+
   private
 
   def set_importe_total
