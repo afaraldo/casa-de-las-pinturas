@@ -87,12 +87,16 @@ CasaDeLasPinturas = {
 
             TablasHelper.filasClickeablesEvent();
 
+            ImprimirHelper.imprimirEvento();
+
             I18n.locale = 'es';
 
         }
     },
 
-    movimiento_mercaderias: MovimientoMercaderiasUI
+    movimiento_mercaderias: MovimientoMercaderiasUI,
+    compras: ComprasUI,
+    pagos: PagosUI
 
 };
 
@@ -126,4 +130,3 @@ UTIL = {
 };
 
 $( document ).on('ready', UTIL.init );
-

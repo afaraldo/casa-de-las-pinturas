@@ -1,0 +1,3 @@
+| $("#compras-table").html("#{escape_javascript(render partial: 'list', format: 'html', locals: {compras: @compras})}");
+| $('#compras-paginate-container').html("#{escape_javascript(paginate(@compras, remote: true)) }");
+| $('.buscador-resultados > .overlay').remove();

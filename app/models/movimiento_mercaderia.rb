@@ -38,14 +38,8 @@ class MovimientoMercaderia < ActiveRecord::Base
     detalles.each do |d|
       if d.nueva_cantidad(borrado) < 0
         m << d.mercaderia
-
       end
     end
-
-    if m.size > 0
-      #errors.add(:base, I18n.t('movimiento_mercaderia.eliminar_stock_negativo', mercaderias: m.map{|me| me.nombre}.to_sentence))
-    end
-
     m
   end
 

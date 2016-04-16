@@ -6,12 +6,12 @@ menu:
     submenus:
       compras:
         text: "Compras"
-        url: "#"
+        url: :compras
         active_submenu: :compras_sidemenu
-      pedidos_compras:
-        text: "Pedido de compras"
-        url: "#"
-        active_submenu: :pedidos_sidemenu
+      pagos:
+        text: "Pagos"
+        url: :pagos
+        active_submenu: :pagos_sidemenu
       proveedores:
         text: "Proveedores"
         url: :proveedores
@@ -24,7 +24,7 @@ menu:
       ventas:
         text: "Ventas"
         url: "#"
-        active_submenu: :compras_sidemenu
+        active_submenu: :ventas_sidemenu
       clientes:
         text: "Clientes"
         url: :clientes

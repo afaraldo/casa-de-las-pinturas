@@ -1,0 +1,10 @@
+@media print {
+  body.vista-imprimir{
+    table.table{
+      td, th{
+        padding: 4px;
+        font-size: 11px;
+      }
+    }
+  }
+}

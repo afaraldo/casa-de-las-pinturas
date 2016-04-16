@@ -1,0 +1,11 @@
+doctype html
+html
+  head
+    title CasaDeLasPinturas
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    = stylesheet_link_tag    'application', media: 'all'
+    = csrf_meta_tags
+  body.vista-imprimir data-controller="#{controller_name}" data-action="#{action_name}"
+    == yield
+    javascript:
+      window.print();

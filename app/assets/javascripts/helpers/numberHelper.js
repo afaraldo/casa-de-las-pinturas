@@ -6,7 +6,7 @@ var NumberHelper = {
         return I18n.toCurrency(monto);
     },
     aNumero: function(texto) {
-        var n = parseFloat(texto.replace('.', '').replace(',', '.'));
+        var n = parseFloat(texto.replace(/\./g, '').replace(',', '.'));
         return isNaN(n) ? 0 : n;
     },
     mascaraMoneda: function(selector) {
