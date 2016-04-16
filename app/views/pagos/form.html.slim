@@ -17,7 +17,7 @@ section.content
                 .row
                   .col-sm-4
                     = f.input :fecha, wrapper: :vertical_input_group do
-                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: true, value: @pago.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: f.object.fecha.nil?, value: @pago.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
                       .input-group-btn
                         .btn.btn-default
                           i.fa.fa-calendar
@@ -124,10 +124,11 @@ section.content
                         span
                       td
           .box-footer
-            - if @monedas_negativas
-              .alert.alert-warning
+            - if @saldo_negativo && @saldo_negativo.size > 0
+              input.hidden name="guardar_si_o_si" value= "true"
+              .alert.alert-warning#mensaje-saldo-negativo
                 p
-                  | La operación va a provocar que los fondos de la caja quede en negativo para las siguientes monedas: %{@monedas_negativas}.
+                  | La operación va a provocar que los fondos de la caja quede en negativo para las siguientes monedas: #{@saldo_negativo.map(&:nombre).to_sentence}.
                 p Esta seguro que quiere continuar?
                 .form-actions
                   = link_to 'Cancelar', pagos_path, class: 'btn btn-default'
@@ -143,3 +144,8 @@ section.content
 javascript:
   PagosUI.setbuscarProveedorUrl("#{proveedores_buscar_path}");
   PagosUI.setboletasPendientesUrl("#{pagos_buscar_pendientes_path}");
+
+- if @saldo_negativo && @saldo_negativo.size > 0
+  javascript:
+    MensajesHelper.irHasta($('#mensaje-saldo-negativo').offset().top);
+

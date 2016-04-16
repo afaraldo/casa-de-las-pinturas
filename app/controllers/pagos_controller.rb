@@ -46,9 +46,11 @@ class PagosController < ApplicationController
   # POST /pagos.json
   def create
     @pago = Pago.new(pago_params)
+    @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @pago.check_detalles_negativos
+
     respond_to do |format|
       Pago.transaction do
-        if @pago.save
+        if @saldo_negativo.size == 0 && @pago.save
           format.html { redirect_to @pago, notice: t('mensajes.save_success', recurso: 'el pago') }
           format.json { render :show, status: :created, location: @pago }
         else
@@ -64,10 +66,11 @@ class PagosController < ApplicationController
   # PATCH/PUT /pagos/1.json
   def update
     @pago.assign_attributes(pago_params)
+    @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @pago.check_detalles_negativos
 
     respond_to do |format|
       Pago.transaction do
-        if @pago.save
+        if @saldo_negativo.size == 0 && @pago.save
           format.html { redirect_to @pago, notice: t('mensajes.update_success', recurso: 'el pago') }
           format.json { render :show, status: :ok, location: @pago }
         else

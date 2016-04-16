@@ -77,13 +77,12 @@ var PagosUI = (function(){
             })
         });
 
+        // Validar que se seleccione por lo menos una boleta
         elementos.pagosForm.on('submit', function(e){
             var form = $(this);
             if(form.find('.pagar-boleta:checked').length == 0 && form.valid()){
                 elementos.validacionBoletasSeleccionadas.removeClass('hide');
-                $('html, body').animate({
-                    scrollTop: elementos.validacionBoletasSeleccionadas.offset().top
-                });
+                MensajesHelper.irHasta(elementos.validacionBoletasSeleccionadas.offset().top);
                 e.preventDefault();
             }
         });
@@ -91,7 +90,7 @@ var PagosUI = (function(){
         TablasHelper.calcularSeleccionados(
             {   selector: '#compra-detalles-tabla',
                 totalPorDefecto: $('.moneda-por-defecto'),
-                callbackDespuesDeSeleccionar: function(){
+                callbackDespuesDeSeleccionar: function(){ // Cuando se selecciona alguna boleta se esconde la validacion
                     if(elementos.pagosForm.find('.pagar-boleta:checked').length > 0){
                         elementos.validacionBoletasSeleccionadas.addClass('hide');
                     }
