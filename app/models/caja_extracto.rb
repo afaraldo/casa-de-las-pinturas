@@ -1,6 +1,6 @@
 class CajaExtracto < ActiveRecord::Base
   
-  self.movimiento_key = [:caja_id]
+  self.movimiento_key = [:caja_id, :moneda_id]
   self.balances = 'CajaPeriodoBalance'
 
   belongs_to :caja
