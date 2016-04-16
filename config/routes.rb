@@ -10,7 +10,12 @@ Rails.application.routes.draw do
   resources :proveedores
 
   get 'clientes/check_nombre' => 'clientes#check_nombre'
+  get 'clientes/buscar' => 'clientes#buscar'
   resources :clientes
+
+  get 'cuentas_corrientes/clientes'
+  get 'cuentas_corrientes/proveedores'
+  get 'cuentas_corrientes/imprimir_extracto'
 
   get 'empleados/check_nombre' => 'empleados#check_nombre'
   resources :empleados

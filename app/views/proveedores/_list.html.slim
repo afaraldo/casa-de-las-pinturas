@@ -16,7 +16,7 @@ table.table.table-bordered.table-hover
         td = cortar_texto(proveedor.direccion)
         td = proveedor.telefono
         td = number_to_currency(proveedor.limite_credito)
-        td = link_to 'Movimientos', '#', class: 'btn btn-default btn-sm'
+        td = link_to 'Movimientos', cuentas_corrientes_proveedores_path(persona_id: proveedor.id), class: 'btn btn-default btn-sm'
         td
           = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_proveedor_path(proveedor), remote: true, class: 'btn btn-default btn-sm'
           | #{' '}
