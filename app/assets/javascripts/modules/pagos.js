@@ -9,7 +9,11 @@ var PagosUI = (function(){
      */
     function noHayPendientes(proveedor){
         elementos.mensajePanel.find('h3').text('No hay boletas pendientes para el proveedor ' + proveedor);
-        elementos.mensajePanel.find('i').removeClass('fa-search').addClass('fa-list');
+        elementos.mensajePanel.find('.seleccionar-panel i').removeClass('fa-search').addClass('fa-list');
+        elementos.mensajePanel.find('.overlay').addClass('hide');
+        elementos.boletasPanel.addClass('hide');
+        elementos.detallesPanel.addClass('hide');
+        elementos.mensajePanel.removeClass('hide');
     }
 
     /**
@@ -17,10 +21,11 @@ var PagosUI = (function(){
      */
     function seleccioneProveedor(){
         elementos.mensajePanel.find('h3').text('Seleccione un proveedor para ver las boletas y devoluciones pendientes');
-        elementos.mensajePanel.find('i').removeClass('fa-list').addClass('fa-search');
+        elementos.mensajePanel.find('.seleccionar-panel i').removeClass('fa-list').addClass('fa-search');
         elementos.mensajePanel.removeClass('hide');
         elementos.boletasPanel.addClass('hide');
         elementos.detallesPanel.addClass('hide');
+        elementos.mensajePanel.find('.overlay').addClass('hide');
     }
 
     /**
@@ -67,12 +72,32 @@ var PagosUI = (function(){
             $.ajax(boletasPendientesUrl + '?proveedor_id=' + $(this).val(), {
                 dataType: 'script',
                 beforeSend: function(){
-                    console.log('ddd');
+                    elementos.mensajePanel.find('.overlay').removeClass('hide');
                 }
             })
         });
 
-        TablasHelper.calcularSeleccionados('#compra-detalles-tabla', $('.moneda-por-defecto'));
+        elementos.pagosForm.on('submit', function(e){
+            var form = $(this);
+            if(form.find('.pagar-boleta:checked').length == 0 && form.valid()){
+                elementos.validacionBoletasSeleccionadas.removeClass('hide');
+                $('html, body').animate({
+                    scrollTop: elementos.validacionBoletasSeleccionadas.offset().top
+                });
+                e.preventDefault();
+            }
+        });
+
+        TablasHelper.calcularSeleccionados(
+            {   selector: '#compra-detalles-tabla',
+                totalPorDefecto: $('.moneda-por-defecto'),
+                callbackDespuesDeSeleccionar: function(){
+                    if(elementos.pagosForm.find('.pagar-boleta:checked').length > 0){
+                        elementos.validacionBoletasSeleccionadas.addClass('hide');
+                    }
+                }
+            }
+        );
         TablasHelper.calcularTotalEvent('.calcular-pagos-total');
 
     }
@@ -84,8 +109,8 @@ var PagosUI = (function(){
                 proveedorBuscador: $('#proveedores-buscador'),
                 mensajePanel: $('#pago-mensajes'),
                 boletasPanel: $('#pago-boletas-devoluciones'),
-                detallesPanel: $('#pago-detalles')
-
+                detallesPanel: $('#pago-detalles'),
+                validacionBoletasSeleccionadas: $('#boletas-seleccionadas-validation')
             }
         },
         index: function() {
@@ -101,6 +126,7 @@ var PagosUI = (function(){
         },
         'edit': function() {
             initFormEvents();
+            mostrarBoletas(false);
         },
         'update': function(){
             initFormEvents();

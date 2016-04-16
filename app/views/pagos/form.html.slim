@@ -9,7 +9,7 @@ section.content
             a.volver-link href= pagos_path
               i.fa.fa-angle-double-left
               | Volver al listado de pagos
-            h3.box-title Nuevo Pago
+            h3.box-title = @pago.new_record? ? 'Nuevo Pago' : "Editar Pago Nro. #{@pago.numero}"
           .box-body
             = f.error_notification
             .row
@@ -22,11 +22,13 @@ section.content
                         .btn.btn-default
                           i.fa.fa-calendar
                   .col-sm-4
-                    = f.association :persona, as: :string, input_html: { id: 'proveedores-buscador', placeholder: 'Buscar proveedor...', data: { proveedor: f.object.persona.to_json } }
+                    = f.association :persona, as: :string, label: 'Proveedor', disabled: @pago.persisted?, input_html: { id: 'proveedores-buscador', placeholder: 'Buscar proveedor...', data: { proveedor: f.object.persona.to_json } }
                 .row
                   .col-sm-4
                     = f.input :numero_comprobante, label: 'Número de Comprobante'
-            .row#pago-mensajes
+            .row.overlay-wrapper#pago-mensajes
+              .overlay.hide
+                i.fa.fa-refresh.fa-spin
               .col-xs-12
                 .well.seleccionar-panel.text-center
                   i.fa.fa-search
@@ -58,6 +60,7 @@ section.content
                 .form-subtitle
                   label Boletas pendientes
                 br
+                p.text-danger.hide#boletas-seleccionadas-validation Debe seleccionar al menos una compra a pagar
                 table.table.table-bordered.detalles-table#compra-detalles-tabla
                   thead
                     tr

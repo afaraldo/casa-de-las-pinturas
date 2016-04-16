@@ -37,11 +37,12 @@ var TablasHelper = {
      * Evento para sumar los totales de recibos/boletas seleccionadas en una tabla.
      * cada fila debe tener un campo con clase .monto-a-sumar y un checkbox con clase .pagar-boleta
      *
-     * @param selector selector de la table
-     * @param totalPorDefecto objeto jquery del elemento a donde se tiene que poner el total. Ej.: el monto de la moneda por defecto
+     * @param opciones object => { selector: de la table,
+     *                             totalPorDefecto: objeto jquery del elemento a donde se tiene que poner el total. Ej.: el monto de la moneda por defecto,
+     *                             callbackDespuesDeSeleccionar: callback luego de seleccionar las boletas}
      */
-    calcularSeleccionados: function(selector, totalPorDefecto) {
-        var tabla = $(selector);
+    calcularSeleccionados: function(opciones) {
+        var tabla = $(opciones.selector);
 
         tabla.on('keyup change', '.monto-a-sumar, .pagar-boleta', function(e){
             var total = 0;
@@ -55,8 +56,10 @@ var TablasHelper = {
 
             tabla.find('.table-total span').text(NumberHelper.aMoneda(total));
 
-            totalPorDefecto.val(NumberHelper.aMoneda(total)).trigger('change');
+            opciones.totalPorDefecto.val(NumberHelper.aMoneda(total)).trigger('change');
 
+            if(opciones.hasOwnProperty('callbackDespuesDeSeleccionar'))
+                opciones.callbackDespuesDeSeleccionar();
         });
     }
 };

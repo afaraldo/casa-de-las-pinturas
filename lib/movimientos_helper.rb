@@ -1,5 +1,10 @@
 module MovimientosHelper
 
+  def fecha_cambio_de_periodo?(fecha_nueva, fecha_anterior)
+    diff_fecha =  (fecha_nueva.year * 12 + fecha_nueva.month) - (fecha_anterior.year * 12 + fecha_anterior.month)
+    diff_fecha != 0
+  end
+
   # Formatea los movimientos para mostrarlo en la vista
   # recibe un listado de Movimientos de Extractos
   # retorna un arreglo de hashes
@@ -37,8 +42,15 @@ module MovimientosHelper
           resultado << {url: "/#{es_ingreso ? 'pagos' : 'cobros'}/#{recibo.id}",
                         fecha: recibo.fecha,
                         motivo: recibo.movimiento_motivo,
-                        ingreso: es_ingreso ? recibo.importe_pagado : 0,
-                        egreso: es_ingreso ? 0 : recibo.importe_pagado}
+                        ingreso: es_ingreso ? recibo.total_pagado : 0,
+                        egreso: es_ingreso ? 0 : recibo.total_pagado}
+        when 'Boleta'
+          boleta = m.boleta
+          resultado << {url: "/#{boleta.instance_of?(Compra) ? 'compras' : 'ventas'}/#{boleta.id}",
+                        fecha: boleta.fecha,
+                        motivo: boleta.movimiento_motivo,
+                        ingreso: 0,
+                        egreso: boleta.importe_total}
         # -------------------------------
         # MOVIMIENTOS DE CAJA
         # -------------------------------

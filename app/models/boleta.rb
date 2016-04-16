@@ -52,6 +52,9 @@ class Boleta < ActiveRecord::Base
     self.importe_total - self.importe_pendiente
   end
 
+  def movimiento_motivo
+    "#{tipo} Nro. #{numero}"
+  end
 
   private
 

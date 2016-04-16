@@ -38,21 +38,21 @@ class PagosController < ApplicationController
 
   # GET /pagos/1/edit
   def edit
+    @pago.rebuild_detalles
+    render :form
   end
 
   # POST /pagos
   # POST /pagos.json
   def create
     @pago = Pago.new(pago_params)
-
     respond_to do |format|
       Pago.transaction do
-        # @pago.valid?
-        #binding.pry
         if @pago.save
-          format.html { redirect_to @pago, notice: 'Pago was successfully created.' }
+          format.html { redirect_to @pago, notice: t('mensajes.save_success', recurso: 'el pago') }
           format.json { render :show, status: :created, location: @pago }
         else
+          @pago.rebuild_detalles
           format.html { render :form }
           format.json { render json: @pago.errors, status: :unprocessable_entity }
         end
@@ -63,13 +63,18 @@ class PagosController < ApplicationController
   # PATCH/PUT /pagos/1
   # PATCH/PUT /pagos/1.json
   def update
+    @pago.assign_attributes(pago_params)
+
     respond_to do |format|
-      if @pago.update(pago_params)
-        format.html { redirect_to @pago, notice: 'Pago was successfully updated.' }
-        format.json { render :show, status: :ok, location: @pago }
-      else
-        format.html { render :edit }
-        format.json { render json: @pago.errors, status: :unprocessable_entity }
+      Pago.transaction do
+        if @pago.save
+          format.html { redirect_to @pago, notice: t('mensajes.update_success', recurso: 'el pago') }
+          format.json { render :show, status: :ok, location: @pago }
+        else
+          @pago.rebuild_detalles
+          format.html { render :form }
+          format.json { render json: @pago.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -79,7 +84,7 @@ class PagosController < ApplicationController
   def destroy
     @pago.destroy
     respond_to do |format|
-      format.html { redirect_to pagos_url, notice: 'Pago was successfully destroyed.' }
+      format.html { redirect_to pagos_url, notice: t('mensajes.delete_success', recurso: 'el pago') }
       format.json { head :no_content }
     end
   end
@@ -88,7 +93,7 @@ class PagosController < ApplicationController
     def get_pagos
       procesar_fechas
       @search = Pago.search(params[:q])
-      @pagos = @search.result.page(params[:page])
+      @pagos = @search.result.includes(:persona).page(params[:page])
     end
 
     # Setear las fechas "hasta" para que incluya el dia entero
@@ -113,16 +118,16 @@ class PagosController < ApplicationController
       end
 
       params.require(:pago).permit(:persona_id, :numero_comprobante, :fecha,
-                                   detalles_attributes: [:monto, :cotizacion, :moneda_id, :forma],
-                                   boletas_detalles_attributes: [:monto_utilizado, :boleta_id])
+                                   detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma],
+                                   boletas_detalles_attributes: [:id, :monto_utilizado, :boleta_id])
 
     end
 
-  def procesar_cantidades
-    params[:pago][:detalles_attributes].each do |i, d|
-      params[:pago][:detalles_attributes][i][:monto] = cantidad_a_numero(d[:monto])
-      params[:pago][:detalles_attributes][i][:cotizacion] = cantidad_a_numero(d[:cotizacion])
+    def procesar_cantidades
+      params[:pago][:detalles_attributes].each do |i, d|
+        params[:pago][:detalles_attributes][i][:monto] = cantidad_a_numero(d[:monto])
+        params[:pago][:detalles_attributes][i][:cotizacion] = cantidad_a_numero(d[:cotizacion])
+      end
     end
-  end
 
 end

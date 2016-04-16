@@ -1,12 +1,15 @@
 - total = 0
 - compras.each_with_index do |c, i|
-  - compra = actualizando ? c.boleta : c
+  - compra = actualizando ? c.boleta : c # cuando se edita, la compra esta en boletas_detalles
   - total += compra.importe_pendiente
+  - importe_pendiente = compra.importe_pendiente
+  - if !@pago.nil? && @pago.persisted? # Sumar el monto utilizado al editar el pago
+    - importe_pendiente += c.monto_utilizado
   tr
     td = compra.numero
     td = localize(compra.fecha.to_date)
     td = localize(compra.fecha_vencimiento.to_date) if compra.fecha_vencimiento
-    td.text-right = number_to_currency(compra.importe_pendiente)
+    td.text-right = number_to_currency(importe_pendiente)
     td
       div class="form-group #{'has-error' if c.errors.has_key?(:monto_utilizado)}"
         = hidden_field "pago[boletas_detalles_attributes][#{i}]", :boleta_id, value: compra.id
@@ -14,4 +17,7 @@
         - if c.errors.has_key?(:monto_utilizado)
           span.help-block = c.errors.get(:monto_utilizado).to_sentence
     td
-      input type="checkbox" name="pago[boletas_detalles_attributes][#{i}][pagado]" class="pagar-boleta" checked="false"
+      - seleccionado = actualizando ? {checked: ''} : {} # checkear la compra al editar o cuando hay errores en el create
+      input type="checkbox" name="pago[boletas_detalles_attributes][#{i}][pagado]" class="pagar-boleta" *seleccionado
+      - if !@pago.nil? && @pago.persisted? # incluir el id del detalle al editar
+        input type="hidden" name="pago[boletas_detalles_attributes][#{i}][id]" value="#{c.id}"
