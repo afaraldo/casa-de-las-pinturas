@@ -38,7 +38,7 @@ section.content
                   /// FECHA DE VENCIMENTO
                   .col-sm-4
                     = f.input :fecha_vencimiento, wrapper: :vertical_input_group, label: 'Fecha de vencimiento' do
-                      = f.input_field :fecha_vencimiento, as: :string, class: 'datepicker form-control', value: @compra.new_record? && f.object.fecha_vencimiento.nil? ? '' : localize(@compra.fecha_vencimiento.to_date)
+                      = f.input_field :fecha_vencimiento, as: :string, class: 'datepicker form-control', value: f.object.fecha_vencimiento.nil? ? '' : localize(f.object.fecha_vencimiento.to_date)
                       .input-group-btn
                         .btn.btn-default
                           i.fa.fa-calendar
@@ -55,10 +55,15 @@ section.content
                   br
                   h4.text-center style="margin-top: 10px; font-size: 16px;"
                     span#saldo 0
+                    = ' '
                     span de
+                    = ' '
                     span#limite_credito 0
                   p.text-center
-                    a Actualizar límite
+                    - if @compra.new_record?
+                      = link_to 'Actualizar límite', "#", id: 'link_to_proveedor', remote: true
+                    - else
+                      = link_to 'Actualizar límite', edit_proveedor_path(@compra.persona.id), id: 'link_to_proveedor', remote: true
 
             /////////////
               DEVOLUCIONES

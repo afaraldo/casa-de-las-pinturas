@@ -21,9 +21,11 @@ var ComprasUI = (function(){
         $(".btn-group").on("click",function(){
             if ($("input:radio:checked").val() == 'contado') {
                 $('.compra_fecha_vencimiento').show();
+                $('.alert-info').show();
             }
             if ($("input:radio:checked").val() == 'credito') {
                 $('.compra_fecha_vencimiento').hide();
+                $('.alert-info').hide();
             }
         });
 
