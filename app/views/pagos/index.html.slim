@@ -7,7 +7,7 @@ section.content
         .box-header
           h3.box-title Listado de pagos
           .box-tools.pull-right.hidden-print
-            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, '#', class: 'btn btn-default'
+            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, pagos_imprimir_url, class: 'btn btn-default imprimir-listado'
             = ' '
             = link_to 'Nuevo pago', new_pago_path, class: 'btn btn-primary'
         .box-body#boletas-lista

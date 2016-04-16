@@ -1,4 +1,5 @@
 class PagosController < ApplicationController
+  layout 'imprimir', only: [:imprimir]
 
   before_action :set_pago, only: [:show, :edit, :update, :destroy]
 
@@ -16,6 +17,10 @@ class PagosController < ApplicationController
 
     @compras = @proveedor.compras_pendientes
     @devoluciones = []
+  end
+
+  def imprimir
+    get_pagos
   end
 
   # GET /pagos
@@ -96,7 +101,7 @@ class PagosController < ApplicationController
     def get_pagos
       procesar_fechas
       @search = Pago.search(params[:q])
-      @pagos = @search.result.includes(:persona).page(params[:page])
+      @pagos = @search.result.includes(:persona).page(params[:page]).per(action_name == 'imprimir' ? LIMITE_REGISTROS_IMPRIMIR : 25)
     end
 
     # Setear las fechas "hasta" para que incluya el dia entero
