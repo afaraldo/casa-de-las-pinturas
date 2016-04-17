@@ -183,7 +183,7 @@ class MovimientoModel < ActiveRecord::Base
   # filtra los movimientos dependiendo de la instancia y fechas
   def self.filtrar_movimientos(buscar_por, desde, hasta)
     self.where(buscar_por)
-        .where('fecha > ? AND fecha < ?', desde, hasta)
+        .where('fecha >= ? AND fecha <= ?', desde, hasta)
         .order(:fecha)
         .includes(self.reflect_on_all_associations.map { |assoc| assoc.name})
   end

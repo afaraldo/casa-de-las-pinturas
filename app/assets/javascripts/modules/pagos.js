@@ -78,13 +78,23 @@ var PagosUI = (function(){
         });
 
         // Validar que se seleccione por lo menos una boleta
+        // y que el total de boletas seleccionadas sea igual al total de detalles de l pago
         elementos.pagosForm.on('submit', function(e){
             var form = $(this);
+
             if(form.find('.pagar-boleta:checked').length == 0 && form.valid()){
                 elementos.validacionBoletasSeleccionadas.removeClass('hide');
                 MensajesHelper.irHasta(elementos.validacionBoletasSeleccionadas.offset().top);
                 e.preventDefault();
             }
+            var totalDetalles = elementos.detallesPanel.find('.table-total span').data('total'),
+                totalBoletas = elementos.boletasPanel.find('.table-total span').data('total');
+
+            if(totalBoletas != totalDetalles){
+                elementos.validacionTotalDetalles.removeClass('hide');
+                e.preventDefault();
+            }
+
         });
 
         TablasHelper.calcularSeleccionados(
@@ -109,7 +119,8 @@ var PagosUI = (function(){
                 mensajePanel: $('#pago-mensajes'),
                 boletasPanel: $('#pago-boletas-devoluciones'),
                 detallesPanel: $('#pago-detalles'),
-                validacionBoletasSeleccionadas: $('#boletas-seleccionadas-validation')
+                validacionBoletasSeleccionadas: $('#boletas-seleccionadas-validation'),
+                validacionTotalDetalles: $('#recibo-total-validation')
             }
         },
         index: function() {
