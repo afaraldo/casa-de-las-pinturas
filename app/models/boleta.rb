@@ -35,6 +35,7 @@ class Boleta < ActiveRecord::Base
   validates :detalles, length: { minimum: 1 }
   validates :condicion, presence: true
   validate  :condicion_cambiada?, on: :update
+  validate :tiene_pagos_asociados?, on: [:update, :destroy]
 
   with_options if: :credito? do |b|
     b.validates :fecha_vencimiento, presence: true
@@ -57,10 +58,20 @@ class Boleta < ActiveRecord::Base
         m << d.mercaderia
       end
     end
-    if m.size > 0
-      #errors.add(:base, I18n.t('movimiento_mercaderia.eliminar_stock_negativo', mercaderias: m.map{|me| me.nombre}.to_sentence))
-    end
     m
+  end
+
+  def tiene_pagos_asociados?
+    valid = true
+    # no se permite editar la persona ni el importe si la boleta tiene un pago
+    if importe_total_changed? && !recibos_detalles.empty?
+      errors.add(:persona, I18n.t('activerecord.errors.messages.importe_no_editable'))
+      valid = false
+    end
+    if persona_id_changed? && !recibos_detalles.empty?
+      errors.add(:persona, I18n.t('activerecord.errors.messages.persona_no_editable'))
+      valid = false
+    end
   end
 
 
