@@ -101,8 +101,9 @@ section.content
                 .form-subtitle
                   label Formas de pago
                 br
-                - if @pago.errors.has_key?(:importe_total)
-                  p.text-danger = @pago.errors.get(:importe_total).to_sentence
+                - esconder_validacion_detalles = @pago.errors.has_key?(:importe_total) ? '' : 'hide'
+                p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de pago debe ser igual al total a pagar de las boletas seleccionadas.
+
                 table.table.table-bordered.detalles-table.calcular-pagos-total
                   thead
                     tr

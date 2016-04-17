@@ -119,15 +119,20 @@ class PagosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def pago_params
+
       procesar_cantidades
-      # se eliminan de params las boletas que no se seleccionaron
+      # se eliminan de params las boletas que no se seleccionaron o se marcan para eliminar
       params[:pago][:boletas_detalles_attributes].each do |k, valor|
-        params[:pago][:boletas_detalles_attributes].delete(k) unless valor[:pagado].present?
+        if valor[:id].present?
+          params[:pago][:boletas_detalles_attributes][k][:_destroy] = '1' unless valor[:pagado].present?
+        else
+          params[:pago][:boletas_detalles_attributes].delete(k) unless valor[:pagado].present?
+        end
       end
 
       params.require(:pago).permit(:persona_id, :numero_comprobante, :fecha,
                                    detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma],
-                                   boletas_detalles_attributes: [:id, :monto_utilizado, :boleta_id])
+                                   boletas_detalles_attributes: [:id, :monto_utilizado, :boleta_id, :_destroy])
 
     end
 

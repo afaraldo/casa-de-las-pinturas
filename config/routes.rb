@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   get 'categoria_gastos/check_nombre' => 'categoria_gastos#check_nombre'
   resources :categoria_gastos
 
+  get 'compras/imprimir' => 'compras#imprimir'
   resources :compras
 
   get 'pagos/buscar_pendientes' => 'pagos#buscar_pendientes'
@@ -45,7 +46,7 @@ Rails.application.routes.draw do
 
   resources :caja_movimiento_detalles
 
-  
+
   resources :caja_movimientos
 
 
