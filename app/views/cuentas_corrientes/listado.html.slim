@@ -22,7 +22,7 @@ section.content
                     = hidden_field_tag :fecha_desde, nil, class: 'fecha-desde'
                     = hidden_field_tag :fecha_hasta, nil, class: 'fecha-hasta'
                     i.fa.fa-calendar
-                    span #{localize(@desde.to_date)} - #{localize(@hasta.to_date)}
+                    span Fecha
                     b.caret
           #cuenta-corriente-table.overlay-wrapper.buscador-resultados.table-responsive
             = render partial: 'movimientos', locals: {movimientos: @movimientos, cuenta_tipo: cuenta_tipo}

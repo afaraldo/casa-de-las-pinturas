@@ -142,7 +142,7 @@ class MovimientoModel < ActiveRecord::Base
     resultado = {balance_anterior: 0, movimientos: []}
 
     page = opciones[:page] || 1 # para paginar
-    limit = opciones[:limit] || 50
+    limit = opciones[:limit] || 25
 
     buscar_por = {}
 
@@ -151,13 +151,21 @@ class MovimientoModel < ActiveRecord::Base
     end
 
     # configurar fechas
-    desde = opciones[:desde] || DateTime.now.beginning_of_month
-    hasta = opciones[:hasta] || DateTime.now.end_of_month
+    desde = opciones[:desde]
+    hasta = opciones[:hasta]
 
     movimientos = filtrar_movimientos(buscar_por, desde, hasta, page, limit)
 
+    if page.to_i > 1
+      movimiento_hasta_fecha = movimientos.first.fecha + 1.day
+      movimiento_hasta_id = movimientos.first.id
+    else
+      movimiento_hasta_fecha = movimientos.size > 0 ? (desde.nil? ? movimientos.first.fecha : desde) : DateTime.now
+      movimiento_hasta_id = nil
+    end
+
     # si la pagina no es la primera indicar para traer el balance hasta el primer movimiento filtrado
-    resultado[:balance_anterior] = get_balance_anterior(buscar_por, page.to_i > 1 ? hasta : desde, page.to_i > 1 ? movimientos.first.id : nil)
+    resultado[:balance_anterior] = get_balance_anterior(buscar_por, movimiento_hasta_fecha, movimiento_hasta_id)
 
     resultado[:movimientos] = movimientos
 
@@ -189,15 +197,23 @@ class MovimientoModel < ActiveRecord::Base
   end
 
   # filtra los movimientos dependiendo de la instancia y fechas
-  def self.filtrar_movimientos(buscar_por, desde, hasta, page, limit = 50)
+  def self.filtrar_movimientos(buscar_por, desde, hasta, page, limit = 25)
     m = self.where(buscar_por)
-            .where('fecha >= ? AND fecha <= ?', desde, hasta)
-            .order(:fecha)
             .includes(self.reflect_on_all_associations.map { |assoc| assoc.name})
+
+    if desde.nil? || hasta.nil?
+      m = m.order('fecha DESC')
+           .reverse_order
+    else
+      m = m.where('fecha >= ? AND fecha <= ?', desde, hasta)
+           .order(:fecha)
+    end
+
     if limit == :unlimited
       m
     else # paginar
       m.page(page).per(limit)
     end
+
   end
 end

@@ -32,8 +32,8 @@ class CuentasCorrientesController < ApplicationController
     @movimientos = nil
 
     # Configurando las fechas
-    @desde = DateTime.now - 30.days
-    @hasta = DateTime.now
+    @desde = nil
+    @hasta = nil
 
     if params[:fecha_desde].present? && params[:fecha_hasta].present?
       @desde = params[:fecha_desde].to_datetime
