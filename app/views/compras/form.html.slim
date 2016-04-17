@@ -30,12 +30,9 @@ section.content
                           = link_to '<i class="fa fa-plus"></i>'.html_safe,
                                     new_proveedor_path(from_proveedor: true),
                                     data: {toggle: 'tooltip'},
-                                    title: 'Nueva proveedor',
+                                    title: 'Nuevo proveedor',
                                     class: 'btn btn-default',
                                     remote: true
-                            
-                      
-                      
                   .col-sm-4
                     = f.input :condicion, as: :radio_group_buttons
                 .row
@@ -104,6 +101,13 @@ section.content
             /      td
             .form-subtitle
               label Mercaderías
+              = link_to '<i class="fa fa-plus"></i>'.html_safe,
+                        new_mercaderia_path(from_mercaderias: true),
+                        data: {toggle: 'tooltip'},
+                        title: 'Nueva mercadería',
+                        class: 'btn btn-default btn-sm',
+                        style: 'margin-left: 10px;',
+                        remote: true
             br
             table.table.table-bordered.detalles-table.calcular-total
               thead
