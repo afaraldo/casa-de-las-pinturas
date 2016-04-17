@@ -28,7 +28,9 @@ var TablasHelper = {
                     total += NumberHelper.aNumero($(this).text());
                 });
 
-                tabla.find('.table-total span').text(NumberHelper.aMoneda(total));
+                tabla.find('.table-total span')
+                    .data('total', total)
+                    .text(NumberHelper.aMoneda(total));
 
         });
 
@@ -54,7 +56,9 @@ var TablasHelper = {
                 }
             });
 
-            tabla.find('.table-total span').text(NumberHelper.aMoneda(total));
+            tabla.find('.table-total span')
+                .data('total', total)
+                .text(NumberHelper.aMoneda(total));
 
             opciones.totalPorDefecto.val(NumberHelper.aMoneda(total)).trigger('change');
 
