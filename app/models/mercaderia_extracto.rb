@@ -4,7 +4,11 @@ class MercaderiaExtracto < MovimientoModel
   self.balances = 'MercaderiaPeriodoBalance'
 
   belongs_to :mercaderia
+  
   belongs_to :movimiento_mercaderia_detalle
   has_one :movimiento_mercaderia, through: :movimiento_mercaderia_detalle
+
+  belongs_to :boleta_detalle
+  has_one :boleta, through: :boleta_detalle
 
 end

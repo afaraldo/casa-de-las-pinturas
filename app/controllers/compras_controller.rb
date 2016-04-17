@@ -1,4 +1,5 @@
 class ComprasController < ApplicationController
+  layout 'imprimir', only: [:imprimir]
   before_action :set_compra, only: [:show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
 
@@ -6,6 +7,10 @@ class ComprasController < ApplicationController
   def setup_menu
     @menu_setup[:main_menu] = :compras
     @menu_setup[:side_menu] = :compras_sidemenu
+  end
+
+  def imprimir
+    get_compras
   end
 
   # GET /compras
@@ -17,6 +22,7 @@ class ComprasController < ApplicationController
   # GET /compras/1
   # GET /compras/1.json
   def show
+    @stock_negativo = @compra.check_detalles_negativos(true)
   end
 
   # GET /compras/new
@@ -54,10 +60,11 @@ class ComprasController < ApplicationController
   # PATCH/PUT /compras/1
   # PATCH/PUT /compras/1.json
   def update
-
+    @compra.assign_attributes(compra_params)
+    @stock_negativo = params[:guardar_si_o_si].present? ? [] : @compra.check_detalles_negativos
     respond_to do |format|
       Compra.transaction do
-        if @compra.update(compra_params)
+        if @stock_negativo.size <= 0 && @compra.save
           format.html { redirect_to @compra, notice: t('mensajes.save_success', recurso: 'la compra') }
           format.json { render :show, status: :created, location: @compra }
         else
@@ -89,9 +96,8 @@ class ComprasController < ApplicationController
 
     def get_compras
       @search = Compra.search(params[:q])
-      @compras = @search.result.includes(:persona, :detalles).page(params[:page])
+      @compras = @search.result.includes(:persona, :detalles).page(params[:page]).per(action_name == 'imprimir' ? LIMITE_REGISTROS_IMPRIMIR : 25)
     end
-
     # Use callbacks to share common setup or constraints between actions.
     def set_compra
       @compra = Compra.find(params[:id])

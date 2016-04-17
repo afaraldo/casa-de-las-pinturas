@@ -29,15 +29,15 @@ class BoletaDetalle < ActiveRecord::Base
     nueva_cantidad = deleted? || borrado ? 0 : cantidad
     nueva_cantidad_diff = nueva_cantidad - cantidad_was.to_f
 
-    cantidad_ = mercaderia.stock
-    cantidad_ += nueva_cantidad_diff if boleta.tipo == :compra
-    cantidad_ -= nueva_cantidad_diff if boleta.tipo == :venta
+    cantidad_ = mercaderia.stock_actual
+    cantidad_ += nueva_cantidad_diff if boleta.tipo == 'Compra'
+    cantidad_ -= nueva_cantidad_diff if boleta.tipo == 'Venta'
     cantidad_
   end
 
   # Actualizar el stock si es que cambio la cantidad o se elimino el detalle
   def update_stock
-    operador = self.boleta.tipo == :compra ? 1 : -1
+    operador = self.boleta.tipo == 'Compra' ? 1 : -1
     if deleted?
       MercaderiaExtracto.eliminar_movimiento(self, self.boleta.fecha, cantidad * operador * -1)
     else

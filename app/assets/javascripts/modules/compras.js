@@ -6,7 +6,7 @@ var ComprasUI = (function(){
     function initFormEvents(){
         elementos.compraForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
 
-        PersonasUI.buscador({elemento: $('#proveedores-buscador'), url: buscarProveedorUrl});
+        PersonasUI.buscador({elemento: $('#proveedores-buscador'), url: buscarProveedorUrl, proveedor: true});
         MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: buscarMercaderiaUrl});
 
         NumberHelper.mascaraCantidad('.maskCantidad');
@@ -17,6 +17,20 @@ var ComprasUI = (function(){
 
         DatepickerHelper.initDatepicker('#compra_fecha');
         DatepickerHelper.initDatepicker('#compra_fecha_vencimiento', 'nolimitar');
+
+        $(".btn-group").on("change",function(){
+            if ($('input[name="compra[condicion]"]:checked').val() == 'contado' ) {
+                //alert($('input[name="compra[condicion]"]:checked').val());
+                $('.compra_fecha_vencimiento').hide();
+                $('.alert-info').hide();
+            }
+            else if ($('input[name="compra[condicion]"]:checked').val() == 'credito') {
+                //alert($('input[name="compra[condicion]"]:checked').val());
+                $('.compra_fecha_vencimiento').show();
+                $('.alert-info').show();
+            }
+        });
+
 
         if($('.nested-fields').length == 1){
             $('.remove_fields').addClass('hide');

@@ -1,5 +1,6 @@
 var PersonasUI = (function(){
 
+
     // Retorna como se muestra cada opcion: Nombre de la persona
     function formatPersonas(m) {
         return '<span>' + m.nombre + '</span>';
@@ -7,12 +8,22 @@ var PersonasUI = (function(){
 
     // Lo que se muestra despues de seleccionar
     function formatPersonasSelection(m) {
+      return m.nombre;
+    }
+
+    // Lo que se muestra despues de seleccionar
+    function formatProveedorSelection(m) {
       $("#limite_credito").html(NumberHelper.aMoneda(m.limite_credito));
+      $("#saldo").html(NumberHelper.aMoneda(m.limite_credito - m.saldo_actual));
+      $("#link_to_proveedor").attr("href", "/proveedores/" + m.id + "/edit");
       return m.nombre;
     }
 
     return {
         buscador: function(opciones){
+            if(!opciones.hasOwnProperty('proveedor')){
+              opciones.proveedor = false;
+            }
             opciones.elemento.select2({
                 minimumInputLength: 2,
                 allowClear: true,
@@ -37,7 +48,7 @@ var PersonasUI = (function(){
                     callback($(element).data('proveedor')); // Se setea la mercaderia si ya esta seleccionada
                 },
                 formatResult: formatPersonas,
-                formatSelection: formatPersonasSelection,
+                formatSelection: opciones.proveedor ? formatProveedorSelection : formatPersonasSelection,
                 escapeMarkup: function(m) { return m; }
             });
         }

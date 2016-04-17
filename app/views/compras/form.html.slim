@@ -17,28 +17,29 @@ section.content
                 .row
                   .col-sm-4
                     = f.input :fecha, wrapper: :vertical_input_group do
-                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: true, value: @compra.new_record? && f.object.fecha.nil? ? '' : localize(@compra.fecha.to_date)
+                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: f.object.fecha.nil?, value: @compra.new_record? && f.object.fecha.nil? ? '' : localize(@compra.fecha.to_date)
                       .input-group-btn
                         .btn.btn-default
                           i.fa.fa-calendar
                   .col-sm-4
                     .form-group
-                      = f.association :persona, as: :string,  label: 'Proveedor', input_html: { id: 'proveedores-buscador', data: {"msg-required" => 'Debe seleccionar un proveedor', class: 'form-control required',
-                             proveedor: f.object.persona.to_json }, placeholder: 'Buscar proveedor...' }
-                      /= link_to '<i class="fa fa-plus"></i>'.html_safe,
-                      /          new_categoria_path(from_mercaderias: true),
-                      /          data: {toggle: 'tooltip'},
-                      /          title: 'Nueva categoría',
-                      /          class: 'btn btn-default',
-                      /          style: 'margin-top: 25px;',
-                      /          remote: true
+                      = f.input :persona, wrapper: :vertical_input_group,  label: 'Proveedor' do
+                        = f.association :persona, as: :string,  label: false, input_html: { id: 'proveedores-buscador', data: {"msg-required" => 'Debe seleccionar un proveedor', class: 'form-control required',
+                               proveedor: f.object.persona.to_json }, placeholder: 'Buscar proveedor...' }
+                        .input-group-btn  
+                          = link_to '<i class="fa fa-plus"></i>'.html_safe,
+                                    new_proveedor_path(from_proveedor: true),
+                                    data: {toggle: 'tooltip'},
+                                    title: 'Nuevo proveedor',
+                                    class: 'btn btn-default',
+                                    remote: true
                   .col-sm-4
                     = f.input :condicion, as: :radio_group_buttons
                 .row
                   /// FECHA DE VENCIMENTO
                   .col-sm-4
                     = f.input :fecha_vencimiento, wrapper: :vertical_input_group, label: 'Fecha de vencimiento' do
-                      = f.input_field :fecha_vencimiento, as: :string, class: 'datepicker form-control', value: @compra.new_record? && f.object.fecha_vencimiento.nil? ? '' : localize(@compra.fecha_vencimiento.to_date)
+                      = f.input_field :fecha_vencimiento, as: :string, class: 'datepicker form-control', value: f.object.fecha_vencimiento.nil? ? '' : localize(f.object.fecha_vencimiento.to_date)
                       .input-group-btn
                         .btn.btn-default
                           i.fa.fa-calendar
@@ -55,10 +56,15 @@ section.content
                   br
                   h4.text-center style="margin-top: 10px; font-size: 16px;"
                     span#saldo 0
+                    = ' '
                     span de
+                    = ' '
                     span#limite_credito 0
                   p.text-center
-                    a Actualizar límite
+                    - if @compra.new_record?
+                      = link_to 'Actualizar límite', "#", id: 'link_to_proveedor', remote: true
+                    - else
+                      = link_to 'Actualizar límite', edit_proveedor_path(@compra.persona.id), id: 'link_to_proveedor', remote: true
 
             /////////////
               DEVOLUCIONES
@@ -95,6 +101,13 @@ section.content
             /      td
             .form-subtitle
               label Mercaderías
+              = link_to '<i class="fa fa-plus"></i>'.html_safe,
+                        new_mercaderia_path(from_mercaderias: true),
+                        data: {toggle: 'tooltip'},
+                        title: 'Nueva mercadería',
+                        class: 'btn btn-default btn-sm',
+                        style: 'margin-left: 10px;',
+                        remote: true
             br
             table.table.table-bordered.detalles-table.calcular-total
               thead
@@ -164,18 +177,21 @@ section.content
             /                                'data-association-insertion-node' => '#compra-detalles-body',
             /                                'data-association-insertion-method' => 'append'
           .box-footer
-            /.alert.alert-warning
-            /  p
-            /    | La operación va a provocar existencia negativa en los siguientes productos: %{productos}.
-            /  p Esta seguro que quiere continuar?
-            /  .form-actions
-            /    = link_to 'Cancelar', compras_path, class: 'btn btn-default'
-            /    | #{' '}
-            /    button.btn.btn-primary type="submit" Continuar
-            .form-actions.text-right
-              = link_to 'Cancelar', @compra.new_record? ? compras_path : compra_path(@compra.id), class: 'btn btn-default'
-              | #{' '}
-              button.btn.btn-primary type="submit" Guardar Compra
+            - if @stock_negativo && @stock_negativo.size > 0
+              input.hidden name="guardar_si_o_si" value= "true"
+              .alert.alert-warning
+                p
+                  | La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}.
+                p Esta seguro que quiere continuar?
+                .form-actions
+                  = link_to 'Cancelar', compras_path, class: 'btn btn-default'
+                  | #{' '}
+                  button.btn.btn-primary type="submit" Continuar
+            - else
+              .form-actions.text-right
+                = link_to 'Cancelar', @compra.new_record? ? compras_path : compra_path(@compra.id), class: 'btn btn-default'
+                | #{' '}
+                button.btn.btn-primary type="submit" Guardar Compra
   //// MODAL DE DEVOLUCIONES
   #modal-credito.modal.fade
     .modal-dialog
