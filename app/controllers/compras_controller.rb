@@ -91,7 +91,6 @@ class ComprasController < ApplicationController
     end
   end
 
-
   private
 
     def get_compras
@@ -105,6 +104,16 @@ class ComprasController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def compra_params
-      params.require(:compra).permit(:persona_id, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :condicion, detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy])
+      procesar_cantidades
+      params.require(:compra).permit(:persona_id, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :condicion,
+                                     detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy])
     end
+
+    def procesar_cantidades
+      params[:compra][:detalles_attributes].each do |i, d|
+        params[:compra][:detalles_attributes][i][:cantidad] = cantidad_a_numero(d[:cantidad])
+        params[:compra][:detalles_attributes][i][:precio_unitario] = cantidad_a_numero(d[:precio_unitario])
+      end
+    end
+
 end
