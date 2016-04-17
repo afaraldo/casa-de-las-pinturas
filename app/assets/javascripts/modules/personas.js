@@ -13,9 +13,14 @@ var PersonasUI = (function(){
 
     return {
         buscador: function(opciones){
+            var allowClear = true;
+
+            if(opciones.hasOwnProperty('allowClear'))
+                allowClear = opciones.allowClear;
+
             opciones.elemento.select2({
                 minimumInputLength: 2,
-                allowClear: true,
+                allowClear: allowClear,
                 ajax: {
                     url: opciones.url,
                     datatype: 'jsonp',
@@ -34,7 +39,7 @@ var PersonasUI = (function(){
                     }
                 },
                 initSelection: function(element, callback) {
-                    callback($(element).data('proveedor')); // Se setea la mercaderia si ya esta seleccionada
+                    callback($(element).data('persona')); // Se setea la persona si ya esta seleccionada
                 },
                 formatResult: formatPersonas,
                 formatSelection: formatPersonasSelection,

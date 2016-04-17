@@ -38,19 +38,18 @@ module MovimientosHelper
         # -------------------------------
         when 'Recibo'
           recibo = m.recibo
-          es_ingreso = recibo.instance_of?(Pago)
-          resultado << {url: "/#{es_ingreso ? 'pagos' : 'cobros'}/#{recibo.id}",
+          resultado << {url: "/#{recibo.instance_of?(Pago) ? 'pagos' : 'cobros'}/#{recibo.id}",
                         fecha: recibo.fecha,
                         motivo: recibo.movimiento_motivo,
-                        ingreso: es_ingreso ? recibo.total_pagado : 0,
-                        egreso: es_ingreso ? 0 : recibo.total_pagado}
+                        egreso: recibo.total_pagado,
+                        ingreso: 0}
         when 'Boleta'
           boleta = m.boleta
           resultado << {url: "/#{boleta.instance_of?(Compra) ? 'compras' : 'ventas'}/#{boleta.id}",
                         fecha: boleta.fecha,
                         motivo: boleta.movimiento_motivo,
-                        ingreso: 0,
-                        egreso: boleta.importe_total}
+                        egreso: 0,
+                        ingreso: boleta.importe_total}
         # -------------------------------
         # MOVIMIENTOS DE CAJA
         # -------------------------------

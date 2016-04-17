@@ -1,0 +1,30 @@
+- cuenta_tipo = action_name
+section.content-header
+  h1 Cuentas Corrientes de #{cuenta_tipo.capitalize}
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Listado de movimientos
+          .box-tools.pull-right.hidden-print
+            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, cuentas_corrientes_imprimir_extracto_path, class: 'btn btn-default imprimir-listado'
+        .box-body
+          #cuenta-corrientes-search.buscador-listado.hidden-print
+            = form_tag "/cuentas_corrientes/#{cuenta_tipo}", remote: true, method: :get, class: 'remote-search' do
+              .row
+                .col-xs-4
+                  .form-group
+                    label.control-label = cuenta_tipo.capitalize.singularize
+                    = text_field_tag :persona_id, @persona ? @persona.id : nil, id: 'persona-buscador', class: 'form-control', placeholder: "Buscar #{cuenta_tipo.singularize}...", data: {persona: @persona.to_json}
+                .col-xs-3
+                  div#date-range.btn.btn-default.daterange.btn-block.top-25
+                    = hidden_field_tag :fecha_desde, nil, class: 'fecha-desde'
+                    = hidden_field_tag :fecha_hasta, nil, class: 'fecha-hasta'
+                    i.fa.fa-calendar
+                    span #{localize(@desde.to_date)} - #{localize(@hasta.to_date)}
+                    b.caret
+          #cuenta-corriente-table.overlay-wrapper.buscador-resultados.table-responsive
+            = render partial: 'movimientos', locals: {movimientos: @movimientos, cuenta_tipo: cuenta_tipo}
+javascript:
+  CuentaCorrientesUI.setBuscarPersonaUrl("/#{cuenta_tipo}/buscar");
