@@ -14,8 +14,6 @@ var ComprasUI = (function(){
 
         TablasHelper.calcularTotalEvent('.calcular-total');
         TablasHelper.calcularTotalEvent('.calcular-pagos-total');
-        $('.calcular-total').trigger('keyup change');
-
 
         DatepickerHelper.initDatepicker('#compra_fecha');
         DatepickerHelper.initDatepicker('#compra_fecha_vencimiento', 'nolimitar');
