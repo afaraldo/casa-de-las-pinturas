@@ -18,14 +18,16 @@ var ComprasUI = (function(){
         DatepickerHelper.initDatepicker('#compra_fecha');
         DatepickerHelper.initDatepicker('#compra_fecha_vencimiento', 'nolimitar');
 
-        $(".btn-group").on("click",function(){
-            if ($("input:radio:checked").val() == 'contado') {
-                $('.compra_fecha_vencimiento').show();
-                $('.alert-info').show();
-            }
-            if ($("input:radio:checked").val() == 'credito') {
+        $(".btn-group").on("change",function(){
+            if ($('input[name="compra[condicion]"]:checked').val() == 'contado' ) {
+                //alert($('input[name="compra[condicion]"]:checked').val());
                 $('.compra_fecha_vencimiento').hide();
                 $('.alert-info').hide();
+            }
+            else if ($('input[name="compra[condicion]"]:checked').val() == 'credito') {
+                //alert($('input[name="compra[condicion]"]:checked').val());
+                $('.compra_fecha_vencimiento').show();
+                $('.alert-info').show();
             }
         });
 
