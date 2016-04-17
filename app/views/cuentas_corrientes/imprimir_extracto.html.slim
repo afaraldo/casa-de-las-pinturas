@@ -6,8 +6,11 @@ h4 Listado de movimientos de cuenta corriente
       = ": #{@persona.nombre}"
   .col-xs-6
     p
-      strong Desde el
-      = " #{localize(@desde.to_date)} "
-      strong hasta el
-      = " #{localize(@hasta.to_date)}"
+      - if @desde
+        strong Desde el
+        = " #{localize(@desde.to_date)} "
+        strong hasta el
+        = " #{localize(@hasta.to_date)}"
+      - else
+        | Ultimos 25 movimientos
 = render partial: 'movimientos', locals: {movimientos: @movimientos, cuenta_tipo: @persona.tipo.downcase}

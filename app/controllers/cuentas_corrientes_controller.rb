@@ -32,8 +32,8 @@ class CuentasCorrientesController < ApplicationController
     @movimientos = nil
 
     # Configurando las fechas
-    @desde = DateTime.now - 30.days
-    @hasta = DateTime.now
+    @desde = nil
+    @hasta = nil
 
     if params[:fecha_desde].present? && params[:fecha_hasta].present?
       @desde = params[:fecha_desde].to_datetime
@@ -42,7 +42,11 @@ class CuentasCorrientesController < ApplicationController
 
     # buscar movimientos
     if params[:persona_id].present?
-      @movimientos = CuentaCorrienteExtracto.get_movimientos(persona_id: params[:persona_id], desde: @desde, hasta: @hasta)
+      @movimientos = CuentaCorrienteExtracto.get_movimientos(persona_id: params[:persona_id],
+                                                             desde: @desde,
+                                                             hasta: @hasta,
+                                                             page: params[:page],
+                                                             limit: action_name == 'imprimir_extracto' ? LIMITE_REGISTROS_IMPRIMIR : nil)
     end
   end
 
