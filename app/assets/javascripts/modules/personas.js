@@ -12,7 +12,7 @@ var PersonasUI = (function(){
     }
 
     // Lo que se muestra despues de seleccionar
-    function formatProveedorSelection(m) {
+    function formatCustomSelection(m) {
       $("#limite_credito").html(NumberHelper.aMoneda(m.limite_credito));
       $("#saldo").html(NumberHelper.aMoneda(m.limite_credito - m.saldo_actual));
       $("#link_to_proveedor").attr("href", "/proveedores/" + m.id + "/edit");
@@ -21,12 +21,19 @@ var PersonasUI = (function(){
 
     return {
         buscador: function(opciones){
-            if(!opciones.hasOwnProperty('proveedor')){
-              opciones.proveedor = false;
-            }
+
+            var allowClear = true,
+                customSelection = false;
+
+            if(opciones.hasOwnProperty('allowClear'))
+                allowClear = opciones.allowClear;
+
+            if(opciones.hasOwnProperty('customSelection'))
+                customSelection = opciones.customSelection;
+
             opciones.elemento.select2({
                 minimumInputLength: 2,
-                allowClear: true,
+                allowClear: allowClear,
                 ajax: {
                     url: opciones.url,
                     datatype: 'jsonp',
@@ -45,10 +52,10 @@ var PersonasUI = (function(){
                     }
                 },
                 initSelection: function(element, callback) {
-                    callback($(element).data('proveedor')); // Se setea la mercaderia si ya esta seleccionada
+                    callback($(element).data('persona')); // Se setea la persona si ya esta seleccionada
                 },
                 formatResult: formatPersonas,
-                formatSelection: opciones.proveedor ? formatProveedorSelection : formatPersonasSelection,
+                formatSelection: customSelection ? formatCustomSelection : formatPersonasSelection,
                 escapeMarkup: function(m) { return m; }
             });
         }

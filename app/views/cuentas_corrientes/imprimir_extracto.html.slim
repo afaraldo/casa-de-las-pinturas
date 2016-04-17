@@ -1,0 +1,13 @@
+h4 Listado de movimientos de cuenta corriente
+.row
+  .col-xs-6
+    p
+      strong = @persona.tipo
+      = ": #{@persona.nombre}"
+  .col-xs-6
+    p
+      strong Desde el
+      = " #{localize(@desde.to_date)} "
+      strong hasta el
+      = " #{localize(@hasta.to_date)}"
+= render partial: 'movimientos', locals: {movimientos: @movimientos, cuenta_tipo: @persona.tipo.downcase}

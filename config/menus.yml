@@ -16,6 +16,10 @@ menu:
         text: "Proveedores"
         url: :proveedores
         active_submenu: :proveedores_sidemenu
+      cuentas_corrientes:
+        text: "Cuentas corrientes"
+        url: :cuentas_corrientes_proveedores
+        active_submenu: :cuentas_corrientes_proveedores
   ventas:
     text: "Ventas"
     url: :clientes
@@ -29,6 +33,10 @@ menu:
         text: "Clientes"
         url: :clientes
         active_submenu: :clientes_sidemenu
+      cuentas_corrientes:
+        text: "Cuentas corrientes"
+        url: :cuentas_corrientes_clientes
+        active_submenu: :cuentas_corrientes_clientes
   stock:
     text: "Stock"
     url: :inventarios
