@@ -23,15 +23,19 @@ section.content
                           i.fa.fa-calendar
                   .col-sm-4
                     .form-group
-                      = f.association :persona, as: :string,  label: 'Proveedor', input_html: { id: 'proveedores-buscador', data: {"msg-required" => 'Debe seleccionar un proveedor', class: 'form-control required',
-                             proveedor: f.object.persona.to_json }, placeholder: 'Buscar proveedor...' }
-                      /= link_to '<i class="fa fa-plus"></i>'.html_safe,
-                      /          new_categoria_path(from_mercaderias: true),
-                      /          data: {toggle: 'tooltip'},
-                      /          title: 'Nueva categoría',
-                      /          class: 'btn btn-default',
-                      /          style: 'margin-top: 25px;',
-                      /          remote: true
+                      = f.input :persona, wrapper: :vertical_input_group,  label: 'Proveedor' do
+                        = f.association :persona, as: :string,  label: false, input_html: { id: 'proveedores-buscador', data: {"msg-required" => 'Debe seleccionar un proveedor', class: 'form-control required',
+                               proveedor: f.object.persona.to_json }, placeholder: 'Buscar proveedor...' }
+                        .input-group-btn  
+                          = link_to '<i class="fa fa-plus"></i>'.html_safe,
+                                    new_proveedor_path(from_proveedor: true),
+                                    data: {toggle: 'tooltip'},
+                                    title: 'Nueva proveedor',
+                                    class: 'btn btn-default',
+                                    remote: true
+                            
+                      
+                      
                   .col-sm-4
                     = f.input :condicion, as: :radio_group_buttons
                 .row
