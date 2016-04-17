@@ -15,7 +15,7 @@ class Recibo < ActiveRecord::Base
   has_many :boletas, class_name: 'Boleta', dependent: :destroy, through: :boletas_detalles
 
   accepts_nested_attributes_for :detalles, reject_if: proc { |attrs| (attrs['monto'].to_f * attrs['cotizacion'].to_f) <= 0 }, allow_destroy: true
-  accepts_nested_attributes_for :boletas_detalles
+  accepts_nested_attributes_for :boletas_detalles, allow_destroy: true
 
   default_scope { order('fecha DESC') } # Ordenar por fecha por defecto
 
@@ -82,7 +82,9 @@ class Recibo < ActiveRecord::Base
     boletas_seleccionadas = 0
 
     boletas_detalles.each do |b|
-      boletas_seleccionadas += b.monto_utilizado
+      unless b.marked_for_destruction?
+        boletas_seleccionadas += b.monto_utilizado
+      end
     end
 
     if total_pagado != boletas_seleccionadas

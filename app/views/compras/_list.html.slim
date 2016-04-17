@@ -14,7 +14,7 @@ table.table.table-bordered.table-hover
         td = localize(compra.fecha.to_date)
         td = link_to compra.numero, compra_path(compra.id)
         td = compra.numero_comprobante
-        td = compra.condicion
+        td = compra.condicion_text
         td = compra.persona_nombre
         td.text-right = number_to_currency(compra.importe_total)
         td = "<label class='label label-#{compra.estado.pagado? ? 'success' : 'warning'}'>#{compra.estado_text}</label>".html_safe
