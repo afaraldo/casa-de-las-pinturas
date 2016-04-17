@@ -8,7 +8,7 @@ section.content
         .box-header
           h3.box-title Listado de movimientos
           .box-tools.pull-right.hidden-print
-            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, cuentas_corrientes_imprimir_extracto_path, class: 'btn btn-default imprimir-listado'
+            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, cuentas_corrientes_imprimir_extracto_path, class: "btn btn-default imprimir-listado #{'disabled' if @persona.nil?}"
         .box-body
           #cuenta-corrientes-search.buscador-listado.hidden-print
             = form_tag "/cuentas_corrientes/#{cuenta_tipo}", remote: true, method: :get, class: 'remote-search' do

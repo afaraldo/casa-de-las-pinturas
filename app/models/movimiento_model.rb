@@ -141,6 +141,9 @@ class MovimientoModel < ActiveRecord::Base
 
     resultado = {balance_anterior: 0, movimientos: []}
 
+    page = opciones[:page] || 1 # para paginar
+    limit = opciones[:limit] || 50
+
     buscar_por = {}
 
     self.movimiento_key.each do |k|
@@ -151,27 +154,32 @@ class MovimientoModel < ActiveRecord::Base
     desde = opciones[:desde] || DateTime.now.beginning_of_month
     hasta = opciones[:hasta] || DateTime.now.end_of_month
 
-    resultado[:balance_anterior] = get_balance_anterior(buscar_por, desde)
+    movimientos = filtrar_movimientos(buscar_por, desde, hasta, page, limit)
 
-    resultado[:movimientos] = formatear_movimientos(filtrar_movimientos(buscar_por, desde, hasta))
+    # si la pagina no es la primera indicar para traer el balance hasta el primer movimiento filtrado
+    resultado[:balance_anterior] = get_balance_anterior(buscar_por, page.to_i > 1 ? hasta : desde, page.to_i > 1 ? movimientos.first.id : nil)
+
+    resultado[:movimientos] = movimientos
 
     resultado
   end
 
-  # retorna el balance anterior a una fecha dada
+  # retorna el balance anterior a una fecha dada y o un movimiento dado
   # Ej.: Si se pasa 15/03/2016 retorna el balance hasta el dia anterior
-  def self.get_balance_anterior(buscar_por, desde)
-    buscar_por[:anho] = desde.year
-    buscar_por[:mes] = desde.month
+  #
+  def self.get_balance_anterior(buscar_por, hasta, movimiento_hasta)
+    buscar_por[:anho] = hasta.year
+    buscar_por[:mes] = hasta.month
 
     periodo_inicial = @balances_class.find_or_initialize_by(buscar_por) # periodo al que corresponde la fecha dada
-    balance = get_balance_periodo_anterior(buscar_por, periodo_inicial) # balance del periodo anterior
+    balance = get_balance_periodo_anterior(buscar_por, periodo_inicial) # balance del periodo antesrior
 
     # movimientos desde el principio del mes hasta la fecha dada
-    movimientos_hasta = formatear_movimientos(filtrar_movimientos(buscar_por, desde.beginning_of_month, (desde.end_of_day - 1.day)))
+    movimientos_hasta = formatear_movimientos(filtrar_movimientos(buscar_por, hasta.beginning_of_month, (hasta.end_of_day - 1.day), 1, :unlimited))
 
     # hacer la suma/resta de los movimeintos hasta la fecha dada
     movimientos_hasta.each do |m|
+      break if m[:movimiento_id] == movimiento_hasta # dejar de calcular cuando se llega al movimiento_hasta
       balance += m[:ingreso]
       balance -= m[:egreso]
     end
@@ -181,10 +189,15 @@ class MovimientoModel < ActiveRecord::Base
   end
 
   # filtra los movimientos dependiendo de la instancia y fechas
-  def self.filtrar_movimientos(buscar_por, desde, hasta)
-    self.where(buscar_por)
-        .where('fecha >= ? AND fecha <= ?', desde, hasta)
-        .order(:fecha)
-        .includes(self.reflect_on_all_associations.map { |assoc| assoc.name})
+  def self.filtrar_movimientos(buscar_por, desde, hasta, page, limit = 50)
+    m = self.where(buscar_por)
+            .where('fecha >= ? AND fecha <= ?', desde, hasta)
+            .order(:fecha)
+            .includes(self.reflect_on_all_associations.map { |assoc| assoc.name})
+    if limit == :unlimited
+      m
+    else # paginar
+      m.page(page).per(limit)
+    end
   end
 end

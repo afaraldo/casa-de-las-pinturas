@@ -1,1 +1,2 @@
 | $("#cuenta-corriente-table").html("#{escape_javascript(render partial: 'movimientos', format: 'html', locals: {movimientos: @movimientos, cuenta_tipo: action_name})}");
+| $('.imprimir-listado').removeClass('disabled');
