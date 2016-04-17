@@ -33,37 +33,46 @@ Fabricator(:mercaderia) do
   unidad_de_medida { :unidad }
 end
 
-15.times {
-  begin
-    Fabricate(:categoria)
-  rescue
-    next
-  end
-}
+unless Categoria.count > 15
+  15.times {
+    begin
+      Fabricate(:categoria)
+    rescue
+      next
+    end
+  }
+end
 
-30.times {
-  begin
-    Fabricate(:mercaderia)
-  rescue
-    next
-  end
-}
+unless Mercaderia.count > 30
+  30.times {
+    begin
+      Fabricate(:mercaderia)
+    rescue
+      next
+    end
+  }
+end
 
-30.times {
-  begin
-    Fabricate(:proveedor)
-  rescue
-    next
-  end
-}
 
-30.times {
-  begin
-    Fabricate(:cliente)
-  rescue
-    next
-  end
-}
+unless Proveedor.count > 30
+  30.times {
+    begin
+      Fabricate(:proveedor)
+    rescue
+      next
+    end
+  }
+end
+
+unless Cliente.count > 30
+  30.times {
+    begin
+      Fabricate(:cliente)
+    rescue
+      next
+    end
+  }
+end
 
 # Crear configuraciones si no existe
 if Configuracion.first.nil?
@@ -82,3 +91,5 @@ Moneda.create nombre: 'Guarani',        abreviatura: 'Gs',  cotizacion: 1,    de
 Moneda.create nombre: 'Peso Argentino', abreviatura: 'Ps',  cotizacion: 300,  defecto: false  if Moneda.find_by_nombre('Peso Argentino').nil?
 Moneda.create nombre: 'Dolar',          abreviatura: '$',   cotizacion: 5000, defecto: false  if Moneda.find_by_nombre('Dolar').nil?
 Moneda.create nombre: 'Real Brasileño', abreviatura: 'R',   cotizacion: 3000, defecto: false  if Moneda.find_by_nombre('Real Brasileño').nil?
+
+Caja.create(nombre: :efectivo) if Caja.get_caja_por_forma(:efectivo).nil?
