@@ -13,4 +13,4 @@ h4 Listado de movimientos de cuenta corriente
         = " #{localize(@hasta.to_date)}"
       - else
         | Ultimos 25 movimientos
-= render partial: 'movimientos', locals: {movimientos: @movimientos, cuenta_tipo: @persona.tipo.downcase}
+= render 'movimientos', movimientos: @movimientos, cuenta_tipo: @persona.tipo.downcase

@@ -104,8 +104,6 @@ class Boleta < ActiveRecord::Base
     end
   end
 
-
-
   def fecha_futura
     if fecha > Date.today
       errors.add(:fecha, I18n.t('activerecord.errors.messages.fecha_futura'))

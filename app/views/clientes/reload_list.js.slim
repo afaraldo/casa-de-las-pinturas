@@ -4,5 +4,5 @@
 - else
   | noty({type: "success", text : "#{@message}"});
   | modal.modal('hide');
-  | $('#clientes-table').html("#{escape_javascript(render partial: 'list', locals: {clientes: @clientes})}");
+  | $('#clientes-table').html("#{escape_javascript(render 'list', clientes: @clientes)}");
   | $('#paginate-container').html("#{escape_javascript(paginate(@clientes, params: {controller: :clientes, action: :index}, remote: true)) }");

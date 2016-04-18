@@ -43,7 +43,7 @@ class MovimientoMercaderiasController < ApplicationController
               format.json { render :show, status: :created, location: @movimiento }
             else
               format.html { render :form }
-              format.json { render json: @stock_negativo, status: :unprocessable_entity }              
+              format.json { render json: @stock_negativo, status: :unprocessable_entity }
             end
         end
       end
