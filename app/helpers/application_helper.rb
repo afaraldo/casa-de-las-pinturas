@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include MovimientosHelper
 
   TEXTO_LIMITE = 30 # longitud maxima mostrar de los textos
 

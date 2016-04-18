@@ -1,25 +1,21 @@
 Rails.application.routes.draw do
 
-  
-
-  resources :pago_detalles
-
-  resources :pagos
-
-  resources :boleta_detalles
-
-  resources :boletas
-
   devise_for :users
 
   get 'configuraciones/check_empresa_nombre' => 'configuraciones#check_empresa_nombre'
   resources :configuraciones, only: [:index, :edit, :update]
 
   get 'proveedores/check_nombre' => 'proveedores#check_nombre'
+  get 'proveedores/buscar' => 'proveedores#buscar'
   resources :proveedores
 
   get 'clientes/check_nombre' => 'clientes#check_nombre'
+  get 'clientes/buscar' => 'clientes#buscar'
   resources :clientes
+
+  get 'cuentas_corrientes/clientes'
+  get 'cuentas_corrientes/proveedores'
+  get 'cuentas_corrientes/imprimir_extracto'
 
   get 'empleados/check_nombre' => 'empleados#check_nombre'
   resources :empleados
@@ -41,10 +37,16 @@ Rails.application.routes.draw do
   get 'categoria_gastos/check_nombre' => 'categoria_gastos#check_nombre'
   resources :categoria_gastos
 
+  get 'compras/imprimir' => 'compras#imprimir'
+  resources :compras
+
+  get 'pagos/buscar_pendientes' => 'pagos#buscar_pendientes'
+  get 'pagos/imprimir' => 'pagos#imprimir'
+  resources :pagos
 
   resources :caja_movimiento_detalles
 
-  
+
   resources :caja_movimientos
 
 

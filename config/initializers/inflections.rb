@@ -18,8 +18,11 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'boleta_detalle', 'boleta_detalles'
   inflect.irregular 'pago', 'pagos'
   inflect.irregular 'pago_detalle', 'pago_detalles'
+  inflect.irregular 'recibo_boleta', 'recibos_boletas'
   inflect.irregular 'mercaderia_extracto', 'mercaderia_extractos'
   inflect.irregular 'mercaderia_periodo_balance', 'mercaderia_periodo_balances'
+  inflect.irregular 'cuenta_corriente_extracto', 'cuentas_corrientes_extractos'
+  inflect.irregular 'cuenta_corriente_periodo_balance', 'cuenta_corriente_periodo_balances'
 end
 
 # These inflection rules are supported but not enabled by default:

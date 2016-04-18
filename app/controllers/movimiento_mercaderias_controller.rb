@@ -33,37 +33,40 @@ class MovimientoMercaderiasController < ApplicationController
 
   # POST /movimiento_mercaderias
   # POST /movimiento_mercaderias.json
-  def create
+ def create
     @movimiento = MovimientoMercaderia.new(movimiento_mercaderia_params)
-
-    respond_to do |format|
-      MovimientoMercaderia.transaction do
-        if @movimiento.save
-          format.html { redirect_to @movimiento, notice: t('mensajes.save_success', recurso: 'el movimiento') }
-          format.json { render :show, status: :created, location: @movimiento }
-        else
-          format.html { render :form }
-          format.json { render json: @movimiento.errors, status: :unprocessable_entity }
+    @stock_negativo = params[:guardar_si_o_si].present? ? [] : @movimiento.check_detalles_negativos
+      respond_to do |format|
+        MovimientoMercaderia.transaction do
+            if @stock_negativo.size <= 0  && @movimiento.save
+              format.html { redirect_to @movimiento, notice: t('mensajes.save_success', recurso: 'el movimiento') }
+              format.json { render :show, status: :created, location: @movimiento }
+            else
+              format.html { render :form }
+              format.json { render json: @stock_negativo, status: :unprocessable_entity }              
+            end
         end
       end
-    end
   end
 
   # PATCH/PUT /movimiento_mercaderias/1
   # PATCH/PUT /movimiento_mercaderias/1.json
   def update
+    @movimiento.assign_attributes(movimiento_mercaderia_params)
+    @stock_negativo = params[:guardar_si_o_si].present? ? [] : @movimiento.check_detalles_negativos
     respond_to do |format|
       MovimientoMercaderia.transaction do
-        if @movimiento.update(movimiento_mercaderia_params)
+        if @stock_negativo.size <= 0 && @movimiento.save
           format.html { redirect_to @movimiento, notice: t('mensajes.update_success', recurso: 'el movimiento') }
           format.json { render :show, status: :ok, location: @movimiento }
         else
           format.html { render :form }
-          format.json { render json: @movimiento.errors, status: :unprocessable_entity }
+          format.json { render json: @stock_negativo, status: :unprocessable_entity }
         end
       end
     end
   end
+
 
   # DELETE /movimiento_mercaderias/1
   # DELETE /movimiento_mercaderias/1.json

@@ -30,7 +30,7 @@ es:
   moneda:
     unique_nombre_error: "Ya existe una moneda con el nombre %{nombre}"
   categoria_gasto:
-    unique_nombre_error: "Ya existe una categoría con el nombre %{nombre}"    
+    unique_nombre_error: "Ya existe una categoría con el nombre %{nombre}"
   activerecord:
     models:
       user: "Usuario"
@@ -46,7 +46,16 @@ es:
         tipo: "Tipo de movimiento"
     errors:
       messages:
+        limite_credito_invalido: "El limite de crédito no puede ser menor a %{limite}"
+        persona_no_editable: "No se puede editar. Posee pagos asociados"
+        importe_no_editable: "Importe y cantidades no se puede editar. Posee pagos asociados"
+        supera_limite_de_credito: "ha superado el límite de crédito permitido"
+        monto_superior_a_pendiente: "El monto a pagar no puede ser mayor al monto pendiente."
+        monto_utilizado_cero: "El monto a pagar debe ser mayor a 0(cero)."
+        total_pagado_diferente_de_boletas: "El total de las formas de pago debe ser igual al total a pagar de las boletas seleccionadas."
+        no_editable: "no es editable"
         fecha_futura: "La fecha no puede ser superior a la actual"
+        fecha_vencimiento: "La fecha de vencimiento no puede ser inferior a la fecha creación"
         email_invalido: "Por favor, escribí una dirección de correo válida"
         record_invalid: "La validación falló: %{errors}"
         restrict_dependent_destroy:

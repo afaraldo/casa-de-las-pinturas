@@ -44,3 +44,21 @@
 .popover-content{
   word-break: break-word;
 }
+
+.alert{
+  .form-actions{
+    margin-top: 15px;
+  }
+  .btn-default{
+    color: #444;
+    text-decoration: none;
+  }
+}
+
+.seleccionar-panel{
+  cursor: pointer;
+  color: #666;
+  .fa-search, .fa-list{
+    font-size: 32px;
+  }
+}
