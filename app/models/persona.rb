@@ -16,9 +16,17 @@ class Persona < ActiveRecord::Base
   validates :numero_documento, length: {maximum: 20, minimum: 2}
   validates :numero_documento, presence: true
   validates :limite_credito, numericality: { greater_than_or_equal_to: 0 }
+  validate :limite_credito_mayor_saldo?
 
   default_scope { order('lower(nombre)') } # Ordenar por nombre por defecto
   scope :by_nombre, lambda { |value| where('lower(nombre) = ?', value.downcase) } # buscar por nombre
+
+  def limite_credito_mayor_saldo?
+    if !(limite_credito >= saldo_actual)
+      errors.add(:limite_credito, I18n.t('activerecord.errors.messages.limite_credito_invalido', limite:saldo_actual ))
+      false
+    end
+  end
 
   def set_limite_credito
     self.limite_credito ||= 0

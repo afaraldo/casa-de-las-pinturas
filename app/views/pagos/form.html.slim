@@ -71,7 +71,7 @@ section.content
                       th Total a pagar
                       th
                   tbody#compra-detalles-body
-                    = render partial: 'compras_pendientes', locals: {compras: @pago.boletas_detalles, actualizando: true}
+                    = render 'compras_pendientes', compras: @pago.boletas_detalles, actualizando: true
                   tfoot
                     tr
                       td colspan="2"

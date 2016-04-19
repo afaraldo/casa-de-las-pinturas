@@ -4,5 +4,5 @@
 - else
   | noty({type: "success", text : "#{@message}"});
   | modal.modal('hide');
-  | $('#mercaderias-table').html("#{escape_javascript(render partial: 'list', locals: {mercaderias: @mercaderias})}");
+  | $('#mercaderias-table').html("#{escape_javascript(render 'list', mercaderias: @mercaderias)}");
   | $('#mercaderias-paginate-container').html("#{escape_javascript(paginate(@mercaderias, params: {controller: :mercaderias, action: :index}, remote: true)) }");

@@ -21,7 +21,7 @@
       - if movimientos[:movimientos].empty?
         tr.bg-info.text-center
           td colspan="5" No hay movimientos para el #{cuenta_tipo.singularize} en el rango de fecha seleccionado
-      - movimientos[:movimientos].each do |m|
+      - formatear_movimientos(movimientos[:movimientos]).each do |m|
         - balance += (m[:ingreso] - m[:egreso])
         tr.fila-clickeable data-url="#{m[:url]}"
           td = localize(m[:fecha].to_date)
@@ -32,3 +32,4 @@
       tr.text-bold
         td.text-right colspan="4" Balance:
         td.text-right = number_to_currency(balance, unit: '')
+  = paginate movimientos[:movimientos], remote: true

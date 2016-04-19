@@ -8,12 +8,20 @@ section.content
           a.volver-link href= compras_path
             i.fa.fa-angle-double-left style="margin-right: 5px;"
             | Volver al listado de compras
-          h3.box-title 
+          h3.box-title
             = "Compra Nro. #{@compra.numero}".html_safe
           .box-tools
             = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_compra_path(@compra),  html_options = {class: 'btn btn-default'}
             = ' '
-            = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, compra_path(@compra), method: 'delete', data: {confirm: "¿Desea eliminar la compra?"}, class: 'btn btn-danger'
+            - if @compra.recibos_detalles.empty?
+              - if @stock_negativo && @stock_negativo.size > 0
+                = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, compra_path(@compra), method: 'delete', data: {confirm: "La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}. ¿Seguro que desea eliminar la compra?"}, class: 'btn btn-danger'
+              - else
+                = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, compra_path(@compra), method: 'delete', data: {confirm: "¿Desea eliminar la compra?"}, class: 'btn btn-danger'
+            - else
+              button.btn.btn-danger.disabled
+                i.fa.fa-trash
+                |  Eliminar
         .box-body
           .row
             .col-sm-9
@@ -29,7 +37,7 @@ section.content
                   p = @compra.condicion.capitalize
               .row
                 - if @compra.credito?
-                  .col-sm-4  
+                  .col-sm-4
                     label.control-label Fecha de vencimiento
                     p = localize(@compra.fecha_vencimiento.to_date)
                 - if !@compra.numero_comprobante.blank?

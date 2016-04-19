@@ -11,7 +11,7 @@ class WelcomeController < ApplicationController
   end
 
   def compras_show_credito
-    
+
   end
 
   def compras_form

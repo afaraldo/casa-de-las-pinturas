@@ -34,7 +34,7 @@ section.content
                 .row
                   .col-sm-12
                     = f.input :motivo, label: 'Motivo'
-            
+
             .form-subtitle
               label Mercaderias
             br
@@ -62,7 +62,7 @@ section.content
             = link_to_add_association '<i class="fa fa-plus"></i> Agregar mercaderia'.html_safe, f, :detalles, class: 'btn btn-default pull-right',
                                             'data-association-insertion-node' => '#movimiento-detalles-body',
                                             'data-association-insertion-method' => 'append'
-            
+
           .box-footer
             .form-actions.text-right
               = link_to 'Cancelar', movimiento_mercaderias_path, class: 'btn btn-default'

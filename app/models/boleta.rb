@@ -28,8 +28,6 @@ class Boleta < ActiveRecord::Base
   after_destroy :actualizar_extractos_de_mercaderias
 
   # Validations
-  # el monto de la compra debe ser mayor que 0?
-
   validates :fecha,  presence: true
   validates :numero_comprobante, length: { minimum: 2, maximum: 50 }, allow_blank: true
   validates :tipo,   presence: true
@@ -37,6 +35,7 @@ class Boleta < ActiveRecord::Base
   validates :detalles, length: { minimum: 1 }
   validates :condicion, presence: true
   validate  :condicion_cambiada?, on: :update
+  validate :tiene_pagos_asociados?, on: [:update, :destroy]
 
   with_options if: :credito? do |b|
     b.validates :fecha_vencimiento, presence: true
@@ -51,6 +50,30 @@ class Boleta < ActiveRecord::Base
   def importe_pagado
     self.importe_total - self.importe_pendiente
   end
+
+  def check_detalles_negativos(borrado = false)
+    m = []
+    detalles.each do |d|
+      if d.nueva_cantidad(borrado) < 0
+        m << d.mercaderia
+      end
+    end
+    m
+  end
+
+  def tiene_pagos_asociados?
+    valid = true
+    # no se permite editar la persona ni el importe si la boleta tiene un pago
+    if importe_total_changed? && !recibos_detalles.empty?
+      errors.add(:persona, I18n.t('activerecord.errors.messages.importe_no_editable'))
+      valid = false
+    end
+    if persona_id_changed? && !recibos_detalles.empty?
+      errors.add(:persona, I18n.t('activerecord.errors.messages.persona_no_editable'))
+      valid = false
+    end
+  end
+
 
   def movimiento_motivo
     "#{tipo} Nro. #{numero}"
@@ -81,19 +104,6 @@ class Boleta < ActiveRecord::Base
     end
   end
 
-  def check_detalles_negativos(borrado = false)
-    m = []
-    detalles.each do |d|
-      if d.nueva_cantidad(borrado) < 0
-        m << d.mercaderia
-      end
-    end
-    if m.size > 0
-      #errors.add(:base, I18n.t('movimiento_mercaderia.eliminar_stock_negativo', mercaderias: m.map{|me| me.nombre}.to_sentence))
-    end
-    m
-  end
-
   def fecha_futura
     if fecha > Date.today
       errors.add(:fecha, I18n.t('activerecord.errors.messages.fecha_futura'))
@@ -114,7 +124,6 @@ class Boleta < ActiveRecord::Base
   end
 
   def supera_limite_de_credito?
-    persona = Persona.find(self.persona_id)
     if importe_total > (persona.limite_credito - persona.saldo_actual)
       errors.add(:persona, I18n.t('activerecord.errors.messages.supera_limite_de_credito'))
       false
