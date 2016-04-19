@@ -40,11 +40,16 @@ var TablasHelper = {
      * cada fila debe tener un campo con clase .monto-a-sumar y un checkbox con clase .pagar-boleta
      *
      * @param opciones object => { selector: de la table,
+     *                             autocompletarCampo: indicador para saber si se debe autocompletar el campo de la moneda por defecto
      *                             totalPorDefecto: objeto jquery del elemento a donde se tiene que poner el total. Ej.: el monto de la moneda por defecto,
      *                             callbackDespuesDeSeleccionar: callback luego de seleccionar las boletas}
      */
     calcularSeleccionados: function(opciones) {
-        var tabla = $(opciones.selector);
+        var tabla = $(opciones.selector),
+            autocompletar = true;
+
+        if(opciones.hasOwnProperty('autocompletarCampo'))
+            autocompletar = opciones.autocompletarCampo;
 
         tabla.on('keyup change', '.monto-a-sumar, .pagar-boleta', function(e){
             var total = 0;
@@ -60,7 +65,8 @@ var TablasHelper = {
                 .data('total', total)
                 .text(NumberHelper.aMoneda(total));
 
-            opciones.totalPorDefecto.val(NumberHelper.aMoneda(total)).trigger('change');
+            if(autocompletar)
+                opciones.totalPorDefecto.val(NumberHelper.aMoneda(total)).trigger('change');
 
             if(opciones.hasOwnProperty('callbackDespuesDeSeleccionar'))
                 opciones.callbackDespuesDeSeleccionar();
