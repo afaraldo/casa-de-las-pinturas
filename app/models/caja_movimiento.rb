@@ -12,7 +12,7 @@ class CajaMovimiento < ActiveRecord::Base
 
   delegate :nombre, to: :categoria_gasto, prefix: true
 
-  accepts_nested_attributes_for :detalles, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :detalles, reject_if: proc { |attrs| (attrs['monto'].to_f) <= 0 }, allow_destroy: true
 
   enumerize :tipo, in: [:ingreso, :egreso], predicates: true
 
@@ -48,6 +48,14 @@ class CajaMovimiento < ActiveRecord::Base
     if fecha_changed?
       detalles.each do |d|
         CajaExtracto.crear_o_actualizar_extracto(d, fecha, d.cantidad, d.cantidad)
+      end
+    end
+  end
+
+  def build_detalles(monedas_usadas = [])
+    Moneda.all.each do |m|
+      unless monedas_usadas.include?(m.id)
+        detalles.build(moneda: m, forma: :efectivo, monto: 0)
       end
     end
   end

@@ -22,12 +22,14 @@ class CajaMovimientosController < ApplicationController
   # GET /caja_movimientos/new
   def new
     @caja_movimiento = CajaMovimiento.new
-    @caja_movimiento.detalles.build
+    @caja_movimiento.build_detalles
+    binding.pry
     render :form
   end
 
   # GET /caja_movimientos/1/edit
   def edit
+    @caja_movimiento.rebuild_detalles
     render :form
   end
 
@@ -83,7 +85,6 @@ class CajaMovimientosController < ApplicationController
 
   def get_caja_movimientos
     procesar_fechas
-    # incluir subcategorias se se selecciona una categoria padre
     @search = CajaMovimiento.search(params[:q])
     @caja_movimientos = @search.result.page(params[:page])
 
@@ -95,17 +96,15 @@ class CajaMovimientosController < ApplicationController
       @caja_movimiento = CajaMovimiento.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def caja_movimiento_params
       procesar_cantidades
       params.require(:caja_movimiento).permit(:fecha, :motivo, :tipo,
-                                                    detalles_attributes: [:forma, :moneda_id, :monto, :destroy])
+                                                    detalles_attributes: [:forma, :cotizacion, :moneda_id, :monto, :destroy])
     end
- 
-    # reemplazar las comas por puntos en el caso de las cantidades decimales
+
     def procesar_cantidades
       params[:caja_movimiento][:detalles_attributes].each do |i, d|
-      params[:caja_movimiento][:detalles_attributes][i][:monto] = cantidad_a_numero(d[:monto])
+        params[:caja_movimiento][:detalles_attributes][i][:monto] = cantidad_a_numero(d[:monto])
       end
     end
 

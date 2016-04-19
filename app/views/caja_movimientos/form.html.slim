@@ -33,15 +33,9 @@ section.content
               tbody#caja-movimiento-detalles-body
                 = f.simple_fields_for :detalles do |detalle|
                   = render 'detalle_fields', f: detalle
-
-            = link_to_add_association '<i class="fa fa-plus"></i> Agregar valor'.html_safe, f, :detalles, class: 'btn btn-default pull-right',
-                                            'data-association-insertion-node' => '#caja-movimiento-detalles-body',
-                                            'data-association-insertion-method' => 'append'
           .box-footer
             .text-right.form-actions
               = link_to 'Cancelar', caja_movimientos_path, class: 'btn btn-default'
               | #{' '}
               button.btn.btn-primary type="submit" Guardar movimiento
 
-javascript:
-  CajaMovimientosUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");

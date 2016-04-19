@@ -1,19 +1,11 @@
 tr.nested-fields
   td.form-group
-    = f.input :moneda_id, as: :string,
-                              label: false,
-                              input_html: { class: 'form-control moneda-select required',
-                                            data: {"msg-required" => 'Debe seleccionar una moneda',
-                                                   moneda: f.object.moneda.to_json } }
+    = f.object.forma.capitalize
+    = f.input :forma, as: :hidden
   td.form-group
-    = f.input :moneda_id, as: :string,
-                              label: false,
-                              input_html: { class: 'form-control moneda-select required',
-                                            data: {"msg-required" => 'Debe seleccionar una moneda',
-                                                   moneda: f.object.moneda.to_json } }
+    = f.object.moneda.nombre
+    = f.association :moneda, as: :hidden
   td.form-group
     = f.input :monto,      as: :string,
                               label: false,
-                              input_html: { class: 'form-control maskCantidad required', data: { 'msg-required' => 'Debe ingresar un monto' }, value: number_with_precision(f.object.monto) }
-  td
-    = link_to_remove_association '<i class="fa fa-times"></i>'.html_safe, f, class: 'btn btn-default btn-sm'
+                              input_html: { class: 'form-control maskMoneda required', data: { 'msg-required' => 'Debe ingresar un monto' }, value: number_with_precision(f.object.monto) }
