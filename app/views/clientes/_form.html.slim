@@ -7,6 +7,8 @@
     h4.modal-title
       = cliente.new_record? ? 'Nuevo cliente' : 'Editar cliente'
   .modal-body
+    - if params[:from_ventas].present?
+      = hidden_field_tag :from_ventas, value: true
     = f.input :id, as: :hidden, input_html: { id: 'cliente_id' }
     = f.input :nombre, autofocus: true, input_html: {class: 'uniqueClienteNombre'}
     = f.input :direccion

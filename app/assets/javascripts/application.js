@@ -96,6 +96,7 @@ CasaDeLasPinturas = {
 
     movimiento_mercaderias: MovimientoMercaderiasUI,
     compras: ComprasUI,
+    ventas: BoletasUI,
     pagos: PagosUI,
     cuentas_corrientes: CuentaCorrientesUI
 

@@ -111,7 +111,7 @@ class Boleta < ActiveRecord::Base
   end
 
   def fecha_vencimiento_es_menor_a_fecha?
-    if fecha_vencimiento < fecha
+    if fecha_vencimiento && fecha_vencimiento < fecha
       errors.add(:fecha_vencimiento, I18n.t('activerecord.errors.messages.fecha_vencimiento'))
     end
   end

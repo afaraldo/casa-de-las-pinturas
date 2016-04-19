@@ -1,0 +1,3 @@
+| $("#ventas-table").html("#{escape_javascript(render partial: 'list', format: 'html', locals: {ventas: @ventas})}");
+| $('#ventas-paginate-container').html("#{escape_javascript(paginate(@ventas, remote: true)) }");
+| $('.buscador-resultados > .overlay').remove();

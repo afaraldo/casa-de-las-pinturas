@@ -16,6 +16,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'configuracion', 'configuraciones'
   inflect.irregular 'boleta', 'boletas'
   inflect.irregular 'boleta_detalle', 'boleta_detalles'
+  inflect.irregular 'venta', 'ventas'
   inflect.irregular 'pago', 'pagos'
   inflect.irregular 'pago_detalle', 'pago_detalles'
   inflect.irregular 'recibo_boleta', 'recibos_boletas'

@@ -49,7 +49,7 @@ var PagosUI = (function(){
 
     function initFormEvents(){
 
-        PersonasUI.buscador({elemento: elementos.proveedorBuscador, url: buscarProveedorUrl});
+        PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarProveedorUrl});
 
         elementos.pagosForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
 
@@ -59,11 +59,11 @@ var PagosUI = (function(){
 
         // Abrir el buscador de proveedores cuando se hace click en el panel inicial
         elementos.pagosForm.on('click', '.seleccionar-panel', function(e){
-            elementos.proveedorBuscador.select2('open');
+            elementos.personasBuscador.select2('open');
         });
 
         // Buscar boletas y devoluciones pendientes del proveedor
-        elementos.proveedorBuscador.on('change', function(e){
+        elementos.personasBuscador.on('change', function(e){
             if($(this).val() === ''){
                 seleccioneProveedor();
                 return false;
@@ -125,7 +125,7 @@ var PagosUI = (function(){
         },
         index: function() {
             DatepickerHelper.initDateRangePicker('#date-range');
-            PersonasUI.buscador({elemento: elementos.proveedorBuscador, url: buscarProveedorUrl});
+            PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarProveedorUrl});
         },
         'new': function() {
             initFormEvents();
