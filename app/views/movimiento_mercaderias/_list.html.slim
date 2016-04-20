@@ -4,11 +4,10 @@ table.table.table-bordered.table-hover
       th Fecha
       th Motivo
       th Tipo
-      
+
   tbody
-    - @movimientos.each do |movimiento|
+    - movimientos.each do |movimiento|
       tr.fila-clickeable data-url="#{movimiento_mercaderia_path(movimiento)}"
         td = localize(movimiento.fecha.to_date)
         td = movimiento.motivo
         td = movimiento.tipo_text
-        

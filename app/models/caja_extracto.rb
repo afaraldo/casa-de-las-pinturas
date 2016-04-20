@@ -1,5 +1,5 @@
 class CajaExtracto < MovimientoModel
-  
+
   self.movimiento_key = [:caja_id, :moneda_id]
   self.balances = 'CajaPeriodoBalance'
 
@@ -11,4 +11,5 @@ class CajaExtracto < MovimientoModel
 
   # recibos detalles
   belongs_to :recibo_detalle
+
 end

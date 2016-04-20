@@ -11,9 +11,6 @@ class ConfiguracionesController < ApplicationController
   # GET /configuraciones/1/edit
   def edit
   end
-  def show
-  end
-
 
   def index
 
@@ -28,10 +25,10 @@ class ConfiguracionesController < ApplicationController
     respond_to do |format|
       if @configuracion.update_attributes(configuracion_params)
         flash.now[:notice] = "Configuraciones actualizadas correctamente"
-        format.html { render action: "edit"}
+        format.html { render "edit"}
       else
         flash.now[:error] = "Ha ocurrido un problema al tratar de guardar la configuracion"
-        format.html { render action: "edit"}
+        format.html { render "edit"}
       end
     end
   end

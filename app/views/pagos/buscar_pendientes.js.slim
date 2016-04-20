@@ -1,5 +1,5 @@
 - if @compras.size == 0
   | PagosUI.noHayPendientes("#{@proveedor.nombre}");
 - else
-  | $('#compra-detalles-body').html("#{escape_javascript(render partial: 'compras_pendientes', locals: {compras: @compras, actualizando: false})}");
+  | $('#compra-detalles-body').html("#{escape_javascript(render 'compras_pendientes', compras: @compras, actualizando: false, pago: @pago)}");
   | PagosUI.mostrarBoletas(true);
