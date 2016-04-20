@@ -6,6 +6,6 @@ tr.nested-fields
     = f.object.moneda.nombre
     = f.association :moneda, as: :hidden
   td.form-group
-    = f.input :monto,      as: :string,
-                              label: false,
-                              input_html: { class: 'form-control maskMoneda required', data: { 'msg-required' => 'Debe ingresar un monto' }, value: number_with_precision(f.object.monto) }
+    = f.input :monto, as: :string,
+                      label: false,
+                      input_html: { class: 'form-control maskMoneda required', data: { 'msg-required' => 'Debe ingresar un monto' }, value: number_with_precision(f.object.monto) }
