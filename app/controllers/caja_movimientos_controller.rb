@@ -23,7 +23,6 @@ class CajaMovimientosController < ApplicationController
   def new
     @caja_movimiento = CajaMovimiento.new
     @caja_movimiento.build_detalles
-    binding.pry
     render :form
   end
 

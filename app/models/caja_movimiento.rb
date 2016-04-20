@@ -30,18 +30,19 @@ class CajaMovimiento < ActiveRecord::Base
     end
   end
 
+  # calcula si se va a producir saldo negativo para algunas monedas en la caja efectivo
   def check_detalles_negativos
-    m = []
-    detalles.each do |d|
-      if d.nueva_monto(true) < 0
-        m << d.caja_saldos
-      end
-    end
 
-    if m.size > 0
-      errors.add(:base, I18n.t('caja_movimiento.eliminar_saldo_negativo', caja_saldos: m.map{|me| me.nombre}.to_sentence))
-      false
+    monedas = detalles.map(&:moneda_id) # monedas de los detalles
+    caja = Caja.get_caja_por_forma(:efectivo) # caja efectivo
+    saldos = caja.saldos_por_moneda(monedas) # saldos de esas monedas
+
+    detalles.each do |d|
+      saldos[d.moneda_id] -= (d.monto - d.monto_was.to_f)
     end
+    monedas_negativas = saldos.map{ |m, v| m if v < 0 }.compact
+    monedas_negativas.empty? ? [] : Moneda.find(monedas_negativas) # retorna un conjunto de monedas que pueden quedar con saldo negativo
+
   end
 
   def actualizar_extracto
