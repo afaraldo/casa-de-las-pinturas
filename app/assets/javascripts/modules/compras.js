@@ -16,7 +16,7 @@ var ComprasUI = (function(){
         TablasHelper.calcularTotalEvent('.calcular-pagos-total');
 
         DatepickerHelper.initDatepicker('#compra_fecha');
-        DatepickerHelper.initDatepicker('#compra_fecha_vencimiento', 'nolimitar');
+        DatepickerHelper.initDatepicker('#compra_fecha_vencimiento', {limited: false, orientation: 'bottom'});
 
         $(".btn-group").on("change",function(){
             if ($('input[name="compra[condicion]"]:checked').val() == 'contado' ) {

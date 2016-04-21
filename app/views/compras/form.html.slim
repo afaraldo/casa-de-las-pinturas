@@ -22,14 +22,12 @@ section.content
                         .btn.btn-default
                           i.fa.fa-calendar
                   .col-sm-4
-                    .form-group
-                      = f.input :persona, wrapper: :vertical_input_group,  label: 'Proveedor' do
-                        = f.association :persona, as: :string,  label: false, input_html: { id: 'proveedores-buscador', data: {"msg-required" => 'Debe seleccionar un proveedor', class: 'form-control required',
-                               persona: f.object.persona.to_json }, placeholder: 'Buscar proveedor...' }
-                        .input-group-btn
-                          = link_to '<i class="fa fa-plus"></i>'.html_safe,
-                                    new_proveedor_path(from_proveedor: true),
-                                    data: {toggle: 'tooltip'},
+                    = f.association :persona, as: :string label: 'Proveedor', input_html: { id: 'proveedores-buscador', data: {"msg-required" => 'Debe seleccionar un proveedor', class: 'required',
+                             persona: f.object.persona.to_json }, placeholder: 'Buscar proveedor...' }
+                      .input-group-btn
+                        = link_to '<i class="fa fa-plus"></i>'.html_safe,
+                                  new_proveedor_path(from_proveedor: true),
+                                  data: {toggle: 'tooltip'},
                                     title: 'Nuevo proveedor',
                                     class: 'btn btn-default',
                                     remote: true
