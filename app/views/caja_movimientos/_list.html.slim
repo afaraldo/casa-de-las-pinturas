@@ -11,6 +11,6 @@ table.table.table-bordered.table-hover
       tr.fila-clickeable data-url="#{caja_movimiento_path(caja_movimiento)}"
         td = localize(caja_movimiento.fecha.to_date)
         td = caja_movimiento.motivo
-        td = caja_movimiento.monto
-        td = caja_movimiento.monto
+        td.text-right = number_to_currency(caja_movimiento.monto)
+        td.text-right = number_to_currency(caja_movimiento.monto)
         td.text-right = number_to_currency(caja_movimiento.monto)

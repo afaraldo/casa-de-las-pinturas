@@ -31,8 +31,8 @@ section.content
                 th Moneda
                 th.text-right Monto
             tbody
-              - @movimiento.detalles.each do |d|
+              - @caja_movimiento.detalles.each do |d|
                 tr
                   td = d.caja_movimiento_forma
                   td = d.moneda_nombre
-                  td.text-right = number_with_precision(d.cantidad)
+                  td.text-right = number_with_precision(d.monto)

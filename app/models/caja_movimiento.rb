@@ -48,7 +48,7 @@ class CajaMovimiento < ActiveRecord::Base
   def actualizar_extracto
     if fecha_changed?
       detalles.each do |d|
-        CajaExtracto.crear_o_actualizar_extracto(d, fecha, d.cantidad, d.cantidad)
+        CajaExtracto.crear_o_actualizar_extracto(d, fecha, d.monto, d.monto)
       end
     end
   end
