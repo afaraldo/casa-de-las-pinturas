@@ -1,0 +1,12 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Fecha
+      th Proveedor
+      th Monto
+  tbody
+    - pagos.each do |pago|
+      tr.fila-clickeable 
+        td = localize(pago.fecha.to_date)
+        td = pago.persona_nombre
+        td

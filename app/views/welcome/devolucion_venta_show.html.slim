@@ -1,0 +1,57 @@
+section.content-header
+  h1 Ventas
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          .row
+            .col-xs-12
+              = link_to '<< Volver al listado de devoluciones', movimiento_mercaderias_path
+          .row
+            .col-xs-12
+              h3.box-title Devolucion de mercaderia
+          .box-tools
+            = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, movimiento_mercaderias_path, class: 'btn btn-default'
+            = " "
+            = link_to ' <i class="fa fa-trash"></i> Eliminar'.html_safe,movimiento_mercaderias_path, method: 'delete', data: {confirm: "¿Esta seguro que desea eliminar el movimiento?"}, class: 'btn btn-danger'
+        .box-body
+          dl.cabecera-info
+            dt fecha
+            dd = localize(Date.today)
+            dt Cliente
+            dd = "Alanis SA"
+            dt Venta
+            dd = "00012352"
+            dt Motivo
+            dd = "Mercaderia vencida"
+          label.control-label Mercaderias
+          table.table.table-bordered
+            thead
+              tr
+                th Código
+                th Mercadería
+                th Cantidad
+                th Precio Unitario
+                th Subtotal
+                th
+            tbody#movimiento-detalles-body
+                td 38409295
+                td Aerodynamic Copper Gloves
+                td 20
+                td 1.000
+                td 20.000
+            tfoot
+              tr
+                td colspan="4"
+                td.text-left.text-bold
+                  | Total: 20.000
+                td.table-total.text-left.text-bold
+                  span
+                td
+  /
+  javascript:
+    MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: "#{mercaderias_buscar_path}"});
+    NumberHelper.mascaraCantidad('.maskCantidad');
+    $('#cliente').select2();
+    TablasHelper.calcularTotalEvent('.calcular-total');
