@@ -29,10 +29,10 @@ section.content
               tr
                 th Tipo de Valor
                 th Moneda
-                th.text-right Monto
+                th Monto
             tbody
               - @caja_movimiento.detalles.each do |d|
                 tr
-                  td = d.caja_movimiento_forma
-                  td = d.moneda_nombre
-                  td.text-right = number_with_precision(d.monto)
+                  td = d.forma
+                  td = d.moneda.nombre
+                  td = number_with_precision(d.monto)
