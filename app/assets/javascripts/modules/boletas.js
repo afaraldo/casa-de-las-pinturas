@@ -3,11 +3,33 @@ var BoletasUI = (function(){
         buscarMercaderiaUrl = '',
         buscarPersonaUrl = '';
 
+    function calcularTotal(){
+        elementos.detallesTable.find('.cantidad').trigger('change');
+    }
+
+    function getCondicionDePago(){
+        return $('.boleta-condicion:checked').val();
+    }
+
     function initFormEvents(){
         elementos.boletaForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
 
         PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarPersonaUrl, customSelection: true});
-        MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: buscarMercaderiaUrl});
+        MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'),
+                                        url: buscarMercaderiaUrl,
+                                        customSelection: function(m, el){
+                                            var condicion = getCondicionDePago(),
+                                                precio = m.precio_venta_contado;
+
+                                            $(el).parents('tr').find('.codigo-celda').text(m.codigo);
+
+                                            if(condicion === 'credito')
+                                                precio = m.precio_venta_credito;
+
+                                            $(el).parents('tr').find('.precio-unitario').val(precio);
+
+                                            return m.nombre;
+                                        }});
 
         NumberHelper.mascaraCantidad('.maskCantidad');
         NumberHelper.mascaraMoneda('.maskMoneda');
@@ -18,8 +40,9 @@ var BoletasUI = (function(){
         DatepickerHelper.initDatepicker('#boleta-fecha');
         DatepickerHelper.initDatepicker('#boleta-fecha-vencimiento', 'nolimitar');
 
+        // Mostrar / esconder fecha de vencimiento y credito disponible al cambiar la condicion
         $(".boleta-condicion").on("change",function(){
-            var condicion = $('.boleta-condicion:checked').val();
+            var condicion = getCondicionDePago();
 
             if ( condicion === 'contado' ) {
                 $('#fecha-vencimiento-wrapper').addClass('hide');
@@ -65,24 +88,28 @@ var BoletasUI = (function(){
         init: function() {
             elementos = {
                 boletaForm: $('#boleta-form'),
-                personasBuscador: $('#personas-buscador')
+                personasBuscador: $('#personas-buscador'),
+                detallesTable: $('.detalles-table')
             }
         },
         index: function() {
           DatepickerHelper.initDateRangePicker('#date-range');
-          PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarPersonaUrl});
+          PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarPersonaUrl, customSelection: true});
         },
         'new': function() {
             initFormEvents();
         },
         'create': function(){
             initFormEvents();
+            calcularTotal();
         },
         'edit': function() {
             initFormEvents();
+            calcularTotal();
         },
         'update': function(){
             initFormEvents();
+            calcularTotal();
         },
         setBuscarMercaderiaUrl: function(url) {
             buscarMercaderiaUrl = url;

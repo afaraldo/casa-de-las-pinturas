@@ -19,6 +19,12 @@
   }
 }
 
+body{
+  > .datepicker-dropdown{
+    z-index: 9999;
+  }
+}
+
 // Ajuste para campos dentro de celdas
 td{
   > .form_group{

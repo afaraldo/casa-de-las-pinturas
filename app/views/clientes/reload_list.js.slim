@@ -4,7 +4,7 @@
 - else
   | noty({type: "success", text : "#{@message}"});
   | modal.modal('hide');
-  - if params[:from_ventas].present?
+  - if params[:from_boletas].present?
     | $("#limite_credito").html(NumberHelper.aMoneda(#{@cliente.limite_credito}));
     | $("#saldo").html(NumberHelper.aMoneda(#{@cliente.limite_credito - @cliente.saldo_actual}));
     | $("#personas-buscador").select2('data', #{@cliente.to_json.html_safe})

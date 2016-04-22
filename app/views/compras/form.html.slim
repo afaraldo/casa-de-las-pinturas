@@ -9,6 +9,7 @@ section.content
             a.volver-link href= compras_path
               i.fa.fa-angle-double-left style="margin-right: 5px;"
               | Volver al listado de compras
+            .clearfix
             h3.box-title = @compra.new_record? ? 'Nueva Compra' : "Editar Compra Nro. #{@compra.numero}"
           .box-body
             = f.error_notification
@@ -28,7 +29,7 @@ section.content
                                persona: f.object.persona.to_json }, placeholder: 'Buscar proveedor...' }
                         .input-group-btn
                           = link_to '<i class="fa fa-plus"></i>'.html_safe,
-                                    new_proveedor_path(from_proveedor: true),
+                                    new_proveedor_path(from_boletas: true),
                                     data: {toggle: 'tooltip'},
                                     title: 'Nuevo proveedor',
                                     class: 'btn btn-default',

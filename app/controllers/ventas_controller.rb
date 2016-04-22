@@ -41,12 +41,12 @@ class VentasController < ApplicationController
   # POST /ventas
   # POST /ventas.json
   def create
-    #binding.pry
     @venta = Venta.new(venta_params)
+    @stock_negativo = params[:guardar_si_o_si].present? ? [] : @venta.check_detalles_negativos
 
     respond_to do |format|
       Venta.transaction do
-        if @venta.save
+        if @stock_negativo.size <= 0 && @venta.save
           format.html { redirect_to @venta, notice: t('mensajes.save_success', recurso: 'la venta') }
           format.json { render :show, status: :created, location: @venta }
         else

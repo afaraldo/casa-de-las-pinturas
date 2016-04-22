@@ -9,6 +9,7 @@ section.content
             a.volver-link href= pagos_path
               i.fa.fa-angle-double-left
               | Volver al listado de pagos
+            .clearfix
             h3.box-title = @pago.new_record? ? 'Nuevo Pago' : "Editar Pago Nro. #{@pago.numero}"
           .box-body
             = f.error_notification
