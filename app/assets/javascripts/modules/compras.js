@@ -6,7 +6,7 @@ var ComprasUI = (function(){
     function initFormEvents(){
         elementos.compraForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
 
-        PersonasUI.buscador({elemento: $('#proveedores-buscador'), url: buscarProveedorUrl, customSelection: true});
+        PersonasUI.buscador({elemento: $('#personas-buscador'), url: buscarProveedorUrl, customSelection: true});
         MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: buscarMercaderiaUrl});
 
         NumberHelper.mascaraCantidad('.maskCantidad');
