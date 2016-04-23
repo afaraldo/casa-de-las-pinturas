@@ -5,8 +5,8 @@ table.table.table-bordered.table-hover
       th Proveedor
       th Monto
   tbody
-    - pagos.each do |pago|
+    - mercaderias_devoluciones_boletas.each do |devolucion|
       tr.fila-clickeable 
-        td = localize(pago.fecha.to_date)
-        td = pago.persona_nombre
+        td = localize(devolucion.fecha.to_date)
+        td = devolucion.persona_nombre
         td

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+
   devise_for :users
 
   get 'configuraciones/check_empresa_nombre' => 'configuraciones#check_empresa_nombre'
@@ -49,6 +50,9 @@ Rails.application.routes.draw do
 
   resources :caja_movimientos
 
+ 
+  resources :mercaderias_devoluciones_boletas
+
 
   get 'welcome/index'
   get 'welcome/compras_index'
@@ -65,6 +69,7 @@ Rails.application.routes.draw do
   get 'welcome/devoluciones_venta_index'
   get 'welcome/devoluciones_compra_index'
   get 'welcome/gastos_reporte'
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

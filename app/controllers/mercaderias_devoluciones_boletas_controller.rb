@@ -1,12 +1,9 @@
 class MercaderiasDevolucionesBoletasController < ApplicationController
-  before_action :set_mercaderias_devoluciones_boleta, only: [:show, :edit, :update, :destroy]
-  before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
+  layout 'imprimir', only: [:imprimir]
 
-  # GET /mercaderias_devoluciones_boletas
-  # GET /mercaderias_devoluciones_boletas.json
-  def index
-    @mercaderias_devoluciones_boletas = MercaderiasDevolucionesBoleta.all
-  end
+  before_action :set_mercaderias_devoluciones_boleta, only: [:show, :edit, :update, :destroy]
+  before_action :setup_menu, only: [:index]
+
 
   # configuracion del menu
   def setup_menu
@@ -17,6 +14,16 @@ class MercaderiasDevolucionesBoletasController < ApplicationController
   # GET /mercaderias_devoluciones_boletas/1
   # GET /mercaderias_devoluciones_boletas/1.json
   def show
+  end
+
+  # GET /mercaderias_devoluciones_boletas
+  # GET /mercaderias_devoluciones_boletas.json
+  def index
+    get_devoluciones
+  end
+
+  def imprimir
+    get_devoluciones
   end
 
   # GET /mercaderias_devoluciones_boletas/new
@@ -77,5 +84,16 @@ class MercaderiasDevolucionesBoletasController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def mercaderias_devoluciones_boleta_params
       params.require(:mercaderias_devoluciones_boleta).permit(:boleta_id)
+    end
+
+    def get_devoluciones
+      procesar_fechas
+      @search = MercaderiasDevolucionesBoleta.search(params[:q])
+      @mercaderias_devoluciones_boletas = @search.result.includes(:persona).page(params[:page]).per(action_name == 'imprimir' ? LIMITE_REGISTROS_IMPRIMIR : 25)
+    end
+    def procesar_fechas
+      if params[:q].present? && params[:q][:fecha_lt].present?
+        params[:q][:fecha_lt] = params[:q][:fecha_lt].to_datetime.end_of_day
+      end
     end
 end

@@ -23,6 +23,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'mercaderia_periodo_balance', 'mercaderia_periodo_balances'
   inflect.irregular 'cuenta_corriente_extracto', 'cuentas_corrientes_extractos'
   inflect.irregular 'cuenta_corriente_periodo_balance', 'cuenta_corriente_periodo_balances'
+  inflect.irregular 'mercaderias_devoluciones_compra', 'mercaderias_devoluciones_compras'
 end
 
 # These inflection rules are supported but not enabled by default:
