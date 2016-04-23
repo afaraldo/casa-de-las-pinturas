@@ -82,9 +82,26 @@ class CajaMovimientosController < ApplicationController
   end
 
   def get_caja_movimientos
-    procesar_fechas
-    @search = CajaMovimiento.search(params[:q])
-    @caja_movimientos = @search.result.page(params[:page])
+    @movimientos = nil
+
+    # Configurando las fechas
+    @desde = nil
+    @hasta = nil
+
+    if params[:fecha_desde].present? && params[:fecha_hasta].present?
+      @desde = params[:fecha_desde].to_datetime
+      @hasta = params[:fecha_hasta].to_datetime
+    end
+
+    # buscar movimientos
+    if params[:persona_id].present?
+      @movimientos = CajaExtracto.get_movimientos(caja_id: params[:caja_id], moneda_id: params[:moneda_id],
+                                                             desde: @desde,
+                                                             hasta: @hasta,
+                                                             page: params[:page],
+                                                             limit: action_name == 'imprimir_extracto' ? LIMITE_REGISTROS_IMPRIMIR : nil)
+    end
+    
 
   end
 
