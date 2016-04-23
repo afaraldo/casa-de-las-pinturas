@@ -27,7 +27,7 @@ menu:
     submenus:
       ventas:
         text: "Ventas"
-        url: "#"
+        url: :ventas
         active_submenu: :ventas_sidemenu
       clientes:
         text: "Clientes"

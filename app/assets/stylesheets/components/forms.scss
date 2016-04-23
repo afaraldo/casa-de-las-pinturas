@@ -19,6 +19,12 @@
   }
 }
 
+body{
+  > .datepicker-dropdown{
+    z-index: 9999;
+  }
+}
+
 // select2 con input-group
 .select2-input-group{
   .input-group{

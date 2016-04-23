@@ -1,13 +1,18 @@
 var DatepickerHelper = {
     // Funcion para inicializar un datepicker simple a partir de un selector
-    initDatepicker: function(selector, opciones = {}) {
-        opciones.endDate = '0d';
-        opciones.zIndexOffset = '1001';
-        if (opciones.limited === false){
+    initDatepicker: function(selector, opciones) {
+
+        if(typeof opciones === 'undefined')
+            opciones = {};
+
+        opciones['endDate'] = '0d';
+        opciones['zIndexOffset'] = '1001';
+
+        if (opciones['limited'] === false){
             delete opciones.endDate;
         }
-        $(selector).datepicker(opciones);
 
+        $(selector).datepicker(opciones);
 
         // Evento para el boton al lado del campo datepicker
         $(selector + ' + .input-group-btn').on('click', function(e){

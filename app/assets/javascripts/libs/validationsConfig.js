@@ -58,5 +58,8 @@ $.validator.addClassRules({
     },
     passwordConfirmation: {
         equalTo: '#empleado_user_attributes_password'
+    },
+    fechaVencimiento: {
+        required: 'input[value="credito"]:checked'
     }
 });

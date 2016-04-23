@@ -40,6 +40,9 @@ Rails.application.routes.draw do
   get 'compras/imprimir' => 'compras#imprimir'
   resources :compras
 
+  get 'ventas/imprimir' => 'ventas#imprimir'
+  resources :ventas
+
   get 'pagos/buscar_pendientes' => 'pagos#buscar_pendientes'
   get 'pagos/imprimir' => 'pagos#imprimir'
   resources :pagos

@@ -4,5 +4,11 @@
 - else
   | noty({type: "success", text : "#{@message}"});
   | modal.modal('hide');
-  | $('#clientes-table').html("#{escape_javascript(render 'list', clientes: @clientes)}");
-  | $('#paginate-container').html("#{escape_javascript(paginate(@clientes, params: {controller: :clientes, action: :index}, remote: true)) }");
+  - if params[:from_boletas].present?
+    | $("#limite_credito").html(NumberHelper.aMoneda(#{@cliente.limite_credito}));
+    | $("#saldo").html(NumberHelper.aMoneda(#{@cliente.limite_credito - @cliente.saldo_actual}));
+    | $("#personas-buscador").select2('data', #{@cliente.to_json.html_safe})
+  - else
+    | $('#clientes-table').html("#{escape_javascript(render 'list', clientes: @clientes)}");
+    | $('#paginate-container').html("#{escape_javascript(paginate(@clientes, params: {controller: :clientes, action: :index}, remote: true)) }");
+
