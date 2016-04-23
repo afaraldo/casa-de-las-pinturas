@@ -53,6 +53,14 @@ module MovimientosHelper
         # -------------------------------
         # MOVIMIENTOS DE CAJA
         # -------------------------------
+        when 'CajaMovimientoDetalle'
+          detalle = m.caja_movimiento_detalle
+          es_ingreso = detalle.caja_movimiento.tipo.ingreso?
+          resultado = {url: "/caja_movimiento/#{detalle.caja_movimiento.id}",
+                        fecha: detalle.caja_movimiento.fecha,
+                        motivo: detalle.caja_movimiento.motivo,
+                        ingreso: es_ingreso ? detalle.monto : 0,
+                        egreso: es_ingreso ? 0 : detalle.monto}
         when 'ReciboDetalle'
           detalle = m.recibo_detalle
           es_ingreso = !detalle.recibo.instance_of?(Pago)

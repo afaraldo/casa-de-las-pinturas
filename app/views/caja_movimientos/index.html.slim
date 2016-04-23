@@ -8,8 +8,8 @@ section.content
           h3.box-title Movimientos de caja
           .box-tools.pull-right
             = link_to 'Nuevo movimiento', new_caja_movimiento_path, class: 'btn btn-primary'
-        .box-body#movimiento-mercaderias-lista
-          #mercaderias-search.buscador-listado
+        .box-body#caja-movimientos-lista
+          #caja-movimientos-search.buscador-listado
             = search_form_for @search, remote: true, class: 'remote-search' do |f|
               .row
                 .col-xs-4
