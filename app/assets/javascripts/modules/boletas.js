@@ -12,24 +12,26 @@ var BoletasUI = (function(){
     }
 
     function initFormEvents(){
+        var opcionesBuscadorMercaderias = {url: buscarMercaderiaUrl,
+                        customSelection: function(m, el){
+                            var condicion = getCondicionDePago(),
+                                precio = m.precio_venta_contado;
+
+                            $(el).parents('tr').find('.codigo-celda').text(m.codigo);
+
+                            // Para completar el precio de venta
+                            if(condicion === 'credito')
+                                precio = m.precio_venta_credito;
+
+                            $(el).parents('tr').find('.precio-unitario').val(precio);
+
+                            return m.nombre;
+                        }};
+
         elementos.boletaForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
 
         PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarPersonaUrl, customSelection: true});
-        MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'),
-                                        url: buscarMercaderiaUrl,
-                                        customSelection: function(m, el){
-                                            var condicion = getCondicionDePago(),
-                                                precio = m.precio_venta_contado;
-
-                                            $(el).parents('tr').find('.codigo-celda').text(m.codigo);
-
-                                            if(condicion === 'credito')
-                                                precio = m.precio_venta_credito;
-
-                                            $(el).parents('tr').find('.precio-unitario').val(precio);
-
-                                            return m.nombre;
-                                        }});
+        MercaderiasUI.buscarMercaderia($.extend({elemento: $('.mercaderia-select')}, opcionesBuscadorMercaderias));
 
         NumberHelper.mascaraCantidad('.maskCantidad');
         NumberHelper.mascaraMoneda('.maskMoneda');
@@ -65,7 +67,7 @@ var BoletasUI = (function(){
         $('#boleta-detalles-body').on('cocoon:after-insert', function(e, insertedItem) { // Evento luego de insertar un detalle
 
             // Se inicializa el buscador de mercaderias y se agrega mascara a los campos del nuevo detalle
-            MercaderiasUI.buscarMercaderia({elemento: insertedItem.find('.mercaderia-select'), url: buscarMercaderiaUrl});
+            MercaderiasUI.buscarMercaderia($.extend({elemento: insertedItem.find('.mercaderia-select')}, opcionesBuscadorMercaderias));
             NumberHelper.mascaraCantidad('.maskCantidad');
             NumberHelper.mascaraMoneda('.maskMoneda');
 

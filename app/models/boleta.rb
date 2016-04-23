@@ -25,7 +25,6 @@ class Boleta < ActiveRecord::Base
   after_destroy :actualizar_extracto_de_cuenta_corriente
 
   after_save :actualizar_extractos_de_mercaderias
-  after_destroy :actualizar_extractos_de_mercaderias
 
   # Validations
   validates :fecha,  presence: true
@@ -132,7 +131,25 @@ class Boleta < ActiveRecord::Base
 
   # Actualiza la cuenta corriente si es que se guardo o actualizo
   def actualizar_extracto_de_cuenta_corriente
-    CuentaCorrienteExtracto.crear_o_actualizar_extracto(self.becomes(Boleta), fecha, importe_pendiente_was.to_f, importe_pendiente)
+    if deleted?
+      CuentaCorrienteExtracto.eliminar_movimiento(self.becomes(Boleta), fecha, importe_pendiente * -1)
+    else
+      if persona_id_changed? && !persona_id_was.nil? # si cambio de cuenta corriente
+        old = get_old_boleta
+        CuentaCorrienteExtracto.eliminar_movimiento(old.becomes(Boleta), fecha_was, importe_pendiente_was * -1)
+        CuentaCorrienteExtracto.crear_o_actualizar_extracto(self.becomes(Boleta), fecha, 0, importe_pendiente)
+      else
+        CuentaCorrienteExtracto.crear_o_actualizar_extracto(self.becomes(Boleta), fecha, importe_pendiente_was.to_f, importe_pendiente)
+      end
+    end
+  end
+
+  def get_old_boleta
+    old = self.dup
+    old.id = self.id
+    old.persona_id = persona_id_was
+
+    old
   end
 
   # Actualiza el extracto de las mercaderias si se cambio de la fecha de la boleta
