@@ -3,6 +3,10 @@ var BoletasUI = (function(){
         buscarMercaderiaUrl = '',
         buscarPersonaUrl = '';
 
+    function getModulo() {
+        return $('body').data('controller');
+    }
+
     function calcularTotal(){
         elementos.detallesTable.find('.cantidad').trigger('change');
     }
@@ -19,11 +23,13 @@ var BoletasUI = (function(){
 
                             $(el).parents('tr').find('.codigo-celda').text(m.codigo);
 
-                            // Para completar el precio de venta
-                            if(condicion === 'credito')
-                                precio = m.precio_venta_credito;
+                            // Para completar el precio de venta si es venta
+                            if(getModulo() === 'ventas') {
+                                if (condicion === 'credito')
+                                    precio = m.precio_venta_credito;
 
-                            $(el).parents('tr').find('.precio-unitario').val(precio);
+                                $(el).parents('tr').find('.precio-unitario').val(precio);
+                            }
 
                             return m.nombre;
                         }};
@@ -40,7 +46,7 @@ var BoletasUI = (function(){
         TablasHelper.calcularTotalEvent('.calcular-pagos-total');
 
         DatepickerHelper.initDatepicker('#boleta-fecha');
-        DatepickerHelper.initDatepicker('#boleta-fecha-vencimiento', 'nolimitar');
+        DatepickerHelper.initDatepicker('#boleta-fecha-vencimiento', {limited: false, orientation: 'bottom'});
 
         // Mostrar / esconder fecha de vencimiento y credito disponible al cambiar la condicion
         $(".boleta-condicion").on("change",function(){
@@ -96,7 +102,7 @@ var BoletasUI = (function(){
         },
         index: function() {
           DatepickerHelper.initDateRangePicker('#date-range');
-          PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarPersonaUrl, customSelection: true});
+          PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarPersonaUrl});
         },
         'new': function() {
             initFormEvents();

@@ -17,7 +17,7 @@ section.content
             - if @venta.recibos_detalles.empty?
               = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, venta_path(@venta), method: 'delete', data: {confirm: "¿Esta seguro que desea eliminar la venta?"}, class: 'btn btn-danger'
             - else
-              button.btn.btn-danger.disabled
+              button.btn.btn-danger.disabled data-toggle="tooltip" title="No se puede eliminar la compra porque tiene pagos asociados."
                 i.fa.fa-trash
                 |  Eliminar
         .box-body

@@ -15,7 +15,7 @@ var PersonasUI = (function(){
     function formatCustomSelection(m) {
       $("#limite_credito").html(NumberHelper.aMoneda(m.limite_credito));
       $("#saldo").html(NumberHelper.aMoneda(m.limite_credito - m.saldo_actual));
-      $("#link_to_persona").attr("href", $('body').data('controller') === 'compras' ? "/proveedores/" : '/clientes/' + m.id + "/edit?from_boletas=true");
+      $("#link_to_persona").attr("href", ($('body').data('controller') === 'compras' ? "/proveedores/" : '/clientes/') + m.id + "/edit?from_boletas=true");
       return m.nombre;
     }
 

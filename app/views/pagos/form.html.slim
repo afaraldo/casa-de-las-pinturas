@@ -23,7 +23,7 @@ section.content
                         .btn.btn-default
                           i.fa.fa-calendar
                   .col-sm-4
-                    = f.association :persona, as: :string, label: 'Proveedor', disabled: @pago.persisted?, input_html: { id: 'proveedores-buscador', placeholder: 'Buscar proveedor...', data: { 'msg-required' => 'Este campo es obligatorio.',persona: f.object.persona.to_json } }
+                    = f.association :persona, as: :string, label: 'Proveedor', disabled: @pago.persisted?, input_html: { id: 'personas-buscador', placeholder: 'Buscar proveedor...', data: { 'msg-required' => 'Este campo es obligatorio.',persona: f.object.persona.to_json } }
                 .row
                   .col-sm-4
                     = f.input :numero_comprobante, label: 'Número de Comprobante'

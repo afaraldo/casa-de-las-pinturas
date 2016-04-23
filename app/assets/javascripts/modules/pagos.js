@@ -116,7 +116,7 @@ var PagosUI = (function(){
         init: function() {
             elementos = {
                 pagosForm: $('#pago-form'),
-                proveedorBuscador: $('#proveedores-buscador'),
+                personasBuscador: $('#personas-buscador'),
                 mensajePanel: $('#pago-mensajes'),
                 boletasPanel: $('#pago-boletas-devoluciones'),
                 detallesPanel: $('#pago-detalles'),

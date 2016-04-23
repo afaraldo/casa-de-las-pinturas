@@ -161,4 +161,9 @@ class Boleta < ActiveRecord::Base
     end
   end
 
+  # para poder buscar por el id y numero comprobante
+  ransacker :id do
+    Arel.sql("to_char(\"#{table_name}\".\"id\", '99999')")
+  end
+
 end
