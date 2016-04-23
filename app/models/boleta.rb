@@ -21,11 +21,9 @@ class Boleta < ActiveRecord::Base
   before_validation :set_importe_pendiente
   before_validation :set_estado
 
-  after_save :actualizar_extracto_de_cuenta_corriente
-  after_destroy :actualizar_extracto_de_cuenta_corriente
-
-  after_save :actualizar_extractos_de_mercaderias
-  after_destroy :actualizar_extractos_de_mercaderias
+  after_create :crear_extracto_de_cuenta_corriente
+  after_update :actualizar_extracto_de_cuenta_corriente
+  after_destroy :eliminar_extractos_de_cuenta_corriente
 
   # Validations
   validates :fecha,  presence: true
@@ -40,7 +38,7 @@ class Boleta < ActiveRecord::Base
   with_options if: :credito? do |b|
     b.validates :fecha_vencimiento, presence: true
     b.validate  :fecha_vencimiento_es_menor_a_fecha?
-    b.validate  :supera_limite_de_credito?
+    b.validate  :supera_limite_de_credito?, on: :create
   end
 
   def numero
@@ -124,15 +122,50 @@ class Boleta < ActiveRecord::Base
   end
 
   def supera_limite_de_credito?
-    if importe_total > (persona.limite_credito - persona.saldo_actual)
+    if importe_pendiente  > (persona.limite_credito - persona.saldo_actual)
       errors.add(:persona, I18n.t('activerecord.errors.messages.supera_limite_de_credito'))
       false
     end
   end
 
-  # Actualiza la cuenta corriente si es que se guardo o actualizo
-  def actualizar_extracto_de_cuenta_corriente
+
+  def crear_extracto_de_cuenta_corriente
     CuentaCorrienteExtracto.crear_o_actualizar_extracto(self.becomes(Boleta), fecha, importe_pendiente_was.to_f, importe_pendiente)
+  end
+
+  def actualizar_extracto_de_cuenta_corriente
+      # Puede cambiar la persona, la fecha y el importe
+      if fecha_changed?
+        fecha_anterior = fecha_was
+        fecha_nueva    = fecha
+      else
+        fecha_anterior = fecha
+        vecha_nueva    = fecha
+      end
+
+      if importe_total_changed?
+        importe_total_anterior = importe_total_was
+        importe_total_nueva    = importe_total
+      else
+        importe_pendiente_anterior = importe_total
+        importe_pendiente_nueva    = importe_total
+      end
+
+      if persona_id_changed?
+        temporal = self.persona_id
+        self.persona_id = persona_id_was
+        CuentaCorrienteExtracto.eliminar_movimiento(self.becomes(Boleta), fecha_anterior, -importe_pendiente_anterior)
+        self.persona_id = temporal
+        CuentaCorrienteExtracto.crear_o_actualizar_extracto(self.becomes(Boleta), fecha, importe_pendiente_anterior.to_f, importe_pendiente_nueva)
+        persona_nueva    = persona_id
+      else
+        CuentaCorrienteExtracto.crear_o_actualizar_extracto(self.becomes(Boleta), fecha, importe_pendiente_was.to_f, importe_pendiente)
+      end
+
+  end
+
+  def eliminar_extractos_de_cuenta_corriente
+    CuentaCorrienteExtracto.eliminar_movimiento(self.becomes(Boleta), self.fecha, -importe_pendiente)
   end
 
   # Actualiza el extracto de las mercaderias si se cambio de la fecha de la boleta
