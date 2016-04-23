@@ -25,6 +25,18 @@ body{
   }
 }
 
+// select2 con input-group
+.select2-input-group{
+  .input-group{
+    width: 90%;
+    display: inline-block;
+    margin-bottom: 0px;
+    .input-group-btn{
+      display: block;
+    }
+  }
+}
+
 // Ajuste para campos dentro de celdas
 td{
   > .form_group{

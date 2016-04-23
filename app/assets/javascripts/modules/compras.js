@@ -6,7 +6,7 @@ var ComprasUI = (function(){
     function initFormEvents(){
         elementos.compraForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
 
-        PersonasUI.buscador({elemento: $('#proveedores-buscador'), url: buscarProveedorUrl, customSelection: true});
+        PersonasUI.buscador({elemento: $('#personas-buscador'), url: buscarProveedorUrl, customSelection: true});
         MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: buscarMercaderiaUrl});
 
         NumberHelper.mascaraCantidad('.maskCantidad');
@@ -16,7 +16,7 @@ var ComprasUI = (function(){
         TablasHelper.calcularTotalEvent('.calcular-pagos-total');
 
         DatepickerHelper.initDatepicker('#compra_fecha');
-        DatepickerHelper.initDatepicker('#compra_fecha_vencimiento', 'nolimitar');
+        DatepickerHelper.initDatepicker('#compra_fecha_vencimiento', {limited: false, orientation: 'bottom'});
 
         $(".btn-group").on("change",function(){
             if ($('input[name="compra[condicion]"]:checked').val() == 'contado' ) {

@@ -39,7 +39,7 @@ class Boleta < ActiveRecord::Base
   with_options if: :credito? do |b|
     b.validates :fecha_vencimiento, presence: true
     b.validate  :fecha_vencimiento_es_menor_a_fecha?
-    b.validate  :supera_limite_de_credito?
+    b.validate  :supera_limite_de_credito?, on: :create
   end
 
   def numero
@@ -123,7 +123,7 @@ class Boleta < ActiveRecord::Base
   end
 
   def supera_limite_de_credito?
-    if importe_total > (persona.limite_credito - persona.saldo_actual)
+    if importe_pendiente  > (persona.limite_credito - persona.saldo_actual)
       errors.add(:persona, I18n.t('activerecord.errors.messages.supera_limite_de_credito'))
       false
     end

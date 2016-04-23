@@ -47,7 +47,7 @@ var PagosUI = (function(){
         }
     }
 
-    function initFormEvents(){
+    function initFormEvents(autocompletarMonedaPorDefecto){
 
         PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarProveedorUrl});
 
@@ -100,6 +100,7 @@ var PagosUI = (function(){
         TablasHelper.calcularSeleccionados(
             {   selector: '#compra-detalles-tabla',
                 totalPorDefecto: $('.moneda-por-defecto'),
+                autocompletarCampo: autocompletarMonedaPorDefecto,
                 callbackDespuesDeSeleccionar: function(){ // Cuando se selecciona alguna boleta se esconde la validacion
                     if(elementos.pagosForm.find('.pagar-boleta:checked').length > 0){
                         elementos.validacionBoletasSeleccionadas.addClass('hide');
@@ -128,18 +129,18 @@ var PagosUI = (function(){
             PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarProveedorUrl});
         },
         'new': function() {
-            initFormEvents();
+            initFormEvents(true);
         },
         'create': function(){
-            initFormEvents();
+            initFormEvents(false);
             mostrarBoletas(false)
         },
         'edit': function() {
-            initFormEvents();
+            initFormEvents(false);
             mostrarBoletas(false);
         },
         'update': function(){
-            initFormEvents();
+            initFormEvents(false);
             mostrarBoletas(false);
         },
         noHayPendientes: noHayPendientes,
