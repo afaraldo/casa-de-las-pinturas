@@ -28,7 +28,6 @@ class CajaMovimientosController < ApplicationController
 
   # GET /caja_movimientos/1/edit
   def edit
-    @caja_movimiento.rebuild_detalles
     render :form
   end
 
@@ -98,7 +97,7 @@ class CajaMovimientosController < ApplicationController
     def caja_movimiento_params
       procesar_cantidades
       params.require(:caja_movimiento).permit(:fecha, :motivo, :tipo,
-                                                    detalles_attributes: [:forma, :cotizacion, :moneda_id, :monto, :destroy])
+                                                    detalles_attributes: [:forma, :moneda_id, :monto, :destroy])
     end
 
     def procesar_cantidades

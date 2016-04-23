@@ -12,23 +12,14 @@ class CajaMovimientoDetalle < ActiveRecord::Base
   validates :monto, numericality: { greater_than: 0, less_than_or_equal_to: DECIMAL_LIMITE[:superior] }
   validates :forma, presence: true
 
-  def nuevo_monto(borrado = false)
-    nuevo_monto = deleted? || borrado ? 0 : monto
-    nuevo_monto_diff = nuevo_monto - monto_was.to_f
-
-    monto_ = caja_saldo.saldo_efectivo
-    monto_ += nuevo_monto_diff if caja_movimiento.tipo == :ingreso
-    monto_ -= nuevo_monto_diff if caja_movimiento.tipo == :egreso
-    monto_
-  end
-
   def actualizar_extractos
     self.caja_id = Caja.get_caja_por_forma(forma).id
-    operador = self.caja_movimiento.tipo.ingreso? ? -1 : 1
+    operador = self.caja_movimiento ? -1 : 1
+
     if deleted?
       CajaExtracto.eliminar_movimiento(self, self.caja_movimiento.fecha, monto * operador * -1)
     else
-      CajaExtracto.crear_o_actualizar_extracto(self, self.caja_movimiento.fecha, monto_was.to_f * operador, monto * operador)
+      CajaExtracto.crear_o_actualizar_extracto(self, self.caja_movimiento.fecha, monto_was.to_f * operador, monto.to_f * operador)
     end
   end
 

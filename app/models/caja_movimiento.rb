@@ -60,5 +60,10 @@ class CajaMovimiento < ActiveRecord::Base
       end
     end
   end
+    # Agregar las monedas que no estan presentes
+  # esto es para cuando se edita o hay un error al tratar de guardar
+  def rebuild_detalles
+    build_detalles(detalles.map(&:moneda_id))
+  end
 
 end
