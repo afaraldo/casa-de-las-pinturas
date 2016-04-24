@@ -78,6 +78,20 @@ class Boleta < ActiveRecord::Base
     "#{tipo} Nro. #{numero}"
   end
 
+  def self.get_reporte(desde, hasta, persona_id, agrupar_por, resumido)
+
+    agrupar_por = 'dia' if agrupar_por.nil?
+
+    resultado = self.unscoped.where(fecha: desde..hasta)
+
+    resultado = resultado.where(persona_id: persona_id) unless persona_id.blank?
+
+    grupo_formato = (agrupar_por == 'dia') ? 'default' : agrupar_por
+
+      resultado.order('fecha asc').group_by { |b| (agrupar_por == 'persona') ? b.persona_nombre :  I18n.localize(b.fecha.to_date, format: grupo_formato.to_sym) }
+
+  end
+
   private
 
   def set_importe_total

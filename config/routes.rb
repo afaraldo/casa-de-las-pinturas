@@ -52,6 +52,10 @@ Rails.application.routes.draw do
 
   resources :caja_movimientos
 
+  # Reportes
+  get 'reportes/compras'
+
+
 
   get 'welcome/index'
   get 'welcome/compras_index'

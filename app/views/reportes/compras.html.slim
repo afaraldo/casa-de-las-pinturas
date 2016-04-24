@@ -1,0 +1,40 @@
+section.content-header
+  h1 Reportes
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Reporte de Compras
+          .box-tools.pull-right.hidden-print
+            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, '#', class: 'btn btn-primary imprimir-listado'
+        .box-body
+          #reporte-search.buscador-listado.hidden-print
+            = form_tag reportes_compras_path, remote: true, method: :get, class: 'remote-search' do
+              .row
+                .col-sm-3
+                  .form-group
+                    label.control-label Filtrar por:
+                    div#date-range.btn.btn-default.daterange.btn-block
+                      = hidden_field_tag :fecha_desde, nil, class: 'fecha-desde'
+                      = hidden_field_tag :fecha_hasta, nil, class: 'fecha-hasta'
+                      i.fa.fa-calendar
+                      span Fecha
+                      b.caret
+                .col-sm-3
+                  .form-group.top-25
+                    = text_field_tag :persona_id, nil, id: 'personas-buscador', class: 'form-control', placeholder: "Todos los proveedores..."
+                .col-sm-3
+                  .form-group
+                    label.control-label Agrupar por:
+                    = select_tag :agrupar_por, options_for_select([['Proveedor', 'persona'], ['Día', 'dia'], ['Mes', 'month'], ['Año', 'year']], 'dia'), class: 'form-control'
+                .col-sm-3
+                  div.top-25 data-toggle="buttons"
+                    label.btn.btn-default
+                      input type="radio" name="modo_resumido"
+                      | Modo resumido
+          #reporte-table.overlay-wrapper.buscador-resultados.table-responsive
+            = render "compras_#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", reporte: @reporte
+  javascript:
+    ReportesUI.setBuscarPersonaUrl("#{proveedores_buscar_path}");
+

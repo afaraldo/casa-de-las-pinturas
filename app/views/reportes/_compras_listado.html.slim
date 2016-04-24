@@ -1,0 +1,19 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Nro. de comprobante
+      th Condicion de pago
+      th Proveedor
+      th Monto
+      th Estado
+  tbody
+    - reporte.each do |grupo, compras|
+      tr.active.text-bold
+        td colspan="5" = grupo
+      - compras.each do |c|
+        tr
+          td = c.numero_comprobante
+          td = c.condicion_text
+          td = c.persona_nombre
+          td = number_to_currency(c.importe_total)
+          td = "<label class='label label-#{c.estado.pagado? ? 'success' : 'warning'}'>#{c.estado_text}</label>".html_safe

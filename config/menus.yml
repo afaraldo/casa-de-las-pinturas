@@ -74,7 +74,7 @@ menu:
     submenus:
       reporte_compras:
         text: "Reporte de compras"
-        url: "#"
+        url: :reportes_compras
         active_submenu: :reporte_compras
       reporte_ventas:
         text: "Reporte de ventas"
