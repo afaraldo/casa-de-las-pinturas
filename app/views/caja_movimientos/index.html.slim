@@ -14,15 +14,23 @@ section.content
           #caja-movimientos-search.buscador.hidden-print
             = form_tag "/caja_movimiento", remote: true, method: :get, class: 'remote-search' do
               .row
-                .col-xs-3
+                .col-xs-4
                   div#rango-de-fecha.btn.btn-default.daterange.btn-block.top-25
                     = hidden_field_tag :fecha_desde, nil, class: 'fecha-desde'
                     = hidden_field_tag :fecha_hasta, nil, class: 'fecha-hasta'
                     i.fa.fa-calendar
                     span Fecha
                     b.caret
+                .col-xs-3
+                  .form-group
+                    = select_tag :caja_id, options_from_collection_for_select(Caja.all, :id, :nombre), class: 'form-control'
+                .col-xs-3
+                  .form-group
+                    = select_tag :moneda_id, options_from_collection_for_select(Moneda.all, :id, :nombre), class: 'form-control'
+
+                    
           #caja-movimientos-table.overlay-wrapper.buscador-resultados.table-responsive
             = render partial: 'list', locals: {caja_movimientos: @caja_movimientos}
 javascript:
-  CajaMovimientosUI.setBuscarCajaUrl();
-  CajaMovimientosUI.setBuscarMonedaUrl();
+  CajaMovimientosUI.setBuscarCajaUrl(cajas_path);
+  CajaMovimientosUI.setBuscarMonedaUrl(monedas_path);
