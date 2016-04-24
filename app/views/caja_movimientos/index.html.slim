@@ -6,31 +6,23 @@ section.content
       .box
         .box-header
           h3.box-title Movimientos de caja
+          .box-tools.pull-right.hidden-print
+            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, caja_movimientos_path
           .box-tools.pull-right
             = link_to 'Nuevo movimiento', new_caja_movimiento_path, class: 'btn btn-primary'
-        .box-body#caja-movimientos-lista
-          #caja-movimientos-search.buscador-listado
-            = search_form_for @search, remote: true, class: 'remote-search' do |f|
+        .box-body
+          #caja-movimientos-search.buscador.hidden-print
+            = form_tag "/caja_movimiento", remote: true, method: :get, class: 'remote-search' do
               .row
-                .col-xs-4
-                  div#rango-de-fecha.btn.btn-default.daterange.btn-block
-                    = f.hidden_field :fecha_gt, class: 'fecha-desde'
-                    = f.hidden_field :fecha_lt, class: 'fecha-hasta'
+                .col-xs-3
+                  div#rango-de-fecha.btn.btn-default.daterange.btn-block.top-25
+                    = hidden_field_tag :fecha_desde, nil, class: 'fecha-desde'
+                    = hidden_field_tag :fecha_hasta, nil, class: 'fecha-hasta'
                     i.fa.fa-calendar
                     span Fecha
                     b.caret
-                .col-xs-5
-                  .input-group
-                    = f.text_field :motivo_cont, class: 'form-control', placeholder: 'Buscar por motivo...'
-                    .input-group-btn
-                      button.btn.btn-default type="submit" name="commit"
-                        i.fa.fa-search
-                .col-xs-3
-                  .form-group
-                    = f.select :tipo_eq, CajaMovimiento.tipo.options,
-                                         {include_blank: 'Todos los tipos...'},
-                                         class: 'form-control'
           #caja-movimientos-table.overlay-wrapper.buscador-resultados.table-responsive
-            = render partial: 'caja_movimientos/list', locals: {caja_movimientos: @caja_movimientos}
-          #paginate-container
-            = paginate @caja_movimientos, remote: true
+            = render partial: 'list', locals: {caja_movimientos: @caja_movimientos}
+javascript:
+  CajaMovimientosUI.setBuscarCajaUrl();
+  CajaMovimientosUI.setBuscarMonedaUrl();

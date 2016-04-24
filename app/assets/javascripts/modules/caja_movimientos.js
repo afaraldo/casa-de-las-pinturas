@@ -1,5 +1,6 @@
 var CajaMovimientosUI = (function(){
     var elementos = null,
+	buscarCajaUrl = '';
         buscarMonedaUrl = '';
 
     function initFormEvents(){
@@ -62,6 +63,9 @@ var CajaMovimientosUI = (function(){
         },
         'update': function(){
             initFormEvents();
+        },
+        setBuscarCajaUrl: function(url) {
+            buscarCajaUrl = url;
         },
         setBuscarMonedaUrl: function(url) {
             buscarMonedaUrl = url;

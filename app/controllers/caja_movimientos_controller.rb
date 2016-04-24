@@ -82,7 +82,7 @@ class CajaMovimientosController < ApplicationController
   end
 
   def get_caja_movimientos
-    @movimientos = nil
+    @caja_movimientos = nil
 
     # Configurando las fechas
     @desde = nil
@@ -94,16 +94,14 @@ class CajaMovimientosController < ApplicationController
     end
 
     # buscar movimientos
-    if params[:persona_id].present?
-      @movimientos = CajaExtracto.get_movimientos(caja_id: params[:caja_id], moneda_id: params[:moneda_id],
+    @caja_id = params[:caja_id].present? ? params[:caja_id] : Caja.get_caja_por_forma(:efectivo)
+    @moneda_id = params[:moneda_id].present? ? params[:moneda_id] : Moneda.first
+    @caja_movimientos = CajaExtracto.get_movimientos(caja_id: params[:caja_id], moneda_id: params[:moneda_id],
                                                              desde: @desde,
                                                              hasta: @hasta,
                                                              page: params[:page],
                                                              limit: action_name == 'imprimir_extracto' ? LIMITE_REGISTROS_IMPRIMIR : nil)
     end
-    
-
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
