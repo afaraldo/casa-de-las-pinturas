@@ -29,6 +29,8 @@ class ComprasController < ApplicationController
   def new
     @compra = Compra.new
     @compra.detalles.build
+    @pago = @compra.recibos.build
+    @pago.build_detalles
     render :form
   end
 

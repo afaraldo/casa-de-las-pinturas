@@ -8,6 +8,7 @@ class Persona < ActiveRecord::Base
 
   has_one :user, dependent: :destroy
   has_many :boletas, foreign_key: 'persona_id', inverse_of: :persona
+  has_many :recibos, foreign_key: 'persona_id', inverse_of: :persona
   has_one :cuenta_corriente_balance, -> { order('anho DESC').order('mes DESC') }, class_name: 'CuentaCorrientePeriodoBalance'
 
   validates :telefono, length: {maximum: 50, minimum: 2}, allow_blank: true

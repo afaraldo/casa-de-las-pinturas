@@ -9,7 +9,9 @@ class Boleta < ActiveRecord::Base
   accepts_nested_attributes_for :detalles, reject_if: :all_blank, allow_destroy: true
 
   has_many :recibos_detalles, class_name: 'ReciboBoleta', foreign_key: "boleta_id", inverse_of: :boleta, dependent: :destroy
+
   has_many :recibos, class_name: 'Recibo', dependent: :destroy, through: :recibos_detalles
+  accepts_nested_attributes_for :recibos, reject_if: :all_blank, allow_destroy: true
 
   enumerize :condicion, in: [:contado, :credito], predicates: true
   enumerize :estado, in: [:pendiente, :pagado], predicates: true
