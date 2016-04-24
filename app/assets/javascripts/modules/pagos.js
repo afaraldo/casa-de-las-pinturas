@@ -47,9 +47,9 @@ var PagosUI = (function(){
         }
     }
 
-    function initFormEvents(){
+    function initFormEvents(autocompletarMonedaPorDefecto){
 
-        PersonasUI.buscador({elemento: elementos.proveedorBuscador, url: buscarProveedorUrl});
+        PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarProveedorUrl});
 
         elementos.pagosForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
 
@@ -59,11 +59,11 @@ var PagosUI = (function(){
 
         // Abrir el buscador de proveedores cuando se hace click en el panel inicial
         elementos.pagosForm.on('click', '.seleccionar-panel', function(e){
-            elementos.proveedorBuscador.select2('open');
+            elementos.personasBuscador.select2('open');
         });
 
         // Buscar boletas y devoluciones pendientes del proveedor
-        elementos.proveedorBuscador.on('change', function(e){
+        elementos.personasBuscador.on('change', function(e){
             if($(this).val() === ''){
                 seleccioneProveedor();
                 return false;
@@ -100,6 +100,7 @@ var PagosUI = (function(){
         TablasHelper.calcularSeleccionados(
             {   selector: '#compra-detalles-tabla',
                 totalPorDefecto: $('.moneda-por-defecto'),
+                autocompletarCampo: autocompletarMonedaPorDefecto,
                 callbackDespuesDeSeleccionar: function(){ // Cuando se selecciona alguna boleta se esconde la validacion
                     if(elementos.pagosForm.find('.pagar-boleta:checked').length > 0){
                         elementos.validacionBoletasSeleccionadas.addClass('hide');
@@ -115,7 +116,7 @@ var PagosUI = (function(){
         init: function() {
             elementos = {
                 pagosForm: $('#pago-form'),
-                proveedorBuscador: $('#proveedores-buscador'),
+                personasBuscador: $('#personas-buscador'),
                 mensajePanel: $('#pago-mensajes'),
                 boletasPanel: $('#pago-boletas-devoluciones'),
                 detallesPanel: $('#pago-detalles'),
@@ -125,21 +126,21 @@ var PagosUI = (function(){
         },
         index: function() {
             DatepickerHelper.initDateRangePicker('#date-range');
-            PersonasUI.buscador({elemento: elementos.proveedorBuscador, url: buscarProveedorUrl});
+            PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarProveedorUrl});
         },
         'new': function() {
-            initFormEvents();
+            initFormEvents(true);
         },
         'create': function(){
-            initFormEvents();
+            initFormEvents(false);
             mostrarBoletas(false)
         },
         'edit': function() {
-            initFormEvents();
+            initFormEvents(false);
             mostrarBoletas(false);
         },
         'update': function(){
-            initFormEvents();
+            initFormEvents(false);
             mostrarBoletas(false);
         },
         noHayPendientes: noHayPendientes,

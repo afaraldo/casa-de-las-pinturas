@@ -7,4 +7,10 @@
       }
     }
   }
+  a[href]:after {
+    content: none !important;
+  }
+  .label {
+    border: 0px solid #000;
+  }
 }

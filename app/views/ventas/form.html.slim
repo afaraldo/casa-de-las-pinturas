@@ -1,0 +1,203 @@
+section.content-header
+  h1 Ventas
+section.content
+  .row
+    .col-xs-12
+      .box
+        = simple_form_for @venta, html: { id: 'boleta-form' } do |f|
+          .box-header
+            a.volver-link href= ventas_path
+              i.fa.fa-angle-double-left style="margin-right: 5px;"
+              | Volver al listado de ventas
+            .clearfix
+            h3.box-title = @venta.new_record? ? 'Nueva Venta' : "Editar Venta Nro. #{@venta.numero}"
+          .box-body
+            = f.error_notification
+            .row
+              .col-sm-9
+                .row
+                  .col-sm-4
+                    = f.input :fecha, wrapper: :vertical_input_group do
+                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', id: 'boleta-fecha', autofocus: f.object.fecha.nil?, value: @venta.new_record? && f.object.fecha.nil? ? '' : localize(@venta.fecha.to_date)
+                      .input-group-btn
+                        .btn.btn-default
+                          i.fa.fa-calendar
+                  .col-sm-4.select2-input-group
+                    = f.input :persona, wrapper: :vertical_input_group,  label: 'Cliente' do
+                      = f.input_field :persona_id, as: :string,
+                                                   label: false,
+                                                   id: 'personas-buscador',
+                                                   class: 'form-control required',
+                                                   data: {"msg-required" => 'Debe seleccionar un cliente',
+                                                          persona: f.object.persona.to_json },
+                                                   placeholder: 'Buscar cliente...'
+                      .input-group-btn
+                        = link_to '<i class="fa fa-plus"></i>'.html_safe,
+                                  new_cliente_path(from_boletas: true),
+                                  data: {toggle: 'tooltip'},
+                                  title: 'Nuevo cliente',
+                                  class: 'btn btn-default',
+                                  remote: true
+                  .col-sm-4
+                    = f.input :condicion, as: :radio_group_buttons, input_html: { class: 'boleta-condicion' }
+                .row
+                  /// FECHA DE VENCIMENTO
+                  .col-sm-4
+                    = f.input :fecha_vencimiento, wrapper: :vertical_input_group, label: 'Fecha de vencimiento', wrapper_html: {id: 'fecha-vencimiento-wrapper', class: !@venta.condicion.nil? && @venta.condicion.credito? ? '' : 'hide'} do
+                      = f.input_field :fecha_vencimiento, as: :string, class: 'datepicker form-control fechaVencimiento', id: 'boleta-fecha-vencimiento', value: f.object.fecha_vencimiento.nil? ? '' : localize(f.object.fecha_vencimiento.to_date)
+                      .input-group-btn
+                        .btn.btn-default
+                          i.fa.fa-calendar
+                  .col-sm-4
+                    = f.input :numero_comprobante, label: 'Número de Comprobante', value: @venta.new_record? && f.object.numero_comprobante.nil? ? '' : f.object.numero_comprobante
+                  .col-xs-12
+                    p
+                      /a href="#modal-credito" data-toggle="modal" Agregar Crédito de devoluciones
+
+              ///////////// CREDITO DISPONIBLE /////////////
+              .col-sm-3
+                .alert.alert-info#credito-persona-info class="#{'hide' if @venta.condicion.nil? || !@venta.condicion.credito? }"
+                  strong Crédito disponible:
+                  br
+                  h4.text-center style="margin-top: 10px; font-size: 16px;"
+                    span#saldo 0
+                    = ' '
+                    span de
+                    = ' '
+                    span#limite_credito 0
+                  p.text-center
+                    - if @venta.new_record?
+                      = link_to 'Actualizar límite', "#", id: 'link_to_persona', remote: true
+                    - else
+                      = link_to 'Actualizar límite', edit_proveedor_path(@venta.persona.id), id: 'link_to_persona', remote: true
+
+            /////////////
+              DEVOLUCIONES
+            /////////////
+            /.form-subtitle
+            /  label Crédito de devoluciones
+            /br
+            /table.table.table-bordered.detalles-table
+            /  thead
+            /    tr
+            /      th Número
+            /      th Monto
+            /      th Crédito disponible
+            /      th Crédito a usar
+            /      th
+            /  tbody#compra-detalles-body
+            /    tr
+            /      td
+            /        a 00034
+            /      td.text-right 200.000
+            /      td.text-right 200.000
+            /      td
+            /        input.form-control type="text" value="200.000"
+            /      td
+            /        a.btn.btn-default
+            /          i.fa.fa-times
+            /  tfoot
+            /    tr
+            /      td colspan="2"
+            /      td.text-right.text-bold
+            /        | Total:
+            /      td.table-total.text-right.text-bold
+            /        span 200.000
+            /      td
+            .form-subtitle
+              label Mercaderías
+              = link_to '<i class="fa fa-plus"></i>'.html_safe,
+                        new_mercaderia_path(from_mercaderias: true),
+                        data: {toggle: 'tooltip'},
+                        title: 'Nueva mercadería',
+                        class: 'btn btn-default btn-sm',
+                        style: 'margin-left: 10px;',
+                        remote: true
+            br
+            table.table.table-bordered.detalles-table.calcular-total
+              thead
+                tr
+                  th Código
+                  th Mercadería
+                  th Cantidad
+                  th Precio Unitario
+                  th Subtotal
+                  th
+              tbody#boleta-detalles-body
+                = f.simple_fields_for :detalles do |detalle|
+                  = render 'detalle_fields', f: detalle
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span
+                  td
+
+            = link_to_add_association '<i class="fa fa-plus"></i> Agregar mercadería'.html_safe, f, :detalles, class: 'btn btn-default pull-right',
+                                            'data-association-insertion-node' => '#boleta-detalles-body',
+                                            'data-association-insertion-method' => 'append'
+            .clearfix
+            /////////////
+              RESUMEN DE TOTALES
+            /////////////
+            /.row
+            /  .col-sm-offset-8.col-sm-4
+            /    table.table.bg-warning
+            /      tbody
+            /        tr
+            /          td Total mercaderias:
+            /          td.text-right Gs. 528.200
+            /        tr
+            /          td Crédito utilizado:
+            /          td.text-right Gs. 200.000
+            /        tr
+            /          td.text-bold Total a pagar:
+            /          td.text-right.text-bold Gs. 328.200
+
+            /.form-subtitle
+            /  label Formas de pago
+            /br
+            /table.table.table-bordered.detalles-table.calcular-pagos-total
+            /  thead
+            /    tr
+            /      th Forma
+            /      th Moneda
+            /      th Cotización
+            /      th Monto
+            /      th Subtotal
+            /      th
+            /  tbody#compra-detalles-body
+            /    = render 'pago_fields'
+            /  tfoot
+            /    tr
+            /      td colspan="3"
+            /      td.text-right.text-bold
+            /        | Total:
+            /      td.table-total.text-right.text-bold
+            /        span
+            /      td
+            /= link_to_add_association '<i class="fa fa-plus"></i> Agregar forma de pago'.html_safe, f, :detalles, class: 'btn btn-default pull-right',
+            /                                'data-association-insertion-node' => '#compra-detalles-body',
+            /                                'data-association-insertion-method' => 'append'
+          .box-footer
+            - if @stock_negativo && @stock_negativo.size > 0
+              input.hidden name="guardar_si_o_si" value= "true"
+              .alert.alert-warning
+                p
+                  | La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}.
+                p Esta seguro que quiere continuar?
+                .form-actions
+                  = link_to 'Cancelar', compras_path, class: 'btn btn-default'
+                  | #{' '}
+                  button.btn.btn-primary type="submit" Continuar
+            - else
+              .form-actions.text-right
+                = link_to 'Cancelar', @venta.new_record? ? ventas_path : venta_path(@venta.id), class: 'btn btn-default'
+                | #{' '}
+                button.btn.btn-primary type="submit" Guardar Compra
+
+javascript:
+  BoletasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");
+  BoletasUI.setBuscarPersonasUrl("#{clientes_buscar_path}");

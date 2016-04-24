@@ -25,7 +25,7 @@ Rails.application.routes.draw do
 
   get 'mercaderias/check_codigo' => 'mercaderias#check_codigo'
   get 'mercaderias/buscar' => 'mercaderias#buscar'
-  resources :mercaderias
+  resources :mercaderias, except: [:show]
 
   resources :inventarios, only: [:index]
 
@@ -39,6 +39,9 @@ Rails.application.routes.draw do
 
   get 'compras/imprimir' => 'compras#imprimir'
   resources :compras
+
+  get 'ventas/imprimir' => 'ventas#imprimir'
+  resources :ventas
 
   get 'pagos/buscar_pendientes' => 'pagos#buscar_pendientes'
   get 'pagos/imprimir' => 'pagos#imprimir'

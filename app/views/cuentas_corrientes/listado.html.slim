@@ -25,6 +25,6 @@ section.content
                     span Fecha
                     b.caret
           #cuenta-corriente-table.overlay-wrapper.buscador-resultados.table-responsive
-            = render partial: 'movimientos', locals: {movimientos: @movimientos, cuenta_tipo: cuenta_tipo}
+            = render 'movimientos', movimientos: @movimientos, cuenta_tipo: cuenta_tipo
 javascript:
   CuentaCorrientesUI.setBuscarPersonaUrl("/#{cuenta_tipo}/buscar");

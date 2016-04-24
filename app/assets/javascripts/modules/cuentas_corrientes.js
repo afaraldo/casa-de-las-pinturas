@@ -16,6 +16,9 @@ var CuentaCorrientesUI = (function(){
             $('.seleccionar-panel').on('click', function(e){
                 elementos.personaBuscador.select2('open');
             });
+            elementos.personaBuscador.on('change',function(e){
+                elementos.personaBuscador.trigger('keyup');
+            });
 
         },
         setBuscarPersonaUrl: function(url) {

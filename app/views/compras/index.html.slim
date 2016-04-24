@@ -23,13 +23,13 @@ section.content
                     b.caret
                 .col-xs-2
                   .input-group
-                    = f.search_field :id_or_numero_comprobante_eq, class: 'form-control', placeholder: 'Nro. de compra o de comprobante...'
+                    = f.search_field :numero_comprobante_or_id_cont, class: 'form-control', placeholder: 'Nro. de compra o de comprobante...'
                     .input-group-btn
                       button.btn.btn-default type="submit" name="commit"
                         i.fa.fa-search
                 .col-xs-3
                   .form-group
-                    = f.search_field :persona_id_eq_any, id: 'proveedores-buscador', class: 'form-control', placeholder: 'Todos los proveedores...'
+                    = f.search_field :persona_id_eq_any, id: 'personas-buscador', class: 'form-control', placeholder: 'Todos los proveedores...'
                 .col-xs-2
                   .form-group
                     = f.select :estado_eq, Compra.estado.options,
@@ -45,4 +45,4 @@ section.content
           #compras-paginate-container.hidden-print
             = paginate @compras, remote: true
 javascript:
-  ComprasUI.setBuscarProveedorUrl("#{proveedores_buscar_path}"); 
+  BoletasUI.setBuscarPersonasUrl("#{proveedores_buscar_path}");

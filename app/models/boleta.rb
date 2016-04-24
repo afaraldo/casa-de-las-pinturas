@@ -25,7 +25,6 @@ class Boleta < ActiveRecord::Base
   after_destroy :actualizar_extracto_de_cuenta_corriente
 
   after_save :actualizar_extractos_de_mercaderias
-  after_destroy :actualizar_extractos_de_mercaderias
 
   # Validations
   validates :fecha,  presence: true
@@ -40,7 +39,7 @@ class Boleta < ActiveRecord::Base
   with_options if: :credito? do |b|
     b.validates :fecha_vencimiento, presence: true
     b.validate  :fecha_vencimiento_es_menor_a_fecha?
-    b.validate  :supera_limite_de_credito?
+    b.validate  :supera_limite_de_credito?, on: :create
   end
 
   def numero
@@ -104,8 +103,6 @@ class Boleta < ActiveRecord::Base
     end
   end
 
-
-
   def fecha_futura
     if fecha > Date.today
       errors.add(:fecha, I18n.t('activerecord.errors.messages.fecha_futura'))
@@ -113,7 +110,7 @@ class Boleta < ActiveRecord::Base
   end
 
   def fecha_vencimiento_es_menor_a_fecha?
-    if fecha_vencimiento < fecha
+    if fecha_vencimiento && fecha_vencimiento < fecha
       errors.add(:fecha_vencimiento, I18n.t('activerecord.errors.messages.fecha_vencimiento'))
     end
   end
@@ -126,7 +123,7 @@ class Boleta < ActiveRecord::Base
   end
 
   def supera_limite_de_credito?
-    if importe_total > (persona.limite_credito - persona.saldo_actual)
+    if importe_pendiente  > (persona.limite_credito - persona.saldo_actual)
       errors.add(:persona, I18n.t('activerecord.errors.messages.supera_limite_de_credito'))
       false
     end
@@ -134,7 +131,25 @@ class Boleta < ActiveRecord::Base
 
   # Actualiza la cuenta corriente si es que se guardo o actualizo
   def actualizar_extracto_de_cuenta_corriente
-    CuentaCorrienteExtracto.crear_o_actualizar_extracto(self.becomes(Boleta), fecha, importe_pendiente_was.to_f, importe_pendiente)
+    if deleted?
+      CuentaCorrienteExtracto.eliminar_movimiento(self.becomes(Boleta), fecha, importe_pendiente * -1)
+    else
+      if persona_id_changed? && !persona_id_was.nil? # si cambio de cuenta corriente
+        old = get_old_boleta
+        CuentaCorrienteExtracto.eliminar_movimiento(old.becomes(Boleta), fecha_was, importe_pendiente_was * -1)
+        CuentaCorrienteExtracto.crear_o_actualizar_extracto(self.becomes(Boleta), fecha, 0, importe_pendiente)
+      else
+        CuentaCorrienteExtracto.crear_o_actualizar_extracto(self.becomes(Boleta), fecha, importe_pendiente_was.to_f, importe_pendiente)
+      end
+    end
+  end
+
+  def get_old_boleta
+    old = self.dup
+    old.id = self.id
+    old.persona_id = persona_id_was
+
+    old
   end
 
   # Actualiza el extracto de las mercaderias si se cambio de la fecha de la boleta
@@ -144,6 +159,11 @@ class Boleta < ActiveRecord::Base
         MercaderiaExtracto.crear_o_actualizar_extracto(d, fecha, d.cantidad, d.cantidad)
       end
     end
+  end
+
+  # para poder buscar por el id y numero comprobante
+  ransacker :id do
+    Arel.sql("to_char(\"#{table_name}\".\"id\", '99999')")
   end
 
 end
