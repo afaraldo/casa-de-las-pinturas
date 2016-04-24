@@ -5,12 +5,13 @@ section.content
     .col-xs-12
       .box
         .box-header
+          a.volver-link href="#{caja_movimientos_path}"
+            i.fa.fa-angle-double-left
+            | Volver al listado de movimientos
+          .clearfix
           .row
             .col-xs-12
-              = link_to '<i class="fa fa-angle-double-left"></i> Volver al listado de movimientos'.html_safe, caja_movimientos_path
-          .row
-            .col-xs-12
-              h3.box-title Movimiento de caja
+              h3.box-title Movimientos de caja
           .box-tools
             = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_caja_movimiento_path(@caja_movimiento), class: 'btn btn-default'
             = " "
@@ -35,4 +36,4 @@ section.content
                 tr
                   td = d.forma
                   td = d.moneda.nombre
-                  td = number_with_precision(d.monto)
+                  td = number_to_currency(d.monto)
