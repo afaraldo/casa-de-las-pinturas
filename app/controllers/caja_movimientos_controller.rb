@@ -94,9 +94,9 @@ class CajaMovimientosController < ApplicationController
     end
 
     # buscar movimientos
-    @caja_id = params[:caja_id].present? ? params[:caja_id] : Caja.get_caja_por_forma(:efectivo)
-    @moneda_id = params[:moneda_id].present? ? params[:moneda_id] : Moneda.first
-    @caja_movimientos = CajaExtracto.get_movimientos(caja_id: params[:caja_id], moneda_id: params[:moneda_id],
+    @caja_id = params[:caja_id].present? ? params[:caja_id] : Caja.get_caja_por_forma(:efectivo).id
+    @moneda_id = params[:moneda_id].present? ? params[:moneda_id] : Moneda.first.id
+    @caja_movimientos = CajaExtracto.get_movimientos(caja_id: @caja_id, moneda_id: @moneda_id,
                                                              desde: @desde,
                                                              hasta: @hasta,
                                                              page: params[:page],
