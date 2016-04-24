@@ -1,4 +1,5 @@
 class Boleta < ActiveRecord::Base
+  include SqlHelper
   extend Enumerize
   acts_as_paranoid
   self.inheritance_column = 'tipo'
@@ -88,7 +89,18 @@ class Boleta < ActiveRecord::Base
 
     grupo_formato = (agrupar_por == 'dia') ? 'default' : agrupar_por
 
-      resultado.order('fecha asc').group_by { |b| (agrupar_por == 'persona') ? b.persona_nombre :  I18n.localize(b.fecha.to_date, format: grupo_formato.to_sym) }
+    if resumido
+      grupo = agrupar_por == 'persona' ? 'personas.nombre' : "to_char(fecha, '#{SQL_PERIODOS[agrupar_por.to_sym]}')"
+
+      resultado.joins(:persona)
+               .select("#{grupo} as grupo, sum(importe_total) as total")
+               .order('grupo asc')
+               .group("#{grupo}")
+    else
+      resultado.includes(:persona)
+               .order('fecha asc')
+               .group_by { |b| (agrupar_por == 'persona') ? b.persona_nombre :  I18n.localize(b.fecha.to_date, format: grupo_formato.to_sym).capitalize }
+    end
 
   end
 
