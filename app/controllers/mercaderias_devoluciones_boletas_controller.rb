@@ -29,6 +29,7 @@ class MercaderiasDevolucionesBoletasController < ApplicationController
   # GET /mercaderias_devoluciones_boletas/new
   def new
     @mercaderias_devoluciones_boleta = MercaderiasDevolucionesBoleta.new
+    render :form
   end
 
   # GET /mercaderias_devoluciones_boletas/1/edit

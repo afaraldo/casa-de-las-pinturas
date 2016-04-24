@@ -7,6 +7,6 @@ table.table.table-bordered.table-hover
   tbody
     - mercaderias_devoluciones_boletas.each do |devolucion|
       tr.fila-clickeable 
-        td = localize(devolucion.fecha.to_date)
-        td = devolucion.persona_nombre
+        td = devolucion.fecha
+        td 
         td
