@@ -166,7 +166,7 @@ section.content
                 /p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de pago debe ser igual al total a pagar de las boletas seleccionadas.
                 = f.simple_fields_for :recibos do |recibo_form|
                   = recibo_form.input :fecha, as: :hidden
-                  = recibo_form.input :persona, as: :hidden
+                  /= recibo_form.input :persona_id, as: :hidden
                   table.table.table-bordered.detalles-table.calcular-pagos-total
                     thead
                       tr

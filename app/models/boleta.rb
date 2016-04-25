@@ -9,8 +9,9 @@ class Boleta < ActiveRecord::Base
   accepts_nested_attributes_for :detalles, reject_if: :all_blank, allow_destroy: true
 
   has_many :recibos_detalles, class_name: 'ReciboBoleta', foreign_key: "boleta_id", inverse_of: :boleta, dependent: :destroy
-
   has_many :recibos, class_name: 'Recibo', dependent: :destroy, through: :recibos_detalles
+
+  accepts_nested_attributes_for :recibos_detalles, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :recibos, reject_if: :all_blank, allow_destroy: true
 
   enumerize :condicion, in: [:contado, :credito], predicates: true
@@ -50,6 +51,13 @@ class Boleta < ActiveRecord::Base
 
   def importe_pagado
     self.importe_total - self.importe_pendiente
+  end
+
+  def guardar_pago(pago)
+    pago.fecha = fecha
+    pago.persona = persona
+    pago.boletas_detalles.build boleta_id: id, monto_utilizado: importe_pendiente
+    pago.save
   end
 
   def check_detalles_negativos(borrado = false)

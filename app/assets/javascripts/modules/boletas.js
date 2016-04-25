@@ -48,17 +48,19 @@ var BoletasUI = (function(){
         DatepickerHelper.initDatepicker('#boleta-fecha');
         DatepickerHelper.initDatepicker('#boleta-fecha-vencimiento', {limited: false, orientation: 'bottom'});
 
-        // Mostrar / esconder fecha de vencimiento y credito disponible al cambiar la condicion
+        // Mostrar / esconder fecha de vencimiento, credito disponible y tabla de formas de pago al cambiar la condicion
         $(".boleta-condicion").on("change",function(){
             var condicion = getCondicionDePago();
 
             if ( condicion === 'contado' ) {
                 $('#fecha-vencimiento-wrapper').addClass('hide');
                 $('#credito-persona-info').addClass('hide');
+                $('#pago-detalles').removeClass('hide');
             }
             else if (condicion === 'credito') {
                 $('#fecha-vencimiento-wrapper').removeClass('hide');
                 $('#credito-persona-info').removeClass('hide');
+                $('#pago-detalles').addClass('hide');
             }
         });
 
