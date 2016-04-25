@@ -5,17 +5,15 @@ section.content
     .col-xs-12
       .box
         .box-header
-          h3.box-title Movimientos de caja
-          .box-tools.pull-right.hidden-print
-            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, caja_movimientos_path
+          h3.box-title Listado de movimientos
           .box-tools.pull-right
             = link_to 'Nuevo movimiento', new_caja_movimiento_path, class: 'btn btn-primary'
         .box-body
           #caja-movimientos-search.buscador.hidden-print
-            = form_tag "/caja_movimiento", remote: true, method: :get, class: 'remote-search' do
+            = form_tag "/caja_movimientos", remote: true, method: :get, class: 'remote-search' do
               .row
                 .col-xs-4
-                  div#rango-de-fecha.btn.btn-default.daterange.btn-block.top-25
+                  div#date-range.btn.btn-default.daterange.btn-block
                     = hidden_field_tag :fecha_desde, nil, class: 'fecha-desde'
                     = hidden_field_tag :fecha_hasta, nil, class: 'fecha-hasta'
                     i.fa.fa-calendar
@@ -27,10 +25,5 @@ section.content
                 .col-xs-3
                   .form-group
                     = select_tag :moneda_id, options_from_collection_for_select(Moneda.all, :id, :nombre), class: 'form-control'
-
-                    
           #caja-movimientos-table.overlay-wrapper.buscador-resultados.table-responsive
             = render partial: 'list', locals: {caja_movimientos: @caja_movimientos}
-javascript:
-  CajaMovimientosUI.setBuscarCajaUrl(cajas_path);
-  CajaMovimientosUI.setBuscarMonedaUrl(monedas_path);

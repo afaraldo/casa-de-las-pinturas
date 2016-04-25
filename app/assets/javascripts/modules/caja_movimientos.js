@@ -1,6 +1,6 @@
 var CajaMovimientosUI = (function(){
     var elementos = null,
-	buscarCajaUrl = '';
+        buscarCajaUrl = '';
         buscarMonedaUrl = '';
 
     function initFormEvents(){
@@ -49,8 +49,7 @@ var CajaMovimientosUI = (function(){
                 .on('changeDate', function(e){ // Evento para hacer submit al formulario cuando se cambia la fecha
                     $(this).parents('.remote-search').submit();
                 });
-
-            DatepickerHelper.initDateRangePicker('#rango-de-fecha');
+            DatepickerHelper.initDateRangePicker('#date-range');
         },
         'new': function() {
             initFormEvents();

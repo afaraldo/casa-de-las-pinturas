@@ -1,3 +1,3 @@
 | $("#caja-movimientos-table").html("#{escape_javascript(render partial: 'list', format: 'html', locals: {caja_movimientos: @caja_movimientos})}");
-| $('#paginate-container').html("#{escape_javascript(paginate(@caja_movimientos, remote: true)) }");
-| $('.buscador-resultados > .overlay').remove();
+| $('.imprimir-listado').removeClass('disabled');
+

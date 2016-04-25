@@ -56,7 +56,7 @@ module MovimientosHelper
         when 'CajaMovimientoDetalle'
           detalle = m.caja_movimiento_detalle
           es_ingreso = detalle.caja_movimiento.tipo.ingreso?
-          resultado = {url: "/caja_movimiento/#{detalle.caja_movimiento.id}",
+          resultado = {url: "/caja_movimientos/#{detalle.caja_movimiento.id}",
                         fecha: detalle.caja_movimiento.fecha,
                         motivo: detalle.caja_movimiento.motivo,
                         ingreso: es_ingreso ? detalle.monto : 0,
