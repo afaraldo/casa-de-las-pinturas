@@ -29,7 +29,8 @@ class ComprasController < ApplicationController
   def new
     @compra = Compra.new
     @compra.detalles.build
-    @pago = @compra.recibos.build
+    @recibo_detalle = @compra.recibos_detalles.build
+    @pago = @recibo_detalle.build_recibo
     @pago.build_detalles
     render :form
   end
@@ -42,22 +43,23 @@ class ComprasController < ApplicationController
   # POST /compras
   # POST /compras.json
   def create
-    @recibo = params[:compra].delete("recibos_attributes")
-    @recibo.permit!
+    #@recibo = params[:compra].delete("recibos_attributes")
+    #@recibo.permit!
     @compra = Compra.new(compra_params)
 
     respond_to do |format|
       Compra.transaction do
         if @compra.save
-          @pago = @compra.recibos.build(@recibo["0"]) if params[:compra][:condicion] == "contado"
-          @compra.guardar_pago(@pago) if params[:compra][:condicion] == "contado"
-          #binding.pry
+          #@pago = @compra.recibos.build(@recibo["0"]) if params[:compra][:condicion] == "contado"
+          #@compra.guardar_pago(@pago) if params[:compra][:condicion] == "contado"
+
           format.html { redirect_to @compra, notice: t('mensajes.save_success', recurso: 'la compra') }
           format.json { render :show, status: :created, location: @compra }
         else
           format.html { render :form }
           format.json { render json: [@compra.errors, @pago.errors], status: :unprocessable_entity }
         end
+        binding.pry
       end
     end
 
@@ -112,8 +114,13 @@ class ComprasController < ApplicationController
     def compra_params
       procesar_cantidades
       params.require(:compra).permit(:persona_id, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :condicion,
+                                     recibos_detalles_attributes:[:id, :_destroy,
+                                       recibo_attributes:  [:id, :fecha, :persona_id, :_destroy,
+                                         detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma]
+                                       ]
+                                     ],
                                      detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy],
-                                     recibos_attributes:  [:id, :fecha, :persona_id, :_destroy, detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma]])
+                                     )
     end
 
     def procesar_cantidades

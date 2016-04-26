@@ -20,12 +20,14 @@ class Boleta < ActiveRecord::Base
   default_scope { order('fecha DESC') } # Ordenar por fecha por defecto
 
   #Callbacks
-  before_validation :set_importe_total
-  before_validation :set_importe_pendiente
-  before_validation :set_estado
 
-  after_save :actualizar_extracto_de_cuenta_corriente
-  after_destroy :actualizar_extracto_de_cuenta_corriente
+  before_validation :set_importe_total
+#  before_validation :set_importe_pendiente
+  before_validation :set_estado
+  before_validation :guardar_pago
+
+  after_save :actualizar_extracto_de_cuenta_corriente, if: :credito?
+  after_destroy :actualizar_extracto_de_cuenta_corriente, if: :credito?
 
   after_save :actualizar_extractos_de_mercaderias
 
@@ -53,11 +55,15 @@ class Boleta < ActiveRecord::Base
     self.importe_total - self.importe_pendiente
   end
 
-  def guardar_pago(pago)
+  def guardar_pago
+    recibo_boleta = recibos_detalles.first
+    pago = recibo_boleta.recibo
     pago.fecha = fecha
     pago.persona = persona
-    pago.boletas_detalles.build boleta_id: id, monto_utilizado: importe_pendiente
-    pago.save
+
+    recibo_boleta.monto_utilizado = importe_pendiente
+    binding.pry
+
   end
 
   def check_detalles_negativos(borrado = false)
@@ -95,14 +101,19 @@ class Boleta < ActiveRecord::Base
     self.detalles.each do |detalle|
         self.importe_total += detalle.precio_unitario * detalle.cantidad
     end
+    self.importe_pendiente = self.importe_total
   end
 
   def set_importe_pendiente
-    monto_pagado = 0
-    self.recibos_detalles.each do |p|
-      monto_pagado += p.monto_utilizado
+    if new_record?
+      importe_pendiente = importe_total
+    else
+      monto_pagado = 0
+      self.recibos_detalles.each do |p|
+        monto_pagado += p.monto_utilizado
+      end
+      self.importe_pendiente = self.importe_total - monto_pagado
     end
-    self.importe_pendiente = self.importe_total - monto_pagado
   end
 
   def set_estado

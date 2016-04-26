@@ -164,29 +164,31 @@ section.content
                 br
                 /- esconder_validacion_detalles = @pago.errors.has_key?(:importe_total) ? '' : 'hide'
                 /p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de pago debe ser igual al total a pagar de las boletas seleccionadas.
-                = f.simple_fields_for :recibos do |recibo_form|
-                  = recibo_form.input :fecha, as: :hidden
-                  /= recibo_form.input :persona_id, as: :hidden
-                  table.table.table-bordered.detalles-table.calcular-pagos-total
-                    thead
-                      tr
-                        th Forma
-                        th Moneda
-                        th Monto
-                        th Cotización
-                        th Subtotal
-                        th
-                    tbody#pago-detalles-body
-                      = recibo_form.simple_fields_for :detalles do |detalle_form|
-                        = render 'pagos/detalles', f: detalle_form
-                    tfoot
-                      tr
-                        td colspan="3"
-                        td.text-right.text-bold
-                          | Total:
-                        td.table-total.text-right.text-bold
-                          span
-                        td
+                = f.simple_fields_for :recibos_detalles do |r_form|
+                  /= r_form.input :monto_utilizado
+                  = r_form.simple_fields_for :recibo do |recibo_form|
+                    /= recibo_form.input :fecha
+                    /= recibo_form.input :persona_id, as: :hidden
+                    table.table.table-bordered.detalles-table.calcular-pagos-total
+                      thead
+                        tr
+                          th Forma
+                          th Moneda
+                          th Monto
+                          th Cotización
+                          th Subtotal
+                          th
+                      tbody#pago-detalles-body
+                        = recibo_form.simple_fields_for :detalles do |detalle_form|
+                          = render 'pagos/detalles', f: detalle_form
+                      tfoot
+                        tr
+                          td colspan="3"
+                          td.text-right.text-bold
+                            | Total:
+                          td.table-total.text-right.text-bold
+                            span
+                          td
           .box-footer
             - if @stock_negativo && @stock_negativo.size > 0
               input.hidden name="guardar_si_o_si" value= "true"

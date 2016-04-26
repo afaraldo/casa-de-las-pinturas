@@ -7,8 +7,9 @@ class ReciboBoleta < ActiveRecord::Base
   after_save :actualizar_boletas
   after_destroy :actualizar_boletas
 
-  belongs_to :recibo
-  belongs_to :boleta
+  belongs_to :recibo, class_name: 'Pago'
+  accepts_nested_attributes_for :recibo, reject_if: :all_blank, allow_destroy: true
+  belongs_to :boleta, class_name: 'Compra'
 
   validate  :monto_utilizado_boletas
 
@@ -16,7 +17,6 @@ class ReciboBoleta < ActiveRecord::Base
   def monto_utilizado_boletas
     importe_pendiente = boleta.importe_pendiente
     importe_pendiente += monto_utilizado_was if persisted? # sumar el monto_utilizado anterior si se esta editando
-
     errors.add(:monto_utilizado, I18n.t('activerecord.errors.messages.monto_superior_a_pendiente')) if importe_pendiente < monto_utilizado
     errors.add(:monto_utilizado, I18n.t('activerecord.errors.messages.monto_utilizado_cero')) if monto_utilizado <= 0
     false if errors.size > 0
