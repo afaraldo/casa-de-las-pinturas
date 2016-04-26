@@ -54,8 +54,7 @@ Rails.application.routes.draw do
 
   # Reportes
   get 'reportes/compras'
-
-
+  get 'reportes/imprimir_reporte_compras'
 
   get 'welcome/index'
   get 'welcome/compras_index'

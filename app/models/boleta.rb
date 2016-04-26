@@ -79,7 +79,7 @@ class Boleta < ActiveRecord::Base
     "#{tipo} Nro. #{numero}"
   end
 
-  def self.get_reporte(desde, hasta, persona_id, agrupar_por, resumido)
+  def self.get_reporte(desde, hasta, persona_id, agrupar_por, resumido, page, limit)
 
     agrupar_por = 'dia' if agrupar_por.nil?
 
@@ -96,10 +96,14 @@ class Boleta < ActiveRecord::Base
                .select("#{grupo} as grupo, sum(importe_total) as total")
                .order('grupo asc')
                .group("#{grupo}")
+               .page(page).per(limit)
+
     else
-      resultado.includes(:persona)
-               .order('fecha asc')
-               .group_by { |b| (agrupar_por == 'persona') ? b.persona_nombre :  I18n.localize(b.fecha.to_date, format: grupo_formato.to_sym).capitalize }
+      resultado = resultado.includes(:persona)
+                           .order("#{(agrupar_por == 'persona') ? 'personas.nombre' : 'fecha'} asc")
+                           .page(page).per(limit)
+
+      {todo: resultado, agrupado: resultado.group_by { |b| (agrupar_por == 'persona') ? b.persona_nombre :  I18n.localize(b.fecha.to_date, format: grupo_formato.to_sym).capitalize }}
     end
 
   end

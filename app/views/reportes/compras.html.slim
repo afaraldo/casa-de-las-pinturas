@@ -7,7 +7,7 @@ section.content
         .box-header
           h3.box-title Reporte de Compras
           .box-tools.pull-right.hidden-print
-            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, '#', class: 'btn btn-primary imprimir-listado'
+            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, reportes_imprimir_reporte_compras_path, class: 'btn btn-primary imprimir-listado'
         .box-body
           #reporte-search.buscador-listado.hidden-print
             = form_tag reportes_compras_path, remote: true, method: :get, class: 'remote-search' do

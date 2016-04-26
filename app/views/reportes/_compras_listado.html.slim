@@ -8,7 +8,7 @@ table.table.table-bordered.table-hover
       th Estado
   tbody
     - total_reporte = 0
-    - reporte.each do |grupo, compras|
+    - reporte[:agrupado].each do |grupo, compras|
       tr.active.text-bold
         td colspan="5" = grupo
       - compras.each do |c|
@@ -24,4 +24,4 @@ table.table.table-bordered.table-hover
       td colspan="3" Total reporte:
       td = number_to_currency(total_reporte)
       td
-
+= paginate reporte[:todo], remote: true
