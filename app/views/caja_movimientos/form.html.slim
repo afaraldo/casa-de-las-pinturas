@@ -17,10 +17,12 @@ section.content
                     .btn.btn-default
                       i.fa.fa-calendar
               .col-sm-3
-                = f.input :tipo, as: :radio_group_buttons
+                = f.input :tipo, as: :radio_group_buttons, input_html: {class: 'movimiento-tipo'}
             .row
               .col-sm-6
                 = f.input :motivo
+              .col-sm-4#categoria-gasto.hide
+                = f.association :categoria_gasto, label_method: :nombre, label: "Categoria", value_method: :id, prompt: "Seleccione una categoria..."
             .links
               label.control-label Valores
             br

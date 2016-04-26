@@ -19,7 +19,7 @@ var CajaMovimientosUI = (function(){
          */
         $('#caja-movimiento-detalles-body').on('cocoon:after-insert', function(e, insertedItem) { // Evento luego de insertar un detalle
 
-            // Se inicializa el buscador de mercaderias y se agrega mascara a los campos del nuevo detalle
+            // Se inicializa el buscador y se agrega mascara a los campos del nuevo detalle
             NumberHelper.mascaraMoneda('.maskMoneda');
 
             // Se vuelve a mostar el boton de eliminar si es que se escondio en algun momento
@@ -33,6 +33,16 @@ var CajaMovimientosUI = (function(){
                 $('.remove_fields').addClass('hide');
             }
 
+        });
+        $(".movimiento-tipo").on("change",function(){
+            var tipo =  $('.movimiento-tipo:checked').val();
+
+            if ( tipo === 'egreso' ) {
+                $('#categoria-gasto').removeClass('hide');
+            }
+            else if (tipo === 'ingreso') {
+                $('#categoria-gasto').addClass('hide');
+            }
         });
 
     }
@@ -50,6 +60,17 @@ var CajaMovimientosUI = (function(){
                     $(this).parents('.remote-search').submit();
                 });
             DatepickerHelper.initDateRangePicker('#date-range');
+            
+            $(".caja-tipo").on("change",function(){
+                var tipo =  $(".caja-tipo option:selected").text();
+
+                if ( tipo === 'tarjeta' ) {
+                    $('#tarjeta-efectivizar').removeClass('hide');
+                }
+                else if (tipo === 'efectivo') {
+                    $('#tarjeta-efectivizar').addClass('hide');
+                }
+            });
         },
         'new': function() {
             initFormEvents();

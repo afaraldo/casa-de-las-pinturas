@@ -7,6 +7,8 @@ section.content
         .box-header
           h3.box-title Listado de movimientos
           .box-tools.pull-right
+            = link_to 'Efectivizar', "#{'#'}", class: 'btn btn-primary hide', id: "tarjeta-efectivizar"
+            |  
             = link_to 'Nuevo movimiento', new_caja_movimiento_path, class: 'btn btn-primary'
         .box-body
           #caja-movimientos-search.buscador.hidden-print
@@ -21,7 +23,7 @@ section.content
                     b.caret
                 .col-xs-3
                   .form-group
-                    = select_tag :caja_id, options_from_collection_for_select(Caja.all, :id, :nombre), class: 'form-control'
+                    = select_tag :caja_id, options_from_collection_for_select(Caja.all, :id, :nombre), class: 'form-control caja-tipo'
                 .col-xs-3
                   .form-group
                     = select_tag :moneda_id, options_from_collection_for_select(Moneda.all, :id, :nombre), class: 'form-control'
