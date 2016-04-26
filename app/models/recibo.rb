@@ -1,13 +1,17 @@
 class Recibo < ActiveRecord::Base
+  extend Enumerize
   include MovimientosHelper
 
   acts_as_paranoid
 
   self.inheritance_column = 'tipo'
 
+  enumerize :condicion, in: [:contado, :credito], predicates: true
+
   before_validation :set_importes
-  after_save :actualizar_cuenta_corriente, :actualizar_extracto_cajas
-  after_destroy :actualizar_cuenta_corriente
+  after_save :actualizar_cuenta_corriente, if: :credito?
+  after_destroy :actualizar_cuenta_corriente, if: :credito?
+  after_save :actualizar_extracto_cajas
 
   belongs_to :persona, foreign_key: "persona_id", inverse_of: :recibos
 
@@ -27,6 +31,8 @@ class Recibo < ActiveRecord::Base
   validates :persona_id, presence: true
   validate  :fecha_futura
   validate  :pagos_boletas_seleccionadas
+  validates :condicion, presence: true
+  validate  :condicion_cambiada?, on: :update
 
   def total_pagado
     total_efectivo + total_tarjeta - total_credito_utilizado
@@ -45,6 +51,13 @@ class Recibo < ActiveRecord::Base
   end
 
   private
+
+  def condicion_cambiada?
+    if condicion_changed? && self.persisted?
+      errors.add(:condicion, I18n.t('activerecord.errors.messages.no_editable'))
+      false
+    end
+  end
 
   def actualizar_cuenta_corriente
     if deleted?
