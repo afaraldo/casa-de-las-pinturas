@@ -1,0 +1,25 @@
+#reporte-chart.chart style="max-height: 300px;"
+  canvas#reporte-chart-canvas
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th = agrupado_por_titulo(params[:agrupar_por])
+      th Total
+  tbody
+    - total_reporte = 0
+    - chart_data = {}
+    - reporte.each do |grupo|
+      - chart_data[grupo_label(grupo.grupo, params[:agrupar_por])] = grupo.total
+      - total_reporte += grupo.total
+      tr
+        td = grupo_label(grupo.grupo, params[:agrupar_por])
+        td.text-right = number_to_currency(grupo.total)
+  tfoot
+    tr.text-right.text-bold
+      td Total reporte:
+      td = number_to_currency(total_reporte)
+
+= paginate reporte, remote: true
+
+javascript:
+  ReportesUI.dibujarChart(#{chart_data.keys.to_json.html_safe}, #{chart_data.values.to_json.html_safe}, "#{params[:agrupar_por] == 'persona' ? 'bar' : 'line'}");
