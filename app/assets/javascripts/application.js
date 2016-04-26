@@ -30,8 +30,6 @@
 //= require ./libs/moment.js
 //= require ./libs/daterangepicker.js
 //= require ./libs/libs.defaults.js
-//= require ./libs/raphael.js
-//= require ./libs/morris.js
 //= require ./libs/Chart.js
 //= require cocoon
 //= require_tree ./helpers
@@ -99,7 +97,8 @@ CasaDeLasPinturas = {
     ventas: BoletasUI,
     pagos: PagosUI,
     caja_movimientos: CajaMovimientosUI,
-    cuentas_corrientes: CuentaCorrientesUI
+    cuentas_corrientes: CuentaCorrientesUI,
+    reportes: ReportesUI
 
 };
 

@@ -1,4 +1,5 @@
 class Boleta < ActiveRecord::Base
+  include SqlHelper
   extend Enumerize
   acts_as_paranoid
   self.inheritance_column = 'tipo'
@@ -76,6 +77,35 @@ class Boleta < ActiveRecord::Base
 
   def movimiento_motivo
     "#{tipo} Nro. #{numero}"
+  end
+
+  def self.get_reporte(desde, hasta, persona_id, agrupar_por, resumido, page, limit)
+
+    agrupar_por = 'dia' if agrupar_por.nil?
+
+    resultado = self.unscoped.where(fecha: desde..hasta)
+
+    resultado = resultado.where(persona_id: persona_id) unless persona_id.blank?
+
+    grupo_formato = (agrupar_por == 'dia') ? 'default' : agrupar_por
+
+    if resumido
+      grupo = agrupar_por == 'persona' ? 'personas.nombre' : "to_char(fecha, '#{SQL_PERIODOS[agrupar_por.to_sym]}')"
+
+      resultado.joins(:persona)
+               .select("#{grupo} as grupo, sum(importe_total) as total")
+               .order('grupo asc')
+               .group("#{grupo}")
+               .page(page).per(limit)
+
+    else
+      resultado = resultado.includes(:persona)
+                           .order("#{(agrupar_por == 'persona') ? 'personas.nombre' : 'fecha'} asc")
+                           .page(page).per(limit)
+
+      {todo: resultado, agrupado: resultado.group_by { |b| (agrupar_por == 'persona') ? b.persona_nombre :  I18n.localize(b.fecha.to_date, format: grupo_formato.to_sym).capitalize }}
+    end
+
   end
 
   private

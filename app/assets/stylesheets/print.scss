@@ -13,4 +13,7 @@
   .label {
     border: 0px solid #000;
   }
+
+  table { page-break-inside:auto }
+  tr    { page-break-inside:avoid; page-break-after:auto }
 }
