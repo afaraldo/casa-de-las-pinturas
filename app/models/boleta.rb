@@ -21,10 +21,9 @@ class Boleta < ActiveRecord::Base
 
   #Callbacks
 
-  before_validation :set_importe_total
-#  before_validation :set_importe_pendiente
+  before_validation :set_importes
   before_validation :set_estado
-  before_validation :guardar_pago
+  before_validation :guardar_pago, if: :contado?
 
   after_save :actualizar_extracto_de_cuenta_corriente, if: :credito?
   after_destroy :actualizar_extracto_de_cuenta_corriente, if: :credito?
@@ -59,7 +58,9 @@ class Boleta < ActiveRecord::Base
     recibo_boleta = recibos_detalles.first
     pago = recibo_boleta.recibo
     pago.fecha = fecha
+    pago.condicion = "contado"
     pago.persona = persona
+    pago.boletas_detalles << recibo_boleta
 
     recibo_boleta.monto_utilizado = importe_pendiente
     binding.pry
@@ -96,7 +97,7 @@ class Boleta < ActiveRecord::Base
 
   private
 
-  def set_importe_total
+  def set_importes
     self.importe_total = 0
     self.detalles.each do |detalle|
         self.importe_total += detalle.precio_unitario * detalle.cantidad

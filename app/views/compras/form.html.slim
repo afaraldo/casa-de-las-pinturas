@@ -165,10 +165,7 @@ section.content
                 /- esconder_validacion_detalles = @pago.errors.has_key?(:importe_total) ? '' : 'hide'
                 /p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de pago debe ser igual al total a pagar de las boletas seleccionadas.
                 = f.simple_fields_for :recibos_detalles do |r_form|
-                  /= r_form.input :monto_utilizado
                   = r_form.simple_fields_for :recibo do |recibo_form|
-                    /= recibo_form.input :fecha
-                    /= recibo_form.input :persona_id, as: :hidden
                     table.table.table-bordered.detalles-table.calcular-pagos-total
                       thead
                         tr

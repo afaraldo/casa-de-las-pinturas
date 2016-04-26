@@ -43,16 +43,12 @@ class ComprasController < ApplicationController
   # POST /compras
   # POST /compras.json
   def create
-    #@recibo = params[:compra].delete("recibos_attributes")
-    #@recibo.permit!
+    params[:compra].delete("recibos_detalles_attributes") if params[:compra][:condicion] == "credito"
     @compra = Compra.new(compra_params)
 
     respond_to do |format|
       Compra.transaction do
         if @compra.save
-          #@pago = @compra.recibos.build(@recibo["0"]) if params[:compra][:condicion] == "contado"
-          #@compra.guardar_pago(@pago) if params[:compra][:condicion] == "contado"
-
           format.html { redirect_to @compra, notice: t('mensajes.save_success', recurso: 'la compra') }
           format.json { render :show, status: :created, location: @compra }
         else
