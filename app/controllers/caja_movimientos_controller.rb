@@ -35,13 +35,15 @@ class CajaMovimientosController < ApplicationController
   # POST /caja_movimientos.json
   def create
     @caja_movimiento = CajaMovimiento.new(caja_movimiento_params)
+    @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @caja_movimiento.check_detalles_negativos
 
     respond_to do |format|
       CajaMovimiento.transaction do
-        if @caja_movimiento.save
+        if @saldo_negativo.size == 0 && @caja_movimiento.save
           format.html { redirect_to @caja_movimiento, notice: t('mensajes.save_success', recurso: 'el movimiento') }
           format.json { render :show, status: :created, location: @caja_movimiento }
         else
+          @caja_movimiento.rebuild_detalles
           format.html { render :form }
           format.json { render json: @caja_movimiento.errors, status: :unprocessable_entity }
         end
@@ -52,12 +54,16 @@ class CajaMovimientosController < ApplicationController
   # PATCH/PUT /caja_movimientos/1
   # PATCH/PUT /caja_movimientos/1.json
   def update
+    @caja_movimiento.assign_attributes(caja_movimiento_params)
+    @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @caja_movimiento.check_detalles_negativos
+
     respond_to do |format|
       CajaMovimiento.transaction do
-        if @caja_movimiento.update(caja_movimiento_params)
+        if @saldo_negativo.size == 0 && @caja_movimiento.save
           format.html { redirect_to @caja_movimiento, notice: t('mensajes.update_success', recurso: 'el movimiento') }
           format.json { render :show, status: :ok, location: @caja_movimiento }
         else
+          @caja_movimiento.rebuild_detalles
           format.html { render :form }
           format.json { render json: @caja_movimiento.errors, status: :unprocessable_entity }
         end
@@ -111,7 +117,7 @@ class CajaMovimientosController < ApplicationController
 
     def caja_movimiento_params
       procesar_cantidades
-      params.require(:caja_movimiento).permit(:fecha, :motivo, :tipo,
+      params.require(:caja_movimiento).permit(:fecha, :motivo, :tipo, :categoria_gasto_id,
                                                     detalles_attributes: [:id, :forma, :moneda_id, :monto, :destroy])
     end
 

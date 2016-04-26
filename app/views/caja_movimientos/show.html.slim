@@ -24,6 +24,9 @@ section.content
             dd = @caja_movimiento.tipo_text
             dt Motivo
             dd = @caja_movimiento.motivo
+            - if @caja_movimiento.tipo.egreso?
+              dt Categoria de Gasto
+              dd = @caja_movimiento.categoria_gasto_nombre
           label.control-label Valores
           table.table.table-bordered
             thead

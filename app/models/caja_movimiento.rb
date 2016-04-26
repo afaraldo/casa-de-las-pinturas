@@ -1,6 +1,7 @@
 class CajaMovimiento < ActiveRecord::Base
   extend Enumerize
   acts_as_paranoid
+
   before_destroy :check_detalles_negativos
   after_save :actualizar_extracto
 
@@ -23,6 +24,7 @@ class CajaMovimiento < ActiveRecord::Base
   validates :tipo,   presence: true
   validates :detalles, length: { minimum: 1 }
   validate  :fecha_futura
+  validates :categoria_gasto, presence: true, if: :egreso?
 
   def fecha_futura
     if fecha > Date.today

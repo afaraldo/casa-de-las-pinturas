@@ -14,7 +14,7 @@ class CajaMovimientoDetalle < ActiveRecord::Base
 
   def actualizar_extractos
     self.caja_id = Caja.get_caja_por_forma(forma).id
-    operador = self.caja_movimiento ? -1 : 1
+    operador = self.caja_movimiento.tipo.ingreso? ? 1 : -1
 
     if deleted?
       CajaExtracto.eliminar_movimiento(self, self.caja_movimiento.fecha, monto * operador * -1)
