@@ -28,7 +28,10 @@ var BoletasUI = (function(){
                                 if (condicion === 'credito')
                                     precio = m.precio_venta_credito;
 
-                                $(el).parents('tr').find('.precio-unitario').val(precio);
+                                var precioInput = $(el).parents('tr').find('.precio-unitario')
+
+                                if(precioInput.val() === '')
+                                    precioInput.val(precio);
                             }
 
                             return m.nombre;

@@ -189,14 +189,14 @@ section.content
                   | La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}.
                 p Esta seguro que quiere continuar?
                 .form-actions
-                  = link_to 'Cancelar', compras_path, class: 'btn btn-default'
+                  = link_to 'Cancelar', ventas_path, class: 'btn btn-default'
                   | #{' '}
                   button.btn.btn-primary type="submit" Continuar
             - else
               .form-actions.text-right
                 = link_to 'Cancelar', @venta.new_record? ? ventas_path : venta_path(@venta.id), class: 'btn btn-default'
                 | #{' '}
-                button.btn.btn-primary type="submit" Guardar Compra
+                button.btn.btn-primary type="submit" Guardar Venta
 
 javascript:
   BoletasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");

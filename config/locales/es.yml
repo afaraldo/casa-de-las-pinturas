@@ -108,6 +108,7 @@ es:
       long: "%d de %B de %Y"
       short: "%d de %b"
       month: "%B, %Y"
+      year: "%Y"
     month_names:
     -
     - enero

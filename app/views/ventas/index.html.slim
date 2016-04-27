@@ -23,7 +23,7 @@ section.content
                     b.caret
                 .col-xs-2
                   .input-group
-                    = f.search_field :id_or_numero_comprobante_eq, class: 'form-control', placeholder: 'Nro. de compra o de comprobante...'
+                    = f.search_field :numero_comprobante_or_id_cont, class: 'form-control', placeholder: 'Nro. de venta o de comprobante...'
                     .input-group-btn
                       button.btn.btn-default type="submit" name="commit"
                         i.fa.fa-search
