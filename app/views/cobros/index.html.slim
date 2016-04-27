@@ -1,0 +1,19 @@
+h1 Listing cobros
+
+table
+  thead
+    tr
+      th
+      th
+      th
+
+  tbody
+    - @cobros.each do |cobro|
+      tr
+        td = link_to 'Show', cobro
+        td = link_to 'Edit', edit_cobro_path(cobro)
+        td = link_to 'Destroy', cobro, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Cobro', new_cobro_path
