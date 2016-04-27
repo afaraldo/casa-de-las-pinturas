@@ -1,0 +1,26 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Fecha
+      th Motivo
+      th Ingreso
+      th Egreso
+      th Saldo
+  tbody
+    - balance = caja_movimientos[:balance_anterior]
+    tr.active
+      td.text-right colspan="4" Saldo anterior:
+      td.text-right = number_to_currency(balance, unit: '')
+    - if caja_movimientos[:movimientos].empty?
+    - formatear_movimientos(caja_movimientos[:movimientos]).each do |m|
+      - balance += (m[:ingreso] - m[:egreso])
+      tr.fila-clickeable data-url="#{m[:url]}"
+        td = localize(m[:fecha].to_date)
+        td = m[:motivo]
+        td.text-right = number_to_currency(m[:ingreso], unit: '')
+        td.text-right = number_to_currency(m[:egreso], unit: '')
+        td.text-right = number_to_currency(balance, unit: '')
+    tr.text-bold
+      td.text-right colspan="4" Balance:
+      td.text-right = number_to_currency(balance, unit: '')
+= paginate caja_movimientos[:movimientos], remote: true

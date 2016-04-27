@@ -8,6 +8,12 @@ class MonedasController < ApplicationController
     @menu_setup[:side_menu] = :monedas_sidemenu
   end
 
+  # buscador de monedas
+  def buscar
+    get_monedas
+    render json: {items: @monedas, total_count: @monedas.total_count}
+  end
+
   # GET /monedas
   # GET /monedas.json
   def index

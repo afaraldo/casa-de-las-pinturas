@@ -1,5 +1,6 @@
 var DatepickerHelper = {
     // Funcion para inicializar un datepicker simple a partir de un selector
+
     initDatepicker: function(selector, opciones) {
 
         if(typeof opciones === 'undefined')
