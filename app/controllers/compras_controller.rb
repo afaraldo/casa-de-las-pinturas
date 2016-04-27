@@ -37,6 +37,7 @@ class ComprasController < ApplicationController
 
   # GET /compras/1/edit
   def edit
+    @compra.recibo.first.rebuild_detalles
     render :form
   end
 
@@ -52,10 +53,10 @@ class ComprasController < ApplicationController
           format.html { redirect_to @compra, notice: t('mensajes.save_success', recurso: 'la compra') }
           format.json { render :show, status: :created, location: @compra }
         else
+          @compra.recibo.first.rebuild_detalles
           format.html { render :form }
           format.json { render json: [@compra.errors, @pago.errors], status: :unprocessable_entity }
         end
-        binding.pry
       end
     end
 

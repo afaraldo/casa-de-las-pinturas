@@ -63,8 +63,6 @@ class Boleta < ActiveRecord::Base
     pago.boletas_detalles << recibo_boleta
 
     recibo_boleta.monto_utilizado = importe_pendiente
-    binding.pry
-
   end
 
   def check_detalles_negativos(borrado = false)
