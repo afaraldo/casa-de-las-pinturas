@@ -11,8 +11,8 @@ section.content
             |  
             = link_to 'Nuevo movimiento', new_caja_movimiento_path, class: 'btn btn-primary'
         .box-body
-          #caja-movimientos-search.buscador.hidden-print
-            = form_tag "/caja_movimientos", remote: true, method: :get, class: 'remote-search' do
+          #caja-movimientos-search.buscador-listado.hidden-print
+            = form_tag caja_movimientos_path, remote: true, method: :get, class: 'remote-search' do
               .row
                 .col-xs-4
                   div#date-range.btn.btn-default.daterange.btn-block

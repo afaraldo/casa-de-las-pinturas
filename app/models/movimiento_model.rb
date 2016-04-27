@@ -156,6 +156,10 @@ class MovimientoModel < ActiveRecord::Base
 
     movimientos = filtrar_movimientos(buscar_por, desde, hasta, page, limit)
 
+    if desde.nil? || hasta.nil?
+      movimientos = movimientos.reverse
+    end
+
     if page.to_i > 1
       movimiento_hasta_fecha = movimientos.first.fecha + 1.day
       movimiento_hasta_id = movimientos.first.id
@@ -200,13 +204,12 @@ class MovimientoModel < ActiveRecord::Base
   def self.filtrar_movimientos(buscar_por, desde, hasta, page, limit = 25)
     m = self.where(buscar_por)
             .includes(self.reflect_on_all_associations.map { |assoc| assoc.name})
+            .order(:fecha)
 
     if desde.nil? || hasta.nil?
-      m = m.order('fecha DESC')
-           .reverse_order
+      m = m.reverse_order
     else
       m = m.where('fecha >= ? AND fecha <= ?', desde, hasta)
-           .order(:fecha)
     end
 
     if limit == :unlimited

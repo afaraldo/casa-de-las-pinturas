@@ -32,4 +32,5 @@
       tr.text-bold
         td.text-right colspan="4" Balance:
         td.text-right = number_to_currency(balance, unit: '')
-  = paginate movimientos[:movimientos], remote: true
+  - unless ultimos_movimientos?
+    = paginate movimientos[:movimientos], remote: true
