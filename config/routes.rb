@@ -49,8 +49,11 @@ Rails.application.routes.draw do
 
   resources :caja_movimiento_detalles
 
-
   resources :caja_movimientos
+
+  get 'cobros/buscar_pendientes' => 'cobros#buscar_pendientes'
+  get 'cobros/imprimir' => 'cobros#imprimir'
+  resources :cobros
 
   # Reportes
   get 'reportes/compras'

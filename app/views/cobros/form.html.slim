@@ -1,0 +1,153 @@
+section.content-header
+  h1 Ventas
+section.content
+  .row
+    .col-xs-12
+      .box
+        = simple_form_for @cobro, html: { id: 'cobro-form' } do |f|
+          .box-header
+            a.volver-link href= cobros_path
+              i.fa.fa-angle-double-left
+              | Volver al listado de cobros
+            .clearfix
+            h3.box-title = @cobro.new_record? ? 'Nuevo Cobro' : "Editar Cobro Nro. #{@cobro.numero}"
+          .box-body
+            = f.error_notification
+            .row
+              .col-sm-9
+                .row
+                  .col-sm-4
+                    = f.input :fecha, wrapper: :vertical_input_group do
+                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: f.object.fecha.nil?, value: @cobro.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                      .input-group-btn
+                        .btn.btn-default
+                          i.fa.fa-calendar
+                  .col-sm-4
+                    = f.association :persona, as: :string, label: 'Cliente', disabled: @cobro.persisted?, input_html: { id: 'personas-buscador', placeholder: 'Buscar cliente...', data: { 'msg-required' => 'Este campo es obligatorio.',persona: f.object.persona.to_json } }
+                .row
+                  .col-sm-4
+                    = f.input :numero_comprobante, label: 'Número de Comprobante'
+            .row.overlay-wrapper#cobro-mensajes
+              .overlay.hide
+                i.fa.fa-refresh.fa-spin
+              .col-xs-12
+                .well.seleccionar-panel.text-center
+                  i.fa.fa-search
+                  h3 Seleccione un cliente para ver las boletas y devoluciones pendientes
+            .row#cobro-boletas-devoluciones.hide
+              .col-xs-12
+                /.form-subtitle
+                /  label Crédito de devoluciones
+                /br
+                /table.table.table-bordered.detalles-table
+                /  thead
+                /    tr
+                /      th Número
+                /      th Monto
+                /      th Crédito disponible
+                /      th Crédito a usar
+                /      th
+                /  tbody#compra-detalles-body
+                /
+                /  tfoot
+                /    tr
+                /      td colspan="2"
+                /      td.text-right.text-bold
+                /        | Total:
+                /      td.table-total.text-right.text-bold
+                /        span 200.000
+                /      td
+
+                .form-subtitle
+                  label Boletas pendientes
+                br
+                p.text-danger.hide#boletas-seleccionadas-validation Debe seleccionar al menos una venta a cobrar
+                table.table.table-bordered.detalles-table#venta-detalles-tabla
+                  thead
+                    tr
+                      th Número
+                      th Fecha
+                      th Fecha de vencimiento
+                      th Total Pendiente
+                      th Total a cobrar
+                      th
+                  tbody#venta-detalles-body
+                    = render 'ventas_pendientes', ventas: @cobro.boletas_detalles, actualizando: true, cobro: @cobro
+                  tfoot
+                    tr
+                      td colspan="2"
+                      td.text-right.text-bold
+                        | Total:
+                      td.text-right.text-bold
+                      td.table-total.text-right.text-bold
+                        span 0
+                      td
+
+            /.row
+            /  .col-sm-offset-8.col-sm-4
+            /    table.table.bg-warning
+            /      tbody
+            /        tr
+            /          td Total mercaderias:
+            /          td.text-right Gs. 528.200
+            /        tr
+            /          td Crédito utilizado:
+            /          td.text-right Gs. 200.000
+            /        tr
+            /          td.text-bold Total a pagar:
+            /          td.text-right.text-bold Gs. 328.200
+
+            .row#cobro-detalles.hide
+              .col-xs-12
+                .form-subtitle
+                  label Formas de cobro
+                br
+                - esconder_validacion_detalles = @cobro.errors.has_key?(:importe_total) ? '' : 'hide'
+                p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de cobro debe ser igual al total a cobrar de las boletas seleccionadas.
+
+                table.table.table-bordered.detalles-table.calcular-cobros-total
+                  thead
+                    tr
+                      th Forma
+                      th Moneda
+                      th Monto
+                      th Cotización
+                      th Subtotal
+                      th
+                  tbody#cobro-detalles-body
+                    = f.simple_fields_for :detalles do |detalle|
+                      = render 'detalles', f: detalle
+                  tfoot
+                    tr
+                      td colspan="3"
+                      td.text-right.text-bold
+                        | Total:
+                      td.table-total.text-right.text-bold
+                        span
+                      td
+          .box-footer
+            - if @saldo_negativo && @saldo_negativo.size > 0
+              input.hidden name="guardar_si_o_si" value= "true"
+              .alert.alert-warning#mensaje-saldo-negativo
+                p
+                  | La operación va a provocar que los fondos de la caja quede en negativo para las siguientes monedas: #{@saldo_negativo.map(&:nombre).to_sentence}.
+                p Esta seguro que quiere continuar?
+                .form-actions
+                  = link_to 'Cancelar', cobros_path, class: 'btn btn-default'
+                  | #{' '}
+                  button.btn.btn-primary type="submit" Continuar
+            - else
+              .form-actions.text-right
+                = link_to 'Cancelar', cobros_path, class: 'btn btn-default'
+                | #{' '}
+                button.btn.btn-primary type="submit" Guardar Cobro
+
+
+javascript:
+  CobrosUI.setbuscarClienteUrl("#{clientes_buscar_path}");
+  CobrosUI.setboletasPendientesUrl("#{cobros_buscar_pendientes_path}");
+
+- if @saldo_negativo && @saldo_negativo.size > 0
+  javascript:
+    MensajesHelper.irHasta($('#mensaje-saldo-negativo').offset().top);
+

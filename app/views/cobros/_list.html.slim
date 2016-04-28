@@ -7,7 +7,7 @@ table.table.table-bordered.table-hover
       th Cliente
       th Monto
   tbody
-    - cobros.each do |pago|
+    - cobros.each do |cobro|
       tr.fila-clickeable data-url="#{cobro_path(cobro)}"
         td = localize(cobro.fecha.to_date)
         td = cobro.numero
