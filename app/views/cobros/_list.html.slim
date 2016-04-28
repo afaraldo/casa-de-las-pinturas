@@ -1,0 +1,16 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Fecha
+      th Número de cobro
+      th Nro. de comprobante
+      th Cliente
+      th Monto
+  tbody
+    - cobros.each do |pago|
+      tr.fila-clickeable data-url="#{cobro_path(cobro)}"
+        td = localize(cobro.fecha.to_date)
+        td = cobro.numero
+        td = cobro.numero_comprobante
+        td = cobro.persona_nombre
+        td.text-right = number_to_currency(cobro.total_pagado)
