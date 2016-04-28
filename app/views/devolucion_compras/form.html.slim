@@ -1,0 +1,38 @@
+section.content-header
+  h1 Compras
+section.content
+  .row
+    .col-xs-12
+      .box
+        = simple_form_for @devolucion_compra, html: { id: 'devolucion-compra-form' } do |f|
+          .box-header
+            a.volver-link href= pagos_path
+              i.fa.fa-angle-double-left
+              | Volver al listado de devoluciones
+            h3.box-title = @devolucion_compra.new_record? ? 'Nueva devolucion' : "Editar Devolucion Nro. #{@devolucion_compra.numero}"
+          .box-body
+            = f.error_notification
+            .row
+              .col-sm-9
+                .row
+                  .col-sm-4
+                    = f.input :fecha, wrapper: :vertical_input_group do
+                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: f.object.fecha.nil?, value: @devolucion_compra.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                      .input-group-btn
+                        .btn.btn-default
+                          i.fa.fa-calendar
+                  .col-sm-4
+                    = f.association :persona, as: :string, label: 'Proveedor', disabled: @devolucion_compra.persisted?, input_html: { id: 'proveedores-buscador', placeholder: 'Buscar proveedor...', data: { 'msg-required' => 'Este campo es obligatorio.',persona: f.object.persona.to_json } }
+                .row
+                  .col-sm-4
+                    = f.input :motivo, label: 'Motivo'
+            .row.overlay-wrapper#devolucion-compra-mensajes
+              .overlay.hide
+                i.fa.fa-refresh.fa-spin
+              .col-xs-12
+                .well.seleccionar-panel.text-center
+                  i.fa.fa-search
+                  h3 Seleccione un proveedor para ver las boletas para la devolución
+
+javascript:
+  DevolucionComprasUI.setBuscarProveedorUrl("#{proveedores_buscar_path}");

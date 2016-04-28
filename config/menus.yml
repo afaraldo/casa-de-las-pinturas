@@ -20,10 +20,10 @@ menu:
         text: "Cuentas corrientes"
         url: :cuentas_corrientes_proveedores
         active_submenu: :cuentas_corrientes_proveedores
-      mercaderias_devoluciones_boletas:
+      devolucion_compras:
         text: "Devoluciones"
-        url: :mercaderias_devoluciones_boletas
-        active_submenu: :devoluciones_sidemenu
+        url: devolucion_compras
+        active_submenu: :devolucion_compra_sidemenu
   ventas:
     text: "Ventas"
     url: :clientes

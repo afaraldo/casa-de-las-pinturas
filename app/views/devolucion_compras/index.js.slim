@@ -1,0 +1,3 @@
+| $("#devolucion-compra-table").html("#{escape_javascript(render partial: 'list', format: 'html', locals: {devolucion_compras: @devolucion_compras})}");
+| $('#devolucion-compra-paginate-container').html("#{escape_javascript(paginate(@devolucion_compras, remote: true)) }");
+| $('.buscador-resultados > .overlay').remove();

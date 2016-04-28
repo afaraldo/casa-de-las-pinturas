@@ -98,7 +98,7 @@ CasaDeLasPinturas = {
     compras: ComprasUI,
     pagos: PagosUI,
     cuentas_corrientes: CuentaCorrientesUI,
-    mercaderias_devoluciones_boletas: DevolucionesUI
+    devolucion_compras: DevolucionComprasUI
 
 };
 

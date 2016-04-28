@@ -6,10 +6,10 @@ section.content
       .box
         .box-header
           h3.box-title Listado de devoluciones
-          .box-tools.pull-right
-            = link_to 'Nueva devolucion', new_mercaderias_devoluciones_boleta_path, class: 'btn btn-primary'
+          .box-tools.pull-right.hidden-print
+            = link_to 'Nueva devolucion', new_devolucion_compra_path, class: 'btn btn-primary'
         .box-body#boletas-lista
-          #compra-search.buscador-listado.hidden-print
+          #devolucion-compra-search.buscador-listado.hidden-print
             = search_form_for @search, remote: true, class: 'remote-search' do |f|
               .row
                 .col-xs-3
@@ -22,9 +22,10 @@ section.content
                 .col-xs-3
                   .form-group
                     = f.search_field :persona_id_eq_any, id: 'proveedores-buscador', class: 'form-control', placeholder: 'Todos los proveedores...'
-          #devoluciones-table.overlay-wrapper.buscador-resultados.table-responsive
-            = render 'list', mercaderias_devoluciones_boletas: @mercaderias_devoluciones_boletas
-          #devoluciones-paginate-container.hidden-print
-            = paginate @mercaderias_devoluciones_boletas, remote: true
+                
+          #devolucion-compra-table.overlay-wrapper.buscador-resultados.table-responsive
+            = render partial: 'devolucion_compras/list', locals: {devolucion_compras: @devolucion_compras}
+          #devolucion-compra-paginate-container.hidden-print
+            = paginate @devolucion_compras, remote: true
 javascript:
-  DevolucionesUI.setBuscarProveedorUrl("#{proveedores_buscar_path}");
+  DevolucionComprasUI.setBuscarProveedorUrl("#{proveedores_buscar_path}");

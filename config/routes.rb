@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
 
+  resources :devolucion_compras
+
   devise_for :users
 
   get 'configuraciones/check_empresa_nombre' => 'configuraciones#check_empresa_nombre'
@@ -51,8 +53,6 @@ Rails.application.routes.draw do
   resources :caja_movimientos
 
  
-  resources :mercaderias_devoluciones_boletas
-
 
   get 'welcome/index'
   get 'welcome/compras_index'
