@@ -24,7 +24,7 @@ class Boleta < ActiveRecord::Base
 
   before_validation :set_importes
   before_validation :set_estado
-  before_validation :guardar_pago, if: :contado?
+  before_validation :set_pago, if: :contado?
 
   after_save :actualizar_extracto_de_cuenta_corriente, if: :credito?
   after_destroy :actualizar_extracto_de_cuenta_corriente, if: :credito?
@@ -55,15 +55,14 @@ class Boleta < ActiveRecord::Base
     self.importe_total - self.importe_pendiente
   end
 
-  def guardar_pago
-    recibo_boleta = recibos_detalles.first
-    pago = recibo_boleta.recibo
-    pago.fecha = fecha
-    pago.condicion = "contado"
-    pago.persona = persona
-    pago.boletas_detalles << recibo_boleta
-
-    recibo_boleta.monto_utilizado = importe_pendiente
+  def set_pago
+      recibo_boleta = recibos_detalles.first
+      pago = recibo_boleta.recibo
+      pago.fecha = fecha
+      pago.condicion = "contado"
+      pago.persona = persona
+      pago.boletas_detalles << recibo_boleta
+      recibo_boleta.monto_utilizado = importe_pendiente
   end
 
   def check_detalles_negativos(borrado = false)

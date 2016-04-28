@@ -67,6 +67,8 @@ var BoletasUI = (function(){
             }
         });
 
+        $(".boleta-condicion").trigger("change");
+
 
         if($('.nested-fields').length == 1){
             $('.remove_fields').addClass('hide');
