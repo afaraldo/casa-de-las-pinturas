@@ -97,6 +97,7 @@ CasaDeLasPinturas = {
     ventas: BoletasUI,
     pagos: PagosUI,
     cuentas_corrientes: CuentaCorrientesUI,
+    caja_movimientos: CajaMovimientosUI,
     reportes: ReportesUI
 
 };
