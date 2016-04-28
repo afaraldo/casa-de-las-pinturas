@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
   get 'mercaderias/check_codigo' => 'mercaderias#check_codigo'
   get 'mercaderias/buscar' => 'mercaderias#buscar'
+  get 'mercaderias/historico' => 'mercaderias#historico'
   resources :mercaderias, except: [:show]
 
   resources :inventarios, only: [:index]
