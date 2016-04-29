@@ -54,6 +54,10 @@ menu:
         text: "Movimientos de mercaderias"
         url: :movimiento_mercaderias
         active_submenu: :movimientos_mercaderias_sidemenu
+      historico:
+        text: "Histórico de mercaderias"
+        url: :mercaderias_historico
+        active_submenu: :mercaderias_historico
   cajas:
     text: "Cajas"
     url: "#"

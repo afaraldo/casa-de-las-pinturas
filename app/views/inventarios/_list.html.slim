@@ -12,5 +12,5 @@ table.table.table-bordered.table-hover
         td = m.codigo
         td = m.nombre
         td = m.categoria_nombre
-        td = link_to 'Movimientos', mercaderias_historico_path, class: 'btn btn-default btn-sm'
+        td = link_to 'Movimientos', mercaderias_historico_path(mercaderia_id: m.id), class: 'btn btn-default btn-sm'
         td.text-right = number_with_precision(m.stock_actual, delimiter: '.')

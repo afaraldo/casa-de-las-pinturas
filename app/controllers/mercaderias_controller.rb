@@ -1,7 +1,8 @@
 class MercaderiasController < ApplicationController
+  layout 'imprimir', only: [:imprimir_historico]
 
   before_action :set_mercaderia, only: [:edit, :update, :destroy]
-  before_action :setup_menu, only: [:index]
+  before_action :setup_menu, only: [:index, :historico]
 
   # configuracion del menu
   def setup_menu
@@ -97,14 +98,21 @@ class MercaderiasController < ApplicationController
   end
 
   def historico
+    @menu_setup[:side_menu] = :mercaderias_historico
     get_historico
     render 'mercaderias/historico/listado'
+  end
+
+  def imprimir_historico
+    get_historico
+    render 'mercaderias/historico/imprimir_historico'
   end
 
   private
 
   def get_historico
     @movimientos = nil
+    @mercaderia = Mercaderia.find_by(id: params[:mercaderia_id])
 
     # Configurando las fechas
     @desde = nil

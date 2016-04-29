@@ -1,5 +1,5 @@
 header.main-header
-  a.logo
+  a.logo href="#{root_path}"
     - logo = Configuracion.first.avatar
     - unless logo.url.nil?
       = cl_image_tag(Configuracion.first.avatar, :width => 50, :height => 50, :crop => :fill, :radius => :max)

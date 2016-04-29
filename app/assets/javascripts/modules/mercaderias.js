@@ -48,7 +48,8 @@ var MercaderiasUI = (function(){
      * Recibe un objeto con:
      * {
      *   elemento: el objeto jquery del elemento input al que se va a utilizar como buscador,
-     *   url: la url del metodo para buscar en el servidor
+     *   url: la url del metodo para buscar en el servidor,
+     *   customSelection: function callback para despues que se seleccione la mercaderia
      * }
      */
     function buscarMercaderia(opciones){
@@ -124,7 +125,17 @@ var MercaderiasUI = (function(){
             });
         },
         recargarCategorias: recargarCategorias,
-        buscarMercaderia:   buscarMercaderia
+        buscarMercaderia:   buscarMercaderia,
+        historico: function(url){
+            var buscadorInput = $('#mercaderia-buscador');
+
+            buscarMercaderia({elemento: buscadorInput, url: url});
+            DatepickerHelper.initDateRangePicker('#date-range');
+
+            $('.seleccionar-panel').on('click', function(e){
+                buscadorInput.select2('open');
+            });
+        }
     };
 
 }());

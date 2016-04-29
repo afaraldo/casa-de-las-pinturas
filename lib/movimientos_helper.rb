@@ -33,6 +33,14 @@ module MovimientosHelper
                         motivo: detalle.movimiento_mercaderia.motivo,
                         ingreso: es_ingreso ? detalle.cantidad : 0,
                         egreso: es_ingreso ? 0 : detalle.cantidad}
+        when 'BoletaDetalle'
+          detalle = m.boleta_detalle
+          es_ingreso = detalle.boleta.instance_of?(Compra)
+          resultado = {url: "/#{es_ingreso ? 'compras' : 'ventas'}/#{detalle.boleta_id}",
+                       fecha: detalle.boleta.fecha,
+                       motivo: detalle.boleta.movimiento_motivo,
+                       ingreso: es_ingreso ? detalle.cantidad : 0,
+                       egreso: es_ingreso ? 0 : detalle.cantidad}
         # -------------------------------
         # MOVIMIENTOS DE CUENTAS CORRIENTES - CLIENTES / PROVEEDORES
         # -------------------------------
