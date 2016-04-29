@@ -1,15 +1,15 @@
 class ReciboBoleta < ActiveRecord::Base
 
-  acts_as_paranoid
+  #acts_as_paranoid
 
   self.table_name = 'recibos_boletas'
 
   after_save :actualizar_boletas
   after_destroy :actualizar_boletas
 
-  belongs_to :recibo, class_name: 'Pago'
+  belongs_to :recibo
   accepts_nested_attributes_for :recibo, reject_if: :all_blank, allow_destroy: true
-  belongs_to :boleta, class_name: 'Compra'
+  belongs_to :boleta
 
   validate  :monto_utilizado_boletas
 

@@ -1,16 +1,16 @@
 class Boleta < ActiveRecord::Base
   include SqlHelper
   extend Enumerize
-  acts_as_paranoid
+  #acts_as_paranoid
   self.inheritance_column = 'tipo'
 
-  belongs_to :persona, foreign_key: "persona_id", inverse_of: :boletas#, counter_cache: true
+  belongs_to :persona, foreign_key: "persona_id", inverse_of: :boletas
 
   has_many :detalles, class_name: 'BoletaDetalle', dependent: :destroy, inverse_of: :boleta
   accepts_nested_attributes_for :detalles, reject_if: :all_blank, allow_destroy: true
 
-  has_many :recibos_detalles, class_name: 'ReciboBoleta', foreign_key: "boleta_id", inverse_of: :boleta, dependent: :destroy
-  has_many :recibos, class_name: 'Recibo', dependent: :destroy, through: :recibos_detalles
+  has_many :recibos_detalles, class_name: 'ReciboBoleta', foreign_key: "boleta_id", inverse_of: :boleta
+  has_many :recibos, class_name: 'Recibo', through: :recibos_detalles
 
   accepts_nested_attributes_for :recibos_detalles, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :recibos, reject_if: :all_blank, allow_destroy: true

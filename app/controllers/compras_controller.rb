@@ -62,6 +62,7 @@ class ComprasController < ApplicationController
         end
       end
     end
+    binding.pry
   end
 
   # PATCH/PUT /compras/1
@@ -83,7 +84,7 @@ class ComprasController < ApplicationController
         end
       end
     end
-    binding.pry
+
   end
 
   # DELETE /compra/1
