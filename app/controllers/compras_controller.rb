@@ -57,7 +57,6 @@ class ComprasController < ApplicationController
         else
           @pago = @compra.recibos_detalles.first.recibo if @compra.recibos_detalles.first
           @pago.rebuild_detalles if @pago
-          binding.pry
           format.html { render :form }
           format.json { render json: @compra.errors, status: :unprocessable_entity }
         end
@@ -68,6 +67,7 @@ class ComprasController < ApplicationController
   # PATCH/PUT /compras/1
   # PATCH/PUT /compras/1.json
   def update
+    params[:compra].delete("recibos_detalles_attributes") if params[:compra][:condicion] == "credito"
     @compra.assign_attributes(compra_params)
     @stock_negativo = params[:guardar_si_o_si].present? ? [] : @compra.check_detalles_negativos
     respond_to do |format|
@@ -76,11 +76,14 @@ class ComprasController < ApplicationController
           format.html { redirect_to @compra, notice: t('mensajes.save_success', recurso: 'la compra') }
           format.json { render :show, status: :created, location: @compra }
         else
+          @pago = @compra.recibos_detalles.first.recibo if @compra.recibos_detalles.first
+          @pago.rebuild_detalles if @pago
           format.html { render :form }
           format.json { render json: @compra.errors, status: :unprocessable_entity }
         end
       end
     end
+    binding.pry
   end
 
   # DELETE /compra/1
@@ -115,7 +118,7 @@ class ComprasController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def compra_params
-      procesar_cantidades_mercaderias
+      #procesar_cantidades_mercaderias
       #procesar_cantidades_pagos
       params.require(:compra).permit(:persona_id, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :condicion,
                                      recibos_detalles_attributes:[:id, :_destroy,
@@ -142,12 +145,6 @@ class ComprasController < ApplicationController
       end
     end
 
-    def procesar_cantidades_pagos
-      pago = params[:compra][:recibos_detalles_attributes]["0"][:recibo_attributes]
-      pago[:detalles_attributes].each do |i, d|
-        pago[:detalles_attributes][i][:monto] = cantidad_a_numero(d[:monto])
-        pago[:detalles_attributes][i][:cotizacion] = cantidad_a_numero(d[:cotizacion])
-      end
-    end
+
 
 end

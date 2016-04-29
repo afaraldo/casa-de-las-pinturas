@@ -22,7 +22,8 @@ class Boleta < ActiveRecord::Base
 
   #Callbacks
 
-  before_validation :set_importes
+  before_validation :set_importe_total
+  before_validation :set_importe_pendiente
   before_validation :set_estado
   before_validation :set_pago, if: :contado?
 
@@ -61,8 +62,8 @@ class Boleta < ActiveRecord::Base
       pago.fecha = fecha
       pago.condicion = "contado"
       pago.persona = persona
-      pago.boletas_detalles << recibo_boleta
-      recibo_boleta.monto_utilizado = importe_pendiente
+      pago.boletas_detalles << recibo_boleta if new_record?
+      recibo_boleta.monto_utilizado = importe_total
   end
 
   def check_detalles_negativos(borrado = false)
@@ -124,17 +125,18 @@ class Boleta < ActiveRecord::Base
 
   private
 
-  def set_importes
+  # carga el campo importe_total = suma de los (precio_unitario * cantidad) de cada detalle
+  def set_importe_total
     self.importe_total = 0
     self.detalles.each do |detalle|
         self.importe_total += detalle.precio_unitario * detalle.cantidad
     end
-    self.importe_pendiente = self.importe_total
   end
 
+  #calcula el importe_pendiente, si la boleta es nueva importe_pendiente = importe_total sino importe_pendiente = (importe_total - montos_pagados)
   def set_importe_pendiente
     if new_record?
-      importe_pendiente = importe_total
+      self.importe_pendiente = importe_total
     else
       monto_pagado = 0
       self.recibos_detalles.each do |p|

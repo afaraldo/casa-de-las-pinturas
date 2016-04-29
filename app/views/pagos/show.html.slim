@@ -79,7 +79,7 @@ section.content
                 - @pago.boletas_detalles.each do |bd|
                   - compra = bd.boleta
                   - total_compras += bd.monto_utilizado
-                  tr
+                  tr.fila-clickeable data-url="#{compra_path(compra.id)}"
                     td = compra.numero
                     td = compra.numero_comprobante
                     td = localize(compra.fecha.to_date)
