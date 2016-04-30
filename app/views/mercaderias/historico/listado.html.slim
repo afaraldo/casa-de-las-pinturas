@@ -1,0 +1,29 @@
+section.content-header
+  h1 Stock
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Histórico de mercaderías
+          .box-tools.pull-right.hidden-print
+            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, mercaderias_imprimir_historico_path, class: "btn btn-default imprimir-listado #{'disabled' if @mercaderia.nil?}"
+        .box-body
+          #cuenta-corrientes-search.buscador-listado.hidden-print
+            = form_tag mercaderias_historico_path, remote: true, method: :get, class: 'remote-search' do
+              .row
+                .col-xs-4
+                  .form-group
+                    label.control-label Mercadería
+                    = search_field_tag :mercaderia_id, @mercaderia ? @mercaderia.id : nil, id: 'mercaderia-buscador', class: 'form-control', placeholder: "Buscar mercadería...", data: {mercaderia: @mercaderia.to_json}
+                .col-xs-3
+                  div#date-range.btn.btn-default.daterange.btn-block.top-25
+                    = hidden_field_tag :fecha_desde, nil, class: 'fecha-desde'
+                    = hidden_field_tag :fecha_hasta, nil, class: 'fecha-hasta'
+                    i.fa.fa-calendar
+                    span Fecha
+                    b.caret
+          #historico-mercaderia-table.overlay-wrapper.buscador-resultados.table-responsive
+            = render 'mercaderias/historico/movimientos', movimientos: @movimientos
+javascript:
+  MercaderiasUI.historico("#{mercaderias_buscar_path}");
