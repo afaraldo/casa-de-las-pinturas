@@ -1,10 +1,11 @@
-#reporte-chart.chart style="max-height: 300px;"
-  canvas#reporte-chart-canvas
+#reporte-chart style="height: 300px;"
 table.table.table-bordered.table-hover
   thead
     tr
-      th = agrupado_por_titulo(params[:agrupar_por])
-      th Total
+      th
+        = order_reporte_link(agrupado_por_titulo(params[:agrupar_por]), 'grupo')
+      th
+        = order_reporte_link('Total', 'total')
   tbody
     - total_reporte = 0
     - chart_data = {}
@@ -22,4 +23,4 @@ table.table.table-bordered.table-hover
 = paginate reporte, remote: true
 
 javascript:
-  ReportesUI.dibujarChart(#{chart_data.keys.to_json.html_safe}, #{chart_data.values.to_json.html_safe}, "#{params[:agrupar_por] == 'persona' ? 'bar' : 'line'}");
+  ReportesUI.dibujarChart(#{chart_data.keys.to_json.html_safe}, #{chart_data.values.to_json.html_safe}, "#{params[:agrupar_por] == 'persona' ? 'bar' : 'area'}");
