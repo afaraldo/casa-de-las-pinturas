@@ -9,9 +9,9 @@ h4 Reporte de compras
   .col-xs-6
     p
       strong Agrupado por:
-      = " #{agrupado_por_titulo(params[:agrupado_por])}"
+      = " #{agrupado_por_titulo(params[:agrupar_por])}"
     - unless params[:persona_id].blank?
       p
         strong Proveedor:
         = " #{Proveedor.find(params[:persona_id]).nombre}"
-= render "compras_#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", reporte: @reporte
+= render "reportes/compras/#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", reporte: @reporte

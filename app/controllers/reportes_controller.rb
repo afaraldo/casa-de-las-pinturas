@@ -14,10 +14,12 @@ class ReportesController < ApplicationController
     @menu_setup[:side_menu] = :reporte_compras
 
     get_reporte_compras
+    render 'reportes/compras/reporte'
   end
 
   def imprimir_reporte_compras
     get_reporte_compras
+    render 'reportes/compras/imprimir_reporte'
   end
 
   def setup_fechas
@@ -26,9 +28,14 @@ class ReportesController < ApplicationController
   end
 
   def get_reporte_compras
-    @reporte = Compra.get_reporte(@desde, @hasta,
-                                  params[:persona_id], params[:agrupar_por],
-                                  params[:modo_resumido].present?, params[:page],
-                                  action_name == 'imprimir_reporte_compras' ? LIMITE_REGISTROS_IMPRIMIR : 100)
+    @reporte = Compra.reporte(desde: @desde,
+                              hasta: @hasta,
+                              persona_id: params[:persona_id],
+                              agrupar_por: params[:agrupar_por],
+                              resumido: params[:modo_resumido].present?,
+                              order_by: params[:order_by],
+                              order_dir: params[:order_dir],
+                              page: params[:page],
+                              limit: action_name == 'imprimir_reporte_compras' ? LIMITE_REGISTROS_IMPRIMIR : 100)
   end
 end

@@ -19,3 +19,10 @@
 .top-25{
   margin-top: 25px;
 }
+
+.ordenar-link{
+  display: block;
+  > i{
+    float: right;
+  }
+}
