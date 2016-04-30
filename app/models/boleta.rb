@@ -2,6 +2,7 @@ class Boleta < ActiveRecord::Base
   include SqlHelper
   extend Enumerize
   acts_as_paranoid
+
   self.inheritance_column = 'tipo'
 
   belongs_to :persona, foreign_key: "persona_id", inverse_of: :boletas#, counter_cache: true
@@ -87,7 +88,7 @@ class Boleta < ActiveRecord::Base
     opciones[:order_by] = 'grupo' if opciones[:order_by].nil?
     opciones[:order_dir] = 'asc' if opciones[:order_dir].nil?
 
-    resultado = self.unscoped.where(fecha: opciones[:desde]..opciones[:hasta])
+    resultado = self.unscoped.where(deleted_at: nil).where(fecha: opciones[:desde]..opciones[:hasta])
 
     resultado = resultado.where(persona_id: opciones[:persona_id]) unless opciones[:persona_id].blank?
 

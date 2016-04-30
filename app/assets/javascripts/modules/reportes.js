@@ -35,7 +35,12 @@ var ReportesUI = (function(){
                     chart: { type: tipo },
                     xAxis: { categories: labels },
                     yAxis: {
-                        title: { text: 'Total' }
+                        title: { text: 'Total' },
+                        labels: {
+                            formatter: function() {
+                                return I18n.toCurrency(this.value, {unit: ''});
+                            }
+                        }
                     },
                     title: null,
                     plotOptions: {
@@ -43,6 +48,7 @@ var ReportesUI = (function(){
                             animation: false
                         }
                     },
+
                     series: [
                         {
                             name: 'Total',
