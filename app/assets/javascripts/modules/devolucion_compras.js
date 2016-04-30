@@ -28,6 +28,36 @@ DevolucionComprasUI= (function(){
         elementos.devolucionCompraForm.on('click', '.seleccionar-panel', function(e){
             elementos.proveedorBuscador.select2('open');
         });
+        elementos.proveedorBuscador.on('change',function(e){
+           $.ajax({
+            url: 'get_compras',
+            type:'get',
+            dataType:'json',
+            data: {persona_id:$(this).val()},
+            success: function(response){
+                $.each(response,function(i,option){
+                    $('#devolucion_id').append($('<option>').text(option.numero_comprobante).attr('value',option.id));    
+                });
+            }
+           });
+        });
+        $('#devolucion_id').on('change',function(){
+            $("#pago-mensajes").addClass("hide");
+            $('#pago-boletas-devoluciones').removeClass("hide");
+            $.ajax({
+            url: 'get_compras_detalles',
+            type:'get',
+            dataType:'json',
+            data: {compra_id:$(this).val()},
+            success: function(response){
+                $.each(response,function(i,option){
+                    var row = "<tr><td>" + option.codigo+"</td><td>"+option.nombre+"</td><td>"+option.cantidad+"</td><td>"+option.precio_unitario+"</td><td>"+option.cantidad*option.precio_unitario+"</td></tr>"
+                    $('#compra-detalles-body').html(row);    
+                });;
+
+            }
+           });
+        })
 
 
     }

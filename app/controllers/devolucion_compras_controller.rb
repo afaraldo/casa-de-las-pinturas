@@ -1,5 +1,5 @@
 class DevolucionComprasController < ApplicationController
-  layout 'imprimir', only: [:imprimir]
+
   before_action :set_devolucion_compra, only: [:show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
 
@@ -18,7 +18,6 @@ class DevolucionComprasController < ApplicationController
   # GET /compras/1
   # GET /compras/1.json
   def show
-    @stock_negativo = @devolucion_compra.check_detalles_negativos(true)
   end
 
   # GET /compras/new
@@ -85,25 +84,46 @@ class DevolucionComprasController < ApplicationController
       end
     end
   end
+  def get_compras
+    @compras = Compra.where("persona_id =?",params[:persona_id])
+    respond_to do |format|
+      format.json {render json: @compras}
+    end
+  end
+
+  def get_compras_detalles
+    @compra_detalles = BoletaDetalle.where("boleta_id =?",params[:compra_id])
+    respond_to do |format|
+      format.json {render json: @compra_detalles}
+    end
+  end
 
   private
 
     def get_devolucion_compras
+      procesar_fechas
       @search = DevolucionCompra.search(params[:q])
-      @devolucion_compras = @search.result.page(params[:page])
+      @devolucion_compra = @search.result.includes(:persona).page(params[:page]).per(action_name == 'imprimir' ? LIMITE_REGISTROS_IMPRIMIR : 25)
     end
-    # Use callbacks to share common setup or constraints between actions.
-    def set_compra
-      @devolucion_compra = Compra.find(params[:id])
+    # Setear las fechas "hasta" para que incluya el dia entero
+    # 01/03/2016 => 2016-03-01 23:59:59
+    def procesar_fechas
+      if params[:q].present? && params[:q][:fecha_lt].present?
+        params[:q][:fecha_lt] = params[:q][:fecha_lt].to_datetime.end_of_day
+      end
     end
 
+    # Use callbacks to share common setup or constraints between actions.
+    def set_devolucion_compra
+      @devolucion_compra = DevolucionCompra.find(params[:id])
+    end
     # Never trust parameters from the scary internet, only allow the white list through.
     def devolucion_compra_params
-      procesar_cantidades
-      params.require(:devolucion_compra).permit(:persona_id, :numero, :fecha, :motivo
-                                     detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy])
-    end
+      params.require(:devolucion_compra).permit(:persona_id, :motivo, :fecha,
+                                   detalles_attributes: [:id,:mercaderia_id, :cantidad, :precio_unitario],
+                                   boletas_detalles_attributes: [:id, :boleta_id, :_destroy])
 
     end
+
 
 end
