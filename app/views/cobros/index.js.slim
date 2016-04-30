@@ -1,0 +1,3 @@
+| $("#cobros-table").html("#{escape_javascript(render partial: 'list', format: 'html', locals: {cobros: @cobros})}");
+| $('#cobros-paginate-container').html("#{escape_javascript(paginate(@cobros, remote: true)) }");
+| $('.buscador-resultados > .overlay').remove();

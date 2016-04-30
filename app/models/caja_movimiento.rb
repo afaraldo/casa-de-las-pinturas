@@ -5,7 +5,7 @@ class CajaMovimiento < ActiveRecord::Base
   before_destroy :check_detalles_negativos
   after_save :actualizar_extracto
 
-  belongs_to :categoria_gasto, -> { with_deleted }
+  belongs_to :categoria_gasto
 
   after_save :actualizar_extracto
 
