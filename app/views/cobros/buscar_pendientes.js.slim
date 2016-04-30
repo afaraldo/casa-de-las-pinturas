@@ -1,0 +1,5 @@
+- if @ventas.size == 0
+  | CobrosUI.noHayPendientes("#{@cliente.nombre}");
+- else
+  | $('#venta-detalles-body').html("#{escape_javascript(render 'ventas_pendientes', ventas: @ventas, actualizando: false, cobro: @cobro)}");
+  | CobrosUI.mostrarBoletas(true);

@@ -25,6 +25,8 @@ Rails.application.routes.draw do
 
   get 'mercaderias/check_codigo' => 'mercaderias#check_codigo'
   get 'mercaderias/buscar' => 'mercaderias#buscar'
+  get 'mercaderias/historico' => 'mercaderias#historico'
+  get 'mercaderias/imprimir_historico' => 'mercaderias#imprimir_historico'
   resources :mercaderias, except: [:show]
 
   resources :inventarios, only: [:index]
@@ -49,8 +51,11 @@ Rails.application.routes.draw do
 
   resources :caja_movimiento_detalles
 
-
   resources :caja_movimientos
+
+  get 'cobros/buscar_pendientes' => 'cobros#buscar_pendientes'
+  get 'cobros/imprimir' => 'cobros#imprimir'
+  resources :cobros
 
   # Reportes
   get 'reportes/compras'

@@ -29,6 +29,10 @@ menu:
         text: "Ventas"
         url: :ventas
         active_submenu: :ventas_sidemenu
+      cobros:
+        text: "Cobros"
+        url: :cobros
+        active_submenu: :cobros_sidemenu
       clientes:
         text: "Clientes"
         url: :clientes
@@ -54,6 +58,10 @@ menu:
         text: "Movimientos de mercaderias"
         url: :movimiento_mercaderias
         active_submenu: :movimientos_mercaderias_sidemenu
+      historico:
+        text: "Histórico de mercaderias"
+        url: :mercaderias_historico
+        active_submenu: :mercaderias_historico
   cajas:
     text: "Cajas"
     url: "#"

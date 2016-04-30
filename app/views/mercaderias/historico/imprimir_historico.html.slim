@@ -1,0 +1,16 @@
+h4 Historico de movimientos de mercadería
+.row
+  .col-xs-6
+    p
+      strong Mercadería
+      = ": #{@mercaderia.nombre}"
+  .col-xs-6
+    p
+      - if @desde
+        strong Desde el
+        = " #{localize(@desde.to_date)} "
+        strong hasta el
+        = " #{localize(@hasta.to_date)}"
+      - else
+        | Ultimos 25 movimientos
+= render 'mercaderias/historico/movimientos', movimientos: @movimientos

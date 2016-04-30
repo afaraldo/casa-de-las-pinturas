@@ -1,6 +1,8 @@
 class MercaderiasController < ApplicationController
+  layout 'imprimir', only: [:imprimir_historico]
+
   before_action :set_mercaderia, only: [:edit, :update, :destroy]
-  before_action :setup_menu, only: [:index]
+  before_action :setup_menu, only: [:index, :historico]
 
   # configuracion del menu
   def setup_menu
@@ -95,7 +97,42 @@ class MercaderiasController < ApplicationController
     @mercaderias = @search_mercaderias.result.page(params[:page])
   end
 
+  def historico
+    @menu_setup[:side_menu] = :mercaderias_historico
+    get_historico
+    render 'mercaderias/historico/listado'
+  end
+
+  def imprimir_historico
+    get_historico
+    render 'mercaderias/historico/imprimir_historico'
+  end
+
   private
+
+  def get_historico
+    @movimientos = nil
+    @mercaderia = Mercaderia.find_by(id: params[:mercaderia_id])
+
+    # Configurando las fechas
+    @desde = nil
+    @hasta = nil
+
+    if params[:fecha_desde].present? && params[:fecha_hasta].present?
+      @desde = params[:fecha_desde].to_datetime
+      @hasta = params[:fecha_hasta].to_datetime
+    end
+
+    # buscar movimientos
+    if params[:mercaderia_id].present?
+      @movimientos = MercaderiaExtracto.get_movimientos(mercaderia_id: params[:mercaderia_id],
+                                                             desde: @desde,
+                                                             hasta: @hasta,
+                                                             page: params[:page],
+                                                             limit: action_name == 'imprimir_historico' ? LIMITE_REGISTROS_IMPRIMIR : nil)
+    end
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_mercaderia
     @mercaderia = Mercaderia.find(params[:id])

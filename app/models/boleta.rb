@@ -2,6 +2,7 @@ class Boleta < ActiveRecord::Base
   include SqlHelper
   extend Enumerize
   acts_as_paranoid
+
   self.inheritance_column = 'tipo'
 
   belongs_to :persona, foreign_key: "persona_id", inverse_of: :boletas
@@ -111,31 +112,35 @@ class Boleta < ActiveRecord::Base
     "#{tipo} Nro. #{numero}"
   end
 
-  def self.get_reporte(desde, hasta, persona_id, agrupar_por, resumido, page, limit)
+  def self.reporte(*args)
 
-    agrupar_por = 'dia' if agrupar_por.nil?
+    opciones = args.extract_options!
 
-    resultado = self.unscoped.where(fecha: desde..hasta)
+    opciones[:agrupar_por] = 'dia' if opciones[:agrupar_por].nil?
+    opciones[:order_by] = 'grupo' if opciones[:order_by].nil?
+    opciones[:order_dir] = 'asc' if opciones[:order_dir].nil?
 
-    resultado = resultado.where(persona_id: persona_id) unless persona_id.blank?
+    resultado = self.unscoped.where(deleted_at: nil).where(fecha: opciones[:desde]..opciones[:hasta])
 
-    grupo_formato = (agrupar_por == 'dia') ? 'default' : agrupar_por
+    resultado = resultado.where(persona_id: opciones[:persona_id]) unless opciones[:persona_id].blank?
 
-    if resumido
-      grupo = agrupar_por == 'persona' ? 'personas.nombre' : "to_char(fecha, '#{SQL_PERIODOS[agrupar_por.to_sym]}')"
+    grupo_formato = (opciones[:agrupar_por] == 'dia') ? 'default' : opciones[:agrupar_por]
+
+    if opciones[:resumido]
+      grupo = opciones[:agrupar_por] == 'persona' ? 'personas.nombre' : "to_char(fecha, '#{SQL_PERIODOS[opciones[:agrupar_por].to_sym]}')"
 
       resultado.joins(:persona)
                .select("#{grupo} as grupo, sum(importe_total) as total")
-               .order('grupo asc')
+               .order("#{opciones[:order_by]} #{opciones[:order_dir]}")
                .group("#{grupo}")
-               .page(page).per(limit)
+               .page(opciones[:page]).per(opciones[:limit])
 
     else
       resultado = resultado.includes(:persona)
-                           .order("#{(agrupar_por == 'persona') ? 'personas.nombre' : 'fecha'} asc")
-                           .page(page).per(limit)
+                           .order("#{(opciones[:agrupar_por] == 'persona') ? 'personas.nombre' : 'fecha'} asc")
+                           .page(opciones[:page]).per(opciones[:limit])
 
-      {todo: resultado, agrupado: resultado.group_by { |b| (agrupar_por == 'persona') ? b.persona_nombre :  I18n.localize(b.fecha.to_date, format: grupo_formato.to_sym).capitalize }}
+      {todo: resultado, agrupado: resultado.group_by { |b| (opciones[:agrupar_por] == 'persona') ? b.persona_nombre :  I18n.localize(b.fecha.to_date, format: grupo_formato.to_sym).capitalize }}
     end
 
   end
