@@ -1,7 +1,7 @@
 class Boleta < ActiveRecord::Base
   include SqlHelper
   extend Enumerize
-  #acts_as_paranoid
+  acts_as_paranoid
   self.inheritance_column = 'tipo'
 
   belongs_to :persona, foreign_key: "persona_id", inverse_of: :boletas
@@ -29,6 +29,7 @@ class Boleta < ActiveRecord::Base
 
   after_save :actualizar_extracto_de_cuenta_corriente, if: :credito?
   after_destroy :actualizar_extracto_de_cuenta_corriente, if: :credito?
+  before_destroy :destroy_pagos
 
   after_save :actualizar_extractos_de_mercaderias
 
@@ -66,12 +67,28 @@ class Boleta < ActiveRecord::Base
       recibo_boleta.monto_utilizado = importe_total
   end
 
+  def destroy_pagos
+    unless recibos.empty?
+      recibos.each(&:destroy)
+    end
+  end
+
   def check_detalles_negativos(borrado = false)
     m = []
     detalles.each do |d|
       if d.nueva_cantidad(borrado) < 0
         m << d.mercaderia
       end
+    end
+    m
+  end
+
+  def check_detalles_negativos_pago(borrado = false)
+    m = []
+    recibo_detalle = recibos_detalles.first
+    pago = recibo_detalle.recibo if recibo_detalle
+    if pago
+      m = pago.check_detalles_negativos
     end
     m
   end

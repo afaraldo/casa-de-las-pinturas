@@ -2,7 +2,7 @@ class Recibo < ActiveRecord::Base
   extend Enumerize
   include MovimientosHelper
 
-  #acts_as_paranoid
+  acts_as_paranoid
 
   self.inheritance_column = 'tipo'
 
