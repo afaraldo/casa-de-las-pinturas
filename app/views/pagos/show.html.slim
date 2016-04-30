@@ -17,7 +17,7 @@ section.content
               - if @stock_negativo && @stock_negativo.size > 0
                 = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, pago_path(@pago), method: 'delete', data: {confirm: "La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}. ¿Seguro que desea eliminar la compra?"}, class: 'btn btn-danger'
               - else
-                = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, pago_path(@compra), method: 'delete', data: {confirm: "¿Desea eliminar el pago?"}, class: 'btn btn-danger'
+                = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, pago_path(@pago), method: 'delete', data: {confirm: "¿Desea eliminar el pago?"}, class: 'btn btn-danger'
             - else
               button.btn.btn-danger.disabled data-toggle="tooltip" title="No se puede eliminar el pago porque pertenece a una compra al contado."
                 i.fa.fa-trash

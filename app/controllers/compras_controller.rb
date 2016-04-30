@@ -60,7 +60,6 @@ class ComprasController < ApplicationController
           format.json { render json: @compra.errors, status: :unprocessable_entity }
         end
       end
-      binding.pry
     end
 
   end
@@ -83,7 +82,6 @@ class ComprasController < ApplicationController
           format.json { render json: @compra.errors, status: :unprocessable_entity }
         end
       end
-      binding.pry
     end
 
   end
