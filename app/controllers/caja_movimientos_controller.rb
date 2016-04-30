@@ -123,7 +123,7 @@ class CajaMovimientosController < ApplicationController
 
     def procesar_cantidades
       params[:caja_movimiento][:detalles_attributes].each do |i, d|
-        params[:caja_movimiento][:detalles_attributes][i][:monto] = cantidad_a_numero(d[:monto])
+      params[:caja_movimiento][:detalles_attributes][i][:monto] = cantidad_a_numero(d[:monto])
       end
     end
 
