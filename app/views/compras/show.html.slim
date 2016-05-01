@@ -14,7 +14,7 @@ section.content
           .box-tools
             = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_compra_path(@compra),  html_options = {class: 'btn btn-default'}
             = ' '
-            - if @compra.recibos_detalles.empty?
+            - if (@compra.credito? && @compra.recibos_detalles.empty?) || @compra.contado?
               - if @stock_negativo && @stock_negativo.size > 0
                 = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, compra_path(@compra), method: 'delete', data: {confirm: "La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}. ¿Seguro que desea eliminar la compra?"}, class: 'btn btn-danger'
               - else
@@ -99,7 +99,7 @@ section.content
                 - total = 0
                 - @compra.recibos_detalles.each do |p|
                   - total += p.monto_utilizado
-                  tr
+                  tr.fila-clickeable data-url="#{pago_path(p.id)}"
                     td = localize(p.recibo.fecha.to_date)
                     td = p.recibo.numero
                     td.text-right = number_to_currency(p.monto_utilizado)
