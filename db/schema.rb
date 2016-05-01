@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20160415233007) do
-=======
-ActiveRecord::Schema.define(version: 20160425184244) do
->>>>>>> development
+ActiveRecord::Schema.define(version: 20160428041309) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,11 +52,7 @@ ActiveRecord::Schema.define(version: 20160425184244) do
     t.integer  "moneda_id"
     t.integer  "caja_movimiento_detalle_id"
     t.datetime "fecha",                                 null: false
-<<<<<<< HEAD
-    t.string   "movimiento_tipo",            limit: 20, null: false
-=======
     t.string   "movimiento_tipo",            limit: 50, null: false
->>>>>>> development
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
     t.integer  "recibo_detalle_id"
@@ -78,10 +70,7 @@ ActiveRecord::Schema.define(version: 20160425184244) do
     t.string   "forma",              limit: 20,                                        null: false
     t.datetime "created_at",                                                           null: false
     t.datetime "updated_at",                                                           null: false
-<<<<<<< HEAD
-=======
     t.datetime "deleted_at"
->>>>>>> development
   end
 
   add_index "caja_movimiento_detalles", ["caja_movimiento_id"], name: "index_caja_movimiento_detalles_on_caja_movimiento_id", using: :btree
@@ -95,16 +84,11 @@ ActiveRecord::Schema.define(version: 20160425184244) do
     t.decimal  "importe_total",                  precision: 15, scale: 2, default: 0.0, null: false
     t.datetime "created_at",                                                            null: false
     t.datetime "updated_at",                                                            null: false
-<<<<<<< HEAD
-  end
-
-=======
     t.datetime "deleted_at"
     t.integer  "caja_id"
   end
 
   add_index "caja_movimientos", ["caja_id"], name: "index_caja_movimientos_on_caja_id", using: :btree
->>>>>>> development
   add_index "caja_movimientos", ["categoria_gasto_id"], name: "index_caja_movimientos_on_categoria_gasto_id", using: :btree
 
   create_table "caja_periodo_balances", force: :cascade do |t|
@@ -304,6 +288,7 @@ ActiveRecord::Schema.define(version: 20160425184244) do
     t.datetime "updated_at",                                                  null: false
     t.integer  "persona_id"
     t.string   "numero_comprobante",      limit: 50
+    t.string   "condicion",               limit: 20,                          null: false
   end
 
   add_index "recibos", ["persona_id"], name: "index_recibos_on_persona_id", using: :btree
@@ -366,10 +351,7 @@ ActiveRecord::Schema.define(version: 20160425184244) do
   add_foreign_key "caja_extractos", "recibo_detalles"
   add_foreign_key "caja_movimiento_detalles", "caja_movimientos"
   add_foreign_key "caja_movimiento_detalles", "monedas"
-<<<<<<< HEAD
-=======
   add_foreign_key "caja_movimientos", "cajas"
->>>>>>> development
   add_foreign_key "caja_movimientos", "categoria_gastos"
   add_foreign_key "caja_periodo_balances", "cajas"
   add_foreign_key "caja_periodo_balances", "monedas"
