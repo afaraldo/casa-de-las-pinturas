@@ -21,7 +21,7 @@ section.content
                       = hidden_field_tag :fecha_desde, nil, class: 'fecha-desde'
                       = hidden_field_tag :fecha_hasta, nil, class: 'fecha-hasta'
                       i.fa.fa-calendar
-                      span Fecha
+                      span #{localize(@desde.to_date)} - #{localize(@hasta.to_date)}
                       b.caret
                 .col-sm-3
                   .form-group.top-25

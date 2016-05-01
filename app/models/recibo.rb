@@ -8,6 +8,7 @@ class Recibo < ActiveRecord::Base
 
   enumerize :condicion, in: [:contado, :credito], predicates: true
 
+  after_initialize :set_condicion
   before_validation :set_importes
   after_save :actualizar_cuenta_corriente, if: :credito?
   after_destroy :actualizar_cuenta_corriente, if: :credito?
@@ -51,6 +52,10 @@ class Recibo < ActiveRecord::Base
   end
 
   private
+
+  def set_condicion
+    self.condicion ||= :credito
+  end
 
   def condicion_cambiada?
     if condicion_changed? && self.persisted?
