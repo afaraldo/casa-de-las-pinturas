@@ -94,7 +94,7 @@ menu:
         active_submenu: :reporte_ventas
       reporte_gastos:
         text: "Reporte de gastos"
-        url: "#"
+        url: :reportes_gastos
         active_submenu: :reporte_gastos
   configuraciones:
     text: "Configuraciones"
