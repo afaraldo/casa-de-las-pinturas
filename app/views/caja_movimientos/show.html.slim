@@ -34,9 +34,19 @@ section.content
                 th Tipo de Valor
                 th Moneda
                 th Monto
+                th Cotizacion
+                th Subtotal
             tbody
+              - total = 0
               - @caja_movimiento.detalles.each do |d|
+                - total += d.monto * d.cotizacion
                 tr
                   td = d.forma
                   td = d.moneda.nombre
-                  td = number_to_currency(d.monto)
+                  td.text-right = number_to_currency(d.monto, unit: '')
+                  td.text-right = number_to_currency(d.cotizacion, unit: '')
+                  td.text-right = number_to_currency(d.monto * d.cotizacion, unit: '')
+            tfoot
+              tr.text-bold.text-right
+                td colspan="4" Total:
+                td = number_to_currency(total)

@@ -1,12 +1,18 @@
 var CajaMovimientosUI = (function(){
     var elementos = null;
 
+    function calcularTotal(){
+        $('#caja-movimiento-detalles-body').find('.cantidad').trigger('change');
+    }
+
     function initFormEvents(){
         elementos.movimientoForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
 
         NumberHelper.mascaraMoneda('.maskMoneda');
 
         DatepickerHelper.initDatepicker('.datepicker');
+
+        $('#caja_movimiento_categoria_gasto_id').select2();
 
         $(".movimiento-tipo").on("change",function(){
             var tipo =  $('.movimiento-tipo:checked').val();
@@ -19,6 +25,9 @@ var CajaMovimientosUI = (function(){
             }
         });
 
+        TablasHelper.calcularTotalEvent('.calcular-total');
+
+        calcularTotal();
     }
 
     return {

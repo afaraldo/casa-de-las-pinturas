@@ -61,5 +61,8 @@ $.validator.addClassRules({
     },
     fechaVencimiento: {
         required: 'input[value="credito"]:checked'
+    },
+    categoriaGasto: {
+        required: 'input[value="egreso"]:checked'
     }
 });

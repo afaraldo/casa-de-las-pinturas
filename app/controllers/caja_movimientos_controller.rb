@@ -118,12 +118,13 @@ class CajaMovimientosController < ApplicationController
     def caja_movimiento_params
       procesar_cantidades
       params.require(:caja_movimiento).permit(:fecha, :motivo, :tipo, :categoria_gasto_id,
-                                                    detalles_attributes: [:id, :forma, :moneda_id, :monto, :destroy])
+                                                    detalles_attributes: [:id, :forma, :moneda_id, :monto, :cotizacion, :_destroy])
     end
 
     def procesar_cantidades
       params[:caja_movimiento][:detalles_attributes].each do |i, d|
-      params[:caja_movimiento][:detalles_attributes][i][:monto] = cantidad_a_numero(d[:monto])
+        params[:caja_movimiento][:detalles_attributes][i][:monto] = cantidad_a_numero(d[:monto])
+        params[:caja_movimiento][:detalles_attributes][i][:cotizacion] = cantidad_a_numero(d[:cotizacion])
       end
     end
 
