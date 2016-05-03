@@ -26,6 +26,8 @@ section.content
             .links
               label.control-label Valores
             br
+            - esconder_validacion_detalles = @caja_movimiento.errors.has_key?(:detalles) ? '' : 'hide'
+            p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El monto debe ser mayor a cero (0).
             table.table.table-bordered.detalles-table
               thead
                 tr
