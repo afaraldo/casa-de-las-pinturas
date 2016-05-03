@@ -1,8 +1,8 @@
 class ReportesController < ApplicationController
 
-  layout 'imprimir', only: [:imprimir_reporte_compras]
+  layout 'imprimir', only: [:imprimir_reporte_compras], [:imprimir_reporte_ventas]
 
-  before_action :setup_menu, only: [:compras]
+  before_action :setup_menu, only: [:compras], [:ventas]
   before_action :setup_fechas
 
   # configuracion del menu
@@ -37,5 +37,29 @@ class ReportesController < ApplicationController
                               order_dir: params[:order_dir],
                               page: params[:page],
                               limit: action_name == 'imprimir_reporte_compras' ? LIMITE_REGISTROS_IMPRIMIR : 100)
+  end
+
+  def ventas
+    @menu_setup[:side_menu] = :reporte_ventas
+
+    get_reporte_compras
+    render 'reportes/ventas/reporte'
+  end
+
+  def imprimir_reporte_ventas
+    get_reporte_ventas
+    render 'reportes/ventas/imprimir_reporte'
+  end
+
+  def get_reporte_ventas
+    @reporte = Venta.reporte(desde: @desde,
+                              hasta: @hasta,
+                              persona_id: params[:persona_id],
+                              agrupar_por: params[:agrupar_por],
+                              resumido: params[:modo_resumido].present?,
+                              order_by: params[:order_by],
+                              order_dir: params[:order_dir],
+                              page: params[:page],
+                              limit: action_name == 'imprimir_reporte_ventas' ? LIMITE_REGISTROS_IMPRIMIR : 100)
   end
 end
