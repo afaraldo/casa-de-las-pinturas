@@ -21,20 +21,31 @@ section.content
             .row
               .col-sm-6
                 = f.input :motivo
-              .col-sm-4#categoria-gasto.hide
-                = f.association :categoria_gasto, label_method: :nombre, label: "Categoria", value_method: :id, prompt: "Seleccione una categoria..."
-            .links
-              label.control-label Valores
-            br
-            table.table.table-bordered.detalles-table
-              thead
-                tr
-                  td Forma
-                  td Moneda
-                  td Monto
-              tbody#caja-movimiento-detalles-body
-                = f.simple_fields_for :detalles do |detalle|
-                  = render 'detalle_fields', f: detalle
+              .col-sm-4#categoria-gasto class="#{@caja_movimiento.tipo && @caja_movimiento.tipo.egreso? ? '' : 'hide'}"
+                = f.association :categoria_gasto, input_html: { class: 'categoriaGasto', data: { 'msg-required' => 'Debe seleccionar una categoría.' }}, label_method: :nombre, label: "Categoria", value_method: :id, placeholder: "Seleccione una categoria..."
+            .row
+              .col-xs-12
+                .form-subtitle
+                  label Valores
+                br
+                - esconder_validacion_detalles = @caja_movimiento.errors.has_key?(:detalles) ? '' : 'hide'
+                p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El monto debe ser mayor a cero (0).
+                table.table.table-bordered.detalles-table.calcular-total
+                  thead
+                    tr
+                      th Forma
+                      th Moneda
+                      th Monto
+                      th Cotización
+                      th Subtotal
+                  tbody#caja-movimiento-detalles-body
+                    = f.simple_fields_for :detalles do |detalle|
+                      = render 'detalle_fields', f: detalle
+                  tfoot
+                    tr.text-right.text-bold
+                      td colspan="4" Total:
+                      td.table-total
+                        span
 
           .box-footer
             - if @saldo_negativo && @saldo_negativo.size > 0

@@ -1,0 +1,17 @@
+h4 Reporte de gastos
+.row
+  .col-xs-6
+    p
+      strong Desde el
+      = " #{localize(@desde.to_date)} "
+      strong hasta el
+      = " #{localize(@hasta.to_date)}"
+  .col-xs-6
+    p
+      strong Agrupado por:
+      = " #{agrupado_por_titulo(params[:agrupar_por])}"
+    - unless params[:categoria_gasto_id].blank?
+      p
+        strong Categoria:
+        = " #{CategoriaGasto.find(params[:categoria_gasto_id]).nombre}"
+= render "reportes/gastos/#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", reporte: @reporte

@@ -4,7 +4,6 @@ var ReportesUI = (function(){
 
     function initFiltros() {
         DatepickerHelper.initDateRangePicker('#date-range');
-        PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarPersonaUrl});
 
         $('#reporte-table').on('click', '.ordenar-link', function(e){
             var link = $(this);
@@ -23,6 +22,11 @@ var ReportesUI = (function(){
         },
         compras: function(){
             initFiltros();
+            PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarPersonaUrl});
+        },
+        gastos: function(){
+            initFiltros();
+            $('#categorias-buscador').select2();
         },
         setBuscarPersonaUrl: function(url) {
             buscarPersonaUrl = url;
