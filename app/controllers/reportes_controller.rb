@@ -1,13 +1,13 @@
 class ReportesController < ApplicationController
 
-  layout 'imprimir', only: [:imprimir_reporte_compras]
+  layout 'imprimir', only: [:imprimir_reporte_compras, :imprimir_reporte_gastos]
 
-  before_action :setup_menu, only: [:compras]
+  before_action :setup_menu, only: [:compras, :gastos]
   before_action :setup_fechas
 
   # configuracion del menu
   def setup_menu
-    @menu_setup[:main_menu] = :reported
+    @menu_setup[:main_menu] = :reportes
   end
 
   def compras
