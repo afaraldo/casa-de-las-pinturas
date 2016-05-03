@@ -1,13 +1,13 @@
 class ReportesController < ApplicationController
 
-  layout 'imprimir', only: [:imprimir_reporte_compras]
+  layout 'imprimir', only: [:imprimir_reporte_compras, :imprimir_reporte_gastos]
 
-  before_action :setup_menu, only: [:compras]
+  before_action :setup_menu, only: [:compras, :gastos]
   before_action :setup_fechas
 
   # configuracion del menu
   def setup_menu
-    @menu_setup[:main_menu] = :reported
+    @menu_setup[:main_menu] = :reportes
   end
 
   def compras
@@ -20,6 +20,19 @@ class ReportesController < ApplicationController
   def imprimir_reporte_compras
     get_reporte_compras
     render 'reportes/compras/imprimir_reporte'
+  end
+
+  def gastos
+    @menu_setup[:side_menu] = :reporte_gastos
+
+    get_reporte_gastos
+    @categorias = CategoriaGasto.all
+    render 'reportes/gastos/reporte'
+  end
+
+  def imprimir_reporte_gastos
+    get_reporte_gastos
+    render 'reportes/gastos/imprimir_reporte'
   end
 
   def setup_fechas
@@ -37,5 +50,17 @@ class ReportesController < ApplicationController
                               order_dir: params[:order_dir],
                               page: params[:page],
                               limit: action_name == 'imprimir_reporte_compras' ? LIMITE_REGISTROS_IMPRIMIR : 100)
+  end
+
+  def get_reporte_gastos
+    @reporte = CajaMovimiento.reporte_gastos(desde: @desde,
+                              hasta: @hasta,
+                              categoria_gasto_id: params[:categoria_gasto_id],
+                              agrupar_por: params[:agrupar_por],
+                              resumido: params[:modo_resumido].present?,
+                              order_by: params[:order_by],
+                              order_dir: params[:order_dir],
+                              page: params[:page],
+                              limit: action_name == 'imprimir_reporte_gastos' ? LIMITE_REGISTROS_IMPRIMIR : 100)
   end
 end

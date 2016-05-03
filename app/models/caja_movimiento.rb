@@ -1,7 +1,10 @@
 class CajaMovimiento < ActiveRecord::Base
   extend Enumerize
+  include SqlHelper
+
   acts_as_paranoid
 
+  before_validation :set_importe_total
   before_destroy :check_detalles_negativos
   after_save :actualizar_extracto
 
@@ -25,6 +28,14 @@ class CajaMovimiento < ActiveRecord::Base
   validates :detalles, length: { minimum: 1 }
   validate  :fecha_futura
   validates :categoria_gasto, presence: true, if: :egreso?
+
+  def set_importe_total
+    self.importe_total = 0
+
+    detalles.each do |d|
+      self.importe_total += d.monto * d.cotizacion
+    end
+  end
 
   def fecha_futura
     if fecha > Date.today
@@ -58,14 +69,48 @@ class CajaMovimiento < ActiveRecord::Base
   def build_detalles(monedas_usadas = [])
     Moneda.all.each do |m|
       unless monedas_usadas.include?(m.id)
-        detalles.build(moneda: m, forma: :efectivo, monto: 0)
+        detalles.build(moneda: m, forma: :efectivo, monto: 0, cotizacion: m.cotizacion)
       end
     end
   end
-    # Agregar las monedas que no estan presentes
+
+  # Agregar las monedas que no estan presentes
   # esto es para cuando se edita o hay un error al tratar de guardar
   def rebuild_detalles
     build_detalles(detalles.map(&:moneda_id))
+  end
+
+  def self.reporte_gastos(*args)
+
+    opciones = args.extract_options!
+
+    opciones[:agrupar_por] = 'dia' if opciones[:agrupar_por].nil?
+    opciones[:order_by] = 'grupo' if opciones[:order_by].nil?
+    opciones[:order_dir] = 'asc' if opciones[:order_dir].nil?
+
+    resultado = self.unscoped.where(deleted_at: nil, tipo: :egreso).where(fecha: opciones[:desde]..opciones[:hasta])
+
+    resultado = resultado.where(categoria_gasto_id: opciones[:categoria_gasto_id]) unless opciones[:categoria_gasto_id].blank?
+
+    grupo_formato = (opciones[:agrupar_por] == 'dia') ? 'default' : opciones[:agrupar_por]
+
+    if opciones[:resumido]
+      grupo = opciones[:agrupar_por] == 'categoria' ? 'categoria_gastos.nombre' : "to_char(fecha, '#{SQL_PERIODOS[opciones[:agrupar_por].to_sym]}')"
+
+      resultado.joins(:categoria_gasto)
+                .select("#{grupo} as grupo, sum(importe_total) as total")
+                .order("#{opciones[:order_by]} #{opciones[:order_dir]}")
+                .group("#{grupo}")
+                .page(opciones[:page]).per(opciones[:limit])
+
+    else
+      resultado = resultado.includes(:categoria_gasto)
+                           .order("#{(opciones[:agrupar_por] == 'categoria') ? 'categoria_gastos.nombre' : 'fecha'} asc")
+                           .page(opciones[:page]).per(opciones[:limit])
+
+      {todo: resultado, agrupado: resultado.group_by { |b| (opciones[:agrupar_por] == 'categoria') ? b.categoria_gasto_nombre :  I18n.localize(b.fecha.to_date, format: grupo_formato.to_sym).capitalize }}
+    end
+
   end
 
 end

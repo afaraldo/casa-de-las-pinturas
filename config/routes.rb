@@ -49,8 +49,6 @@ Rails.application.routes.draw do
   get 'pagos/imprimir' => 'pagos#imprimir'
   resources :pagos
 
-  resources :caja_movimiento_detalles
-
   resources :caja_movimientos
 
   get 'cobros/buscar_pendientes' => 'cobros#buscar_pendientes'
@@ -60,22 +58,14 @@ Rails.application.routes.draw do
   # Reportes
   get 'reportes/compras'
   get 'reportes/imprimir_reporte_compras'
+  get 'reportes/gastos'
+  get 'reportes/imprimir_reporte_gastos'
 
   get 'welcome/index'
-  get 'welcome/compras_index'
-  get 'welcome/compras_form'
-  get 'welcome/compras_show'
-  get 'welcome/compras_show_credito'
-  get 'welcome/compras_reporte'
-  get 'welcome/reporte_ventas_index'
-  get 'welcome/pagos_index'
-  get 'welcome/pagos_form'
-  get 'welcome/cobros_index'
   get 'welcome/devoluciones_venta'
   get 'welcome/devoluciones_compra'
   get 'welcome/devoluciones_venta_index'
   get 'welcome/devoluciones_compra_index'
-  get 'welcome/gastos_reporte'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
