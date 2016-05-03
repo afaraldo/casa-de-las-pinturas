@@ -2,6 +2,9 @@ class Cobro < Recibo
 
   belongs_to :persona, foreign_key: "persona_id", inverse_of: :boletas, class_name: 'Cliente'
 
+  has_many :boletas_detalles, class_name: 'CobroVenta', foreign_key: "recibo_id", inverse_of: :recibo
+  has_many :boletas, class_name: 'Venta', through: :boletas_detalles
+
   delegate :nombre, to: :persona, prefix: true
 
   def build_detalles(monedas_usadas = [])
