@@ -11,8 +11,8 @@ class Boleta < ActiveRecord::Base
   has_many :recibos_detalles, class_name: 'ReciboBoleta', foreign_key: "boleta_id", inverse_of: :boleta, dependent: :destroy
   has_many :recibos, class_name: 'Recibo', dependent: :destroy, through: :recibos_detalles
 
-  has_many :notas_debitos_creditos_detalles, class_name: 'MercaderiasDebolucionesBoleta', foreign_key: "boleta_id", inverse_of: :boleta, dependent: :destroy
-  has_many :notas_debitos_creditos, class_name: 'NotasCreditosDebitos', dependent: :destroy, through: :notas_debitos_creditos_detalles
+  has_many :nota_credito_debito_detalles, class_name: 'MercaderiasDebolucionesBoleta', foreign_key: "boleta_id", inverse_of: :boleta, dependent: :destroy
+  has_many :notas_creditos_debitos, class_name: 'NotasCreditosDebitos', dependent: :destroy, through: :nota_credito_debito_detalles
 
   enumerize :condicion, in: [:contado, :credito], predicates: true
   enumerize :estado, in: [:pendiente, :pagado], predicates: true

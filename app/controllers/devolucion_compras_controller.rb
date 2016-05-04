@@ -8,7 +8,6 @@ class DevolucionComprasController < ApplicationController
     @menu_setup[:main_menu] = :compras
     @menu_setup[:side_menu] = :devolucion_compra_sidemenu
   end
-
   # GET /compras
   # GET /compras.json
   def index
@@ -35,7 +34,7 @@ class DevolucionComprasController < ApplicationController
   # POST /compras.json
   def create
     #binding.pry
-    @devolucion_compra = Compra.new(compra_params)
+    @devolucion_compra = DevolucionCompra.new(devolucion_compra_params)
 
     respond_to do |format|
       Compra.transaction do
@@ -60,7 +59,7 @@ class DevolucionComprasController < ApplicationController
       Compra.transaction do
         if @stock_negativo.size <= 0 && @devolucion_compra.save
           format.html { redirect_to @devolucion_compra, notice: t('mensajes.save_success', recurso: 'la compra') }
-          format.json { render :show, status: :created, location: @devolucion_compra }
+          format.json { render :index }
         else
           format.html { render :form }
           format.json { render json: @devolucion_compra.errors, status: :unprocessable_entity }
@@ -120,8 +119,8 @@ class DevolucionComprasController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def devolucion_compra_params
       params.require(:devolucion_compra).permit(:persona_id, :motivo, :fecha,
-                                   detalles_attributes: [:id,:mercaderia_id, :cantidad, :precio_unitario],
-                                   boletas_detalles_attributes: [:id, :boleta_id, :_destroy])
+                                   detalles_attributes: [:id,:mercaderia_codigo,:mercaderia_nombre, :cantidad, :precio_unitario],
+                                   boletas_detalles_attributes: [:id, :boleta_detalle_id, :_destroy])
 
     end
 

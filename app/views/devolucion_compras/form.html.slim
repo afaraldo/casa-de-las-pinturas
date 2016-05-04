@@ -32,18 +32,18 @@ section.content
                 .row
                   .col-sm-4
                     = f.input :motivo, label: 'Motivo'
-            .row.overlay-wrapper#pago-mensajes
+            .row.overlay-wrapper#devolucion-mensajes
               .overlay.hide
                 i.fa.fa-refresh.fa-spin
               .col-xs-12
                 .well.seleccionar-panel.text-center
                   i.fa.fa-search
-                  h3 Seleccione un proveedor para ver las boletas para devolucion
+                  h3 Seleccione un proveedor y una boleta para ver las mercaderias para devolución
             .row#pago-boletas-devoluciones.hide
               .col-xs-12
                 .form-subtitle
                   label Mercaderias
-                table.table.table-bordered.detalles-table#compra-detalles-tabla
+                table.table.table-bordered.detalles-table#devolucion-compra-detalles-tabla
                   thead
                     tr
                       th Código
@@ -52,7 +52,7 @@ section.content
                       th Precio Unitario
                       th Subtotal
                   tbody#compra-detalles-body
-                    // = render 'compras', compras: @compra.boletas_detalles, actualizando: true, compra: @compra
+                      
                   tfoot
                     tr
                       td colspan="2"
@@ -72,4 +72,5 @@ section.content
 
 javascript:
   DevolucionComprasUI.setBuscarProveedorUrl("#{proveedores_buscar_path}");
+
 

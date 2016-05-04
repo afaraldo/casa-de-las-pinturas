@@ -42,7 +42,7 @@ DevolucionComprasUI= (function(){
            });
         });
         $('#devolucion_id').on('change',function(){
-            $("#pago-mensajes").addClass("hide");
+            $("#devolucion-mensajes").addClass("hide");
             $('#pago-boletas-devoluciones').removeClass("hide");
             $.ajax({
             url: 'get_compras_detalles',
@@ -50,10 +50,10 @@ DevolucionComprasUI= (function(){
             dataType:'json',
             data: {compra_id:$(this).val()},
             success: function(response){
-                $.each(response,function(i,option){
-                    var row = "<tr><td>" + option.codigo+"</td><td>"+option.nombre+"</td><td>"+option.cantidad+"</td><td>"+option.precio_unitario+"</td><td>"+option.cantidad*option.precio_unitario+"</td></tr>"
+                $.each(response,function(i,option){            
+                    var row = "<tr><td>"+ option.boleta_id+"</td><td>"+option.mercaderia_id+"</td><td><input>"+option.cantidad+"</td><td><input>"+option.precio_unitario+"</input></td><td>"+option.cantidad*option.precio_unitario+"</td></tr>"
                     $('#compra-detalles-body').html(row);    
-                });;
+                });
 
             }
            });
@@ -82,7 +82,7 @@ DevolucionComprasUI= (function(){
             elementos = {
                 devolucionCompraForm: $('#devolucion-compra-form'),
                 proveedorBuscador: $('#proveedores-buscador'),
-                mensajePanel: $('#devolucion-compra-mensajes'),
+                mensajePanel: $('#devolucion-mensajes'),
                 detallesPanel: $('#devolucion-compra-detalles'),
             }
         },
