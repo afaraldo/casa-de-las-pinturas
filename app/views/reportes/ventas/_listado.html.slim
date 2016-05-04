@@ -2,7 +2,7 @@ table.table.table-bordered.table-hover
   thead
     tr
       th Nro. de comprobante
-      th Condicion de pago
+      th Condicion de cobro
       th Cliente
       th Monto
       th Estado
@@ -11,7 +11,7 @@ table.table.table-bordered.table-hover
     - reporte[:agrupado].each do |grupo, ventas|
       tr.active.text-bold
         td colspan="5" = grupo
-      - compras.each do |c|
+      - ventas.each do |c|
         - total_reporte += c.importe_total
         tr
           td = c.numero_comprobante

@@ -90,7 +90,7 @@ menu:
         active_submenu: :reporte_compras
       reporte_ventas:
         text: "Reporte de ventas"
-        url: "#"
+        url: :reportes_ventas
         active_submenu: :reporte_ventas
       reporte_gastos:
         text: "Reporte de gastos"

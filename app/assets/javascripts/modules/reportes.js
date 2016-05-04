@@ -24,6 +24,9 @@ var ReportesUI = (function(){
         compras: function(){
             initFiltros();
         },
+        ventas: function(){
+                    initFiltros();
+        },
         setBuscarPersonaUrl: function(url) {
             buscarPersonaUrl = url;
         },

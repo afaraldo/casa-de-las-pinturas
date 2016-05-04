@@ -1,8 +1,8 @@
 class ReportesController < ApplicationController
 
-  layout 'imprimir', only: [:imprimir_reporte_compras], [:imprimir_reporte_ventas]
+  layout 'imprimir', only: [:imprimir_reporte_compras, :imprimir_reporte_ventas]
 
-  before_action :setup_menu, only: [:compras], [:ventas]
+  before_action :setup_menu, only: [:compras, :ventas]
   before_action :setup_fechas
 
   # configuracion del menu
@@ -41,8 +41,8 @@ class ReportesController < ApplicationController
 
   def ventas
     @menu_setup[:side_menu] = :reporte_ventas
-
-    get_reporte_compras
+    
+    get_reporte_ventas
     render 'reportes/ventas/reporte'
   end
 
@@ -52,6 +52,7 @@ class ReportesController < ApplicationController
   end
 
   def get_reporte_ventas
+
     @reporte = Venta.reporte(desde: @desde,
                               hasta: @hasta,
                               persona_id: params[:persona_id],
