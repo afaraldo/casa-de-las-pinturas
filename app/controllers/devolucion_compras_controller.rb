@@ -22,7 +22,7 @@ class DevolucionComprasController < ApplicationController
   # GET /compras/new
   def new
     @devolucion_compra = DevolucionCompra.new
-    @devolucion_compra.detalles.build
+   # @devolucion_compra.detalles.build
     render :form
   end
 
@@ -34,14 +34,14 @@ class DevolucionComprasController < ApplicationController
   # POST /compras
   # POST /compras.json
   def create
-    #binding.pry
+    
     @devolucion_compra = DevolucionCompra.new(devolucion_compra_params)
-
+    #binding.pry
     respond_to do |format|
-      Compra.transaction do
+      DevolucionCompra.transaction do
         if @devolucion_compra.save
           format.html { redirect_to @devolucion_compra, notice: t('mensajes.save_success', recurso: 'la compra') }
-          format.json { render :index, status: :created, location: @devolucion_compra }
+          format.json { render :show, status: :created, location: @devolucion_compra }
         else
           format.html { render :form }
           format.json { render json: @devolucion_compra.errors, status: :unprocessable_entity }
@@ -101,7 +101,7 @@ class DevolucionComprasController < ApplicationController
     def get_devolucion_compras
       procesar_fechas
       @search = DevolucionCompra.search(params[:q])
-      @devolucion_compra = @search.result.includes(:persona).page(params[:page]).per(action_name == 'imprimir' ? LIMITE_REGISTROS_IMPRIMIR : 25)
+      @devolucion_compras = @search.result.includes(:persona).page(params[:page]).per(action_name == 'imprimir' ? LIMITE_REGISTROS_IMPRIMIR : 25)
     end
     # Setear las fechas "hasta" para que incluya el dia entero
     # 01/03/2016 => 2016-03-01 23:59:59
@@ -118,8 +118,8 @@ class DevolucionComprasController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def devolucion_compra_params
       params.require(:devolucion_compra).permit(:persona_id, :motivo, :fecha,
-                                   detalles_attributes: [:id,:mercaderia_codigo,:mercaderia_nombre, :cantidad, :precio_unitario],
-                                   boletas_detalles_attributes: [:id, :boleta_detalle_id, :_destroy])
+                                   detalles_attributes: [:id,:mercaderia_id, :cantidad, :precio_unitario],
+                                   boletas_detalles_attributes: [:id, :boleta_id, :_destroy])
 
     end
 

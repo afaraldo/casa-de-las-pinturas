@@ -39,7 +39,7 @@ section.content
                 .well.seleccionar-panel.text-center
                   i.fa.fa-search
                   h3 Seleccione un proveedor y una boleta para ver las mercaderias para devolución
-            .row#pago-boletas-devoluciones.hide
+            .row#devolucion-compra-detalles.hide
               .col-xs-12
                 .form-subtitle
                   label Mercaderias
@@ -52,8 +52,7 @@ section.content
                       th Precio Unitario
                       th Subtotal
                   tbody#compra-detalles-body
-                      
-                      
+                    = render 'compra_detalle', compras: @devolucion_compra.detalles
                   tfoot
                     tr
                       td colspan="2"

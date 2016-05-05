@@ -43,6 +43,15 @@ module MovimientosHelper
                         motivo: recibo.movimiento_motivo,
                         egreso: recibo.total_pagado,
                         ingreso: 0}
+
+         when 'NotasCreditosDebito'
+          notas_creditos_debito = m.notas_creditos_debito
+          resultado = {url: "/#{notas_creditos_debito.instance_of?(DevolucionCompra) ? 'devolucion_compra' : 'devolucion_venta'}/#{notas_creditos_debito.id}",
+                        fecha: notas_creditos_debito.fecha,
+                        motivo: notas_creditos_debito.movimiento_motivo,
+                        egreso: notas_creditos_debito.importe_total,
+                        ingreso: 0}
+
         when 'Boleta'
           boleta = m.boleta
           resultado = {url: "/#{boleta.instance_of?(Compra) ? 'compras' : 'ventas'}/#{boleta.id}",

@@ -45,6 +45,7 @@ DevolucionComprasUI= (function(){
         NumberHelper.mascaraMoneda('.maskMoneda');
 
         DatepickerHelper.initDatepicker('.datepicker');
+        TablasHelper.calcularTotalEvent('.detalles-table');
 
         // Abrir el buscador de proveedores cuando se hace click en el panel inicial
         elementos.devolucionCompraForm.on('click', '.seleccionar-panel', function(e){
@@ -75,7 +76,6 @@ DevolucionComprasUI= (function(){
                 
             });
         })
-        $(.cantidad).trigger('change');
 
     }
 
@@ -122,11 +122,7 @@ DevolucionComprasUI= (function(){
             initFormEvents();
             mostrarBoletas(false);
         },
-        noHayBoletas: noHayBoletas,
-        mostrarBoletas: mostrarBoletas,
-        setBuscarMercaderiaUrl: function(url) {
-            buscarMercaderiaUrl = url;
-        },
+        
         setBuscarProveedorUrl: function(url) {
             buscarProveedorUrl = url;
         }

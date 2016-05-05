@@ -6,7 +6,7 @@ table.table.table-bordered.table-hover
       th Motivo
   tbody
     - devolucion_compras.each do |devolucion|
-      tr 
+      tr.fila-clickeable data-url="#{devolucion_compra_path(devolucion)}"
         td = localize(devolucion.fecha.to_date)
         td = devolucion.persona_nombre
         td = devolucion.motivo

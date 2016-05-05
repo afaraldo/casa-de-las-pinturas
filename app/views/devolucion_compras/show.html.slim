@@ -1,0 +1,71 @@
+section.content-header
+  h1 Compras
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          a.volver-link href= devolucion_compras_path
+            i.fa.fa-angle-double-left style="margin-right: 5px;"
+            | Volver al listado de devoluciones
+          h3.box-title
+            = "Devolucion Nro. #{@devolucion_compra.id}".html_safe
+          .box-tools
+            = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_devolucion_compra_path(@devolucion_compra),  html_options = {class: 'btn btn-default'}
+            = ' '
+            - if @devolucion_compra.boletas_detalles.empty?
+              - if @stock_negativo && @stock_negativo.size > 0
+                = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, compra_path(@devolucion_compra), method: 'delete', data: {confirm: "La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}. ¿Seguro que desea eliminar la compra?"}, class: 'btn btn-danger'
+              - else
+                = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, devolucion_compra_path(@devolucion_compra), method: 'delete', data: {confirm: "¿Desea eliminar la compra?"}, class: 'btn btn-danger'
+            - else
+              button.btn.btn-danger.disabled
+                i.fa.fa-trash
+                |  Eliminar
+        .box-body
+          .row
+            .col-sm-9
+              .row
+                .col-sm-4
+                  label.control-label Fecha
+                  p = localize(@devolucion_compra.fecha.to_date)
+                .col-sm-4
+                  label.control-label Proveedor
+                  p = @devolucion_compra.persona_nombre
+  .row
+    .col-xs-12
+      .nav-tabs-custom
+        ul.nav.nav-tabs
+          li.active
+            a href="#mercaderias" data-toggle="tab" Mercaderías
+        .tab-content
+          .tab-pane.active#mercaderias
+            table.table.table-bordered.detalles-table.calcular-total
+              thead
+                tr
+                  th Código
+                  th Mercadería
+                  th Cantidad
+                  th Precio Unitario
+                  th Subtotal
+              tbody#movimiento-detalles-body
+                - total = 0
+                - @devolucion_compra.detalles.each do |m|
+                  - n = m.cantidad
+                  tr
+                    td = m.mercaderia.codigo
+                    td = m.mercaderia.nombre
+                    td.text-right = number_with_precision(n, delimiter: '.')
+                    td.text-right = number_to_currency(m.precio_unitario)
+                    td.text-right = number_to_currency(n * m.precio_unitario)
+                  - total += n * m.precio_unitario
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total)
+                  td
+          
+

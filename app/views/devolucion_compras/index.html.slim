@@ -22,9 +22,10 @@ section.content
                 .col-xs-4
                   .form-group
                     = f.search_field :persona_id_eq_any, id: 'proveedores-buscador', class: 'form-control', placeholder: 'Todos los proveedores...'
+
           #devolucion-compras-table.overlay-wrapper.buscador-resultados.table-responsive
-            = render 'list', devolucion_compras: @devolucion_compra
+            = render 'list', devolucion_compras: @devolucion_compras
           #devolucion-compras-paginate-container.hidden-print
-            /= paginate @devolucion_compras, remote: true
+            = paginate @devolucion_compras, remote: true
 javascript:
   DevolucionComprasUI.setBuscarProveedorUrl("#{proveedores_buscar_path}");
