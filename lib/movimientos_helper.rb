@@ -28,7 +28,7 @@ module MovimientosHelper
         when 'MovimientoMercaderiaDetalle'
           detalle = m.movimiento_mercaderia_detalle
           es_ingreso = detalle.movimiento_mercaderia.tipo.ingreso?
-          resultado = {url: "/movimiento_mercaderia/#{detalle.movimiento_mercaderia.id}",
+          resultado = {url: "/movimiento_mercaderias/#{detalle.movimiento_mercaderia.id}",
                         fecha: detalle.movimiento_mercaderia.fecha,
                         motivo: detalle.movimiento_mercaderia.motivo,
                         ingreso: es_ingreso ? detalle.cantidad : 0,
