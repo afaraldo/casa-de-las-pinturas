@@ -34,7 +34,7 @@
       .col-xs-6
         = f.input :stock_minimo, as: :string, input_html: {class: 'maskCantidad', value: number_with_precision(f.object.stock_minimo)}
       .col-xs-6
-        = f.input :stock,        as: :string, input_html: {class: 'maskCantidad', value: number_with_precision(f.object.stock)}, disabled: !(mercaderia.new_record?)
+        = f.input :stock_inicial,        as: :string, input_html: {class: 'maskCantidad', value: number_with_precision(f.object.stock_inicial)}, disabled: !(mercaderia.new_record?)
   .modal-footer.text-right
     button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
     input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
