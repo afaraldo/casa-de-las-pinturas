@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
   get 'devolucion_compras/get_compras' => 'devolucion_compras#get_compras'
-  get 'devolucion_compras/get_compras_detalles' => 'devolucion_compras#get_compras_detalles'
+  get 'devolucion_compras/buscar_compra' => 'devolucion_compras#buscar_compra'
   resources :devolucion_compras, except: [:show]
 
   devise_for :users

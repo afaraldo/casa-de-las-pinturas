@@ -13,6 +13,28 @@ DevolucionComprasUI= (function(){
         elementos.detallesPanel.addClass('hide');
         elementos.mensajePanel.find('.overlay').addClass('hide');
     }
+    /**
+     * Mensaje que indica que el proveedor seleccionado no tiene boletas pendientes
+     * @param proveedor
+     */
+    function noHayBoletas(proveedor){
+        elementos.mensajePanel.find('h3').text('No hay boletas para el proveedor ' + proveedor);
+        elementos.mensajePanel.find('.seleccionar-panel i').removeClass('fa-search').addClass('fa-list');
+        elementos.mensajePanel.find('.overlay').addClass('hide');
+        elementos.boletasPanel.addClass('hide');
+        elementos.detallesPanel.addClass('hide');
+        elementos.mensajePanel.removeClass('hide');
+    }
+    /**
+     * Muestra el panel de las boletas y los detalles del pago
+     * Esconde el panel del mensaje inicial
+     */
+    function mostrarBoletas(limpiarDetalles) {
+        elementos.mensajePanel.addClass('hide');
+        elementos.detallesPanel.removeClass('hide');
+
+    }
+
 
 
     function initFormEvents(){
@@ -36,29 +58,24 @@ DevolucionComprasUI= (function(){
             data: {persona_id:$(this).val()},
             success: function(response){
                 $.each(response,function(i,option){
-                    $('#devolucion_id').append($('<option>').text(option.numero_comprobante).attr('value',option.id));    
+                    $('#devolucion_id').append($('<option>').text(option.id).attr('value',option.id));    
                 });
             }
            });
+           
         });
         $('#devolucion_id').on('change',function(){
             $("#devolucion-mensajes").addClass("hide");
             $('#pago-boletas-devoluciones').removeClass("hide");
             $.ajax({
-            url: 'get_compras_detalles',
-            type:'get',
-            dataType:'json',
-            data: {compra_id:$(this).val()},
-            success: function(response){
-                $.each(response,function(i,option){            
-                    var row = "<tr><td>"+ option.boleta_id+"</td><td>"+option.mercaderia_id+"</td><td><input>"+option.cantidad+"</td><td><input>"+option.precio_unitario+"</input></td><td>"+option.cantidad*option.precio_unitario+"</td></tr>"
-                    $('#compra-detalles-body').html(row);    
-                });
-
-            }
-           });
+                url: 'buscar_compra',
+                type:'get',
+                dataType:'script',
+                data: {compra_id:$(this).val()}
+                
+            });
         })
-
+        $(.cantidad).trigger('change');
 
     }
 
@@ -95,13 +112,18 @@ DevolucionComprasUI= (function(){
         },
         'create': function(){
             initFormEvents();
+            mostrarBoletas(false);
         },
         'edit': function() {
             initFormEvents();
+            mostrarBoletas(false);
         },
         'update': function(){
             initFormEvents();
+            mostrarBoletas(false);
         },
+        noHayBoletas: noHayBoletas,
+        mostrarBoletas: mostrarBoletas,
         setBuscarMercaderiaUrl: function(url) {
             buscarMercaderiaUrl = url;
         },

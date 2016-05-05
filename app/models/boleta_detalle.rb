@@ -45,4 +45,8 @@ class BoletaDetalle < ActiveRecord::Base
     end
     mercaderia.update(stock: nueva_cantidad) if cantidad_changed? || deleted?
   end
+
+  def as_json(options={})
+    super(:methods => [:mercaderia_codigo, :mercaderia_nombre])
+  end
 end

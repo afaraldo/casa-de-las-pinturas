@@ -9,6 +9,7 @@ class NotasCreditosDebito < ActiveRecord::Base
   has_many :boletas, class_name: 'Boleta', dependent: :destroy, through: :boletas_detalles
 
   accepts_nested_attributes_for :boletas_detalles, allow_destroy: true
+  accepts_nested_attributes_for :detalles, allow_destroy: true
 
 
   default_scope { order('fecha DESC') } # Ordenar por fecha por defecto

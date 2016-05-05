@@ -1,0 +1,19 @@
+- total = 0
+- compras.each_with_index do |c, i|
+  - precio = c.precio_unitario
+  - cantidad = c.cantidad
+  - subtotal = c.cantidad*c.precio_unitario
+ 
+  tr
+    td = c.mercaderia_codigo
+    td = c.mercaderia_nombre
+    td
+      div class="form-group "
+        = hidden_field "devolucion_compra[boletas_detalles_attributes][#{i}]", :boleta_id, value: c.id
+        = text_field "devolucion_compra[boletas_detalles_attributes][#{i}]", :cantitad, value: number_with_precision(cantidad), class: 'form-control text-right '
+
+    td.precio_unitario.text-right = number_with_precision(precio, delimiter: '.')
+    td.text-right = number_with_precision(subtotal, delimiter: '.')
+    
+     
+    

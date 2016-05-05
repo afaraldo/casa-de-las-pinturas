@@ -1,0 +1,4 @@
+- if @compra_detalles.size == 0
+  | DevolucionComprasUI.noHayBoletas("#{@proveedor.nombre}");
+- else
+  | $('#compra-detalles-body').html("#{escape_javascript(render 'compra_detalle', compras: @compra_detalles, actualizando: false)}");

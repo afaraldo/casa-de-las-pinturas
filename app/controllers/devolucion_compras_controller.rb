@@ -22,6 +22,7 @@ class DevolucionComprasController < ApplicationController
   # GET /compras/new
   def new
     @devolucion_compra = DevolucionCompra.new
+    @devolucion_compra.detalles.build
     render :form
   end
 
@@ -40,7 +41,7 @@ class DevolucionComprasController < ApplicationController
       Compra.transaction do
         if @devolucion_compra.save
           format.html { redirect_to @devolucion_compra, notice: t('mensajes.save_success', recurso: 'la compra') }
-          format.json { render :show, status: :created, location: @devolucion_compra }
+          format.json { render :index, status: :created, location: @devolucion_compra }
         else
           format.html { render :form }
           format.json { render json: @devolucion_compra.errors, status: :unprocessable_entity }
@@ -90,11 +91,9 @@ class DevolucionComprasController < ApplicationController
     end
   end
 
-  def get_compras_detalles
+  def buscar_compra
     @compra_detalles = BoletaDetalle.where("boleta_id =?",params[:compra_id])
-    respond_to do |format|
-      format.json {render json: @compra_detalles}
-    end
+    
   end
 
   private
