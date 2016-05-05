@@ -1,8 +1,8 @@
 class ReportesController < ApplicationController
 
-  layout 'imprimir', only: [:imprimir_reporte_compras, :imprimir_reporte_gastos, :imprimir_reporte_ventas]
+  layout 'imprimir', only: [:imprimir_reporte_compras, :imprimir_reporte_gastos, :imprimir_reporte_ventas, :imprimir_reporte_caja]
 
-  before_action :setup_menu, only: [:compras, :gastos, :ventas]
+  before_action :setup_menu, only: [:compras, :gastos, :ventas, :caja]
   before_action :setup_fechas
 
   # configuracion del menu
@@ -47,6 +47,18 @@ class ReportesController < ApplicationController
     render 'reportes/gastos/imprimir_reporte'
   end
 
+  def caja
+    @menu_setup[:side_menu] = :reporte_caja
+
+    get_reporte_caja
+    render 'reportes/caja/reporte'
+  end
+
+  def imprimir_reporte_caja
+    get_reporte_caja
+    render 'reportes/caja/imprimir_reporte'
+  end
+
   def setup_fechas
     @desde = params[:fecha_desde].blank? ? DateTime.now.to_date.beginning_of_month : params[:fecha_desde].to_datetime.beginning_of_day
     @hasta = params[:fecha_hasta].blank? ? DateTime.now.to_date.end_of_month : params[:fecha_hasta].to_datetime.end_of_day
@@ -86,5 +98,9 @@ class ReportesController < ApplicationController
                               order_dir: params[:order_dir],
                               page: params[:page],
                               limit: action_name == 'imprimir_reporte_gastos' ? LIMITE_REGISTROS_IMPRIMIR : 100)
+  end
+
+  def get_reporte_caja
+
   end
 end

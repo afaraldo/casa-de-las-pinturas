@@ -1,0 +1,22 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Motivo
+      th Ingreso
+      th Egreso
+  tbody
+    - total_reporte = 0
+    - reporte[:agrupado].each do |grupo, gastos|
+      tr.active.text-bold
+        td colspan="3" = grupo
+      - gastos.each do |g|
+        - total_reporte += g.importe_total
+        tr
+          td = g.motivo
+          td = g.categoria_gasto_nombre
+          td.text-right = number_to_currency(g.importe_total)
+  tfoot
+    tr.text-bold.text-right
+      td colspan="2" Total reporte:
+      td = number_to_currency(total_reporte)
+= paginate reporte[:todo], remote: true
