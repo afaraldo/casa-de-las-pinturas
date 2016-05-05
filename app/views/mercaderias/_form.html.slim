@@ -8,7 +8,7 @@
       = mercaderia.new_record? ? 'Nueva mercadería' : 'Editar mercadería'
   .modal-body
     = f.input :id, as: :hidden, input_html: { id: 'mercaderia_id' }
-    = f.input :codigo,          input_html: {class: 'uniqueMercaderiaCodigo'}
+    = f.input :codigo, autofocus: true, input_html: {class: 'uniqueMercaderiaCodigo'}
     = f.input :nombre
     .row
       .col-xs-10
