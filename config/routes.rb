@@ -58,6 +58,8 @@ Rails.application.routes.draw do
   # Reportes
   get 'reportes/compras'
   get 'reportes/imprimir_reporte_compras'
+  get 'reportes/ventas'
+  get 'reportes/imprimir_reporte_ventas'
   get 'reportes/gastos'
   get 'reportes/imprimir_reporte_gastos'
 

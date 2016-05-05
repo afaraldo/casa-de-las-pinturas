@@ -28,6 +28,9 @@ var ReportesUI = (function(){
             initFiltros();
             $('#categorias-buscador').select2();
         },
+        ventas: function(){
+                    initFiltros();
+        },
         setBuscarPersonaUrl: function(url) {
             buscarPersonaUrl = url;
         },
