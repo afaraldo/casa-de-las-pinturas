@@ -28,6 +28,10 @@ var ReportesUI = (function(){
             initFiltros();
             $('#categorias-buscador').select2();
         },
+        ventas: function(){
+            initFiltros();
+            PersonasUI.buscador({elemento: elementos.personasBuscador, url: buscarPersonaUrl});
+        },
         setBuscarPersonaUrl: function(url) {
             buscarPersonaUrl = url;
         },
