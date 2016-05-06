@@ -1,18 +1,25 @@
 class Recibo < ActiveRecord::Base
+  extend Enumerize
   include MovimientosHelper
 
   acts_as_paranoid
 
   self.inheritance_column = 'tipo'
 
+  enumerize :condicion, in: [:contado, :credito], predicates: true
+
+  after_initialize :set_condicion
   before_validation :set_importes
-  after_save :actualizar_cuenta_corriente, :actualizar_extracto_cajas
-  after_destroy :actualizar_cuenta_corriente
+  after_save :actualizar_cuenta_corriente, if: :credito?
+  after_destroy :actualizar_cuenta_corriente, if: :credito?
+  after_save :actualizar_extracto_cajas
+
+  belongs_to :persona, foreign_key: "persona_id", inverse_of: :recibos
 
   has_many :detalles, class_name: 'ReciboDetalle', dependent: :destroy, inverse_of: :recibo
 
-  has_many :boletas_detalles, class_name: 'ReciboBoleta', foreign_key: "recibo_id", dependent: :destroy, inverse_of: :recibo
-  has_many :boletas, class_name: 'Boleta', dependent: :destroy, through: :boletas_detalles
+  has_many :boletas_detalles, class_name: 'ReciboBoleta', foreign_key: "recibo_id", inverse_of: :recibo
+  has_many :boletas, dependent: :destroy, class_name: 'Boleta', through: :boletas_detalles
 
   accepts_nested_attributes_for :detalles, reject_if: proc { |attrs| (attrs['monto'].to_f * attrs['cotizacion'].to_f) <= 0 }, allow_destroy: true
   accepts_nested_attributes_for :boletas_detalles, allow_destroy: true
@@ -25,6 +32,8 @@ class Recibo < ActiveRecord::Base
   validates :persona_id, presence: true
   validate  :fecha_futura
   validate  :pagos_boletas_seleccionadas
+  validates :condicion, presence: true
+  validate  :condicion_cambiada?, on: :update
 
   def total_pagado
     total_efectivo + total_tarjeta - total_credito_utilizado
@@ -43,6 +52,17 @@ class Recibo < ActiveRecord::Base
   end
 
   private
+
+  def set_condicion
+    self.condicion ||= :credito
+  end
+
+  def condicion_cambiada?
+    if condicion_changed? && self.persisted?
+      errors.add(:condicion, I18n.t('activerecord.errors.messages.no_editable'))
+      false
+    end
+  end
 
   def actualizar_cuenta_corriente
     if deleted?

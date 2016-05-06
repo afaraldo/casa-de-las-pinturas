@@ -29,6 +29,8 @@ Rails.application.routes.draw do
 
   get 'mercaderias/check_codigo' => 'mercaderias#check_codigo'
   get 'mercaderias/buscar' => 'mercaderias#buscar'
+  get 'mercaderias/historico' => 'mercaderias#historico'
+  get 'mercaderias/imprimir_historico' => 'mercaderias#imprimir_historico'
   resources :mercaderias, except: [:show]
 
   resources :inventarios, only: [:index]
@@ -44,32 +46,32 @@ Rails.application.routes.draw do
   get 'compras/imprimir' => 'compras#imprimir'
   resources :compras
 
+  get 'ventas/imprimir' => 'ventas#imprimir'
+  resources :ventas
+
   get 'pagos/buscar_pendientes' => 'pagos#buscar_pendientes'
   get 'pagos/imprimir' => 'pagos#imprimir'
   resources :pagos
 
-  resources :caja_movimiento_detalles
-
-
   resources :caja_movimientos
 
- 
+  get 'cobros/buscar_pendientes' => 'cobros#buscar_pendientes'
+  get 'cobros/imprimir' => 'cobros#imprimir'
+  resources :cobros
+
+  # Reportes
+  get 'reportes/compras'
+  get 'reportes/imprimir_reporte_compras'
+  get 'reportes/ventas'
+  get 'reportes/imprimir_reporte_ventas'
+  get 'reportes/gastos'
+  get 'reportes/imprimir_reporte_gastos'
 
   get 'welcome/index'
-  get 'welcome/compras_index'
-  get 'welcome/compras_form'
-  get 'welcome/compras_show'
-  get 'welcome/compras_show_credito'
-  get 'welcome/compras_reporte'
-  get 'welcome/reporte_ventas_index'
-  get 'welcome/pagos_index'
-  get 'welcome/pagos_form'
-  get 'welcome/cobros_index'
   get 'welcome/devoluciones_venta'
   get 'welcome/devoluciones_compra'
   get 'welcome/devoluciones_venta_index'
   get 'welcome/devoluciones_compra_index'
-  get 'welcome/gastos_reporte'
 
 
   # The priority is based upon order of creation: first created -> highest priority.

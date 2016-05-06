@@ -13,4 +13,9 @@ module ApplicationHelper
     html.html_safe
   end
 
+  # metodo para determinar si se esta mostarndo los ultimos movimientos de algun extracto
+  def ultimos_movimientos?
+    @desde.nil? || @hasta.nil?
+  end
+
 end

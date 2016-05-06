@@ -92,4 +92,5 @@ Moneda.create nombre: 'Peso Argentino', abreviatura: 'Ps',  cotizacion: 300,  de
 Moneda.create nombre: 'Dolar',          abreviatura: '$',   cotizacion: 5000, defecto: false  if Moneda.find_by_nombre('Dolar').nil?
 Moneda.create nombre: 'Real Brasileño', abreviatura: 'R',   cotizacion: 3000, defecto: false  if Moneda.find_by_nombre('Real Brasileño').nil?
 
-Caja.create(nombre: :efectivo) if Caja.get_caja_por_forma(:efectivo).nil?
+Caja.create(nombre: 'Efectivo') if Caja.get_caja_por_forma(:efectivo).nil?
+Caja.create(nombre: 'Tarjeta') if Caja.get_caja_por_forma(:tarjeta).nil?

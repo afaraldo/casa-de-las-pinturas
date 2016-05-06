@@ -1,0 +1,20 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Fecha
+      th Número de venta
+      th Nro. de comprobante
+      th Condición de pago
+      th Cliente
+      th Monto
+      th Estado
+  tbody
+    - ventas.each do |venta|
+      tr.fila-clickeable data-url="#{venta_path(venta)}"
+        td = localize(venta.fecha.to_date)
+        td = link_to venta.numero, venta_path(venta.id)
+        td = venta.numero_comprobante
+        td = venta.condicion_text
+        td = venta.persona_nombre
+        td.text-right = number_to_currency(venta.importe_total)
+        td = "<label class='label label-#{venta.estado.pagado? ? 'success' : 'warning'}'>#{venta.estado_text}</label>".html_safe

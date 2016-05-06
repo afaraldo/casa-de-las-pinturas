@@ -28,11 +28,19 @@ module MovimientosHelper
         when 'MovimientoMercaderiaDetalle'
           detalle = m.movimiento_mercaderia_detalle
           es_ingreso = detalle.movimiento_mercaderia.tipo.ingreso?
-          resultado = {url: "/movimiento_mercaderia/#{detalle.movimiento_mercaderia.id}",
+          resultado = {url: "/movimiento_mercaderias/#{detalle.movimiento_mercaderia.id}",
                         fecha: detalle.movimiento_mercaderia.fecha,
                         motivo: detalle.movimiento_mercaderia.motivo,
                         ingreso: es_ingreso ? detalle.cantidad : 0,
                         egreso: es_ingreso ? 0 : detalle.cantidad}
+        when 'BoletaDetalle'
+          detalle = m.boleta_detalle
+          es_ingreso = detalle.boleta.instance_of?(Compra)
+          resultado = {url: "/#{es_ingreso ? 'compras' : 'ventas'}/#{detalle.boleta_id}",
+                       fecha: detalle.boleta.fecha,
+                       motivo: detalle.boleta.movimiento_motivo,
+                       ingreso: es_ingreso ? detalle.cantidad : 0,
+                       egreso: es_ingreso ? 0 : detalle.cantidad}
         # -------------------------------
         # MOVIMIENTOS DE CUENTAS CORRIENTES - CLIENTES / PROVEEDORES
         # -------------------------------
@@ -62,6 +70,14 @@ module MovimientosHelper
         # -------------------------------
         # MOVIMIENTOS DE CAJA
         # -------------------------------
+        when 'CajaMovimientoDetalle'
+          detalle = m.caja_movimiento_detalle
+          es_ingreso = detalle.caja_movimiento.tipo.ingreso?
+          resultado = {url: "/caja_movimientos/#{detalle.caja_movimiento.id}",
+                        fecha: detalle.caja_movimiento.fecha,
+                        motivo: detalle.caja_movimiento.motivo,
+                        ingreso: es_ingreso ? detalle.monto : 0,
+                        egreso: es_ingreso ? 0 : detalle.monto}
         when 'ReciboDetalle'
           detalle = m.recibo_detalle
           es_ingreso = !detalle.recibo.instance_of?(Pago)

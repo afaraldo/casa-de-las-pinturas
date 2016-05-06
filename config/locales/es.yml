@@ -30,6 +30,7 @@ es:
   moneda:
     unique_nombre_error: "Ya existe una moneda con el nombre %{nombre}"
   categoria_gasto:
+    caja_movimientos_dependientes_error: "No se puede eliminar la categoria porque hay movimientos de caja que dependen de ella"
     unique_nombre_error: "Ya existe una categoría con el nombre %{nombre}"
   activerecord:
     models:
@@ -108,6 +109,7 @@ es:
       long: "%d de %B de %Y"
       short: "%d de %b"
       month: "%B, %Y"
+      year: "%Y"
     month_names:
     -
     - enero

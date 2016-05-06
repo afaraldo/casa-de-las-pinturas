@@ -1,3 +1,6 @@
+body.vista-imprimir {
+  max-width: 21cm;
+}
 @media print {
   body.vista-imprimir{
     table.table{
@@ -7,4 +10,13 @@
       }
     }
   }
+  a[href]:after {
+    content: none !important;
+  }
+  .label {
+    border: 0px solid #000;
+  }
+
+  table { page-break-inside:auto }
+  tr    { page-break-inside:avoid; page-break-after:auto }
 }

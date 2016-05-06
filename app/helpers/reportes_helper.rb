@@ -1,0 +1,46 @@
+module ReportesHelper
+
+  def agrupado_por_titulo(agrupado_por)
+    case agrupado_por
+      when 'month'
+        'Mes'
+      when 'year'
+        'Año'
+      when 'persona'
+        'Proveedor'
+      else
+        'Día'
+    end
+  end
+
+  def grupo_label(grupo, agrupado_por)
+    case agrupado_por
+      when 'dia'
+        localize(grupo.to_date)
+      when 'month'
+        get_mes_anho(grupo).capitalize
+      else
+        grupo
+    end
+  end
+
+  def get_mes_anho(mes_anho)
+    data = mes_anho.split('-')
+    "#{t('date.month_names')[data[1].to_i]}, #{data[0]}"
+  end
+
+  def order_reporte_link(texto, order_by)
+    order_dir = params[:order_dir] || 'asc'
+    html = ''
+    html << "<a class='ordenar-link' href='#' data-order-by='#{order_by}' data-order-dir='#{params[:order_by] == order_by ? (order_dir == 'asc' ? 'desc' : 'asc') : 'asc'}'>"
+      html << texto
+
+    if params[:order_by] == order_by
+      html << "<i class='fa fa-sort-amount-#{order_dir}'></i>"
+    end
+
+    html << '</a>'
+
+    html.html_safe
+  end
+end

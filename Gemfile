@@ -94,6 +94,8 @@ end
 gem 'rollbar', '~> 2.8.3'
 gem 'oj', '~> 2.12.14'
 
+gem 'quiet_assets'
+
 group :development do
   gem 'better_errors'
 

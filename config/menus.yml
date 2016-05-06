@@ -31,8 +31,12 @@ menu:
     submenus:
       ventas:
         text: "Ventas"
-        url: "#"
+        url: :ventas
         active_submenu: :ventas_sidemenu
+      cobros:
+        text: "Cobros"
+        url: :cobros
+        active_submenu: :cobros_sidemenu
       clientes:
         text: "Clientes"
         url: :clientes
@@ -58,6 +62,10 @@ menu:
         text: "Movimientos de mercaderias"
         url: :movimiento_mercaderias
         active_submenu: :movimientos_mercaderias_sidemenu
+      historico:
+        text: "Histórico de mercaderias"
+        url: :mercaderias_historico
+        active_submenu: :mercaderias_historico
   cajas:
     text: "Cajas"
     url: "#"
@@ -71,6 +79,10 @@ menu:
         text: "Categoria de Gastos"
         url: :categoria_gastos
         active_submenu: :categoria_gastos_sidemenu
+      caja_movimientos:
+        text: "Movimientos de cajas"
+        url: :caja_movimientos
+        active_submenu: :caja_movimientos_sidemenu
   reportes:
     text: "Reportes"
     url: "#"
@@ -78,15 +90,15 @@ menu:
     submenus:
       reporte_compras:
         text: "Reporte de compras"
-        url: "#"
+        url: :reportes_compras
         active_submenu: :reporte_compras
       reporte_ventas:
         text: "Reporte de ventas"
-        url: "#"
+        url: :reportes_ventas
         active_submenu: :reporte_ventas
       reporte_gastos:
         text: "Reporte de gastos"
-        url: "#"
+        url: :reportes_gastos
         active_submenu: :reporte_gastos
   configuraciones:
     text: "Configuraciones"

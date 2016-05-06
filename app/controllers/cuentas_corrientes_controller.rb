@@ -4,6 +4,7 @@ class CuentasCorrientesController < ApplicationController
 
   before_action :setup_menu, only: [:clientes, :proveedores]
   before_action :set_persona
+
   # configuracion del menu
   def setup_menu
     @menu_setup[:main_menu] = action_name == 'proveedores' ? :compras : :ventas
