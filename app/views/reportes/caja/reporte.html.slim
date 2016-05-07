@@ -23,10 +23,16 @@ section.content
                       i.fa.fa-calendar
                       span #{localize(@desde.to_date)} - #{localize(@hasta.to_date)}
                       b.caret
-                .col-sm-3
+                .col-xs-2
+                  .form-group
+                    = select_tag :caja_id, options_from_collection_for_select(Caja.all, :id, :nombre), class: 'form-control top-25'
+                .col-xs-2
+                  .form-group
+                    = select_tag :moneda_id, options_from_collection_for_select(Moneda.all, :id, :nombre), class: 'form-control top-25'
+                .col-sm-2
                   .form-group
                     label.control-label Agrupar por:
-                    = select_tag :agrupar_por, options_for_select([['Categoría', 'categoria'], ['Día', 'dia'], ['Mes', 'month'], ['Año', 'year']], 'dia'), class: 'form-control'
+                    = select_tag :agrupar_por, options_for_select([['Día', 'dia'], ['Mes', 'month'], ['Año', 'year']], 'dia'), class: 'form-control'
                 .col-sm-3
                   div.top-25 data-toggle="buttons"
                     label.btn.btn-default

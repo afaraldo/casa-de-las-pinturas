@@ -101,6 +101,16 @@ class ReportesController < ApplicationController
   end
 
   def get_reporte_caja
+    @reporte = CajaExtracto.reporte(desde: @desde,
+                                             hasta: @hasta,
+                                             caja_id: params[:caja_id],
+                                             moneda_id: params[:moneda_id],
+                                             agrupar_por: params[:agrupar_por],
+                                             resumido: params[:modo_resumido].present?,
+                                             order_by: params[:order_by],
+                                             order_dir: params[:order_dir],
+                                             page: params[:page],
+                                             limit: action_name == 'imprimir_reporte_caja' ? LIMITE_REGISTROS_IMPRIMIR : 100)
 
   end
 end

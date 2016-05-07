@@ -1,1 +1,1 @@
-| $("#reporte-table").html("#{escape_javascript(render partial: "reportes/gastos/#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", format: 'html', locals: {reporte: @reporte})}");
+| $("#reporte-table").html("#{escape_javascript(render partial: "reportes/caja/#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", format: 'html', locals: {reporte: @reporte})}");
