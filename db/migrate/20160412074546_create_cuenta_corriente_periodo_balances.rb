@@ -4,7 +4,7 @@ class CreateCuentaCorrientePeriodoBalances < ActiveRecord::Migration
       t.references :persona, index: true
       t.integer :mes, null: false
       t.integer :anho, null: false
-      t.decimal :saldo, null: false, precision: 15, scale: 2
+      t.decimal :balance, null: false, precision: 15, scale: 2
 
       t.timestamps null: false
     end

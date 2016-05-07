@@ -22,7 +22,7 @@ class DevolucionComprasController < ApplicationController
   # GET /compras/new
   def new
     @devolucion_compra = DevolucionCompra.new
-   # @devolucion_compra.detalles.build
+    #@devolucion_compra.detalles.build
     render :form
   end
 
@@ -40,7 +40,7 @@ class DevolucionComprasController < ApplicationController
     respond_to do |format|
       DevolucionCompra.transaction do
         if @devolucion_compra.save
-          format.html { redirect_to @devolucion_compra, notice: t('mensajes.save_success', recurso: 'la compra') }
+          format.html { redirect_to @devolucion_compra, notice: t('mensajes.save_success', recurso: 'la devolución') }
           format.json { render :show, status: :created, location: @devolucion_compra }
         else
           format.html { render :form }
@@ -54,12 +54,12 @@ class DevolucionComprasController < ApplicationController
   # PATCH/PUT /compras/1
   # PATCH/PUT /compras/1.json
   def update
-    @devolucion_compra.assign_attributes(compra_params)
+    @devolucion_compra.assign_attributes(devolucion_compra_params)
     @stock_negativo = params[:guardar_si_o_si].present? ? [] : @devolucion_compra.check_detalles_negativos
     respond_to do |format|
-      Compra.transaction do
+      DevolucionCompra.transaction do
         if @stock_negativo.size <= 0 && @devolucion_compra.save
-          format.html { redirect_to @devolucion_compra, notice: t('mensajes.save_success', recurso: 'la compra') }
+          format.html { redirect_to @devolucion_compra, notice: t('mensajes.save_success', recurso: 'la devolución') }
           format.json { render :index }
         else
           format.html { render :form }
@@ -73,12 +73,12 @@ class DevolucionComprasController < ApplicationController
   # DELETE /compra/1.json
   def destroy
     respond_to do |format|
-      Compra.transaction do
+      DevolucionCompra.transaction do
         if @devolucion_compra.destroy
-          format.html { redirect_to compras_url, notice: t('mensajes.delete_success', recurso: 'la compra') }
+          format.html { redirect_to devolucion_compras_url, notice: t('mensajes.delete_success', recurso: 'la devolución') }
           format.json { head :no_content }
         else
-          flash[:error] = t('mensajes.delete_error', recurso: 'la compra', errores: @devolucion_compra.errors.full_messages.to_sentence)
+          flash[:error] = t('mensajes.delete_error', errores: @devolucion_compra.errors.full_messages.to_sentence)
           format.html { redirect_to @devolucion_compra }
         end
       end

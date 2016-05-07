@@ -98,7 +98,7 @@ DevolucionComprasUI= (function(){
         init: function() {
             elementos = {
                 devolucionCompraForm: $('#devolucion-compra-form'),
-                proveedorBuscador: $('#proveedores-buscador'),
+                proveedorBuscador: $('#personas-buscador'),
                 mensajePanel: $('#devolucion-mensajes'),
                 detallesPanel: $('#devolucion-compra-detalles'),
             }

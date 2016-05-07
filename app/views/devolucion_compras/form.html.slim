@@ -9,7 +9,8 @@ section.content
             a.volver-link href= devolucion_compras_path
               i.fa.fa-angle-double-left
               | Volver al listado de devoluciones
-            h3.box-title = @devolucion_compra.new_record? ? 'Nueva Devolucion' : "Editar devolucion"
+            .clearfix
+            h3.box-title = @devolucion_compra.new_record? ? 'Nueva Devolución' : "Editar devolución"
           .box-body
             = f.error_notification
             .row
@@ -17,33 +18,50 @@ section.content
                 .row
                   .col-sm-4
                     = f.input :fecha, wrapper: :vertical_input_group do
-                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: f.object.fecha.nil?, value: @devolucion_compra.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                      = f.input_field :fecha, as: :string, 
+                                              class: 'datepicker form-control', 
+                                              autofocus: f.object.fecha.nil?, 
+                                              value: @devolucion_compra.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
                       .input-group-btn
                         .btn.btn-default
                           i.fa.fa-calendar
-                  .col-sm-4
-                    = f.association :persona, as: :string, label: 'Proveedor', disabled: @devolucion_compra.persisted?, input_html: { id: 'proveedores-buscador', placeholder: 'Buscar proveedor...', data: { 'msg-required' => 'Este campo es obligatorio.',persona: f.object.persona.to_json } }
+                  .col-sm-4.select2-input-group
+                    = f.input :persona, wrapper: :vertical_input_group,  label: 'Proveedor' do
+                      = f.input_field :persona_id, as: :string,
+                                                   label: false,
+                                                   id: 'personas-buscador',
+                                                   class: 'form-control required',
+                                                   data: {"msg-required" => 'Debe seleccionar un proveedor',
+                                                          persona: f.object.persona.to_json },
+                                                   placeholder: 'Buscar proveedor...'
                   .col-sm-4
                     <label>Compra</label>
                   .col-sm-4
-                    <select class="form-control" id="devolucion_id" >
+                    <select class="form-control " id="devolucion_id" >
                       <option value="">Seleccione una compra</option>
                     </select>
                 .row
                   .col-sm-4
-                    = f.input :motivo, label: 'Motivo'
+                    = f.input :motivo, label: 'Motivo' do
+                      = f.input_field :motivo, as: :string,
+                                                   label: false,
+                                                    class: 'form-control required',
+                                                   data: {"msg-required" => 'Debe escribir un motivo'}
+                                                          
+                                                   
+                                                   
             .row.overlay-wrapper#devolucion-mensajes
               .overlay.hide
                 i.fa.fa-refresh.fa-spin
               .col-xs-12
                 .well.seleccionar-panel.text-center
                   i.fa.fa-search
-                  h3 Seleccione un proveedor y una boleta para ver las mercaderias para devolución
-            .row#devolucion-compra-detalles.hide
+                  h3 Seleccione un proveedor y una commpra para ver las mercaderias para devolución
+            .row#pago-boletas-devoluciones.hide
               .col-xs-12
                 .form-subtitle
                   label Mercaderias
-                table.table.table-bordered.detalles-table#devolucion-compra-detalles-tabla
+                table.table.table-bordered.detalles-table#devolucion-compra-detalles
                   thead
                     tr
                       th Código
@@ -65,7 +83,7 @@ section.content
 
           .box-footer
               .form-actions.text-right
-                = link_to 'Cancelar', pagos_path, class: 'btn btn-default'
+                = link_to 'Cancelar', devolucion_compras_path, class: 'btn btn-default'
                 | #{' '}
                 button.btn.btn-primary type="submit" Guardar Devolucion
 

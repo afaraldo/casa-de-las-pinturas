@@ -19,6 +19,19 @@ class NotasCreditosDebito < ActiveRecord::Base
   after_destroy :actualizar_extracto_de_cuenta_corriente
   after_save :actualizar_boleta
 
+  # Validations
+  validates :fecha,  presence: true
+  validates :motivo, length: { minimum: 2, maximum: 50 }, allow_blank: false
+  validates :persona, presence: true
+  validates :detalles, presence: true
+  validate  :fecha_futura
+  
+  def fecha_futura
+    if fecha > Date.today
+      errors.add(:fecha, I18n.t('activerecord.errors.messages.fecha_futura'))
+    end
+  end
+
   def movimiento_motivo
   	"Devolucion Nro. #{id}"
   end
