@@ -44,6 +44,8 @@ class ReportesController < ApplicationController
 
   def imprimir_reporte_gastos
     get_reporte_gastos
+    @categoria = CategoriaGasto.find_by(id: params[:categoria_gasto_id])
+
     render 'reportes/gastos/imprimir_reporte'
   end
 

@@ -1,5 +1,9 @@
 module ReportesHelper
 
+  def gastos_grupos
+    [['Categoría', 'categoria'], ['Día', 'dia'], ['Mes', 'month'], ['Año', 'year']]
+  end
+
   def agrupado_por_titulo(agrupado_por)
     case agrupado_por
       when 'month'
@@ -8,6 +12,8 @@ module ReportesHelper
         'Año'
       when 'persona'
         'Proveedor'
+      when 'categoria'
+        'Categoría'
       else
         'Día'
     end
