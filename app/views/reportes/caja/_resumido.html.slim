@@ -5,22 +5,28 @@ table.table.table-bordered.table-hover
       th
         = order_reporte_link(agrupado_por_titulo(params[:agrupar_por]), 'grupo')
       th
-        = order_reporte_link('Total', 'total')
+        = order_reporte_link('Ingreso', 'ingreso')
+      th
+        = order_reporte_link('Egreso', 'egreso')
   tbody
-    - total_reporte = 0
+    - total_ingresos = 0
+    - total_egresos = 0
     - chart_data = {}
     - reporte.each do |grupo|
-      - chart_data[grupo_label(grupo.grupo, params[:agrupar_por])] = grupo.total
-      - total_reporte += grupo.total
+      - chart_data[grupo_label(grupo[0], params[:agrupar_por])] = grupo.total
+      - total_ingresos += grupo[1]
+      - total_egresos += grupo[2]
       tr
-        td = grupo_label(grupo.grupo, params[:agrupar_por])
-        td.text-right = number_to_currency(grupo.total)
+        td = grupo_label(grupo[0], params[:agrupar_por])
+        td.text-right = number_to_currency(grupo[1])
+        td.text-right = number_to_currency(grupo[2])
   tfoot
     tr.text-right.text-bold
       td Total reporte:
-      td = number_to_currency(total_reporte)
+      td = number_to_currency(total_ingresos)
+      td = number_to_currency(total_egresos)
 
-= paginate reporte, remote: true
+/ = paginate reporte, remote: true
 
 javascript:
   ReportesUI.dibujarChart(#{chart_data.keys.to_json.html_safe}, #{chart_data.values.to_json.html_safe}, "#{params[:agrupar_por] == 'categoria' ? 'bar' : 'area'}");
