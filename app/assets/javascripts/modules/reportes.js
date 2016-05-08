@@ -14,6 +14,23 @@ var ReportesUI = (function(){
         });
     }
 
+    function buildSeries(data, mostrarReferencia) {
+        var series = [];
+
+        for(var i = 0; i < data.length; i++) {
+            var s = data[i];
+            series.push(
+                {
+                    name: s.nombre,
+                    showInLegend: mostrarReferencia,
+                    data: $.map(s.totales, function(v){ return parseInt(v); })
+                }
+            );
+        }
+
+        return series;
+    }
+
     return {
         init: function() {
             elementos = {
@@ -38,7 +55,7 @@ var ReportesUI = (function(){
         setBuscarPersonaUrl: function(url) {
             buscarPersonaUrl = url;
         },
-        dibujarChart: function(labels, totales, tipo){
+        dibujarChart: function(labels, totales, tipo, mostrarReferencia){
 
             var elemento = $('#reporte-chart'),
 
@@ -60,13 +77,7 @@ var ReportesUI = (function(){
                         }
                     },
 
-                    series: [
-                        {
-                            name: 'Total',
-                            showInLegend: false,
-                            data: $.map(totales, function(v){ return parseInt(v); })
-                        }
-                    ]
+                    series: buildSeries(totales, mostrarReferencia)
                 };
 
             elemento.highcharts(opciones);

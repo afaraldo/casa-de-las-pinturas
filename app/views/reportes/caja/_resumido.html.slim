@@ -11,9 +11,7 @@ table.table.table-bordered.table-hover
   tbody
     - total_ingresos = 0
     - total_egresos = 0
-    - chart_data = {}
     - reporte.each do |grupo|
-      - chart_data[grupo_label(grupo[0], params[:agrupar_por])] = grupo.total
       - total_ingresos += grupo[1]
       - total_egresos += grupo[2]
       tr
@@ -27,6 +25,7 @@ table.table.table-bordered.table-hover
       td = number_to_currency(total_egresos)
 
 / = paginate reporte, remote: true
-
+- chart_labels = reporte.map{ |d| grupo_label(d[0], params[:agrupar_por])}
+- chart_totales = [{nombre: 'Ingresos', totales: reporte.map{|d| d[1] }}, {nombre: 'Egresos', totales: reporte.map{|d| d[2] }}]
 javascript:
-  ReportesUI.dibujarChart(#{chart_data.keys.to_json.html_safe}, #{chart_data.values.to_json.html_safe}, "#{params[:agrupar_por] == 'categoria' ? 'bar' : 'area'}");
+  ReportesUI.dibujarChart(#{chart_labels.to_json.html_safe}, #{chart_totales.to_json.html_safe}, "#{params[:agrupar_por] == 'categoria' ? 'bar' : 'areaspline'}", true);
