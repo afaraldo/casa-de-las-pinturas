@@ -5,6 +5,7 @@ DevolucionComprasUI= (function(){
         /**
      * Mensaje que muestra un mensaje para indicar que debe seleccionar un proveedor
      */
+ 
     function seleccioneProveedor(){
         elementos.mensajePanel.find('h3').text('Seleccione un proveedor para ver las boletas para la devolucion');
         elementos.mensajePanel.find('.seleccionar-panel i').removeClass('fa-list').addClass('fa-search');
@@ -36,7 +37,6 @@ DevolucionComprasUI= (function(){
     }
 
 
-
     function initFormEvents(){
         PersonasUI.buscador({elemento: elementos.proveedorBuscador, url: buscarProveedorUrl});
 
@@ -52,22 +52,27 @@ DevolucionComprasUI= (function(){
             elementos.proveedorBuscador.select2('open');
         });
         elementos.proveedorBuscador.on('change',function(e){
-           $.ajax({
-            url: 'get_compras',
-            type:'get',
-            dataType:'json',
-            data: {persona_id:$(this).val()},
-            success: function(response){
-                $.each(response,function(i,option){
-                    $('#devolucion_id').append($('<option>').text(option.id).attr('value',option.id));    
-                });
-            }
-           });
-           
+               $.ajax({
+                    url: 'get_compras',
+                    type:'get',
+                    dataType:'json',
+                    data: {persona_id:$(this).val()},
+                    success: function(response){
+                        $('#devolucion_id').select2();
+                        $.each(response,function(i,option){
+                            $('#devolucion_id').append($('<option>').text(option.id).attr('value',option.id));    
+                            
+                        });
+        
+                    }
+     
+                });           
+                               
         });
         $('#devolucion_id').on('change',function(){
             $("#devolucion-mensajes").addClass("hide");
             $('#pago-boletas-devoluciones').removeClass("hide");
+            
             $.ajax({
                 url: 'buscar_compra',
                 type:'get',
@@ -75,7 +80,22 @@ DevolucionComprasUI= (function(){
                 data: {compra_id:$(this).val()}
                 
             });
-        })
+        });
+
+        if($('.nested-fields').length == 1){
+            $('.remove_fields').addClass('hide');
+        }
+        
+        $('#compra-detalles-body').on('cocoon:after-remove', function(e, removedItem) {
+
+            // Se esconde el boton de eliminar si es que ya queda solo uno
+            var tBody = $(this);
+            if(tBody.find('.nested-fields:visible').length == 1){
+                $('.remove_fields').addClass('hide');
+            }
+
+        });
+
 
     }
 
@@ -113,14 +133,17 @@ DevolucionComprasUI= (function(){
         'create': function(){
             initFormEvents();
             mostrarBoletas(false);
+            
         },
         'edit': function() {
             initFormEvents();
             mostrarBoletas(false);
+            
         },
         'update': function(){
             initFormEvents();
             mostrarBoletas(false);
+
         },
         
         setBuscarProveedorUrl: function(url) {
