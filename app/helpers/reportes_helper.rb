@@ -1,5 +1,9 @@
 module ReportesHelper
 
+  def ventas_grupos
+    [['Cliente', 'persona'], ['Día', 'dia'], ['Mes', 'month'], ['Año', 'year']]    
+  end
+
   def gastos_grupos
     [['Categoría', 'categoria'], ['Día', 'dia'], ['Mes', 'month'], ['Año', 'year']]
   end
