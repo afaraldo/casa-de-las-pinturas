@@ -11,7 +11,7 @@
     td
       div class="form-group "
         = hidden_field "devolucion_compra[detalles_attributes][#{i}]", :mercaderia_id, value: c.mercaderia_id
-        = text_field "devolucion_compra[detalles_attributes][#{i}]", :cantidad, value: number_with_precision(cantidad), :min=>"1", :max => cantidad, :required => true, class: 'form-control text-right cantidad'
+        = text_field "devolucion_compra[detalles_attributes][#{i}]", :cantidad, value: number_with_precision(cantidad), :min=>"1", :required => true, class: 'form-control text-right cantidad'
 
     td.precio_unitario.text-right 
       = number_with_precision(precio, delimiter: '.')

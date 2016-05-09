@@ -11,4 +11,7 @@ class MercaderiaExtracto < MovimientoModel
   belongs_to :boleta_detalle
   has_one :boleta, through: :boleta_detalle
 
+  belongs_to :nota_credito_debito_detalle
+  has_one :notas_creditos_debito, through: :nota_credito_debito_detalle
+
 end

@@ -120,7 +120,7 @@ DevolucionComprasUI= (function(){
                 devolucionCompraForm: $('#devolucion-compra-form'),
                 proveedorBuscador: $('#personas-buscador'),
                 mensajePanel: $('#devolucion-mensajes'),
-                detallesPanel: $('#devolucion-compra-detalles'),
+                detallesPanel: $('#pago-boletas-devoluciones')
             }
         },
         index: function() {

@@ -1,7 +1,7 @@
 class NotasCreditosDebito < ActiveRecord::Base
-  include MovimientosHelper
-
   acts_as_paranoid
+
+  self.inheritance_column = 'tipo'
 
   has_many :detalles, class_name: 'NotaCreditoDebitoDetalle', dependent: :destroy, inverse_of: :notas_creditos_debito
 
@@ -25,10 +25,27 @@ class NotasCreditosDebito < ActiveRecord::Base
   validates :persona, presence: true
   validates :detalles, length: { minimum: 1 }
   validate  :fecha_futura
+  validate  :persona_cambiada?, on: :update
   
   def fecha_futura
     if fecha > Date.today
       errors.add(:fecha, I18n.t('activerecord.errors.messages.fecha_futura'))
+    end
+  end
+  def check_detalles_negativos(borrado = false)
+    m = []
+    detalles.each do |d|
+      if d.nueva_cantidad(borrado) < 0
+        m << d.mercaderia
+      end
+    end
+    m
+  end
+
+  def persona_cambiada?
+    if persona_id_changed? && self.persisted?
+      errors.add(:persona, I18n.t('activerecord.errors.messages.no_editable'))
+      false
     end
   end
 

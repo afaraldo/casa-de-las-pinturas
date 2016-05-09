@@ -82,11 +82,21 @@ section.content
                       td 
 
           .box-footer
-              .form-actions.text-right
+            - if @stock_negativo && @stock_negativo.size > 0
+              input.hidden name="guardar_si_o_si" value= "true"
+              .alert.alert-warning
+                p
+                | La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}
+                p Esta seguro que quiere continuar?
+                .form-actions
+                  = link_to 'Cancelar', devolucion_compras_path, class: 'btn btn-default'
+                  | #{' '}
+                  button.btn.btn-primary type="submit" Continuar
+            - else
+              .text-right.form-actions
                 = link_to 'Cancelar', devolucion_compras_path, class: 'btn btn-default'
                 | #{' '}
-                button.btn.btn-primary type="submit" Guardar Devolucion
-
+                button.btn.btn-primary type="submit" Guardar devolucion
 
 javascript:
   DevolucionComprasUI.setBuscarProveedorUrl("#{proveedores_buscar_path}");

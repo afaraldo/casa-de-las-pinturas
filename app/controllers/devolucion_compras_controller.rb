@@ -36,10 +36,11 @@ class DevolucionComprasController < ApplicationController
   def create
     
     @devolucion_compra = DevolucionCompra.new(devolucion_compra_params)
+    @stock_negativo = params[:guardar_si_o_si].present? ? [] : @devolucion_compra.check_detalles_negativos
     #binding.pry
     respond_to do |format|
       DevolucionCompra.transaction do
-        if @devolucion_compra.save
+        if @stock_negativo.size <= 0 && @devolucion_compra.save
           format.html { redirect_to @devolucion_compra, notice: t('mensajes.save_success', recurso: 'la devolución') }
           format.json { render :show, status: :created, location: @devolucion_compra }
         else
