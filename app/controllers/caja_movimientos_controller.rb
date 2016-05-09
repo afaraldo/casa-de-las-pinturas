@@ -128,12 +128,4 @@ class CajaMovimientosController < ApplicationController
       end
     end
 
-  # Setear las fechas "hasta" para que incluya el dia entero
-  # 01/03/2016 => 2016-03-01 23:59:59
-  def procesar_fechas
-    if params[:q].present? && params[:q][:fecha_lt].present?
-      params[:q][:fecha_lt] = params[:q][:fecha_lt].to_datetime.end_of_day
-    end
-  end
-
 end

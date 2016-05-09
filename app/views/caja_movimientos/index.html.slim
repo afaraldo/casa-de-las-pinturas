@@ -28,4 +28,4 @@ section.content
                   .form-group
                     = select_tag :moneda_id, options_from_collection_for_select(Moneda.all, :id, :nombre), class: 'form-control'
           #caja-movimientos-table.overlay-wrapper.buscador-resultados.table-responsive
-            = render partial: 'list', locals: {caja_movimientos: @caja_movimientos}
+            = render partial: 'caja_movimientos/list', locals: {caja_movimientos: @caja_movimientos}
