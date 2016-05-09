@@ -28,7 +28,7 @@ class MovimientoMercaderiaDetalle < ActiveRecord::Base
     nueva_cantidad = deleted? || borrado ? 0 : cantidad
     nueva_cantidad_diff = nueva_cantidad - cantidad_was.to_f
 
-    cantidad_ = mercaderia.stock
+    cantidad_ = mercaderia.stock_actual
     cantidad_ += nueva_cantidad_diff if movimiento_mercaderia.tipo == :ingreso
     cantidad_ -= nueva_cantidad_diff if movimiento_mercaderia.tipo == :egreso
     cantidad_
@@ -42,7 +42,6 @@ class MovimientoMercaderiaDetalle < ActiveRecord::Base
     else
       MercaderiaExtracto.crear_o_actualizar_extracto(self, self.movimiento_mercaderia.fecha, cantidad_was.to_f * operador, cantidad * operador)
     end
-    mercaderia.update(stock: nueva_cantidad) if cantidad_changed? || deleted?
   end
 
 end
