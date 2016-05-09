@@ -89,7 +89,7 @@ class Boleta < ActiveRecord::Base
     recibo_detalle = recibos_detalles.first
     pago = recibo_detalle.recibo if recibo_detalle
     if pago
-      m = pago.check_detalles_negativos
+      m = pago.check_detalles_negativos borrado
     end
     m
   end

@@ -16,7 +16,7 @@ class Pago < Recibo
   end
 
   # calcula si se va a producir saldo negativo para algunas monedas en la caja efectivo
-  def check_detalles_negativos
+  def check_detalles_negativos(deleted = false)
 
     monedas = detalles.map(&:moneda_id) # monedas de los detalles
     caja = Caja.get_caja_por_forma(:efectivo) # caja efectivo

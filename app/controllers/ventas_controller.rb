@@ -47,10 +47,10 @@ class VentasController < ApplicationController
   # POST /ventas.json
   def create
     @venta = Venta.new(venta_params)
-    @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @venta.check_detalles_negativos_pago
+    @stock_negativo = params[:guardar_si_o_si].present? ? [] : @venta.check_detalles_negativos
     respond_to do |format|
       Venta.transaction do
-        if @saldo_negativo.size == 0 && @venta.save
+        if @stock_negativo.size == 0 && @venta.save
           format.html { redirect_to @venta, notice: t('mensajes.save_success', recurso: 'la venta') }
           format.json { render :show, status: :created, location: @venta }
         else
@@ -72,7 +72,7 @@ class VentasController < ApplicationController
     @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @venta.check_detalles_negativos_pago
     respond_to do |format|
       Venta.transaction do
-        if @stock_negativo.size <= 0 && @venta.save
+        if @stock_negativo.size <= 0 && @saldo_negativo.size <= 0 && @venta.save
           format.html { redirect_to @venta, notice: t('mensajes.save_success', recurso: 'la venta') }
           format.json { render :show, status: :created, location: @venta }
         else

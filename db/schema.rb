@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160503012324) do
+ActiveRecord::Schema.define(version: 20160508014124) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -198,7 +198,7 @@ ActiveRecord::Schema.define(version: 20160503012324) do
     t.datetime "deleted_at"
     t.datetime "created_at",                                                              null: false
     t.datetime "updated_at",                                                              null: false
-    t.decimal  "stock",                            precision: 15, scale: 3, default: 0.0, null: false
+    t.decimal  "stock_inicial",                    precision: 15, scale: 3, default: 0.0, null: false
     t.decimal  "stock_minimo",                     precision: 15, scale: 2, default: 0.0, null: false
   end
 
@@ -262,8 +262,10 @@ ActiveRecord::Schema.define(version: 20160503012324) do
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
     t.datetime "deleted_at"
+    t.integer  "caja_id"
   end
 
+  add_index "recibo_detalles", ["caja_id"], name: "index_recibo_detalles_on_caja_id", using: :btree
   add_index "recibo_detalles", ["moneda_id"], name: "index_recibo_detalles_on_moneda_id", using: :btree
   add_index "recibo_detalles", ["recibo_id"], name: "index_recibo_detalles_on_recibo_id", using: :btree
 
@@ -356,6 +358,7 @@ ActiveRecord::Schema.define(version: 20160503012324) do
   add_foreign_key "mercaderias", "categorias"
   add_foreign_key "movimiento_mercaderia_detalles", "mercaderias"
   add_foreign_key "movimiento_mercaderia_detalles", "movimiento_mercaderias"
+  add_foreign_key "recibo_detalles", "cajas"
   add_foreign_key "recibo_detalles", "monedas"
   add_foreign_key "recibo_detalles", "recibos"
   add_foreign_key "recibos", "personas"
