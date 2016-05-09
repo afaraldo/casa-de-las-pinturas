@@ -16,7 +16,7 @@ class ReciboDetalle < ActiveRecord::Base
   delegate :nombre, to: :moneda, prefix: true
 
   def set_caja
-    caja_id = Caja.get_caja_por_forma(forma).id
+    self.caja_id = Caja.get_caja_por_forma(forma).id
   end
 
   def actualizar_extractos
