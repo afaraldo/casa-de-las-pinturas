@@ -1,0 +1,13 @@
+h4 Reporte de Movimientos de Caja
+.row
+  .col-xs-6
+    p
+      strong Desde el
+      = " #{localize(@desde.to_date)} "
+      strong hasta el
+      = " #{localize(@hasta.to_date)}"
+  .col-xs-6
+    p
+      strong Agrupado por:
+      = " #{agrupado_por_titulo(params[:agrupar_por])}"
+= render "reportes/caja/#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", reporte: @reporte

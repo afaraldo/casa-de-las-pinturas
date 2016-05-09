@@ -62,6 +62,8 @@ Rails.application.routes.draw do
   get 'reportes/imprimir_reporte_ventas'
   get 'reportes/gastos'
   get 'reportes/imprimir_reporte_gastos'
+  get 'reportes/caja'
+  get 'reportes/imprimir_reporte_caja'
 
   get 'welcome/index'
   get 'welcome/devoluciones_venta'
