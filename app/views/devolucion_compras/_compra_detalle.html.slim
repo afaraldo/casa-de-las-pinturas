@@ -1,4 +1,4 @@
-= hidden_field "devolucion_compra[boletas_detalles_attributes][0]", :boleta_id, value: params[:compra_id]
+= hidden_field "devolucion_compra[boletas_detalles_attributes][0]", :boleta_id, value: @devolucion_compra && !@devolucion_compra.boletas_detalles.empty? ? @devolucion_compra.boletas_detalles.first.boleta_id : params[:compra_id]
 - compras.each_with_index do |c, i|
   - total = compras.size();
   - precio = c.precio_unitario
@@ -10,7 +10,10 @@
     td = c.mercaderia_nombre
     td
       div class="form-group "
+
         = hidden_field "devolucion_compra[detalles_attributes][#{i}]", :mercaderia_id, value: c.mercaderia_id
+        - if @devolucion_compra && !@devolucion_compra.new_record?
+          = hidden_field "devolucion_compra[detalles_attributes][#{i}]", :id, value: c.id
         = text_field "devolucion_compra[detalles_attributes][#{i}]", :cantidad, value: number_with_precision(cantidad), :min=>"1", :required => true, class: 'form-control text-right cantidad'
 
     td.precio_unitario.text-right 

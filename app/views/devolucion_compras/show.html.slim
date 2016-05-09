@@ -25,7 +25,7 @@ section.content
                 .col-sm-4
                   label.control-label Proveedor
                   p = @devolucion_compra.persona_nombre
-  .row
+  .row#pago-boletas-devoluciones
     .col-xs-12
       .nav-tabs-custom
         ul.nav.nav-tabs
@@ -33,7 +33,7 @@ section.content
             a href="#mercaderias" data-toggle="tab" Mercaderías
         .tab-content
           .tab-pane.active#mercaderias
-            table.table.table-bordered.detalles-table.calcular-total
+            table.table.table-bordered.detalles-table#devolucion-compra-detalles
               thead
                 tr
                   th Código
@@ -41,7 +41,7 @@ section.content
                   th Cantidad
                   th Precio Unitario
                   th Subtotal
-              tbody#movimiento-detalles-body
+              tbody#compra-detalles-body
                 - total = 0
                 - @devolucion_compra.detalles.each do |m|
                   - n = m.cantidad

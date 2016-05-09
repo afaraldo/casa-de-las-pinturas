@@ -34,16 +34,16 @@ class DevolucionComprasController < ApplicationController
   # POST /compras
   # POST /compras.json
   def create
-    
     @devolucion_compra = DevolucionCompra.new(devolucion_compra_params)
     @stock_negativo = params[:guardar_si_o_si].present? ? [] : @devolucion_compra.check_detalles_negativos
-    #binding.pry
+    
     respond_to do |format|
       DevolucionCompra.transaction do
         if @stock_negativo.size <= 0 && @devolucion_compra.save
           format.html { redirect_to @devolucion_compra, notice: t('mensajes.save_success', recurso: 'la devolución') }
           format.json { render :show, status: :created, location: @devolucion_compra }
         else
+          #binding.pry
           format.html { render :form }
           format.json { render json: @devolucion_compra.errors, status: :unprocessable_entity }
         end
@@ -55,8 +55,8 @@ class DevolucionComprasController < ApplicationController
   # PATCH/PUT /compras/1
   # PATCH/PUT /compras/1.json
   def update
-    @devolucion_compra.assign_attributes(devolucion_compra_params)
     @stock_negativo = params[:guardar_si_o_si].present? ? [] : @devolucion_compra.check_detalles_negativos
+    @devolucion_compra.assign_attributes(devolucion_compra_params)
     respond_to do |format|
       DevolucionCompra.transaction do
         if @stock_negativo.size <= 0 && @devolucion_compra.save

@@ -58,6 +58,7 @@ DevolucionComprasUI= (function(){
                     dataType:'json',
                     data: {persona_id:$(this).val()},
                     success: function(response){
+                        $('#devolucion_id').html("");
                         $('#devolucion_id').select2();
                         $.each(response,function(i,option){
                             $('#devolucion_id').append($('<option>').text(option.id).attr('value',option.id));    
