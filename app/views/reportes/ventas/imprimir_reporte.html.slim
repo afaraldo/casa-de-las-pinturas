@@ -13,5 +13,5 @@ h4 Reporte de ventas
     - unless params[:persona_id].blank?
       p
         strong Cliente:
-        = " #{Cliente.find(params[:persona_id]).nombre}"
+        = " #{@cliente.nombre}"
 = render "reportes/ventas/#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", reporte: @reporte

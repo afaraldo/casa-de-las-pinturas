@@ -13,5 +13,5 @@ h4 Reporte de compras
     - unless params[:persona_id].blank?
       p
         strong Proveedor:
-        = " #{Proveedor.find(params[:persona_id]).nombre}"
+        = " #{@proveedor.nombre}"
 = render "reportes/compras/#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", reporte: @reporte
