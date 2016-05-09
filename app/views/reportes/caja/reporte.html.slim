@@ -32,7 +32,7 @@ section.content
                 .col-sm-2
                   .form-group
                     label.control-label Agrupar por:
-                    = select_tag :agrupar_por, options_for_select([['Día', 'dia'], ['Mes', 'month'], ['Año', 'year']], 'dia'), class: 'form-control'
+                    = select_tag :agrupar_por, options_for_select(caja_grupos, 'dia'), class: 'form-control'
                 .col-sm-3
                   div.top-25 data-toggle="buttons"
                     label.btn.btn-default

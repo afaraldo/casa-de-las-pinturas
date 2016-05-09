@@ -4,6 +4,10 @@ module ReportesHelper
     [['Categoría', 'categoria'], ['Día', 'dia'], ['Mes', 'month'], ['Año', 'year']]
   end
 
+  def caja_grupos
+    [['Día', 'dia'], ['Mes', 'month'], ['Año', 'year']]
+  end
+
   def agrupado_por_titulo(agrupado_por)
     case agrupado_por
       when 'month'
