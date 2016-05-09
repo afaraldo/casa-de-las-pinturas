@@ -29,7 +29,7 @@ section.content
                 .col-sm-3
                   .form-group
                     label.control-label Agrupar por:
-                    = select_tag :agrupar_por, options_for_select([['Cliente', 'persona'], ['Día', 'dia'], ['Mes', 'month'], ['Año', 'year']], 'dia'), class: 'form-control'
+                    = select_tag :agrupar_por, options_for_select(ventas_grupos, 'dia'), class: 'form-control'
                 .col-sm-3
                   div.top-25 data-toggle="buttons"
                     label.btn.btn-default
