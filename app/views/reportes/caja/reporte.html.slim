@@ -5,12 +5,12 @@ section.content
     .col-xs-12
       .box
         .box-header
-          h3.box-title Reporte de Gastos
+          h3.box-title Reporte de Movimientos de Caja
           .box-tools.pull-right.hidden-print
-            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, reportes_imprimir_reporte_gastos_path, class: 'btn btn-primary imprimir-listado'
+            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, reportes_imprimir_reporte_caja_path, class: 'btn btn-primary imprimir-listado'
         .box-body
           #reporte-search.buscador-listado.hidden-print
-            = form_tag reportes_gastos_path, remote: true, method: :get, class: 'remote-search' do
+            = form_tag reportes_caja_path, remote: true, method: :get, class: 'remote-search' do
               = hidden_field_tag :order_by, 'grupo', id: 'filtro-order-by'
               = hidden_field_tag :order_dir, 'asc', id: 'filtro-order-dir'
               .row
@@ -23,17 +23,20 @@ section.content
                       i.fa.fa-calendar
                       span #{localize(@desde.to_date)} - #{localize(@hasta.to_date)}
                       b.caret
-                .col-sm-3
-                  .form-group.top-25
-                    = select_tag :categoria_gasto_id, options_from_collection_for_select(@categorias, :id, :nombre), id: 'categorias-buscador', class: 'form-control', include_blank: "Todas las categorías..."
-                .col-sm-3
+                .col-xs-2
+                  .form-group
+                    = select_tag :caja_id, options_from_collection_for_select(Caja.all, :id, :nombre), class: 'form-control top-25'
+                .col-xs-2
+                  .form-group
+                    = select_tag :moneda_id, options_from_collection_for_select(Moneda.all, :id, :nombre), class: 'form-control top-25'
+                .col-sm-2
                   .form-group
                     label.control-label Agrupar por:
-                    = select_tag :agrupar_por, options_for_select(gastos_grupos, 'dia'), class: 'form-control'
+                    = select_tag :agrupar_por, options_for_select(caja_grupos, 'dia'), class: 'form-control'
                 .col-sm-3
                   div.top-25 data-toggle="buttons"
                     label.btn.btn-default
                       input type="checkbox" name="modo_resumido"
                       | Modo resumido
           #reporte-table.overlay-wrapper.buscador-resultados.table-responsive
-            = render "reportes/gastos/#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", reporte: @reporte
+            = render "reportes/caja/#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", reporte: @reporte

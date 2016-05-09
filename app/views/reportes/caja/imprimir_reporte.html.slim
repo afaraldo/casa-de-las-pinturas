@@ -1,4 +1,4 @@
-h4 Reporte de gastos
+h4 Reporte de Movimientos de Caja
 .row
   .col-xs-6
     p
@@ -10,8 +10,4 @@ h4 Reporte de gastos
     p
       strong Agrupado por:
       = " #{agrupado_por_titulo(params[:agrupar_por])}"
-    - if @categoria
-      p
-        strong Categoria:
-        = " #{@categoria.nombre}"
-= render "reportes/gastos/#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", reporte: @reporte
+= render "reportes/caja/#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", reporte: @reporte
