@@ -23,4 +23,4 @@ table.table.table-bordered.table-hover
 = paginate reporte, remote: true
 
 javascript:
-  ReportesUI.dibujarChart(#{chart_data.keys.to_json.html_safe}, #{chart_data.values.to_json.html_safe}, "#{params[:agrupar_por] == 'persona' ? 'bar' : 'area'}");
+  ReportesUI.dibujarChart(#{chart_data.keys.to_json.html_safe}, [{nombre: 'Total', totales: #{chart_data.values.to_json.html_safe}}], "#{params[:agrupar_por] == 'persona' ? 'bar' : 'areaspline'}", false);

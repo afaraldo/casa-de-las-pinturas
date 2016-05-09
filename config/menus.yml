@@ -96,6 +96,10 @@ menu:
         text: "Reporte de gastos"
         url: :reportes_gastos
         active_submenu: :reporte_gastos
+      reporte_caja:
+        text: "Reporte de caja"
+        url: :reportes_caja
+        active_submenu: :reporte_caja
   configuraciones:
     text: "Configuraciones"
     url: :configuraciones

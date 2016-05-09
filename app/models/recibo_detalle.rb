@@ -3,20 +3,23 @@ class ReciboDetalle < ActiveRecord::Base
 
   acts_as_paranoid
 
-  attr_accessor :caja_id
-
+  before_save :set_caja
   after_save :actualizar_extractos
   after_destroy :actualizar_extractos
 
   belongs_to :recibo
   belongs_to :moneda
+  belongs_to :caja
 
   enumerize :forma, in: [:efectivo, :tarjeta], predicates: true
 
   delegate :nombre, to: :moneda, prefix: true
 
-  def actualizar_extractos
+  def set_caja
     self.caja_id = Caja.get_caja_por_forma(forma).id
+  end
+
+  def actualizar_extractos
     operador = self.recibo.instance_of?(Pago) ? -1 : 1
 
     if deleted?
