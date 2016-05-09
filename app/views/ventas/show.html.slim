@@ -13,7 +13,7 @@ section.content
             = "Venta Nro. #{@venta.numero}".html_safe
           .box-tools
             - @saldo_negativo = @venta.check_detalles_negativos_pago true
-            - if (@venta.credito? && @venta.recibos_detalles.empty?) || @venta.contado?
+            - if @venta.es_editable?
               = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_venta_path(@venta),  html_options = {class: 'btn btn-default'}
               = ' '
               - if @saldo_negativo && @saldo_negativo.size > 0

@@ -43,6 +43,7 @@ class Boleta < ActiveRecord::Base
   validates :condicion, presence: true
   validate  :condicion_cambiada?, on: :update
   validate :tiene_pagos_asociados?, on: [:update, :destroy]
+  validate :fecha_futura
 
   with_options if: :credito? do |b|
     b.validates :fecha_vencimiento, presence: true
@@ -52,6 +53,14 @@ class Boleta < ActiveRecord::Base
 
   def numero
     id
+  end
+
+  def es_editable?
+    if (credito? && recibos_detalles.empty?) || contado?
+      true
+    else
+      false
+    end
   end
 
   def importe_pagado

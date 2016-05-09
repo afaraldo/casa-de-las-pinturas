@@ -12,7 +12,7 @@ section.content
           h3.box-title
             = "Compra Nro. #{@compra.numero}".html_safe
           .box-tools
-            - if (@compra.credito? && @compra.recibos_detalles.empty?) || @compra.contado?
+            - if @compra.es_editable?
               = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_compra_path(@compra),  html_options = {class: 'btn btn-default'}
               = ' '
               - if @stock_negativo && @stock_negativo.size > 0
