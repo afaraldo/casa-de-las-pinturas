@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'devolucion_compras/get_compras' => 'devolucion_compras#get_compras'
+  get 'devolucion_compras/buscar_compra' => 'devolucion_compras#buscar_compra'
+  resources :devolucion_compras
+
   devise_for :users
 
   get 'configuraciones/check_empresa_nombre' => 'configuraciones#check_empresa_nombre'
@@ -70,6 +74,7 @@ Rails.application.routes.draw do
   get 'welcome/devoluciones_compra'
   get 'welcome/devoluciones_venta_index'
   get 'welcome/devoluciones_compra_index'
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

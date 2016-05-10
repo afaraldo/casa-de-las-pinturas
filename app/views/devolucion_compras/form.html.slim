@@ -1,0 +1,93 @@
+section.content-header
+  h1 Compras
+section.content
+  .row
+    .col-xs-12
+      .box
+        = simple_form_for @devolucion_compra, html: { id: 'devolucion-compra-form' } do |f|
+          .box-header
+            a.volver-link href= devolucion_compras_path
+              i.fa.fa-angle-double-left
+              | Volver al listado de devoluciones
+            .clearfix
+            h3.box-title = @devolucion_compra.new_record? ? 'Nueva Devolución' : "Editar devolución"
+          .box-body
+            = f.error_notification
+            .row
+              .col-sm-9
+                .row
+                  .col-sm-4
+                    = f.input :fecha, wrapper: :vertical_input_group do
+                      = f.input_field :fecha, as: :string,
+                                              class: 'datepicker form-control',
+                                              autofocus: f.object.fecha.nil?,
+                                              value: @devolucion_compra.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                      .input-group-btn
+                        .btn.btn-default
+                          i.fa.fa-calendar
+                  .col-sm-4
+                    = f.association :persona, as: :string, label: 'Proveedor', disabled: @devolucion_compra.persisted?, input_html: { id: 'personas-buscador', placeholder: 'Buscar proveedor...', data: { 'msg-required' => 'Este campo es obligatorio.',persona: f.object.persona.to_json } }
+                  .col-sm-4
+                    <label>Compra</label>
+                  .col-sm-4
+                    <select class="form-control " id="devolucion_id" >
+                    </select>
+                .row
+                  .col-sm-4
+                    = f.input :motivo, label: 'Motivo' do
+                      = f.input_field :motivo, as: :string,
+                                                   label: false,
+                                                    class: 'form-control required',
+                                                   data: {"msg-required" => 'Debe escribir un motivo'}
+            .row.overlay-wrapper#devolucion-mensajes
+              .overlay.hide
+                i.fa.fa-refresh.fa-spin
+              .col-xs-12
+                .well.seleccionar-panel.text-center
+                  i.fa.fa-search
+                  h3 Seleccione un proveedor y una commpra para ver las mercaderias para devolución
+            .row#pago-boletas-devoluciones.hide
+              .col-xs-12
+                .form-subtitle
+                  label Mercaderias
+                table.table.table-bordered.detalles-table#devolucion-compra-detalles
+                  thead
+                    tr
+                      th Código
+                      th Mercaderia
+                      th Cantidad
+                      th Precio Unitario
+                      th Subtotal
+                  tbody#compra-detalles-body
+                    = render 'compra_detalle',devolucion_compra: @devolucion_compra, compras: @devolucion_compra.detalles
+                  tfoot
+                    tr
+                      td colspan="2"
+                      td.text-right.text-bold
+                        | Total:
+                      td.text-right.text-bold
+                      td.table-total.text-right.text-bold
+                        span 0
+                      td
+
+          .box-footer
+            - if @stock_negativo && @stock_negativo.size > 0
+              input.hidden name="guardar_si_o_si" value= "true"
+              .alert.alert-warning
+                p
+                | La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}
+                p Esta seguro que quiere continuar?
+                .form-actions
+                  = link_to 'Cancelar', devolucion_compras_path, class: 'btn btn-default'
+                  | #{' '}
+                  button.btn.btn-primary type="submit" Continuar
+            - else
+              .text-right.form-actions
+                = link_to 'Cancelar', devolucion_compras_path, class: 'btn btn-default'
+                | #{' '}
+                button.btn.btn-primary type="submit" Guardar devolucion
+
+javascript:
+  DevolucionComprasUI.setBuscarProveedorUrl("#{proveedores_buscar_path}");
+
+
