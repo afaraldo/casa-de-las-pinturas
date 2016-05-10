@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160505140144) do
+ActiveRecord::Schema.define(version: 20160510030257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,6 +105,17 @@ ActiveRecord::Schema.define(version: 20160505140144) do
   add_index "caja_periodo_balances", ["caja_id"], name: "index_caja_periodo_balances_on_caja_id", using: :btree
   add_index "caja_periodo_balances", ["moneda_id"], name: "index_caja_periodo_balances_on_moneda_id", using: :btree
 
+  create_table "caja_saldos", force: :cascade do |t|
+    t.integer  "caja_id"
+    t.integer  "moneda_id"
+    t.decimal  "saldo_efectivo", precision: 15, scale: 2, default: 0.0, null: false
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+  end
+
+  add_index "caja_saldos", ["caja_id"], name: "index_caja_saldos_on_caja_id", using: :btree
+  add_index "caja_saldos", ["moneda_id"], name: "index_caja_saldos_on_moneda_id", using: :btree
+
   create_table "cajas", force: :cascade do |t|
     t.string   "nombre",     limit: 50, null: false
     t.datetime "deleted_at"
@@ -183,10 +194,13 @@ ActiveRecord::Schema.define(version: 20160505140144) do
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
     t.integer  "boleta_detalle_id"
+    t.integer  "nota_credito_debito_detalle_id"
   end
 
+  add_index "mercaderia_extractos", ["boleta_detalle_id"], name: "index_mercaderia_extractos_on_boleta_detalle_id", using: :btree
   add_index "mercaderia_extractos", ["mercaderia_id"], name: "index_mercaderia_extractos_on_mercaderia_id", using: :btree
   add_index "mercaderia_extractos", ["movimiento_mercaderia_detalle_id"], name: "index_mercaderia_extractos_on_movimiento_mercaderia_detalle_id", using: :btree
+  add_index "mercaderia_extractos", ["nota_credito_debito_detalle_id"], name: "index_mercaderia_extractos_on_nota_credito_debito_detalle_id", using: :btree
 
   create_table "mercaderia_periodo_balances", force: :cascade do |t|
     t.integer  "mercaderia_id"
@@ -211,7 +225,7 @@ ActiveRecord::Schema.define(version: 20160505140144) do
     t.datetime "deleted_at"
     t.datetime "created_at",                                                              null: false
     t.datetime "updated_at",                                                              null: false
-    t.decimal  "stock",                            precision: 15, scale: 3, default: 0.0, null: false
+    t.decimal  "stock_inicial",                    precision: 15, scale: 3, default: 0.0, null: false
     t.decimal  "stock_minimo",                     precision: 15, scale: 2, default: 0.0, null: false
   end
 
@@ -303,8 +317,10 @@ ActiveRecord::Schema.define(version: 20160505140144) do
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
     t.datetime "deleted_at"
+    t.integer  "caja_id"
   end
 
+  add_index "recibo_detalles", ["caja_id"], name: "index_recibo_detalles_on_caja_id", using: :btree
   add_index "recibo_detalles", ["moneda_id"], name: "index_recibo_detalles_on_moneda_id", using: :btree
   add_index "recibo_detalles", ["recibo_id"], name: "index_recibo_detalles_on_recibo_id", using: :btree
 
@@ -386,6 +402,8 @@ ActiveRecord::Schema.define(version: 20160505140144) do
   add_foreign_key "caja_movimientos", "categoria_gastos"
   add_foreign_key "caja_periodo_balances", "cajas"
   add_foreign_key "caja_periodo_balances", "monedas"
+  add_foreign_key "caja_saldos", "cajas"
+  add_foreign_key "caja_saldos", "monedas"
   add_foreign_key "cuenta_corriente_periodo_balances", "personas"
   add_foreign_key "cuentas_corrientes_extractos", "boletas"
   add_foreign_key "cuentas_corrientes_extractos", "notas_creditos_debitos"
@@ -396,6 +414,7 @@ ActiveRecord::Schema.define(version: 20160505140144) do
   add_foreign_key "mercaderia_extractos", "boleta_detalles"
   add_foreign_key "mercaderia_extractos", "mercaderias"
   add_foreign_key "mercaderia_extractos", "movimiento_mercaderia_detalles"
+  add_foreign_key "mercaderia_extractos", "nota_credito_debito_detalles"
   add_foreign_key "mercaderia_periodo_balances", "mercaderias"
   add_foreign_key "mercaderias", "categorias"
   add_foreign_key "movimiento_mercaderia_detalles", "mercaderias"
@@ -403,6 +422,7 @@ ActiveRecord::Schema.define(version: 20160505140144) do
   add_foreign_key "nota_credito_debito_detalles", "mercaderias"
   add_foreign_key "nota_credito_debito_detalles", "notas_creditos_debitos"
   add_foreign_key "notas_creditos_debitos", "personas"
+  add_foreign_key "recibo_detalles", "cajas"
   add_foreign_key "recibo_detalles", "monedas"
   add_foreign_key "recibo_detalles", "recibos"
   add_foreign_key "recibos", "personas"
