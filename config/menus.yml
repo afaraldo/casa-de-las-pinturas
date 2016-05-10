@@ -22,8 +22,8 @@ menu:
         active_submenu: :cuentas_corrientes_proveedores
       devolucion_compras:
         text: "Devoluciones"
-        url: devolucion_compras
-        active_submenu: :devolucion_compra_sidemenu
+        url: :devolucion_compras
+        active_submenu: :devolucion_compras_sidemenu
   ventas:
     text: "Ventas"
     url: :clientes

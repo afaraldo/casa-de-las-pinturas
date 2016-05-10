@@ -18,9 +18,9 @@ section.content
                 .row
                   .col-sm-4
                     = f.input :fecha, wrapper: :vertical_input_group do
-                      = f.input_field :fecha, as: :string, 
-                                              class: 'datepicker form-control', 
-                                              autofocus: f.object.fecha.nil?, 
+                      = f.input_field :fecha, as: :string,
+                                              class: 'datepicker form-control',
+                                              autofocus: f.object.fecha.nil?,
                                               value: @devolucion_compra.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
                       .input-group-btn
                         .btn.btn-default
@@ -31,7 +31,6 @@ section.content
                     <label>Compra</label>
                   .col-sm-4
                     <select class="form-control " id="devolucion_id" >
-                      <option value="">Seleccione una compra</option>
                     </select>
                 .row
                   .col-sm-4
@@ -40,9 +39,6 @@ section.content
                                                    label: false,
                                                     class: 'form-control required',
                                                    data: {"msg-required" => 'Debe escribir un motivo'}
-                                                          
-                                                   
-                                                   
             .row.overlay-wrapper#devolucion-mensajes
               .overlay.hide
                 i.fa.fa-refresh.fa-spin
@@ -63,7 +59,7 @@ section.content
                       th Precio Unitario
                       th Subtotal
                   tbody#compra-detalles-body
-                    = render 'compra_detalle', compras: @devolucion_compra.detalles
+                    = render 'compra_detalle',devolucion_compra: @devolucion_compra, compras: @devolucion_compra.detalles
                   tfoot
                     tr
                       td colspan="2"
@@ -72,7 +68,7 @@ section.content
                       td.text-right.text-bold
                       td.table-total.text-right.text-bold
                         span 0
-                      td 
+                      td
 
           .box-footer
             - if @stock_negativo && @stock_negativo.size > 0

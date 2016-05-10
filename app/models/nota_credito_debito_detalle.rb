@@ -7,7 +7,28 @@ class NotaCreditoDebitoDetalle < ActiveRecord::Base
   validates :cantidad, numericality: { greater_than: 0, less_than_or_equal_to: DECIMAL_LIMITE[:superior] }
   after_save :update_stock
   after_destroy :update_stock
-  
+
+  validate :validar_cantidad_boleta
+
+  def validar_cantidad_boleta
+    boleta = Boleta.find(notas_creditos_debito.boletas_detalles.first.boleta_id)
+    detalle = boleta.detalles.find_by(mercaderia_id: mercaderia_id)
+
+    total_devuelto = 0
+
+    boleta.notas_creditos_debitos.each do |d|
+      detalle_devolucion = d.detalles.find_by(mercaderia_id: mercaderia_id)
+
+      if self.id != detalle_devolucion.id
+        total_devuelto += detalle_devolucion.cantidad
+      end
+
+    end
+
+    if cantidad + total_devuelto > detalle.cantidad
+      errors.add(:cantidad, "La cantidad no puede ser mayor al de la boleta: #{detalle.cantidad - total_devuelto}")
+    end
+  end
   # Comprobar que la cantidad no provoque stock negativo o que sea mayor al limite definido
   def check_stock_rango
     c = nueva_cantidad
@@ -40,5 +61,4 @@ class NotaCreditoDebitoDetalle < ActiveRecord::Base
   def as_json(options={})
     super(:methods => [:mercaderia_codigo, :mercaderia_nombre])
   end
- 
 end

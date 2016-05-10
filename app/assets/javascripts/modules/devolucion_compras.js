@@ -58,17 +58,14 @@ DevolucionComprasUI= (function(){
                     dataType:'json',
                     data: {persona_id:$(this).val()},
                     success: function(response){
-                        $('#devolucion_id').html("");
                         $('#devolucion_id').select2();
+                        $('#devolucion_id').html('<option>').attr('value',"");
                         $.each(response,function(i,option){
-                            $('#devolucion_id').append($('<option>').text(option.id).attr('value',option.id));    
-                            
+                            $('#devolucion_id').append($('<option>').text(option.id).attr('value',option.id));
                         });
-        
                     }
-     
-                });           
-                               
+
+                });
         });
         $('#devolucion_id').on('change',function(){
             $("#devolucion-mensajes").addClass("hide");

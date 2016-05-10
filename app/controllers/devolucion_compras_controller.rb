@@ -6,7 +6,7 @@ class DevolucionComprasController < ApplicationController
   # configuracion del menu
   def setup_menu
     @menu_setup[:main_menu] = :compras
-    @menu_setup[:side_menu] = :devolucion_compra_sidemenu
+    @menu_setup[:side_menu] = :devolucion_compras_sidemenu
   end
   # GET /compras
   # GET /compras.json
@@ -36,7 +36,6 @@ class DevolucionComprasController < ApplicationController
   def create
     @devolucion_compra = DevolucionCompra.new(devolucion_compra_params)
     @stock_negativo = params[:guardar_si_o_si].present? ? [] : @devolucion_compra.check_detalles_negativos
-    
     respond_to do |format|
       DevolucionCompra.transaction do
         if @stock_negativo.size <= 0 && @devolucion_compra.save
@@ -94,7 +93,6 @@ class DevolucionComprasController < ApplicationController
 
   def buscar_compra
     @compra_detalles = BoletaDetalle.where("boleta_id =?",params[:compra_id])
-    
   end
 
   private

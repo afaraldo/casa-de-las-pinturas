@@ -26,7 +26,10 @@ class NotasCreditosDebito < ActiveRecord::Base
   validates :detalles, length: { minimum: 1 }
   validate  :fecha_futura
   validate  :persona_cambiada?, on: :update
-  
+
+  def movimiento_motivo
+      "Devolucion Nro. #{id}"
+  end
   def fecha_futura
     if fecha > Date.today
       errors.add(:fecha, I18n.t('activerecord.errors.messages.fecha_futura'))
