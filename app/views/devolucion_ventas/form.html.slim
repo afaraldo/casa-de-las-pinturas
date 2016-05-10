@@ -1,0 +1,95 @@
+section.content-header
+  h1 Ventas
+section.content
+  .row
+    .col-xs-12
+      .box
+        = simple_form_for @devolucion_venta, html: { id: 'devolucion-venta-form' } do |f|
+          .box-header
+            a.volver-link href= devolucion_ventas_path
+              i.fa.fa-angle-double-left
+              | Volver al listado de devoluciones
+            .clearfix
+            h3.box-title = @devolucion_venta.new_record? ? 'Nueva Devolución' : "Editar devolución"
+          .box-body
+            = f.error_notification
+            .row
+              .col-sm-9
+                .row
+                  .col-sm-4
+                    = f.input :fecha, wrapper: :vertical_input_group do
+                      = f.input_field :fecha, as: :string,
+                                              class: 'datepicker form-control',
+                                              autofocus: f.object.fecha.nil?,
+                                              value: @devolucion_venta.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                      .input-group-btn
+                        .btn.btn-default
+                          i.fa.fa-calendar
+                  .col-sm-4
+                    = f.association :persona, as: :string, label: 'Proveedor', disabled: @devolucion_venta.persisted?, input_html: { id: 'personas-buscador', placeholder: 'Buscar cliente...', data: { 'msg-required' => 'Este campo es obligatorio.',persona: f.object.persona.to_json } }
+                  .col-sm-4
+                    label.control-label Venta
+                    - if @devolucion_venta.persisted?
+                      br
+                      = @devolucion_venta.boletas.first.id
+                    - else
+                      select.form-control.required#devolucion_id
+                .row
+                  .col-sm-4
+                    = f.input :motivo, label: 'Motivo' do
+                      = f.input_field :motivo, as: :string,
+                                                   label: false,
+                                                    class: 'form-control required',
+                                                   data: {"msg-required" => 'Debe escribir un motivo'}
+            .row.overlay-wrapper#devolucion-mensajes
+              .overlay.hide
+                i.fa.fa-refresh.fa-spin
+              .col-xs-12
+                .well.seleccionar-panel.text-center
+                  i.fa.fa-search
+                  h3 Seleccione un cliente y una venta para ver las mercaderias para devolución
+            .row#pago-boletas-devoluciones.hide
+              .col-xs-12
+                .form-subtitle
+                  label Mercaderias
+                table.table.table-bordered.detalles-table#devolucion-venta-detalles
+                  thead
+                    tr
+                      th Código
+                      th Mercaderia
+                      th Cantidad
+                      th Precio Unitario
+                      th Subtotal
+                  tbody#venta-detalles-body
+                    = render 'venta_detalle',devolucion_venta: @devolucion_venta, ventas: @devolucion_venta.detalles
+                  tfoot
+                    tr
+                      td colspan="2"
+                      td.text-right.text-bold
+                        | Total:
+                      td.text-right.text-bold
+                      td.table-total.text-right.text-bold
+                        span 0
+                      td
+
+          .box-footer
+            - if @stock_negativo && @stock_negativo.size > 0
+              input.hidden name="guardar_si_o_si" value= "true"
+              .alert.alert-warning
+                p
+                | La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}
+                p Esta seguro que quiere continuar?
+                .form-actions
+                  = link_to 'Cancelar', devolucion_ventas_path, class: 'btn btn-default'
+                  | #{' '}
+                  button.btn.btn-primary type="submit" Continuar
+            - else
+              .text-right.form-actions
+                = link_to 'Cancelar', devolucion_ventas_path, class: 'btn btn-default'
+                | #{' '}
+                button.btn.btn-primary type="submit" Guardar devolucion
+
+javascript:
+  DevolucionVentasUI.setBuscarClienterUrl("#{clientes_buscar_path}");
+
+

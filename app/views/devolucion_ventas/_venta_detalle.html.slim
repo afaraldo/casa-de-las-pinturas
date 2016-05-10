@@ -1,0 +1,32 @@
+= hidden_field "devolucion_venta[boletas_detalles_attributes][0]", :boleta_id, value: devolucion_venta && !devolucion_venta.boletas_detalles.empty? ? devolucion_venta.boletas_detalles.first.boleta_id : params[:venta_id]
+- ventas.each_with_index do |c, i|
+  - total = ventas.size();
+  - precio = c.precio_unitario
+  - cantidad = c.cantidad
+  - subtotal = c.cantidad*c.precio_unitario
+  tr.nested-fields
+    td = c.mercaderia_codigo
+    td = c.mercaderia_nombre
+    td
+      div class="form-group "
+
+        = hidden_field "devolucion_venta[detalles_attributes][#{i}]", :mercaderia_id, value: c.mercaderia_id
+        - if devolucion_venta && !devolucion_venta.new_record?
+          = hidden_field "devolucion_venta[detalles_attributes][#{i}]", :id, value: c.id
+        = text_field "devolucion_venta[detalles_attributes][#{i}]", :cantidad, value: number_with_precision(cantidad), :min=>"1", :required => true, class: 'form-control text-right  maskCantidad required cantidad'
+        - if c.errors && c.errors.has_key?(:cantidad)
+
+          span.text-danger = c.errors.get(:cantidad).to_sentence
+
+    td.precio_unitario.text-right
+      = number_with_precision(precio, delimiter: '.')
+      = text_field "devolucion_venta[detalles_attributes][#{i}]", :precio_unitario, value: number_with_precision(precio), class: 'form-control text-right precio-unitario hide'
+    td.subtotal-col.text-right
+      span
+        = number_with_precision(subtotal, delimiter: '.')
+    - if total ==1
+      td
+    - else
+      td
+        =  link_to '<i class="fa fa-times"></i>'.html_safe,"#", class: 'btn btn-default btn-sm remove_fields dynamic'
+        = hidden_field "devolucion_venta[detalles_attributes][#{i}]", :_destroy, value: false
