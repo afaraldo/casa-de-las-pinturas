@@ -43,7 +43,6 @@ class BoletaDetalle < ActiveRecord::Base
     else
       MercaderiaExtracto.crear_o_actualizar_extracto(self, self.boleta.fecha, cantidad_was.to_f * operador, cantidad * operador)
     end
-    mercaderia.update(stock: nueva_cantidad) if cantidad_changed? || deleted?
   end
 
   def as_json(options={})
