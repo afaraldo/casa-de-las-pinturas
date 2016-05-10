@@ -28,7 +28,7 @@ section.content
                   .col-sm-4
                     = f.association :persona, as: :string, label: 'Proveedor', disabled: @devolucion_venta.persisted?, input_html: { id: 'personas-buscador', placeholder: 'Buscar cliente...', data: { 'msg-required' => 'Este campo es obligatorio.',persona: f.object.persona.to_json } }
                   .col-sm-4
-                    label.control-label Venta
+                    label.has-error.control-label Venta
                     - if @devolucion_venta.persisted?
                       br
                       = @devolucion_venta.boletas.first.id

@@ -46,7 +46,7 @@ module MovimientosHelper
         when 'NotaCreditoDebitoDetalle'
           detalle = m.nota_credito_debito_detalle
           es_ingreso = !detalle.notas_creditos_debito.instance_of?(DevolucionCompra)
-          resultado = {url: "/#{es_ingreso ? 'devolucion_compras' : 'devolucion_ventas'}/#{detalle.notas_creditos_debito_id}",
+          resultado = {url: "/#{es_ingreso ? 'devolucion_ventas' : 'devolucion_compras'}/#{detalle.notas_creditos_debito_id}",
                        fecha: detalle.notas_creditos_debito.fecha,
                        motivo: detalle.notas_creditos_debito.movimiento_motivo,
                        ingreso: es_ingreso ? detalle.cantidad : 0,
