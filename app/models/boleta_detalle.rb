@@ -41,11 +41,25 @@ class BoletaDetalle < ActiveRecord::Base
     if deleted?
       MercaderiaExtracto.eliminar_movimiento(self, self.boleta.fecha, cantidad * operador * -1)
     else
-      MercaderiaExtracto.crear_o_actualizar_extracto(self, self.boleta.fecha, cantidad_was.to_f * operador, cantidad * operador)
+      if mercaderia_id_changed? && !mercaderia_id_was.nil? # si cambio de cuenta corriente
+        old = get_old_boleta_detalle
+        MercaderiaExtracto.eliminar_movimiento(old, self.boleta.fecha, cantidad_was * operador * -1)
+        MercaderiaExtracto.crear_o_actualizar_extracto(self, self.boleta.fecha, 0, cantidad * operador)
+      else
+        MercaderiaExtracto.crear_o_actualizar_extracto(self, self.boleta.fecha, cantidad_was.to_f * operador, cantidad * operador)
+      end
     end
   end
 
-  def as_json(options={})
+  def get_old_boleta_detalle
+    old = self.dup
+    old.id = self.id
+    old.mercaderia_id = self.mercaderia_id_was
+    old
+  end
+
+    def as_json(options={})
     super(:methods => [:mercaderia_codigo, :mercaderia_nombre])
   end
+
 end
