@@ -1,13 +1,17 @@
 class NotaCreditoDebitoDetalle < ActiveRecord::Base
+
   acts_as_paranoid
-  belongs_to :notas_creditos_debito
-  belongs_to :mercaderia
-  delegate :nombre, to: :mercaderia, prefix: true
-  delegate :codigo, to: :mercaderia, prefix: true
-  validates :cantidad, numericality: { greater_than: 0, less_than_or_equal_to: DECIMAL_LIMITE[:superior] }
+
   after_save :update_stock
   after_destroy :update_stock
 
+  belongs_to :notas_creditos_debito
+  belongs_to :mercaderia
+
+  delegate :nombre, to: :mercaderia, prefix: true
+  delegate :codigo, to: :mercaderia, prefix: true
+
+  validates :cantidad, numericality: { greater_than: 0, less_than_or_equal_to: DECIMAL_LIMITE[:superior] }
   validate :validar_cantidad_boleta
 
   def validar_cantidad_boleta
@@ -29,6 +33,7 @@ class NotaCreditoDebitoDetalle < ActiveRecord::Base
       errors.add(:cantidad, "La cantidad no puede ser mayor al de la boleta: #{detalle.cantidad - total_devuelto}")
     end
   end
+
   # Comprobar que la cantidad no provoque stock negativo o que sea mayor al limite definido
   def check_stock_rango
     c = nueva_cantidad

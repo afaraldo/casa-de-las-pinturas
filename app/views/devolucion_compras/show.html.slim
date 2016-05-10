@@ -25,6 +25,9 @@ section.content
                 .col-sm-4
                   label.control-label Proveedor
                   p = @devolucion_compra.persona_nombre
+                .col-sm-4
+                  label.control-label Nro. de Compra
+                  p = @devolucion_compra.boletas.first.id
   .row#pago-boletas-devoluciones
     .col-xs-12
       .nav-tabs-custom
@@ -59,4 +62,3 @@ section.content
                     | Total:
                   td.table-total.text-right.text-bold
                     span = number_to_currency(total)
-                  td

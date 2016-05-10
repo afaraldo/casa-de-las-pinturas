@@ -33,7 +33,7 @@ module MovimientosHelper
                         motivo: detalle.movimiento_mercaderia.motivo,
                         ingreso: es_ingreso ? detalle.cantidad : 0,
                         egreso: es_ingreso ? 0 : detalle.cantidad}
-                        
+
         when 'BoletaDetalle'
           detalle = m.boleta_detalle
           es_ingreso = detalle.boleta.instance_of?(Compra)
@@ -69,7 +69,6 @@ module MovimientosHelper
                         motivo: notas_creditos_debito.movimiento_motivo,
                         egreso: notas_creditos_debito.importe_total,
                         ingreso: 0}
-
         when 'Boleta'
           boleta = m.boleta
           resultado = {url: "/#{boleta.instance_of?(Compra) ? 'compras' : 'ventas'}/#{boleta.id}",
@@ -105,5 +104,4 @@ module MovimientosHelper
 
     resultados
   end
-
 end

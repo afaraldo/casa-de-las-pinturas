@@ -28,10 +28,12 @@ section.content
                   .col-sm-4
                     = f.association :persona, as: :string, label: 'Proveedor', disabled: @devolucion_compra.persisted?, input_html: { id: 'personas-buscador', placeholder: 'Buscar proveedor...', data: { 'msg-required' => 'Este campo es obligatorio.',persona: f.object.persona.to_json } }
                   .col-sm-4
-                    <label>Compra</label>
-                  .col-sm-4
-                    <select class="form-control " id="devolucion_id" >
-                    </select>
+                    label.control-label Compra
+                    - if @devolucion_compra.persisted?
+                      br
+                      = @devolucion_compra.boletas.first.id
+                    - else
+                      select.form-control#devolucion_id
                 .row
                   .col-sm-4
                     = f.input :motivo, label: 'Motivo' do

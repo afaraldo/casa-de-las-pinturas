@@ -43,6 +43,7 @@ DevolucionComprasUI= (function(){
         elementos.devolucionCompraForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
 
         NumberHelper.mascaraMoneda('.maskMoneda');
+        NumberHelper.mascaraCantidad('.maskCantidad');
 
         DatepickerHelper.initDatepicker('.datepicker');
         TablasHelper.calcularTotalEvent('.detalles-table');
@@ -51,22 +52,28 @@ DevolucionComprasUI= (function(){
         elementos.devolucionCompraForm.on('click', '.seleccionar-panel', function(e){
             elementos.proveedorBuscador.select2('open');
         });
+
         elementos.proveedorBuscador.on('change',function(e){
-               $.ajax({
+            var boleta = $('#devolucion_id');
+
+            if($(this).val() !== '') {
+                $.ajax({
                     url: 'get_compras',
-                    type:'get',
-                    dataType:'json',
-                    data: {persona_id:$(this).val()},
-                    success: function(response){
-                        $('#devolucion_id').select2();
-                        $('#devolucion_id').html('<option>').attr('value',"");
-                        $.each(response,function(i,option){
-                            $('#devolucion_id').append($('<option>').text(option.id).attr('value',option.id));
+                    type: 'get',
+                    dataType: 'json',
+                    data: {persona_id: $(this).val()},
+                    success: function (response) {
+                        boleta.html('<option>').attr('value', "");
+                        $.each(response, function (i, option) {
+                            boleta.append($('<option>').text(option.id).attr('value', option.id));
                         });
+                        boleta.select2();
                     }
 
                 });
+            }
         });
+
         $('#devolucion_id').on('change',function(){
             $("#devolucion-mensajes").addClass("hide");
             $('#pago-boletas-devoluciones').removeClass("hide");

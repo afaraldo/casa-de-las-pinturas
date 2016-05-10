@@ -3,6 +3,11 @@ class NotasCreditosDebito < ActiveRecord::Base
 
   self.inheritance_column = 'tipo'
 
+  before_validation :set_importe_total
+  after_save :actualizar_extracto_de_cuenta_corriente
+  after_destroy :actualizar_extracto_de_cuenta_corriente
+  after_save :actualizar_boleta
+
   has_many :detalles, class_name: 'NotaCreditoDebitoDetalle', dependent: :destroy, inverse_of: :notas_creditos_debito
 
   has_many :boletas_detalles, class_name: 'DevolucionesBoleta', foreign_key: "notas_creditos_debito_id", dependent: :destroy, inverse_of: :notas_creditos_debito
@@ -11,13 +16,7 @@ class NotasCreditosDebito < ActiveRecord::Base
   accepts_nested_attributes_for :boletas_detalles, allow_destroy: true
   accepts_nested_attributes_for :detalles, allow_destroy: true
 
-
   default_scope { order('fecha DESC') } # Ordenar por fecha por defecto
-  before_validation :set_importe_total
-
-  after_save :actualizar_extracto_de_cuenta_corriente
-  after_destroy :actualizar_extracto_de_cuenta_corriente
-  after_save :actualizar_boleta
 
   # Validations
   validates :fecha,  presence: true
@@ -28,8 +27,9 @@ class NotasCreditosDebito < ActiveRecord::Base
   validate  :persona_cambiada?, on: :update
 
   def movimiento_motivo
-      "Devolucion Nro. #{id}"
+    "Devolucion Nro. #{id}"
   end
+
   def fecha_futura
     if fecha > Date.today
       errors.add(:fecha, I18n.t('activerecord.errors.messages.fecha_futura'))
@@ -52,15 +52,12 @@ class NotasCreditosDebito < ActiveRecord::Base
     end
   end
 
-  def movimiento_motivo
-  	"Devolucion Nro. #{id}"
-  end
-
   private
 
   def actualizar_boleta
     boletas.first.update_column(:importe_descontado, importe_total)
   end
+
   def set_importe_total
     self.importe_total = 0
     self.detalles.each do |detalle|
