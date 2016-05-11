@@ -46,11 +46,10 @@ class ComprasController < ApplicationController
   # POST /compras
   # POST /compras.json
   def create
-    @compra = Compra.new(compra_params)
-    @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @compra.check_detalles_negativos_pago
+    nueva_compra
     respond_to do |format|
       Compra.transaction do
-        if @saldo_negativo.size == 0 && @compra.save
+        if @compra.guardar(compra_params, params[:guardar_si_o_si].present?)
           format.html { redirect_to @compra, notice: t('mensajes.save_success', recurso: 'la compra') }
           format.json { render :show, status: :created, location: @compra }
         else
@@ -64,15 +63,16 @@ class ComprasController < ApplicationController
 
   end
 
+  def nueva_compra
+    @compra = Compra.new
+  end
+
   # PATCH/PUT /compras/1
   # PATCH/PUT /compras/1.json
   def update
-    @compra.assign_attributes(compra_params)
-    @stock_negativo = params[:guardar_si_o_si].present? ? [] : @compra.check_detalles_negativos
-    @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @compra.check_detalles_negativos_pago
     respond_to do |format|
       Compra.transaction do
-        if @stock_negativo.size <= 0 && @compra.save
+        if @compra.guardar(compra_params, params[:guardar_si_o_si].present?)
           format.html { redirect_to @compra, notice: t('mensajes.save_success', recurso: 'la compra') }
           format.json { render :show, status: :created, location: @compra }
         else

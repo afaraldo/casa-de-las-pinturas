@@ -187,16 +187,14 @@ section.content
                             span
                           td
           .box-footer
-            - if (@stock_negativo && @stock_negativo.size > 0) || (@saldo_negativo && @saldo_negativo.size > 0)
+            - if @compra.errors.has_key?(:stock_negativo) || @compra.errors.has_key?(:saldo_negativo)
               input.hidden name="guardar_si_o_si" value= "true"
-              .alert.alert-warning
-                - if  @stock_negativo && @stock_negativo.size > 0
-                  p
-                    | La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}.
+              .alert.alert-warning#mensaje-saldo-negativo
+                - if @compra.errors.has_key?(:stock_negativo)
+                  p = @compra.errors.get(:stock_negativo).to_sentence
                   p Esta seguro que quiere continuar?
-                - if @saldo_negativo && @saldo_negativo.size > 0
-                  p
-                    | La operación va a provocar disponibilidad negativa en los siguientes monedas: #{@saldo_negativo.map {|m| m.nombre }.to_sentence}.
+                - if @compra.errors.has_key?(:saldo_negativo)
+                  p = @compra.errors.get(:saldo_negativo).to_sentence
                   p Esta seguro que quiere continuar?
                 .form-actions
                   = link_to 'Cancelar', compras_path, class: 'btn btn-default'
@@ -245,3 +243,7 @@ section.content
 javascript:
   BoletasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");
   BoletasUI.setBuscarPersonasUrl("#{proveedores_buscar_path}");
+
+- if @compra.errors.has_key?(:stock_negativo) || @compra.errors.has_key?(:saldo_negativo)
+  javascript:
+    MensajesHelper.irHasta($('#mensaje-saldo-negativo').offset().top);

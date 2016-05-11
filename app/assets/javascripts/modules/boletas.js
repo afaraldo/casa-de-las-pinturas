@@ -68,7 +68,6 @@ var BoletasUI = (function(){
 
         }).trigger("change");
 
-
         if($('.nested-fields').length == 1){
             $('.remove_fields').addClass('hide');
         }
