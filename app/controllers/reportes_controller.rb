@@ -20,7 +20,7 @@ class ReportesController < ApplicationController
   def imprimir_reporte_compras
     get_reporte_compras
     @proveedor = Proveedor.find_by(id: params[:persona_id])
-    
+
     render 'reportes/compras/imprimir_reporte'
   end
 
@@ -34,7 +34,7 @@ class ReportesController < ApplicationController
   def imprimir_reporte_ventas
     get_reporte_ventas
     @cliente = Cliente.find_by(id: params[:persona_id])
-    
+
     render 'reportes/ventas/imprimir_reporte'
   end
 

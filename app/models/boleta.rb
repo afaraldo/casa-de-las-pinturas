@@ -16,6 +16,9 @@ class Boleta < ActiveRecord::Base
   accepts_nested_attributes_for :recibos_detalles, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :recibos, reject_if: :all_blank, allow_destroy: true
 
+  has_many :nota_credito_debito_detalles, class_name: 'DevolucionesBoleta', foreign_key: "boleta_id", inverse_of: :boleta, dependent: :destroy
+  has_many :notas_creditos_debitos, class_name: 'NotasCreditosDebito', dependent: :destroy, through: :nota_credito_debito_detalles
+
   enumerize :condicion, in: [:contado, :credito], predicates: true
   enumerize :estado, in: [:pendiente, :pagado], predicates: true
 
@@ -43,6 +46,7 @@ class Boleta < ActiveRecord::Base
   validates :condicion, presence: true
   validate  :condicion_cambiada?, on: :update
   validate :tiene_pagos_asociados?, on: [:update, :destroy]
+  validate :fecha_futura
 
   with_options if: :credito? do |b|
     b.validates :fecha_vencimiento, presence: true
@@ -52,6 +56,14 @@ class Boleta < ActiveRecord::Base
 
   def numero
     id
+  end
+
+  def es_editable?
+    if (credito? && recibos_detalles.empty?) || contado?
+      true
+    else
+      false
+    end
   end
 
   def importe_pagado
@@ -89,7 +101,7 @@ class Boleta < ActiveRecord::Base
     recibo_detalle = recibos_detalles.first
     pago = recibo_detalle.recibo if recibo_detalle
     if pago
-      m = pago.check_detalles_negativos
+      m = pago.check_detalles_negativos borrado
     end
     m
   end

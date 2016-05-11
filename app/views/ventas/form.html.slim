@@ -156,47 +156,54 @@ section.content
             /          td.text-bold Total a pagar:
             /          td.text-right.text-bold Gs. 328.200
 
-            /.form-subtitle
-            /  label Formas de pago
-            /br
-            /table.table.table-bordered.detalles-table.calcular-pagos-total
-            /  thead
-            /    tr
-            /      th Forma
-            /      th Moneda
-            /      th Cotización
-            /      th Monto
-            /      th Subtotal
-            /      th
-            /  tbody#compra-detalles-body
-            /    = render 'pago_fields'
-            /  tfoot
-            /    tr
-            /      td colspan="3"
-            /      td.text-right.text-bold
-            /        | Total:
-            /      td.table-total.text-right.text-bold
-            /        span
-            /      td
-            /= link_to_add_association '<i class="fa fa-plus"></i> Agregar forma de pago'.html_safe, f, :detalles, class: 'btn btn-default pull-right',
-            /                                'data-association-insertion-node' => '#compra-detalles-body',
-            /                                'data-association-insertion-method' => 'append'
-          .box-footer
-            - if @stock_negativo && @stock_negativo.size > 0
-              input.hidden name="guardar_si_o_si" value= "true"
-              .alert.alert-warning
-                p
-                  | La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}.
-                p Esta seguro que quiere continuar?
-                .form-actions
-                  = link_to 'Cancelar', ventas_path, class: 'btn btn-default'
+            .row#pago-detalles.hide
+              .col-xs-12
+                .form-subtitle
+                  label Formas de cobro
+                br
+                - esconder_validacion_detalles = @venta.errors.has_key?(:"recibos_detalles.recibo.importe_total") ? '' : 'hide'
+                p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de cobro debe ser igual al total a cobrar de las boletas seleccionadas.
+                = f.simple_fields_for :recibos_detalles do |r_form|
+                  = r_form.simple_fields_for :recibo, @cobro do |recibo_form|
+                    table.table.table-bordered.detalles-table.calcular-cobros-total
+                      thead
+                        tr
+                          th Forma
+                          th Moneda
+                          th Monto
+                          th Cotización
+                          th Subtotal
+                      tbody#cobro-detalles-body
+                        = recibo_form.simple_fields_for :detalles do |detalle|
+                          = render 'cobros/detalles', f: detalle
+                      tfoot
+                        tr
+                          td colspan="3"
+                          td.text-right.text-bold
+                            | Total:
+                          td.table-total.text-right.text-bold
+                            span
+            .box-footer
+              - if (@stock_negativo && @stock_negativo.size > 0) || (@saldo_negativo && @saldo_negativo.size > 0)
+                input.hidden name="guardar_si_o_si" value= "true"
+                .alert.alert-warning
+                  - if  @stock_negativo && @stock_negativo.size > 0
+                    p
+                      | La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}.
+                    p Esta seguro que quiere continuar?
+                  - if @saldo_negativo && @saldo_negativo.size > 0
+                    p
+                      | La operación va a provocar disponibilidad negativa en los siguientes monedas: #{@saldo_negativo.map {|m| m.nombre }.to_sentence}.
+                    p Esta seguro que quiere continuar?
+                  .form-actions
+                    = link_to 'Cancelar', ventas_path, class: 'btn btn-default'
+                    | #{' '}
+                    button.btn.btn-primary type="submit" Continuar
+              - else
+                .form-actions.text-right
+                  = link_to 'Cancelar', @venta.new_record? ? ventas_path : venta_path(@venta.id), class: 'btn btn-default'
                   | #{' '}
-                  button.btn.btn-primary type="submit" Continuar
-            - else
-              .form-actions.text-right
-                = link_to 'Cancelar', @venta.new_record? ? ventas_path : venta_path(@venta.id), class: 'btn btn-default'
-                | #{' '}
-                button.btn.btn-primary type="submit" Guardar Venta
+                  button.btn.btn-primary type="submit" Guardar Venta
 
 javascript:
   BoletasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");

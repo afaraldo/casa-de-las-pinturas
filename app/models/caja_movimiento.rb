@@ -6,6 +6,7 @@ class CajaMovimiento < ActiveRecord::Base
 
   before_validation :set_importe_total
   before_destroy :check_detalles_negativos
+  after_initialize :set_caja
   after_save :actualizar_extracto
 
   belongs_to :categoria_gasto
@@ -28,6 +29,10 @@ class CajaMovimiento < ActiveRecord::Base
   validates :detalles, length: { minimum: 1 }
   validate  :fecha_futura
   validates :categoria_gasto, presence: true, if: :egreso?
+
+  def set_caja
+    self.caja_id ||= Caja.get_caja_por_forma(:efectivo).id
+  end
 
   def set_importe_total
     self.importe_total = 0

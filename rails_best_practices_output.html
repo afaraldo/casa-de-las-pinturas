@@ -60,59 +60,27 @@
       to see more useful Rails Best Practices.
     </p>
     <p>
-        Found 35 warnings.
+        Found 17 warnings.
     </p>
     <table>
-          <tr>
-              <td>
-                <input type="checkbox" class="error-type" id="AlwaysAddDbIndexReview" value="AlwaysAddDbIndexReview"
-                />&nbsp;<label for="AlwaysAddDbIndexReview">Always Add Db Index</label>
-              </td>
-              <td>
-                <input type="checkbox" class="error-type" id="MoveModelLogicIntoModelReview" value="MoveModelLogicIntoModelReview"
-                />&nbsp;<label for="MoveModelLogicIntoModelReview">Move Model Logic Into Model</label>
-              </td>
-              <td>
-                <input type="checkbox" class="error-type" id="SimplifyRenderInViewsReview" value="SimplifyRenderInViewsReview"
-                />&nbsp;<label for="SimplifyRenderInViewsReview">Simplify Render In Views</label>
-              </td>
-          </tr>
-          <tr>
-              <td>
-                <input type="checkbox" class="error-type" id="MoveCodeIntoControllerReview" value="MoveCodeIntoControllerReview"
-                />&nbsp;<label for="MoveCodeIntoControllerReview">Move Code Into Controller</label>
-              </td>
-              <td>
-                <input type="checkbox" class="error-type" id="RemoveUnusedMethodsInControllersReview" value="RemoveUnusedMethodsInControllersReview"
-                />&nbsp;<label for="RemoveUnusedMethodsInControllersReview">Remove Unused Methods In Controllers</label>
-              </td>
-              <td>
-                <input type="checkbox" class="error-type" id="UseScopeAccessReview" value="UseScopeAccessReview"
-                />&nbsp;<label for="UseScopeAccessReview">Use Scope Access</label>
-              </td>
-          </tr>
-          <tr>
-              <td>
-                <input type="checkbox" class="error-type" id="MoveCodeIntoHelperReview" value="MoveCodeIntoHelperReview"
-                />&nbsp;<label for="MoveCodeIntoHelperReview">Move Code Into Helper</label>
-              </td>
-              <td>
-                <input type="checkbox" class="error-type" id="RemoveUnusedMethodsInModelsReview" value="RemoveUnusedMethodsInModelsReview"
-                />&nbsp;<label for="RemoveUnusedMethodsInModelsReview">Remove Unused Methods In Models</label>
-              </td>
-              <td>
-                <input type="checkbox" class="error-type" id="RemoveTrailingWhitespaceCheck" value="RemoveTrailingWhitespaceCheck"
-                />&nbsp;<label for="RemoveTrailingWhitespaceCheck">Remove Trailing Whitespace</label>
-              </td>
-          </tr>
           <tr>
               <td>
                 <input type="checkbox" class="error-type" id="MoveCodeIntoModelReview" value="MoveCodeIntoModelReview"
                 />&nbsp;<label for="MoveCodeIntoModelReview">Move Code Into Model</label>
               </td>
               <td>
-                <input type="checkbox" class="error-type" id="ReplaceInstanceVariableWithLocalVariableReview" value="ReplaceInstanceVariableWithLocalVariableReview"
-                />&nbsp;<label for="ReplaceInstanceVariableWithLocalVariableReview">Replace Instance Variable With Local Variable</label>
+                <input type="checkbox" class="error-type" id="RemoveUnusedMethodsInModelsReview" value="RemoveUnusedMethodsInModelsReview"
+                />&nbsp;<label for="RemoveUnusedMethodsInModelsReview">Remove Unused Methods In Models</label>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                <input type="checkbox" class="error-type" id="MoveModelLogicIntoModelReview" value="MoveModelLogicIntoModelReview"
+                />&nbsp;<label for="MoveModelLogicIntoModelReview">Move Model Logic Into Model</label>
+              </td>
+              <td>
+                <input type="checkbox" class="error-type" id="UseScopeAccessReview" value="UseScopeAccessReview"
+                />&nbsp;<label for="UseScopeAccessReview">Use Scope Access</label>
               </td>
           </tr>
         <tr>
@@ -131,58 +99,13 @@
         </tr>
       </thead>
       <tbody>
-          <tr class="AlwaysAddDbIndexReview">
+          <tr class="MoveCodeIntoModelReview">
             <td class='filename'>
-                db/schema.rb
+                app/views/compras/show.html.slim
             </td>
-            <td class='line'>175</td>
+            <td class='line'>stmts_add</td>
             <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/07/24/always-add-db-index/' target='_blank'>always add db index (mercaderia_extractos => [boleta_detalle_id])</a>
-            </td>
-          </tr>
-          <tr class="MoveCodeIntoControllerReview">
-            <td class='filename'>
-                app/views/reportes/imprimir_reporte_compras.html.slim
-            </td>
-            <td class='line'>16</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/07/24/move-code-into-controller/' target='_blank'>move code into controller</a>
-            </td>
-          </tr>
-          <tr class="MoveCodeIntoHelperReview">
-            <td class='filename'>
-                app/views/reportes/compras.html.slim
-            </td>
-            <td class='line'>30</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/07/24/move-code-into-helper/' target='_blank'>move code into helper (array_count >= 3)</a>
-            </td>
-          </tr>
-          <tr class="MoveCodeIntoHelperReview">
-            <td class='filename'>
-                app/views/welcome/compras_reporte.html.slim
-            </td>
-            <td class='line'>29</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/07/24/move-code-into-helper/' target='_blank'>move code into helper (array_count >= 3)</a>
-            </td>
-          </tr>
-          <tr class="MoveCodeIntoHelperReview">
-            <td class='filename'>
-                app/views/welcome/gastos_reporte.html.slim
-            </td>
-            <td class='line'>29</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/07/24/move-code-into-helper/' target='_blank'>move code into helper (array_count >= 3)</a>
-            </td>
-          </tr>
-          <tr class="MoveCodeIntoHelperReview">
-            <td class='filename'>
-                app/views/welcome/reporte_ventas_index.html.slim
-            </td>
-            <td class='line'>29</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/07/24/move-code-into-helper/' target='_blank'>move code into helper (array_count >= 3)</a>
+              <a href='http://rails-bestpractices.com/posts/2010/07/24/move-code-into-model/' target='_blank'>move code into model (@compra use_count > 2)</a>
             </td>
           </tr>
           <tr class="MoveCodeIntoModelReview">
@@ -196,20 +119,56 @@
           </tr>
           <tr class="MoveModelLogicIntoModelReview">
             <td class='filename'>
-                app/controllers/caja_movimientos_controller.rb
+                app/controllers/cobros_controller.rb
             </td>
-            <td class='line'>36</td>
+            <td class='line'>51</td>
             <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/07/21/move-model-logic-into-the-model/' target='_blank'>move model logic into model (@caja_movimiento use_count > 4)</a>
+              <a href='http://rails-bestpractices.com/posts/2010/07/21/move-model-logic-into-the-model/' target='_blank'>move model logic into model (@cobro use_count > 4)</a>
             </td>
           </tr>
           <tr class="MoveModelLogicIntoModelReview">
             <td class='filename'>
-                app/controllers/caja_movimientos_controller.rb
+                app/controllers/cobros_controller.rb
             </td>
-            <td class='line'>56</td>
+            <td class='line'>71</td>
             <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/07/21/move-model-logic-into-the-model/' target='_blank'>move model logic into model (@caja_movimiento use_count > 4)</a>
+              <a href='http://rails-bestpractices.com/posts/2010/07/21/move-model-logic-into-the-model/' target='_blank'>move model logic into model (@cobro use_count > 4)</a>
+            </td>
+          </tr>
+          <tr class="MoveModelLogicIntoModelReview">
+            <td class='filename'>
+                app/controllers/cobros_controller.rb
+            </td>
+            <td class='line'>51</td>
+            <td class='message'>
+              <a href='http://rails-bestpractices.com/posts/2010/07/21/move-model-logic-into-the-model/' target='_blank'>move model logic into model (@cobro use_count > 4)</a>
+            </td>
+          </tr>
+          <tr class="MoveModelLogicIntoModelReview">
+            <td class='filename'>
+                app/controllers/cobros_controller.rb
+            </td>
+            <td class='line'>71</td>
+            <td class='message'>
+              <a href='http://rails-bestpractices.com/posts/2010/07/21/move-model-logic-into-the-model/' target='_blank'>move model logic into model (@cobro use_count > 4)</a>
+            </td>
+          </tr>
+          <tr class="MoveModelLogicIntoModelReview">
+            <td class='filename'>
+                app/controllers/compras_controller.rb
+            </td>
+            <td class='line'>48</td>
+            <td class='message'>
+              <a href='http://rails-bestpractices.com/posts/2010/07/21/move-model-logic-into-the-model/' target='_blank'>move model logic into model (@compra use_count > 4)</a>
+            </td>
+          </tr>
+          <tr class="MoveModelLogicIntoModelReview">
+            <td class='filename'>
+                app/controllers/compras_controller.rb
+            </td>
+            <td class='line'>69</td>
+            <td class='message'>
+              <a href='http://rails-bestpractices.com/posts/2010/07/21/move-model-logic-into-the-model/' target='_blank'>move model logic into model (@compra use_count > 4)</a>
             </td>
           </tr>
           <tr class="MoveModelLogicIntoModelReview">
@@ -234,61 +193,16 @@
             <td class='filename'>
                 app/controllers/pagos_controller.rb
             </td>
-            <td class='line'>72</td>
+            <td class='line'>73</td>
             <td class='message'>
               <a href='http://rails-bestpractices.com/posts/2010/07/21/move-model-logic-into-the-model/' target='_blank'>move model logic into model (@pago use_count > 4)</a>
-            </td>
-          </tr>
-          <tr class="MoveModelLogicIntoModelReview">
-            <td class='filename'>
-                app/controllers/welcome_controller.rb
-            </td>
-            <td class='line'>17</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/07/21/move-model-logic-into-the-model/' target='_blank'>move model logic into model (Mercaderia use_count > 4)</a>
-            </td>
-          </tr>
-          <tr class="MoveModelLogicIntoModelReview">
-            <td class='filename'>
-                app/controllers/welcome_controller.rb
-            </td>
-            <td class='line'>24</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/07/21/move-model-logic-into-the-model/' target='_blank'>move model logic into model (Mercaderia use_count > 4)</a>
-            </td>
-          </tr>
-          <tr class="MoveModelLogicIntoModelReview">
-            <td class='filename'>
-                app/controllers/welcome_controller.rb
-            </td>
-            <td class='line'>31</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/07/21/move-model-logic-into-the-model/' target='_blank'>move model logic into model (Mercaderia use_count > 4)</a>
-            </td>
-          </tr>
-          <tr class="MoveModelLogicIntoModelReview">
-            <td class='filename'>
-                app/controllers/welcome_controller.rb
-            </td>
-            <td class='line'>58</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/07/21/move-model-logic-into-the-model/' target='_blank'>move model logic into model (Mercaderia use_count > 4)</a>
-            </td>
-          </tr>
-          <tr class="RemoveUnusedMethodsInControllersReview">
-            <td class='filename'>
-                app/controllers/caja_movimientos_controller.rb
-            </td>
-            <td class='line'>132</td>
-            <td class='message'>
-              <a href='' target='_blank'>remove unused methods (CajaMovimientosController#procesar_fechas)</a>
             </td>
           </tr>
           <tr class="RemoveUnusedMethodsInModelsReview">
             <td class='filename'>
                 app/models/boleta.rb
             </td>
-            <td class='line'>136</td>
+            <td class='line'>182</td>
             <td class='message'>
               <a href='' target='_blank'>remove unused methods (Boleta#fecha_futura)</a>
             </td>
@@ -297,7 +211,7 @@
             <td class='filename'>
                 app/models/boleta.rb
             </td>
-            <td class='line'>142</td>
+            <td class='line'>188</td>
             <td class='message'>
               <a href='' target='_blank'>remove unused methods (Boleta#fecha_vencimiento_es_menor_a_fecha?)</a>
             </td>
@@ -306,7 +220,7 @@
             <td class='filename'>
                 app/models/boleta.rb
             </td>
-            <td class='line'>155</td>
+            <td class='line'>201</td>
             <td class='message'>
               <a href='' target='_blank'>remove unused methods (Boleta#supera_limite_de_credito?)</a>
             </td>
@@ -329,96 +243,6 @@
               <a href='' target='_blank'>remove unused methods (User#email_changed?)</a>
             </td>
           </tr>
-          <tr class="ReplaceInstanceVariableWithLocalVariableReview">
-            <td class='filename'>
-                app/views/welcome/_cobros_form.html.slim
-            </td>
-            <td class='line'>7</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/07/24/replace-instance-variable-with-local-variable/' target='_blank'>replace instance variable with local variable</a>
-            </td>
-          </tr>
-          <tr class="SimplifyRenderInViewsReview">
-            <td class='filename'>
-                app/views/caja_movimientos/index.html.slim
-            </td>
-            <td class='line'>31</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/12/04/simplify-render-in-views/' target='_blank'>simplify render in views</a>
-            </td>
-          </tr>
-          <tr class="SimplifyRenderInViewsReview">
-            <td class='filename'>
-                app/views/welcome/cobros_index.html.slim
-            </td>
-            <td class='line'>32</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/12/04/simplify-render-in-views/' target='_blank'>simplify render in views</a>
-            </td>
-          </tr>
-          <tr class="SimplifyRenderInViewsReview">
-            <td class='filename'>
-                app/views/welcome/compras_index.html.slim
-            </td>
-            <td class='line'>42</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/12/04/simplify-render-in-views/' target='_blank'>simplify render in views</a>
-            </td>
-          </tr>
-          <tr class="SimplifyRenderInViewsReview">
-            <td class='filename'>
-                app/views/welcome/compras_reporte.html.slim
-            </td>
-            <td class='line'>39</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/12/04/simplify-render-in-views/' target='_blank'>simplify render in views</a>
-            </td>
-          </tr>
-          <tr class="SimplifyRenderInViewsReview">
-            <td class='filename'>
-                app/views/welcome/devoluciones_compra_index.html.slim
-            </td>
-            <td class='line'>26</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/12/04/simplify-render-in-views/' target='_blank'>simplify render in views</a>
-            </td>
-          </tr>
-          <tr class="SimplifyRenderInViewsReview">
-            <td class='filename'>
-                app/views/welcome/devoluciones_venta_index.html.slim
-            </td>
-            <td class='line'>26</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/12/04/simplify-render-in-views/' target='_blank'>simplify render in views</a>
-            </td>
-          </tr>
-          <tr class="SimplifyRenderInViewsReview">
-            <td class='filename'>
-                app/views/welcome/gastos_reporte.html.slim
-            </td>
-            <td class='line'>36</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/12/04/simplify-render-in-views/' target='_blank'>simplify render in views</a>
-            </td>
-          </tr>
-          <tr class="SimplifyRenderInViewsReview">
-            <td class='filename'>
-                app/views/welcome/pagos_index.html.slim
-            </td>
-            <td class='line'>32</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/12/04/simplify-render-in-views/' target='_blank'>simplify render in views</a>
-            </td>
-          </tr>
-          <tr class="SimplifyRenderInViewsReview">
-            <td class='filename'>
-                app/views/welcome/reporte_ventas_index.html.slim
-            </td>
-            <td class='line'>38</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/12/04/simplify-render-in-views/' target='_blank'>simplify render in views</a>
-            </td>
-          </tr>
           <tr class="UseScopeAccessReview">
             <td class='filename'>
                 app/controllers/empleados_controller.rb
@@ -426,24 +250,6 @@
             <td class='line'>58</td>
             <td class='message'>
               <a href='http://rails-bestpractices.com/posts/2010/07/20/use-scope-access/' target='_blank'>use scope access</a>
-            </td>
-          </tr>
-          <tr class="RemoveTrailingWhitespaceCheck">
-            <td class='filename'>
-                db/migrate/20160407034015_create_categoria_gastos.rb
-            </td>
-            <td class='line'>6</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/12/02/remove-trailing-whitespace/' target='_blank'>remove trailing whitespace</a>
-            </td>
-          </tr>
-          <tr class="RemoveTrailingWhitespaceCheck">
-            <td class='filename'>
-                app/views/caja_movimientos/index.html.slim
-            </td>
-            <td class='line'>11</td>
-            <td class='message'>
-              <a href='http://rails-bestpractices.com/posts/2010/12/02/remove-trailing-whitespace/' target='_blank'>remove trailing whitespace</a>
             </td>
           </tr>
       </tbody>

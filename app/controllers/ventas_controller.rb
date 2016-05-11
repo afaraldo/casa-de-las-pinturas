@@ -1,6 +1,5 @@
 class VentasController < ApplicationController
   layout 'imprimir', only: [:imprimir]
-
   before_action :set_venta, only: [:show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
 
@@ -30,11 +29,17 @@ class VentasController < ApplicationController
   def new
     @venta = Venta.new
     @venta.detalles.build
+
+    @recibo_detalle = @venta.recibos_detalles.build
+    @cobro = @recibo_detalle.build_recibo
+    @cobro.build_detalles
+
     render :form
   end
 
   # GET /ventas/1/edit
   def edit
+    @cobro.rebuild_detalles if @cobro
     render :form
   end
 
@@ -43,13 +48,14 @@ class VentasController < ApplicationController
   def create
     @venta = Venta.new(venta_params)
     @stock_negativo = params[:guardar_si_o_si].present? ? [] : @venta.check_detalles_negativos
-
     respond_to do |format|
       Venta.transaction do
-        if @stock_negativo.size <= 0 && @venta.save
+        if @stock_negativo.size == 0 && @venta.save
           format.html { redirect_to @venta, notice: t('mensajes.save_success', recurso: 'la venta') }
           format.json { render :show, status: :created, location: @venta }
         else
+          @cobro = @venta.recibos_detalles.first.recibo if @venta.recibos_detalles.first
+          @cobro.rebuild_detalles if @cobro
           format.html { render :form }
           format.json { render json: @venta.errors, status: :unprocessable_entity }
         end
@@ -63,17 +69,21 @@ class VentasController < ApplicationController
   def update
     @venta.assign_attributes(venta_params)
     @stock_negativo = params[:guardar_si_o_si].present? ? [] : @venta.check_detalles_negativos
+    @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @venta.check_detalles_negativos_pago
     respond_to do |format|
       Venta.transaction do
-        if @stock_negativo.size <= 0 && @venta.save
+        if @stock_negativo.size <= 0 && @saldo_negativo.size <= 0 && @venta.save
           format.html { redirect_to @venta, notice: t('mensajes.save_success', recurso: 'la venta') }
           format.json { render :show, status: :created, location: @venta }
         else
+          @cobro = @venta.recibos_detalles.first.recibo if @venta.recibos_detalles.first
+          @cobro.rebuild_detalles if @cobro
           format.html { render :form }
           format.json { render json: @venta.errors, status: :unprocessable_entity }
         end
       end
     end
+
   end
 
   # DELETE /venta/1
@@ -95,26 +105,56 @@ class VentasController < ApplicationController
   private
 
     def get_ventas
+      procesar_fechas
       @search = Venta.search(params[:q])
       @ventas = @search.result.includes(:persona, :detalles).page(params[:page]).per(action_name == 'imprimir' ? LIMITE_REGISTROS_IMPRIMIR : 25)
     end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_venta
       @venta = Venta.find(params[:id])
+      @cobro = @venta.recibos.first
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def venta_params
-      procesar_cantidades
+      procesar_cantidades_mercaderias
+      procesar_cantidades_cobros
+      params[:venta].delete("recibos_detalles_attributes") if params[:venta][:condicion] == "credito"
       params.require(:venta).permit(:persona_id, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :condicion,
-                                     detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy])
+                                     recibos_detalles_attributes:[:id, :_destroy,
+                                       recibo_attributes:  [:id, :fecha, :persona_id, :_destroy,
+                                         detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma]
+                                       ]
+                                     ],
+                                     detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy],
+                                     )
     end
 
-    def procesar_cantidades
+    # Setear las fechas "hasta" para que incluya el dia entero
+    # 01/03/2016 => 2016-03-01 23:59:59
+    def procesar_fechas
+      if params[:q].present? && params[:q][:fecha_lt].present?
+        params[:q][:fecha_lt] = params[:q][:fecha_lt].to_datetime.end_of_day
+      end
+    end
+
+    def procesar_cantidades_mercaderias
       params[:venta][:detalles_attributes].each do |i, d|
         params[:venta][:detalles_attributes][i][:cantidad] = cantidad_a_numero(d[:cantidad])
         params[:venta][:detalles_attributes][i][:precio_unitario] = cantidad_a_numero(d[:precio_unitario])
       end
     end
+
+    def procesar_cantidades_cobros
+      if params[:venta][:recibos_detalles_attributes]
+        cobro = params[:venta][:recibos_detalles_attributes]["0"][:recibo_attributes]
+        cobro[:detalles_attributes].each do |i, d|
+          cobro[:detalles_attributes][i][:monto] = cantidad_a_numero(d[:monto])
+          cobro[:detalles_attributes][i][:cotizacion] = cantidad_a_numero(d[:cotizacion])
+        end
+      end
+    end
+
 
 end

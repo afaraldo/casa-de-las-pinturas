@@ -18,7 +18,7 @@ class Recibo < ActiveRecord::Base
 
   has_many :detalles, class_name: 'ReciboDetalle', dependent: :destroy, inverse_of: :recibo
 
-  has_many :boletas_detalles, class_name: 'ReciboBoleta', foreign_key: "recibo_id", inverse_of: :recibo
+  has_many :boletas_detalles, class_name: 'ReciboBoleta', dependent: :destroy, foreign_key: "recibo_id", inverse_of: :recibo
   has_many :boletas, dependent: :destroy, class_name: 'Boleta', through: :boletas_detalles
 
   accepts_nested_attributes_for :detalles, reject_if: proc { |attrs| (attrs['monto'].to_f * attrs['cotizacion'].to_f) <= 0 }, allow_destroy: true

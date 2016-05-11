@@ -33,12 +33,22 @@ module MovimientosHelper
                         motivo: detalle.movimiento_mercaderia.motivo,
                         ingreso: es_ingreso ? detalle.cantidad : 0,
                         egreso: es_ingreso ? 0 : detalle.cantidad}
+
         when 'BoletaDetalle'
           detalle = m.boleta_detalle
           es_ingreso = detalle.boleta.instance_of?(Compra)
           resultado = {url: "/#{es_ingreso ? 'compras' : 'ventas'}/#{detalle.boleta_id}",
                        fecha: detalle.boleta.fecha,
                        motivo: detalle.boleta.movimiento_motivo,
+                       ingreso: es_ingreso ? detalle.cantidad : 0,
+                       egreso: es_ingreso ? 0 : detalle.cantidad}
+
+        when 'NotaCreditoDebitoDetalle'
+          detalle = m.nota_credito_debito_detalle
+          es_ingreso = !detalle.notas_creditos_debito.instance_of?(DevolucionCompra)
+          resultado = {url: "/#{es_ingreso ? 'devolucion_compras' : 'devolucion_ventas'}/#{detalle.notas_creditos_debito_id}",
+                       fecha: detalle.notas_creditos_debito.fecha,
+                       motivo: detalle.notas_creditos_debito.movimiento_motivo,
                        ingreso: es_ingreso ? detalle.cantidad : 0,
                        egreso: es_ingreso ? 0 : detalle.cantidad}
         # -------------------------------
@@ -50,6 +60,14 @@ module MovimientosHelper
                         fecha: recibo.fecha,
                         motivo: recibo.movimiento_motivo,
                         egreso: recibo.total_pagado,
+                        ingreso: 0}
+
+         when 'NotasCreditosDebito'
+          notas_creditos_debito = m.notas_creditos_debito
+          resultado = {url: "/#{notas_creditos_debito.instance_of?(DevolucionCompra) ? 'devolucion_compras' : 'devolucion_ventas'}/#{notas_creditos_debito.id}",
+                        fecha: notas_creditos_debito.fecha,
+                        motivo: notas_creditos_debito.movimiento_motivo,
+                        egreso: notas_creditos_debito.importe_total,
                         ingreso: 0}
         when 'Boleta'
           boleta = m.boleta
@@ -86,5 +104,4 @@ module MovimientosHelper
 
     resultados
   end
-
 end

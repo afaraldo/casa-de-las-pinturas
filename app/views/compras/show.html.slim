@@ -12,14 +12,18 @@ section.content
           h3.box-title
             = "Compra Nro. #{@compra.numero}".html_safe
           .box-tools
-            = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_compra_path(@compra),  html_options = {class: 'btn btn-default'}
-            = ' '
-            - if (@compra.credito? && @compra.recibos_detalles.empty?) || @compra.contado?
+            - if @compra.es_editable?
+              = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_compra_path(@compra),  html_options = {class: 'btn btn-default'}
+              = ' '
               - if @stock_negativo && @stock_negativo.size > 0
                 = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, compra_path(@compra), method: 'delete', data: {confirm: "La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}. ¿Seguro que desea eliminar la compra?"}, class: 'btn btn-danger'
               - else
                 = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, compra_path(@compra), method: 'delete', data: {confirm: "¿Desea eliminar la compra?"}, class: 'btn btn-danger'
             - else
+              button.btn.btn-default.disabled data-toggle="tooltip" title="No se puede editar la compra porque tiene pagos asociados."
+                i.fa.fa-trash
+                |  Editar
+              = ' '
               button.btn.btn-danger.disabled data-toggle="tooltip" title="No se puede eliminar la compra porque tiene pagos asociados."
                 i.fa.fa-trash
                 |  Eliminar
@@ -99,7 +103,7 @@ section.content
                 - total = 0
                 - @compra.recibos_detalles.each do |p|
                   - total += p.monto_utilizado
-                  tr.fila-clickeable data-url="#{pago_path(p.id)}"
+                  tr.fila-clickeable data-url="#{pago_path(p.recibo.id)}"
                     td = localize(p.recibo.fecha.to_date)
                     td = p.recibo.numero
                     td.text-right = number_to_currency(p.monto_utilizado)

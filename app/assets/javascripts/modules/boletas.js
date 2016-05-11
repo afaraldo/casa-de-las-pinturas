@@ -46,7 +46,7 @@ var BoletasUI = (function(){
         NumberHelper.mascaraMoneda('.maskMoneda');
 
         TablasHelper.calcularTotalEvent('.calcular-total');
-        TablasHelper.calcularTotalEvent('.calcular-pagos-total');
+        TablasHelper.calcularTotalEvent('.calcular-cobros-total');
 
         DatepickerHelper.initDatepicker('#boleta-fecha');
         DatepickerHelper.initDatepicker('#boleta-fecha-vencimiento', {limited: false, orientation: 'bottom'});

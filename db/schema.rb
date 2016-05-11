@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160503012324) do
+ActiveRecord::Schema.define(version: 20160510030257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -161,17 +161,30 @@ ActiveRecord::Schema.define(version: 20160503012324) do
 
   create_table "cuentas_corrientes_extractos", force: :cascade do |t|
     t.integer  "persona_id"
-    t.datetime "fecha",                      null: false
-    t.string   "movimiento_tipo", limit: 50
+    t.datetime "fecha",                               null: false
+    t.string   "movimiento_tipo",          limit: 50
     t.integer  "boleta_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.integer  "recibo_id"
+    t.integer  "notas_creditos_debito_id"
   end
 
   add_index "cuentas_corrientes_extractos", ["boleta_id"], name: "index_cuentas_corrientes_extractos_on_boleta_id", using: :btree
+  add_index "cuentas_corrientes_extractos", ["notas_creditos_debito_id"], name: "index_cuentas_corrientes_extractos_on_notas_creditos_debito_id", using: :btree
   add_index "cuentas_corrientes_extractos", ["persona_id"], name: "index_cuentas_corrientes_extractos_on_persona_id", using: :btree
   add_index "cuentas_corrientes_extractos", ["recibo_id"], name: "index_cuentas_corrientes_extractos_on_recibo_id", using: :btree
+
+  create_table "devoluciones_boleta", force: :cascade do |t|
+    t.integer  "notas_creditos_debito_id"
+    t.integer  "boleta_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "devoluciones_boleta", ["boleta_id"], name: "index_devoluciones_boleta_on_boleta_id", using: :btree
+  add_index "devoluciones_boleta", ["notas_creditos_debito_id"], name: "index_devoluciones_boleta_on_notas_creditos_debito_id", using: :btree
 
   create_table "mercaderia_extractos", force: :cascade do |t|
     t.integer  "mercaderia_id"
@@ -181,10 +194,13 @@ ActiveRecord::Schema.define(version: 20160503012324) do
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
     t.integer  "boleta_detalle_id"
+    t.integer  "nota_credito_debito_detalle_id"
   end
 
+  add_index "mercaderia_extractos", ["boleta_detalle_id"], name: "index_mercaderia_extractos_on_boleta_detalle_id", using: :btree
   add_index "mercaderia_extractos", ["mercaderia_id"], name: "index_mercaderia_extractos_on_mercaderia_id", using: :btree
   add_index "mercaderia_extractos", ["movimiento_mercaderia_detalle_id"], name: "index_mercaderia_extractos_on_movimiento_mercaderia_detalle_id", using: :btree
+  add_index "mercaderia_extractos", ["nota_credito_debito_detalle_id"], name: "index_mercaderia_extractos_on_nota_credito_debito_detalle_id", using: :btree
 
   create_table "mercaderia_periodo_balances", force: :cascade do |t|
     t.integer  "mercaderia_id"
@@ -209,7 +225,7 @@ ActiveRecord::Schema.define(version: 20160503012324) do
     t.datetime "deleted_at"
     t.datetime "created_at",                                                              null: false
     t.datetime "updated_at",                                                              null: false
-    t.decimal  "stock",                            precision: 15, scale: 3, default: 0.0, null: false
+    t.decimal  "stock_inicial",                    precision: 15, scale: 3, default: 0.0, null: false
     t.decimal  "stock_minimo",                     precision: 15, scale: 2, default: 0.0, null: false
   end
 
@@ -250,6 +266,34 @@ ActiveRecord::Schema.define(version: 20160503012324) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "nota_credito_debito_detalles", force: :cascade do |t|
+    t.integer  "notas_creditos_debito_id"
+    t.integer  "mercaderia_id"
+    t.decimal  "cantidad",                 precision: 15, scale: 3, null: false
+    t.decimal  "precio_unitario",          precision: 15, scale: 2, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+  end
+
+  add_index "nota_credito_debito_detalles", ["mercaderia_id"], name: "index_nota_credito_debito_detalles_on_mercaderia_id", using: :btree
+  add_index "nota_credito_debito_detalles", ["notas_creditos_debito_id"], name: "index_nota_credito_debito_detalles_on_notas_creditos_debito_id", using: :btree
+
+  create_table "notas_creditos_debitos", force: :cascade do |t|
+    t.integer  "persona_id"
+    t.datetime "fecha",                                                null: false
+    t.string   "motivo",                                               null: false
+    t.integer  "numero"
+    t.decimal  "importe_total",               precision: 15, scale: 2
+    t.decimal  "credito_restante",            precision: 15, scale: 2
+    t.string   "tipo",             limit: 20
+    t.datetime "deleted_at"
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
+  end
+
+  add_index "notas_creditos_debitos", ["persona_id"], name: "index_notas_creditos_debitos_on_persona_id", using: :btree
+
   create_table "personas", force: :cascade do |t|
     t.string   "nombre",           limit: 150
     t.string   "telefono",         limit: 50
@@ -273,8 +317,10 @@ ActiveRecord::Schema.define(version: 20160503012324) do
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
     t.datetime "deleted_at"
+    t.integer  "caja_id"
   end
 
+  add_index "recibo_detalles", ["caja_id"], name: "index_recibo_detalles_on_caja_id", using: :btree
   add_index "recibo_detalles", ["moneda_id"], name: "index_recibo_detalles_on_moneda_id", using: :btree
   add_index "recibo_detalles", ["recibo_id"], name: "index_recibo_detalles_on_recibo_id", using: :btree
 
@@ -360,15 +406,23 @@ ActiveRecord::Schema.define(version: 20160503012324) do
   add_foreign_key "caja_saldos", "monedas"
   add_foreign_key "cuenta_corriente_periodo_balances", "personas"
   add_foreign_key "cuentas_corrientes_extractos", "boletas"
+  add_foreign_key "cuentas_corrientes_extractos", "notas_creditos_debitos"
   add_foreign_key "cuentas_corrientes_extractos", "personas"
   add_foreign_key "cuentas_corrientes_extractos", "recibos"
+  add_foreign_key "devoluciones_boleta", "boletas"
+  add_foreign_key "devoluciones_boleta", "notas_creditos_debitos"
   add_foreign_key "mercaderia_extractos", "boleta_detalles"
   add_foreign_key "mercaderia_extractos", "mercaderias"
   add_foreign_key "mercaderia_extractos", "movimiento_mercaderia_detalles"
+  add_foreign_key "mercaderia_extractos", "nota_credito_debito_detalles"
   add_foreign_key "mercaderia_periodo_balances", "mercaderias"
   add_foreign_key "mercaderias", "categorias"
   add_foreign_key "movimiento_mercaderia_detalles", "mercaderias"
   add_foreign_key "movimiento_mercaderia_detalles", "movimiento_mercaderias"
+  add_foreign_key "nota_credito_debito_detalles", "mercaderias"
+  add_foreign_key "nota_credito_debito_detalles", "notas_creditos_debitos"
+  add_foreign_key "notas_creditos_debitos", "personas"
+  add_foreign_key "recibo_detalles", "cajas"
   add_foreign_key "recibo_detalles", "monedas"
   add_foreign_key "recibo_detalles", "recibos"
   add_foreign_key "recibos", "personas"

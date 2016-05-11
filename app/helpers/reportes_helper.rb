@@ -1,7 +1,7 @@
 module ReportesHelper
 
   def ventas_grupos
-    [['Cliente', 'persona'], ['Día', 'dia'], ['Mes', 'month'], ['Año', 'year']]    
+    [['Cliente', 'persona'], ['Día', 'dia'], ['Mes', 'month'], ['Año', 'year']]
   end
 
   def gastos_grupos
@@ -10,6 +10,10 @@ module ReportesHelper
 
   def caja_grupos
     [['Día', 'dia'], ['Mes', 'month'], ['Año', 'year']]
+  end
+
+  def compras_grupos
+    [['Proveedor', 'persona'], ['Día', 'dia'], ['Mes', 'month'], ['Año', 'year']]
   end
 
   def agrupado_por_titulo(agrupado_por)
