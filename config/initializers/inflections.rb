@@ -27,6 +27,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'notas_creditos_debito','notas_creditos_debitos'
   inflect.irregular 'nota_credito_debito_detalle','nota_credito_debito_detalles'
   inflect.irregular 'devolucion_compra','devolucion_compras'
+  inflect.irregular 'devolucion_venta','devolucion_ventas'
 end
 
 # These inflection rules are supported but not enabled by default:

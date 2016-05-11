@@ -1,0 +1,3 @@
+| $("#devolucion-ventas-table").html("#{escape_javascript(render partial: 'list', format: 'html', locals: {devolucion_ventas: @devolucion_ventas})}");
+| $('#devolucion-ventas-paginate-container').html("#{escape_javascript(paginate(@devolucion_ventas, remote: true)) }");
+| $('.buscador-resultados > .overlay').remove();
