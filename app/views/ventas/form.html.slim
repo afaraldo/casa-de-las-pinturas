@@ -165,7 +165,7 @@ section.content
                 p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de cobro debe ser igual al total a cobrar de las boletas seleccionadas.
                 = f.simple_fields_for :recibos_detalles do |r_form|
                   = r_form.simple_fields_for :recibo, @cobro do |recibo_form|
-                    table.table.table-bordered.detalles-table.calcular-cobros-total
+                    table.table.table-bordered.detalles-table.calcular-pagos-total
                       thead
                         tr
                           th Forma

@@ -124,7 +124,7 @@ class VentasController < ApplicationController
       params.require(:venta).permit(:persona_id, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :condicion,
                                      recibos_detalles_attributes:[:id, :_destroy,
                                        recibo_attributes:  [:id, :fecha, :persona_id, :_destroy,
-                                         detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma]
+                                         detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma, :_destroy]
                                        ]
                                      ],
                                      detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy],
@@ -150,6 +150,7 @@ class VentasController < ApplicationController
       if params[:venta][:recibos_detalles_attributes]
         cobro = params[:venta][:recibos_detalles_attributes]["0"][:recibo_attributes]
         cobro[:detalles_attributes].each do |i, d|
+          cobro[:detalles_attributes][i][:_destroy] = '1' if cantidad_a_numero(d[:monto]) == 0 # marcar para eliminar si el monto es cero
           cobro[:detalles_attributes][i][:monto] = cantidad_a_numero(d[:monto])
           cobro[:detalles_attributes][i][:cotizacion] = cantidad_a_numero(d[:cotizacion])
         end
