@@ -1,0 +1,4 @@
+- if @venta_detalles.size == 0
+  | DevolucionVentasUI.noHayBoletas("#{@cliente.nombre}");
+- else
+  | $('#venta-detalles-body').html("#{escape_javascript(render 'venta_detalle', devolucion_venta: @devolucion_venta, ventas: @venta_detalles, actualizando: false)}");

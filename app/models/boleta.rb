@@ -8,16 +8,16 @@ class Boleta < ActiveRecord::Base
   belongs_to :persona, foreign_key: "persona_id", inverse_of: :boletas
 
   has_many :detalles, class_name: 'BoletaDetalle', dependent: :destroy, inverse_of: :boleta
-  accepts_nested_attributes_for :detalles, reject_if: :all_blank, allow_destroy: true
 
   has_many :recibos_detalles, class_name: 'ReciboBoleta', foreign_key: "boleta_id", inverse_of: :boleta
   has_many :recibos, class_name: 'Recibo', through: :recibos_detalles
 
-  accepts_nested_attributes_for :recibos_detalles, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :recibos, reject_if: :all_blank, allow_destroy: true
-
   has_many :nota_credito_debito_detalles, class_name: 'DevolucionesBoleta', foreign_key: "boleta_id", inverse_of: :boleta, dependent: :destroy
   has_many :notas_creditos_debitos, class_name: 'NotasCreditosDebito', dependent: :destroy, through: :nota_credito_debito_detalles
+
+  accepts_nested_attributes_for :detalles, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :recibos_detalles, reject_if: :all_blank, allow_destroy: true
+  # accepts_nested_attributes_for :recibos, reject_if: :all_blank, allow_destroy: true
 
   enumerize :condicion, in: [:contado, :credito], predicates: true
   enumerize :estado, in: [:pendiente, :pagado], predicates: true
@@ -54,6 +54,19 @@ class Boleta < ActiveRecord::Base
     b.validate  :supera_limite_de_credito?, on: :create
   end
 
+  # Se controlan los posibles detalles y saldos negativos y se guarda la boleta
+  def guardar(atributos, guardar_si_o_si)
+    self.assign_attributes(atributos)
+
+    stock_negativo = guardar_si_o_si ? [] : self.check_detalles_negativos
+    saldo_negativo = guardar_si_o_si ? [] : self.check_detalles_negativos_pago
+
+    errors.add(:stock_negativo, "La operación va a provocar existencia negativa en los siguientes productos: #{stock_negativo.map {|m| m.nombre }.to_sentence}") if stock_negativo.size > 0
+    errors.add(:saldo_negativo, "La operación va a provocar disponibilidad negativa en los siguientes monedas: #{saldo_negativo.map {|m| m.nombre }.to_sentence}") if saldo_negativo.size > 0
+
+    stock_negativo.size <= 0 && saldo_negativo.size <= 0 && save
+  end
+
   def numero
     id
   end
@@ -71,13 +84,20 @@ class Boleta < ActiveRecord::Base
   end
 
   def set_pago
-      recibo_boleta = recibos_detalles.first
-      pago = recibo_boleta.recibo
-      pago.fecha = fecha
-      pago.condicion = "contado"
-      pago.persona = persona
-      pago.boletas_detalles << recibo_boleta if new_record?
-      recibo_boleta.monto_utilizado = importe_total
+
+    recibo_boleta = recibos_detalles.first
+    recibo_boleta.monto_utilizado = importe_total
+
+    # HACK? Para forzar que se actualize el recibo_detalle y se actualice el recibo.
+    # Porque pasa esto?: es un misterio todavia. :)
+    recibo_boleta.updated_at = Time.zone.now
+    #---------------------------------------
+
+    recibo_boleta.recibo.fecha = fecha
+    recibo_boleta.recibo.condicion = "contado"
+    recibo_boleta.recibo.persona = persona
+    recibo_boleta.recibo.boletas_detalles = [recibo_boleta] # Para que la validacion de recibo tenga el nuevo monto_utilizado
+
   end
 
   def destroy_pagos

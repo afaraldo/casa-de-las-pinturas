@@ -165,7 +165,7 @@ section.content
                 p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de cobro debe ser igual al total a cobrar de las boletas seleccionadas.
                 = f.simple_fields_for :recibos_detalles do |r_form|
                   = r_form.simple_fields_for :recibo, @cobro do |recibo_form|
-                    table.table.table-bordered.detalles-table.calcular-cobros-total
+                    table.table.table-bordered.detalles-table.calcular-pagos-total
                       thead
                         tr
                           th Forma
@@ -184,16 +184,14 @@ section.content
                           td.table-total.text-right.text-bold
                             span
             .box-footer
-              - if (@stock_negativo && @stock_negativo.size > 0) || (@saldo_negativo && @saldo_negativo.size > 0)
+              - if @venta.errors.has_key?(:stock_negativo) || @venta.errors.has_key?(:saldo_negativo)
                 input.hidden name="guardar_si_o_si" value= "true"
-                .alert.alert-warning
-                  - if  @stock_negativo && @stock_negativo.size > 0
-                    p
-                      | La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}.
+                .alert.alert-warning#mensaje-saldo-negativo
+                  - if @venta.errors.has_key?(:stock_negativo)
+                    p = @venta.errors.get(:stock_negativo).to_sentence
                     p Esta seguro que quiere continuar?
-                  - if @saldo_negativo && @saldo_negativo.size > 0
-                    p
-                      | La operación va a provocar disponibilidad negativa en los siguientes monedas: #{@saldo_negativo.map {|m| m.nombre }.to_sentence}.
+                  - if @venta.errors.has_key?(:saldo_negativo)
+                    p = @venta.errors.get(:saldo_negativo).to_sentence
                     p Esta seguro que quiere continuar?
                   .form-actions
                     = link_to 'Cancelar', ventas_path, class: 'btn btn-default'
@@ -208,3 +206,7 @@ section.content
 javascript:
   BoletasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");
   BoletasUI.setBuscarPersonasUrl("#{clientes_buscar_path}");
+
+- if @venta.errors.has_key?(:stock_negativo) || @venta.errors.has_key?(:saldo_negativo)
+  javascript:
+    MensajesHelper.irHasta($('#mensaje-saldo-negativo').offset().top);

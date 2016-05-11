@@ -104,7 +104,7 @@ section.content
                 - total = 0
                 - @venta.recibos_detalles.each do |p|
                   - total += p.monto_utilizado
-                  tr.fila-clickeable data-url="#{cobro_path(p.id)}"
+                  tr.fila-clickeable data-url="#{cobro_path(p.recibo_id)}"
                     td = localize(p.recibo.fecha.to_date)
                     td = p.recibo.numero
                     td.text-right = number_to_currency(p.monto_utilizado)

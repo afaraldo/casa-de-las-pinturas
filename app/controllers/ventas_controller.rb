@@ -46,11 +46,10 @@ class VentasController < ApplicationController
   # POST /ventas
   # POST /ventas.json
   def create
-    @venta = Venta.new(venta_params)
-    @stock_negativo = params[:guardar_si_o_si].present? ? [] : @venta.check_detalles_negativos
+    nueva_venta
     respond_to do |format|
       Venta.transaction do
-        if @stock_negativo.size == 0 && @venta.save
+        if @venta.guardar(venta_params, params[:guardar_si_o_si].present?)
           format.html { redirect_to @venta, notice: t('mensajes.save_success', recurso: 'la venta') }
           format.json { render :show, status: :created, location: @venta }
         else
@@ -64,15 +63,16 @@ class VentasController < ApplicationController
 
   end
 
+  def nueva_venta
+    @venta = Venta.new
+  end
+
   # PATCH/PUT /ventas/1
   # PATCH/PUT /ventas/1.json
   def update
-    @venta.assign_attributes(venta_params)
-    @stock_negativo = params[:guardar_si_o_si].present? ? [] : @venta.check_detalles_negativos
-    @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @venta.check_detalles_negativos_pago
     respond_to do |format|
       Venta.transaction do
-        if @stock_negativo.size <= 0 && @saldo_negativo.size <= 0 && @venta.save
+        if @venta.guardar(venta_params, params[:guardar_si_o_si].present?)
           format.html { redirect_to @venta, notice: t('mensajes.save_success', recurso: 'la venta') }
           format.json { render :show, status: :created, location: @venta }
         else
@@ -124,7 +124,7 @@ class VentasController < ApplicationController
       params.require(:venta).permit(:persona_id, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :condicion,
                                      recibos_detalles_attributes:[:id, :_destroy,
                                        recibo_attributes:  [:id, :fecha, :persona_id, :_destroy,
-                                         detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma]
+                                         detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma, :_destroy]
                                        ]
                                      ],
                                      detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy],
@@ -150,6 +150,7 @@ class VentasController < ApplicationController
       if params[:venta][:recibos_detalles_attributes]
         cobro = params[:venta][:recibos_detalles_attributes]["0"][:recibo_attributes]
         cobro[:detalles_attributes].each do |i, d|
+          cobro[:detalles_attributes][i][:_destroy] = '1' if cantidad_a_numero(d[:monto]) == 0 # marcar para eliminar si el monto es cero
           cobro[:detalles_attributes][i][:monto] = cantidad_a_numero(d[:monto])
           cobro[:detalles_attributes][i][:cotizacion] = cantidad_a_numero(d[:cotizacion])
         end

@@ -45,6 +45,10 @@ menu:
         text: "Cuentas corrientes"
         url: :cuentas_corrientes_clientes
         active_submenu: :cuentas_corrientes_clientes
+      devolucion_ventas:
+        text: "Devoluciones"
+        url: :devolucion_ventas
+        active_submenu: :devolucion_ventas_sidemenu
   stock:
     text: "Stock"
     url: :inventarios

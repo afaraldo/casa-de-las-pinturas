@@ -46,7 +46,7 @@ var BoletasUI = (function(){
         NumberHelper.mascaraMoneda('.maskMoneda');
 
         TablasHelper.calcularTotalEvent('.calcular-total');
-        TablasHelper.calcularTotalEvent('.calcular-cobros-total');
+        TablasHelper.calcularTotalEvent('.calcular-pagos-total');
 
         DatepickerHelper.initDatepicker('#boleta-fecha');
         DatepickerHelper.initDatepicker('#boleta-fecha-vencimiento', {limited: false, orientation: 'bottom'});
@@ -65,10 +65,8 @@ var BoletasUI = (function(){
                 $('#credito-persona-info').removeClass('hide');
                 $('#pago-detalles').addClass('hide');
             }
-        });
 
-        $(".boleta-condicion").trigger("change");
-
+        }).trigger("change");
 
         if($('.nested-fields').length == 1){
             $('.remove_fields').addClass('hide');
