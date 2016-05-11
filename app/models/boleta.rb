@@ -14,7 +14,7 @@ class Boleta < ActiveRecord::Base
   has_many :recibos, class_name: 'Recibo', through: :recibos_detalles
 
   accepts_nested_attributes_for :recibos_detalles, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :recibos, reject_if: :all_blank, allow_destroy: true
+  # accepts_nested_attributes_for :recibos, reject_if: :all_blank, allow_destroy: true
 
   has_many :nota_credito_debito_detalles, class_name: 'DevolucionesBoleta', foreign_key: "boleta_id", inverse_of: :boleta, dependent: :destroy
   has_many :notas_creditos_debitos, class_name: 'NotasCreditosDebito', dependent: :destroy, through: :nota_credito_debito_detalles
@@ -71,13 +71,20 @@ class Boleta < ActiveRecord::Base
   end
 
   def set_pago
-      recibo_boleta = recibos_detalles.first
-      pago = recibo_boleta.recibo
-      pago.fecha = fecha
-      pago.condicion = "contado"
-      pago.persona = persona
-      pago.boletas_detalles << recibo_boleta if new_record?
-      recibo_boleta.monto_utilizado = importe_total
+
+    recibo_boleta = recibos_detalles.first
+    recibo_boleta.monto_utilizado = importe_total
+
+    # HACK? Para forzar que se actualize el recibo_detalle y se actualice el recibo.
+    # Porque pasa esto?: es un misterio todavia. :)
+    recibo_boleta.updated_at = Time.zone.now
+    #---------------------------------------
+
+    recibo_boleta.recibo.fecha = fecha
+    recibo_boleta.recibo.condicion = "contado"
+    recibo_boleta.recibo.persona = persona
+    recibo_boleta.recibo.boletas_detalles = [recibo_boleta] # Para que la validacion de recibo tenga el nuevo monto_utilizado
+
   end
 
   def destroy_pagos

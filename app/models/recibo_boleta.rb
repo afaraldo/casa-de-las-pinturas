@@ -8,8 +8,9 @@ class ReciboBoleta < ActiveRecord::Base
   after_destroy :actualizar_boletas
 
   belongs_to :recibo
-  accepts_nested_attributes_for :recibo, reject_if: :all_blank, allow_destroy: true
   belongs_to :boleta
+
+  accepts_nested_attributes_for :recibo, reject_if: :all_blank, allow_destroy: true
 
   validate  :monto_utilizado_boletas
 

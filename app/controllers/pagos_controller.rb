@@ -133,13 +133,14 @@ class PagosController < ApplicationController
       end
 
       params.require(:pago).permit(:persona_id, :numero_comprobante, :fecha,
-                                   detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma],
+                                   detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma, :_destroy],
                                    boletas_detalles_attributes: [:id, :monto_utilizado, :boleta_id, :_destroy])
 
     end
 
     def procesar_cantidades
       params[:pago][:detalles_attributes].each do |i, d|
+        params[:pago][:detalles_attributes][i][:_destroy] = '1' if cantidad_a_numero(d[:monto]) == 0 # marcar para eliminar si el monto es cero
         params[:pago][:detalles_attributes][i][:monto] = cantidad_a_numero(d[:monto])
         params[:pago][:detalles_attributes][i][:cotizacion] = cantidad_a_numero(d[:cotizacion])
       end
