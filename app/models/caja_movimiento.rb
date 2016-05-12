@@ -28,7 +28,20 @@ class CajaMovimiento < ActiveRecord::Base
   validates :tipo,   presence: true
   validates :detalles, length: { minimum: 1 }
   validate  :fecha_futura
-  #validates :categoria_gasto, presence: true, if: :egreso?
+  validate :validar_categoria_gasto
+
+  def validar_categoria_gasto
+    caja = Caja.get_caja_por_forma(:efectivo)
+    if egreso? && caja_id == caja.id
+      if !categoria_gasto
+        errors.add(:categoria_gasto, I18n.t('activerecord.errors.messages.ingresar_categoria'))
+      else
+        true
+      end
+    else
+      true
+    end
+  end
 
   def set_caja
     self.caja_id ||= Caja.get_caja_por_forma(:efectivo).id
