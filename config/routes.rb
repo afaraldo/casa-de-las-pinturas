@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   get 'pagos/imprimir' => 'pagos#imprimir'
   resources :pagos
 
+  resources :transferencias, only: [:new, :create]
   resources :caja_movimientos
 
   get 'cobros/buscar_pendientes' => 'cobros#buscar_pendientes'

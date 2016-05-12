@@ -101,7 +101,8 @@ CasaDeLasPinturas = {
     devolucion_ventas: DevolucionVentasUI,
     caja_movimientos: CajaMovimientosUI,
     reportes: ReportesUI,
-    cobros: CobrosUI
+    cobros: CobrosUI,
+    transferencias: TransferenciasUI
 
 };
 

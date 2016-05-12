@@ -28,7 +28,7 @@ class CajaMovimiento < ActiveRecord::Base
   validates :tipo,   presence: true
   validates :detalles, length: { minimum: 1 }
   validate  :fecha_futura
-  validates :categoria_gasto, presence: true, if: :egreso?
+  #validates :categoria_gasto, presence: true, if: :egreso?
 
   def set_caja
     self.caja_id ||= Caja.get_caja_por_forma(:efectivo).id
@@ -49,10 +49,15 @@ class CajaMovimiento < ActiveRecord::Base
   end
 
   # calcula si se va a producir saldo negativo para algunas monedas en la caja efectivo
-  def check_detalles_negativos
+  def check_detalles_negativos(caja_efectivo = true)
 
     monedas = detalles.map(&:moneda_id) # monedas de los detalles
-    caja = Caja.get_caja_por_forma(:efectivo) # caja efectivo
+
+    if caja_efectivo
+      caja = Caja.get_caja_por_forma(:efectivo) # caja efectivo
+    else
+      caja = Caja.get_caja_por_forma(:tarjeta) # caja tarjeta
+    end
     saldos = caja.saldos_por_moneda(monedas) # saldos de esas monedas
 
     detalles.each do |d|

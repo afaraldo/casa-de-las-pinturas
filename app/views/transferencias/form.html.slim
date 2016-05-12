@@ -4,31 +4,24 @@ section.content
   .row
     .col-xs-12
       .box
-        = simple_form_for @caja_movimiento, html: { id: 'caja-movimiento-form' } do |f|
+        = simple_form_for @movimiento_egreso, url: transferencias_path, method: :create, html: { id: 'caja-movimiento-form' } do |f|
           .box-header
-            h3.box-title = "#{ @caja_movimiento.new_record? ? 'Nuevo Movimiento de Caja' : 'Editar Movimiento de Caja'}"
+            h3.box-title = "#{ @movimiento_egreso.new_record? ? 'Nueva Transferencia' : 'Editar Movimiento de Caja'}"
           .box-body
             = f.error_notification
             .row
               .col-sm-3
                 = f.input :fecha, wrapper: :vertical_input_group do
-                  = f.input_field :fecha, as: :string, class: 'datepicker form-control', value: @caja_movimiento.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                  = f.input_field :fecha, as: :string, class: 'datepicker form-control', value: @movimiento_egreso.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
                   .input-group-btn
                     .btn.btn-default
                       i.fa.fa-calendar
-              .col-sm-3
-                = f.input :tipo, as: :radio_group_buttons, input_html: {class: 'movimiento-tipo'}
-            .row
-              .col-sm-6
-                = f.input :motivo
-              .col-sm-4#categoria-gasto class="#{@caja_movimiento.tipo && @caja_movimiento.tipo.egreso? ? '' : 'hide'}"
-                = f.association :categoria_gasto, input_html: { class: 'categoriaGasto', data: { 'msg-required' => 'Debe seleccionar una categoría.' }}, label_method: :nombre, label: "Categoria", value_method: :id, placeholder: "Seleccione una categoria..."
             .row
               .col-xs-12
                 .form-subtitle
                   label Valores
                 br
-                - esconder_validacion_detalles = @caja_movimiento.errors.has_key?(:detalles) ? '' : 'hide'
+                - esconder_validacion_detalles = @movimiento_egreso.errors.has_key?(:detalles) ? '' : 'hide'
                 p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El monto debe ser mayor a cero (0).
                 table.table.table-bordered.detalles-table.calcular-total
                   thead
@@ -62,7 +55,7 @@ section.content
               .form-actions.text-right
                 = link_to 'Cancelar', caja_movimientos_path, class: 'btn btn-default'
                 | #{' '}
-                button.btn.btn-primary type="submit" Guardar movimiento
+                button.btn.btn-primary type="submit" Guardar transferencia
 
 - if @saldo_negativo && @saldo_negativo.size > 0
   javascript:
