@@ -9,6 +9,10 @@ class ComprasController < ApplicationController
     @menu_setup[:side_menu] = :compras_sidemenu
   end
 
+  def buscar_devoluciones
+
+  end
+
   def imprimir
     get_compras
   end

@@ -1,7 +1,8 @@
 var BoletasUI = (function(){
     var elementos = null,
         buscarMercaderiaUrl = '',
-        buscarPersonaUrl = '';
+        buscarPersonaUrl = '',
+        devolucionesPendientesUrl = '';
 
     function getModulo() {
         return $('body').data('controller');
@@ -95,6 +96,31 @@ var BoletasUI = (function(){
 
         });
 
+
+        // Buscar devoluciones pendientes de la persona
+        elementos.personasBuscador.on('change', function(e){
+            if($(this).val() === ''){
+                return false;
+            }
+
+            $.ajax(devolucionesPendientesUrl + '?persona_id=' + $(this).val(), {
+                dataType: 'script',
+                beforeSend: function(){
+                    //elementos.mensajePanel.find('.overlay').removeClass('hide');
+                }
+            })
+        });
+
+        TablasHelper.calcularSeleccionados(
+            {   selector: '#compra-detalles-tabla',
+                callbackDespuesDeSeleccionar: function(){ // Cuando se selecciona alguna devolucion se esconde la validacion
+//                    if(elementos.pagosForm.find('.pagar-boleta:checked').length > 0){
+//                        elementos.validacionBoletasSeleccionadas.addClass('hide');
+//                    }
+                }
+            }
+        );
+
     }
 
     return {
@@ -129,6 +155,9 @@ var BoletasUI = (function(){
         },
         setBuscarPersonasUrl: function(url) {
             buscarPersonaUrl = url;
+        },
+        setDevolucionesPendientesUrl: function(url) {
+            devolucionesPendientesUrl = url;
         }
     };
 

@@ -54,7 +54,7 @@ section.content
                     = f.input :numero_comprobante, label: 'Número de Comprobante', value: @compra.new_record? && f.object.numero_comprobante.nil? ? '' : f.object.numero_comprobante
                   .col-xs-12
                     p
-                      /a href="#modal-credito" data-toggle="modal" Agregar Crédito de devoluciones
+                      a href="#devoluciones-persona" data-toggle="collapse" Mostrar Crédito de devoluciones
 
               ///////////// CREDITO DISPONIBLE /////////////
               .col-sm-3
@@ -76,36 +76,29 @@ section.content
             /////////////
               DEVOLUCIONES
             /////////////
-            /.form-subtitle
-            /  label Crédito de devoluciones
-            /br
-            /table.table.table-bordered.detalles-table
-            /  thead
-            /    tr
-            /      th Número
-            /      th Monto
-            /      th Crédito disponible
-            /      th Crédito a usar
-            /      th
-            /  tbody#compra-detalles-body
-            /    tr
-            /      td
-            /        a 00034
-            /      td.text-right 200.000
-            /      td.text-right 200.000
-            /      td
-            /        input.form-control type="text" value="200.000"
-            /      td
-            /        a.btn.btn-default
-            /          i.fa.fa-times
-            /  tfoot
-            /    tr
-            /      td colspan="2"
-            /      td.text-right.text-bold
-            /        | Total:
-            /      td.table-total.text-right.text-bold
-            /        span 200.000
-            /      td
+            #devoluciones-persona.collapse
+              .form-subtitle
+                label Crédito de devoluciones
+              br
+              table.table.table-bordered.detalles-table
+                thead
+                  tr
+                    th Número
+                    th Fecha
+                    th Monto
+                    th Crédito disponible
+                    th Crédito a usar
+                    th
+                tbody#compra-detalles-body
+                  = render 'credito_devoluciones', devoluciones: @compra.creditos_detalles, actualizando: true, compra: @compra
+                tfoot
+                  tr
+                    td colspan="3"
+                    td.text-right.text-bold
+                      | Total:
+                    td.table-total.text-right.text-bold
+                      span
+                    td
             .form-subtitle
               label Mercaderías
               = link_to '<i class="fa fa-plus"></i>'.html_safe,

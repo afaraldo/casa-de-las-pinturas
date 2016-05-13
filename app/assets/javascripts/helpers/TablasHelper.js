@@ -51,12 +51,12 @@ var TablasHelper = {
         if(opciones.hasOwnProperty('autocompletarCampo'))
             autocompletar = opciones.autocompletarCampo;
 
-        tabla.on('keyup change', '.monto-a-sumar, .pagar-boleta', function(e){
+        tabla.on('keyup change', '.monto-a-sumar, .pagar-boleta, .usar-credito', function(e){
             var total = 0;
 
             tabla.find('.monto-a-sumar').each(function(){
                 var campo = $(this);
-                if(campo.parents('tr').find('.pagar-boleta').is(':checked')) {
+                if(campo.parents('tr').find('.pagar-boleta, .usar-credito').is(':checked')) {
                     total += NumberHelper.aNumero($(this).val());
                 }
             });

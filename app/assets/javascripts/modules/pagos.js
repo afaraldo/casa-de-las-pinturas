@@ -108,6 +108,7 @@ var PagosUI = (function(){
                 }
             }
         );
+
         TablasHelper.calcularTotalEvent('.calcular-pagos-total');
 
     }
