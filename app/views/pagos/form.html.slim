@@ -36,28 +36,6 @@ section.content
                   h3 Seleccione un proveedor para ver las boletas y devoluciones pendientes
             .row#pago-boletas-devoluciones.hide
               .col-xs-12
-                /.form-subtitle
-                /  label Crédito de devoluciones
-                /br
-                /table.table.table-bordered.detalles-table
-                /  thead
-                /    tr
-                /      th Número
-                /      th Monto
-                /      th Crédito disponible
-                /      th Crédito a usar
-                /      th
-                /  tbody#compra-detalles-body
-                /
-                /  tfoot
-                /    tr
-                /      td colspan="2"
-                /      td.text-right.text-bold
-                /        | Total:
-                /      td.table-total.text-right.text-bold
-                /        span 200.000
-                /      td
-
                 .form-subtitle
                   label Boletas pendientes
                 br
@@ -82,7 +60,28 @@ section.content
                       td.table-total.text-right.text-bold
                         span 0
                       td
-
+              .col-xs-12
+                .form-subtitle
+                  label Crédito de devoluciones
+                br
+                table.table.table-bordered.detalles-table
+                  thead
+                    tr
+                      th Número
+                      th Monto
+                      th Crédito disponible
+                      th Crédito a usar
+                      th
+                  tbody#compra-detalles-body
+                
+                  tfoot
+                    tr
+                      td colspan="2"
+                      td.text-right.text-bold
+                        | Total:
+                      td.table-total.text-right.text-bold
+                        span 0
+                      td
             /.row
             /  .col-sm-offset-8.col-sm-4
             /    table.table.bg-warning
