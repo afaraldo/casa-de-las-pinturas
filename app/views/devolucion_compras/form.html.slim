@@ -28,27 +28,25 @@ section.content
                   .col-sm-4
                     = f.association :persona, as: :string, label: 'Proveedor', disabled: @devolucion_compra.persisted?, input_html: { id: 'personas-buscador', placeholder: 'Buscar proveedor...', data: { 'msg-required' => 'Este campo es obligatorio.',persona: f.object.persona.to_json } }
                   .col-sm-4
-                    label.control-label Compra
-                    - if @devolucion_compra.persisted?
-                      br
-                      = @devolucion_compra.boletas.first.id
-                    - else
-                      select.form-control#devolucion_id
+                    .form-group
+                      label.control-label Compra
+                      abbr *
+                      - if @devolucion_compra.persisted?
+                        br
+                        = @devolucion_compra.boletas.first.id
+                      - else
+                        select.form-control#devolucion_id.required
                 .row
                   .col-sm-4
-                    = f.input :motivo, label: 'Motivo' do
-                      = f.input_field :motivo, as: :string,
-                                                   label: false,
-                                                    class: 'form-control required',
-                                                   data: {"msg-required" => 'Debe escribir un motivo'}
+                    = f.input :motivo, label: 'Motivo'
             .row.overlay-wrapper#devolucion-mensajes
               .overlay.hide
                 i.fa.fa-refresh.fa-spin
               .col-xs-12
                 .well.seleccionar-panel.text-center
                   i.fa.fa-search
-                  h3 Seleccione un proveedor y una commpra para ver las mercaderias para devolución
-            .row#pago-boletas-devoluciones.hide
+                  h3 Seleccione un proveedor para ver las boletas para la devolucion
+            .row#pago-boletas-d<abbr title data-toggle="tooltip" data-original-title="Campo obligatorio">*</abbr>evoluciones.hide
               .col-xs-12
                 .form-subtitle
                   label Mercaderias
