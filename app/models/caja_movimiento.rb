@@ -30,6 +30,27 @@ class CajaMovimiento < ActiveRecord::Base
   validate  :fecha_futura
   validate :validar_categoria_gasto
 
+  # Se controlan los posibles detalles y saldos negativos y se guarda la boleta
+  def guardar(atributos, guardar_si_o_si)
+    movimiento_egreso = self.assign_attributes(atributos)
+    movimiento_egreso.motivo = "Transferencia de cuenta bancaria a caja registradora"
+    movimiento_egreso.tipo = :egreso
+    movimiento_egreso.caja_id = Caja.get_caja_por_forma(:tarjeta).id
+
+    movimiento_ingreso = CajaMovimiento.new
+    movimiento_ingreso.motivo = "Transferencia de cuenta bancaria a caja registradora"
+    detalle = movimiento_ingreso.detalles.build
+    detalle.forma = :efectivo
+    detalle.monto = self.monto
+    movimiento_ingreso.tipo = :ingreso
+    movimiento_ingreso.caja_id = Caja.get_caja_por_forma(:efectivo).id
+
+    saldo_negativo = guardar_si_o_si ? [] : self.check_detalles_negativos(false)
+    errors.add(:saldo_negativo, "La operación va a provocar disponibilidad negativa en los siguientes monedas: #{saldo_negativo.map {|m| m.nombre }.to_sentence}") if saldo_negativo.size > 0
+
+    saldo_negativo.size <= 0 && save && movimiento_ingreso.save
+  end
+
   def validar_categoria_gasto
     caja = Caja.get_caja_por_forma(:efectivo)
     if egreso? && caja_id == caja.id

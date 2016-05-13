@@ -4,15 +4,15 @@ section.content
   .row
     .col-xs-12
       .box
-        = simple_form_for @movimiento_egreso, url: transferencias_path, method: :create, html: { id: 'caja-movimiento-form' } do |f|
+        = simple_form_for movimiento_egreso, url: transferencias_path, method: :create, html: { id: 'caja-movimiento-form' } do |f|
           .box-header
-            h3.box-title = "#{ @movimiento_egreso.new_record? ? 'Nueva Transferencia' : 'Editar Movimiento de Caja'}"
+            h3.box-title = "#{ movimiento_egreso.new_record? ? 'Nueva Transferencia' : 'Editar Movimiento de Caja'}"
           .box-body
             = f.error_notification
             .row
               .col-sm-3
                 = f.input :fecha, wrapper: :vertical_input_group do
-                  = f.input_field :fecha, as: :string, class: 'datepicker form-control', value: @movimiento_egreso.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                  = f.input_field :fecha, as: :string, class: 'datepicker form-control', value: movimiento_egreso.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
                   .input-group-btn
                     .btn.btn-default
                       i.fa.fa-calendar
@@ -21,7 +21,7 @@ section.content
                 .form-subtitle
                   label Valores
                 br
-                - esconder_validacion_detalles = @movimiento_egreso.errors.has_key?(:detalles) ? '' : 'hide'
+                - esconder_validacion_detalles = movimiento_egreso.errors.has_key?(:detalles) ? '' : 'hide'
                 p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El monto debe ser mayor a cero (0).
                 table.table.table-bordered.detalles-table.calcular-total
                   thead
@@ -29,17 +29,9 @@ section.content
                       th Forma
                       th Moneda
                       th Monto
-                      th Cotización
-                      th Subtotal
                   tbody#caja-movimiento-detalles-body
                     = f.simple_fields_for :detalles do |detalle|
                       = render 'detalle_fields', f: detalle
-                  tfoot
-                    tr.text-right.text-bold
-                      td colspan="4" Total:
-                      td.table-total
-                        span
-
           .box-footer
             - if @saldo_negativo && @saldo_negativo.size > 0
               input.hidden name="guardar_si_o_si" value= "true"
@@ -56,7 +48,6 @@ section.content
                 = link_to 'Cancelar', caja_movimientos_path, class: 'btn btn-default'
                 | #{' '}
                 button.btn.btn-primary type="submit" Guardar transferencia
-
-- if @saldo_negativo && @saldo_negativo.size > 0
+                
   javascript:
-    MensajesHelper.irHasta($('#mensaje-saldo-negativo').offset().top);
+    TransferenciasUI.initFormEvents();

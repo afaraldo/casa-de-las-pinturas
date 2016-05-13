@@ -1,0 +1,8 @@
+| var modal = $('#main-modal');
+- if @error
+  | noty({type: "error", text : "#{@message}"});
+- else
+  | noty({type: "success", text : "#{@message}"});
+  | modal.modal('hide');
+  | $("#caja-movimientos-table").html("#{escape_javascript(render partial: 'list', format: 'html', locals: {caja_movimientos: @caja_movimientos})}");
+  | $('.imprimir-listado').removeClass('disabled');

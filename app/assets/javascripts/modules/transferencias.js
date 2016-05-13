@@ -6,15 +6,11 @@ var TransferenciasUI = (function(){
     }
 
     function initFormEvents(){
-        elementos.movimientoForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
+        $('#caja-movimiento-form').validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
 
         NumberHelper.mascaraMoneda('.maskMoneda');
 
         DatepickerHelper.initDatepicker('.datepicker');
-
-        TablasHelper.calcularTotalEvent('.calcular-total');
-
-        calcularTotal();
     }
 
     return {
@@ -28,7 +24,8 @@ var TransferenciasUI = (function(){
         },
         'create': function(){
             initFormEvents();
-        }
+        },
+        initFormEvents: initFormEvents
     };
 
 }());

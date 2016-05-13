@@ -12,37 +12,21 @@ class TransferenciasController < ApplicationController
     @movimiento_egreso = CajaMovimiento.new
     @moneda = Moneda.find_by_defecto(true)
     @movimiento_egreso.detalles.build(forma: :tarjeta, moneda_id: @moneda.id, cotizacion: @moneda.cotizacion )
-    render :form
+    render 'load_form', format: :js
   end
 
   def create
     @movimiento_egreso = CajaMovimiento.new(caja_movimiento_params)
-    @movimiento_egreso.motivo = "Transferencia de cuenta bancaria a caja registradora"
-    @movimiento_egreso.tipo = :egreso
-    @movimiento_egreso.caja_id = Caja.get_caja_por_forma(:tarjeta).id
-
-    @movimiento_ingreso = CajaMovimiento.new(caja_movimiento_params)
-    @movimiento_ingreso.motivo = "Transferencia de cuenta bancaria a caja registradora"
-    @movimiento_ingreso.detalles.first.forma = :efectivo
-    @movimiento_ingreso.tipo = :ingreso
-    @movimiento_ingreso.caja_id = Caja.get_caja_por_forma(:efectivo).id
-
-    @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @movimiento_egreso.check_detalles_negativos(false)
-
-
-    respond_to do |format|
-      CajaMovimiento.transaction do
-        if @saldo_negativo.size == 0 && @movimiento_egreso.save && @movimiento_ingreso.save
-          format.html { redirect_to @movimiento_ingreso, notice: t('mensajes.save_success', recurso: 'el movimiento') }
-          format.json { render :show, status: :created, location: @movimiento_egreso }
-        else
-          @moneda = Moneda.find_by_defecto(true)
-          @movimiento_egreso.detalles.build(forma: :tarjeta, moneda_id: @moneda.id, cotizacion: @moneda.cotizacion )
-          format.html { render :form }
-          format.json { render json: @movimiento_egreso.errors, status: :unprocessable_entity }
-        end
+    CajaMovimiento.transaction do
+      if @movimiento_egreso.save
+        @error = false
+        @message = "Se ha guardado la transferencia"
+      else
+        @error = true
+        @message = "Ha ocurrido un problema al tratar de guardar la transferencia. #{@movimiento_egreso.errors.full_messages.to_sentence}"
       end
     end
+    render 'reload_list', format: :js
   end
 
   private
