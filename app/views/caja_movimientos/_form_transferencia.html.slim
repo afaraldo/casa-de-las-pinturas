@@ -4,7 +4,7 @@ section.content
   .row
     .col-xs-12
       .box
-        = simple_form_for movimiento_egreso, url: transferencias_path, method: :create, html: { id: 'caja-movimiento-form' } do |f|
+        = simple_form_for movimiento_egreso, url: caja_movimientos_create_transferencia_path, method: :create, html: { id: 'caja-movimiento-form' }, remote: true do |f|
           .box-header
             h3.box-title = "#{ movimiento_egreso.new_record? ? 'Nueva Transferencia' : 'Editar Movimiento de Caja'}"
           .box-body
@@ -31,7 +31,7 @@ section.content
                       th Monto
                   tbody#caja-movimiento-detalles-body
                     = f.simple_fields_for :detalles do |detalle|
-                      = render 'detalle_fields', f: detalle
+                      = render 'detalle_transferencia_fields', f: detalle
           .box-footer
             - if @saldo_negativo && @saldo_negativo.size > 0
               input.hidden name="guardar_si_o_si" value= "true"

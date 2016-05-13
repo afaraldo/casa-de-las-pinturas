@@ -109,6 +109,28 @@ class CajaMovimientosController < ApplicationController
                                                              limit: action_name == 'imprimir_extracto' ? LIMITE_REGISTROS_IMPRIMIR : nil)
     end
 
+    # GET /caja_movimientos/new
+    def new_transferencia
+      @movimiento_egreso = CajaMovimiento.new
+      @moneda = Moneda.find_by_defecto(true)
+      @movimiento_egreso.detalles.build(forma: :tarjeta, moneda_id: @moneda.id, cotizacion: @moneda.cotizacion )
+      render 'load_form', format: :js
+    end
+
+    def create_transferencia
+      @movimiento_egreso = CajaMovimiento.new(caja_movimiento_params)
+      CajaMovimiento.transaction do
+        if @movimiento_egreso.save
+          @error = false
+          @message = "Se ha guardado la transferencia"
+        else
+          @error = true
+          @message = "Ha ocurrido un problema al tratar de guardar la transferencia. #{@movimiento_egreso.errors.full_messages.to_sentence}"
+        end
+      end
+      render 'load_form', format: :js
+    end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_caja_movimiento
