@@ -119,11 +119,17 @@ class CajaMovimientosController < ApplicationController
 
     def create_transferencia
       @movimiento_egreso = CajaMovimiento.new(caja_movimiento_params)
+      @movimiento_egreso.motivo = "Transferencia de cuenta bancaria a caja registradora"
+      @movimiento_egreso.tipo = :egreso
+      @movimiento_egreso.caja_id = Caja.get_caja_por_forma(:tarjeta).id
+
       CajaMovimiento.transaction do
-        if @movimiento_egreso.save
+        if @movimiento_egreso.save && @movimiento_egreso.guardar_ingreso
           @error = false
           @message = "Se ha guardado la transferencia"
         else
+                    @moneda = Moneda.find_by_defecto(true)
+          @movimiento_egreso.detalles.build(forma: :tarjeta, moneda_id: @moneda.id, cotizacion: @moneda.cotizacion )so.detalles.build(forma: :tarjeta, moneda_id: @moneda.id, cotizacion: @moneda.cotizacion )
           @error = true
           @message = "Ha ocurrido un problema al tratar de guardar la transferencia. #{@movimiento_egreso.errors.full_messages.to_sentence}"
         end
