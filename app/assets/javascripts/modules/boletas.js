@@ -10,6 +10,7 @@ var BoletasUI = (function(){
 
     function calcularTotal(){
         elementos.detallesTable.find('.cantidad').trigger('change');
+        elementos.devolucionesTabla.find('.monto-a-sumar').trigger('change');
     }
 
     function getCondicionDePago(){
@@ -130,12 +131,17 @@ var BoletasUI = (function(){
             if(tBody.find('.nested-fields:visible').length == 1){
                 $('.remove_fields').addClass('hide');
             }
-
         });
 
+        if($('#creditos-detalles-body').find('tr').length > 0){
+            mostrarDevoluciones();
+        }
 
         // Buscar devoluciones pendientes de la persona
         elementos.personasBuscador.on('change', function(e){
+
+            limpiarDevoluciones();
+
             if($(this).val() === ''){
                 seleccionePersona(getModulo() === 'compras' ? 'proveedor' : 'cliente');
                 return false;
@@ -153,6 +159,7 @@ var BoletasUI = (function(){
         TablasHelper.calcularTotalEvent({
             selector: '.calcular-total',
             callbackParaElTotal: function(total){
+                // setear el total de mercaderias en el resumen
                 $('#res-total-mercaderia').data('total', total).text(NumberHelper.aMoneda(total));
                 calcularTotalBoleta();
             }
@@ -163,6 +170,7 @@ var BoletasUI = (function(){
             {   selector: '#devoluciones-disponibles-tabla',
                 autocompletarCampo: false,
                 callbackDespuesDeSeleccionar: function(credito){
+                    // setear el credito utilizado en el resumen
                     $('#res-total-creditos').data('total', credito).text(NumberHelper.aMoneda(credito));
                     calcularTotalBoleta();
                 }
@@ -171,6 +179,13 @@ var BoletasUI = (function(){
 
     }
 
+    function limpiarDevoluciones(){
+        $('#creditos-detalles-body').html('');
+        $('#res-total-creditos').data('total', 0).text('Gs. 0');
+        elementos.detallesTable.find('.cantidad').trigger('change');
+    }
+
+    // Usar los data attributes del resumen para calcular el total a pagar
     function calcularTotalBoleta(){
         var aPagar = parseInt($('#res-total-mercaderia').data('total')) - parseInt($('#res-total-creditos').data('total'));
 

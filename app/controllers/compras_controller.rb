@@ -126,6 +126,8 @@ class ComprasController < ApplicationController
     def compra_params
       procesar_cantidades_mercaderias
       procesar_cantidades_pagos
+      procesar_devoluciones(params[:compra][:condicion])
+
       params[:compra].delete("recibos_detalles_attributes") if params[:compra][:condicion] == "credito"
       params.require(:compra).permit(:persona_id, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :condicion,
                                      recibos_detalles_attributes:[:id, :_destroy,
@@ -133,6 +135,7 @@ class ComprasController < ApplicationController
                                          detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma, :_destroy]
                                        ]
                                      ],
+                                     creditos_detalles_attributes: [:id, :notas_creditos_debito_id, :monto_utilizado, :_destroy],
                                      detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy],
                                      )
     end
@@ -163,5 +166,26 @@ class ComprasController < ApplicationController
       end
     end
 
+    def procesar_devoluciones(condicion)
+
+      if condicion == 'contado' && !params[:compra][:creditos_detalles_attributes].blank?
+
+        params[:compra][:creditos_detalles_attributes].each do |k, valor|
+
+          params[:compra][:creditos_detalles_attributes][k][:monto_utilizado] = cantidad_a_numero(valor[:monto_utilizado])
+
+          # se eliminan de params las boletas que no se seleccionaron o se marcan para eliminar
+          if valor[:id].present?
+            params[:compra][:creditos_detalles_attributes][k][:_destroy] = '1' unless valor[:usado].present?
+          else
+            params[:compra][:creditos_detalles_attributes].delete(k) unless valor[:usado].present?
+          end
+        end
+
+      else
+        params[:compra].delete("creditos_detalles_attributes")
+      end
+
+    end
 
 end
