@@ -42,7 +42,7 @@ section.content
                                     class: 'btn btn-default',
                                     remote: true
                   .col-sm-4
-                    = f.input :condicion, as: :radio_group_buttons, input_html: { class: 'boleta-condicion' }
+                    = f.input :condicion, as: :radio_group_buttons, disabled: @compra.persisted?, input_html: { class: 'boleta-condicion' }
                 .row
                   /// FECHA DE VENCIMENTO
                   .col-sm-4
@@ -114,6 +114,8 @@ section.content
                         style: 'margin-left: 10px;',
                         remote: true
             br
+            - if @compra.errors.has_key?(:importe_total)
+              p.text-danger = "El importe total de la compra #{t('errors.messages.less_than', count: number_to_currency(DECIMAL_LIMITE[:superior]))}"
             table.table.table-bordered.detalles-table.calcular-total
               thead
                 tr

@@ -36,9 +36,7 @@ class ComprasController < ApplicationController
     @compra = Compra.new
     @compra.detalles.build
 
-    @recibo_detalle = @compra.recibos_detalles.build
-    @pago = @recibo_detalle.build_recibo
-    @pago.build_detalles
+    get_pago
 
     render :form
   end
@@ -59,8 +57,7 @@ class ComprasController < ApplicationController
           format.html { redirect_to @compra, notice: t('mensajes.save_success', recurso: 'la compra') }
           format.json { render :show, status: :created, location: @compra }
         else
-          @pago = @compra.recibos_detalles.first.recibo if @compra.recibos_detalles.first
-          @pago.rebuild_detalles if @pago
+          get_pago
           format.html { render :form }
           format.json { render json: @compra.errors, status: :unprocessable_entity }
         end
@@ -120,6 +117,17 @@ class ComprasController < ApplicationController
     def set_compra
       @compra = Compra.find(params[:id])
       @pago = @compra.recibos.first
+    end
+
+    def get_pago
+      if @compra.recibos_detalles.first
+        @pago = @compra.recibos_detalles.first.recibo
+        @pago.rebuild_detalles if @pago
+      else
+        @recibo_detalle = @compra.recibos_detalles.build
+        @pago = @recibo_detalle.build_recibo
+        @pago.build_detalles
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

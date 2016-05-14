@@ -48,6 +48,7 @@ class Boleta < ActiveRecord::Base
   validates :persona, presence: true
   validates :detalles, length: { minimum: 1 }
   validates :condicion, presence: true
+  validates :importe_total, numericality: { greater_than: 0, less_than: DECIMAL_LIMITE[:superior] }
   validate  :condicion_cambiada?, on: :update
   validate :tiene_pagos_asociados?, on: [:update, :destroy]
   validate :fecha_futura
@@ -62,13 +63,18 @@ class Boleta < ActiveRecord::Base
   def guardar(atributos, guardar_si_o_si)
     self.assign_attributes(atributos)
 
-    stock_negativo = guardar_si_o_si ? [] : self.check_detalles_negativos
+    stock_negativo = controlar_stock_negativo(guardar_si_o_si)
     saldo_negativo = guardar_si_o_si ? [] : self.check_detalles_negativos_pago
 
     errors.add(:stock_negativo, "La operación va a provocar existencia negativa en los siguientes productos: #{stock_negativo.map {|m| m.nombre }.to_sentence}") if stock_negativo.size > 0
     errors.add(:saldo_negativo, "La operación va a provocar disponibilidad negativa en los siguientes monedas: #{saldo_negativo.map {|m| m.nombre }.to_sentence}") if saldo_negativo.size > 0
 
     stock_negativo.size <= 0 && saldo_negativo.size <= 0 && save
+  end
+
+  # si la boleta es compra y es nueva no provoca stock negativo
+  def controlar_stock_negativo(guardar_si_o_si)
+    guardar_si_o_si || new_record? && self.instance_of?(Compra) ? [] : self.check_detalles_negativos
   end
 
   def numero

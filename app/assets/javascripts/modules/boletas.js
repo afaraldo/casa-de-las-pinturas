@@ -107,7 +107,7 @@ var BoletasUI = (function(){
 
         }).trigger("change");
 
-        if($('.nested-fields').length == 1){
+        if($('#boleta-detalles-body').find('.nested-fields:visible').length == 1){
             $('.remove_fields').addClass('hide');
         }
 
