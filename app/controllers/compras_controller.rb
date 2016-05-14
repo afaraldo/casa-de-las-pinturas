@@ -10,7 +10,9 @@ class ComprasController < ApplicationController
   end
 
   def buscar_devoluciones
+    @proveedor = Proveedor.find(params[:persona_id])
 
+    @devoluciones = @proveedor.devoluciones_disponibles
   end
 
   def imprimir

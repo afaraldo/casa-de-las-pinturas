@@ -68,6 +68,8 @@ class NotasCreditosDebito < ActiveRecord::Base
     self.detalles.each do |detalle|
         self.importe_total += detalle.precio_unitario * detalle.cantidad
     end
+
+    self.credito_restante = self.importe_total
   end
 
    # Actualiza la cuenta corriente si es que se guardo o actualizo

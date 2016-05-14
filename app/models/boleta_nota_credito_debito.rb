@@ -2,7 +2,7 @@ class BoletaNotaCreditoDebito < ActiveRecord::Base
 
   acts_as_paranoid
 
-  self.table_name = 'boletas_notas_crditos_debitos'
+  self.table_name = 'boletas_notas_creditos_debitos'
 
   after_save :actualizar_devoluciones
   after_destroy :actualizar_devoluciones

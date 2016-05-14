@@ -11,10 +11,10 @@ var TablasHelper = {
      * Evento para calcular subtotales y total en una tabla
      * cada fila debe tener un campo con la clase .cantidad y otro con la clase .precio-unitario
      *
-     * @param selector el selector de la tabla
+     * @param opciones el selector de la tabla {selector: , callbackParaElTotal: funcion para acceder al total}
      */
-    calcularTotalEvent: function(selector) {
-        var tabla = $(selector);
+    calcularTotalEvent: function(opciones) {
+        var tabla = $(opciones.selector);
 
         tabla.on('keyup change', '.cantidad, .precio-unitario', function(){
             var fila = $(this).parents('tr'),
@@ -31,6 +31,9 @@ var TablasHelper = {
                 tabla.find('.table-total span')
                     .data('total', total)
                     .text(NumberHelper.aMoneda(total));
+
+                if(opciones.hasOwnProperty('callbackParaElTotal'))
+                    opciones.callbackParaElTotal(total);
 
         });
 
@@ -69,7 +72,7 @@ var TablasHelper = {
                 opciones.totalPorDefecto.val(NumberHelper.aMoneda(total)).trigger('change');
 
             if(opciones.hasOwnProperty('callbackDespuesDeSeleccionar'))
-                opciones.callbackDespuesDeSeleccionar();
+                opciones.callbackDespuesDeSeleccionar(total);
         });
     }
 };

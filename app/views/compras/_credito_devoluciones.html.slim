@@ -12,10 +12,10 @@
       div class="form-group #{'has-error' if d.errors.has_key?(:monto_utilizado)}"
         = hidden_field "compra[creditos_detalles_attributes][#{i}]", :notas_creditos_debito_id, value: devolucion.id
         = text_field "compra[creditos_detalles_attributes][#{i}]", :monto_utilizado, value: number_with_precision(actualizando ? d.monto_utilizado : devolucion.credito_restante), class: 'form-control mascaraMoneda monto-a-sumar'
-        - if c.errors.has_key?(:monto_utilizado)
+        - if d.errors.has_key?(:monto_utilizado)
           span.help-block = d.errors.get(:monto_utilizado).to_sentence
     td
       - seleccionado = actualizando ? {checked: ''} : {} # checkear la compra al editar o cuando hay errores en el create
       input type="checkbox" name="compra[creditos_detalles_attributes][#{i}][usado]" class="usar-credito" *seleccionado
       - if !compra.nil? && compra.persisted? # incluir el id del detalle al editar
-        input type="hidden" name="compra[creditos_detalles_attributes][#{i}][id]" value="#{c.id}"
+        input type="hidden" name="compra[creditos_detalles_attributes][#{i}][id]" value="#{d.id}"
