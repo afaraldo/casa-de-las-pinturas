@@ -16,7 +16,7 @@ class NotasCreditosDebito < ActiveRecord::Base
 
   # Boletas donde se uso el credito de la devolucion
   has_many :creditos_detalles, class_name: 'BoletaNotaCreditoDebito', foreign_key: "notas_creditos_debito_id", inverse_of: :notas_creditos_debito, dependent: :destroy
-  has_many :creditos, class_name: 'Boleta', dependent: :destroy, through: :creditos_detalles
+  has_many :creditos, class_name: 'Boleta', dependent: :destroy, through: :creditos_detalles, source: :boleta
 
   accepts_nested_attributes_for :boletas_detalles, allow_destroy: true
   accepts_nested_attributes_for :detalles, allow_destroy: true
@@ -40,6 +40,23 @@ class NotasCreditosDebito < ActiveRecord::Base
       errors.add(:fecha, I18n.t('activerecord.errors.messages.fecha_futura'))
     end
   end
+
+  def es_editable?
+    self.creditos.size == 0
+  end
+
+  def es_eliminable?
+    es_editable?
+  end
+
+  def no_editable_mensaje
+    "La devolución no se puede editar porque ya se ha utilizado."
+  end
+
+  def no_eliminable_mensaje
+    "La devolución no se puede eliminar porque ya se ha utilizado."
+  end
+
   def check_detalles_negativos(borrado = false)
     m = []
     detalles.each do |d|
