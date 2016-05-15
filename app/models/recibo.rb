@@ -21,6 +21,12 @@ class Recibo < ActiveRecord::Base
   has_many :boletas_detalles, class_name: 'ReciboBoleta', dependent: :destroy, foreign_key: "recibo_id", inverse_of: :recibo
   has_many :boletas, dependent: :destroy, class_name: 'Boleta', through: :boletas_detalles
 
+  has_many :nota_credito_debito_detalles, class_name: 'DevolucionesBoleta', foreign_key: "recibo_id", inverse_of: :recibo, dependent: :destroy
+  has_many :notas_creditos_debitos, class_name: 'NotasCreditosDebito', dependent: :destroy, through: :nota_credito_debito_detalles
+
+  has_many :creditos_detalles, class_name: 'BoletaNotaCreditoDebito', foreign_key: "recibo_id", inverse_of: :recibo, dependent: :destroy
+  has_many :creditos, class_name: 'NotasCreditosDebito', dependent: :destroy, through: :creditos_detalles, source: :notas_creditos_debito
+
   accepts_nested_attributes_for :detalles, reject_if: proc { |attrs| (attrs['monto'].to_f * attrs['cotizacion'].to_f) <= 0 }, allow_destroy: true
   accepts_nested_attributes_for :boletas_detalles, allow_destroy: true
 
