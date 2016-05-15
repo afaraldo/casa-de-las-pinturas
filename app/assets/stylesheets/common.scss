@@ -61,3 +61,19 @@
     font-size: 32px;
   }
 }
+
+.text-largo{
+  word-wrap: break-word;
+}
+
+.disabled-group{
+  display: inline-block;
+
+  .btn-group{
+    opacity: 0.8;
+  }
+}
+
+.btn-wrap{
+  display: inline-block;
+}

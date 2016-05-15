@@ -101,14 +101,14 @@ var CobrosUI = (function(){
             {   selector: '#venta-detalles-tabla',
                 totalPorDefecto: $('.moneda-por-defecto'),
                 autocompletarCampo: autocompletarMonedaPorDefecto,
-                callbackDespuesDeSeleccionar: function(){ // Cuando se selecciona alguna boleta se esconde la validacion
+                callbackDespuesDeSeleccionar: function(total){ // Cuando se selecciona alguna boleta se esconde la validacion
                     if(elementos.cobrosForm.find('.pagar-boleta:checked').length > 0){
                         elementos.validacionBoletasSeleccionadas.addClass('hide');
                     }
                 }
             }
         );
-        TablasHelper.calcularTotalEvent('.calcular-cobros-total');
+        TablasHelper.calcularTotalEvent({selector: '.calcular-cobros-total'});
 
     }
 

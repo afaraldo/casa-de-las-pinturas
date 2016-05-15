@@ -9,6 +9,12 @@ class ComprasController < ApplicationController
     @menu_setup[:side_menu] = :compras_sidemenu
   end
 
+  def buscar_devoluciones
+    @proveedor = Proveedor.find(params[:persona_id])
+
+    @devoluciones = @proveedor.devoluciones_disponibles
+  end
+
   def imprimir
     get_compras
   end
@@ -30,9 +36,7 @@ class ComprasController < ApplicationController
     @compra = Compra.new
     @compra.detalles.build
 
-    @recibo_detalle = @compra.recibos_detalles.build
-    @pago = @recibo_detalle.build_recibo
-    @pago.build_detalles
+    get_pago
 
     render :form
   end
@@ -53,8 +57,7 @@ class ComprasController < ApplicationController
           format.html { redirect_to @compra, notice: t('mensajes.save_success', recurso: 'la compra') }
           format.json { render :show, status: :created, location: @compra }
         else
-          @pago = @compra.recibos_detalles.first.recibo if @compra.recibos_detalles.first
-          @pago.rebuild_detalles if @pago
+          get_pago
           format.html { render :form }
           format.json { render json: @compra.errors, status: :unprocessable_entity }
         end
@@ -116,10 +119,23 @@ class ComprasController < ApplicationController
       @pago = @compra.recibos.first
     end
 
+    def get_pago
+      if @compra.recibos_detalles.first
+        @pago = @compra.recibos_detalles.first.recibo
+        @pago.rebuild_detalles if @pago
+      else
+        @recibo_detalle = @compra.recibos_detalles.build
+        @pago = @recibo_detalle.build_recibo
+        @pago.build_detalles
+      end
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def compra_params
       procesar_cantidades_mercaderias
       procesar_cantidades_pagos
+      procesar_devoluciones(params[:compra][:condicion])
+
       params[:compra].delete("recibos_detalles_attributes") if params[:compra][:condicion] == "credito"
       params.require(:compra).permit(:persona_id, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :condicion,
                                      recibos_detalles_attributes:[:id, :_destroy,
@@ -127,6 +143,7 @@ class ComprasController < ApplicationController
                                          detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma, :_destroy]
                                        ]
                                      ],
+                                     creditos_detalles_attributes: [:id, :notas_creditos_debito_id, :monto_utilizado, :_destroy],
                                      detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy],
                                      )
     end
@@ -157,5 +174,26 @@ class ComprasController < ApplicationController
       end
     end
 
+    def procesar_devoluciones(condicion)
+
+      if condicion == 'contado' && !params[:compra][:creditos_detalles_attributes].blank?
+
+        params[:compra][:creditos_detalles_attributes].each do |k, valor|
+
+          params[:compra][:creditos_detalles_attributes][k][:monto_utilizado] = cantidad_a_numero(valor[:monto_utilizado])
+
+          # se eliminan de params las boletas que no se seleccionaron o se marcan para eliminar
+          if valor[:id].present?
+            params[:compra][:creditos_detalles_attributes][k][:_destroy] = '1' unless valor[:usado].present?
+          else
+            params[:compra][:creditos_detalles_attributes].delete(k) unless valor[:usado].present?
+          end
+        end
+
+      else
+        params[:compra].delete("creditos_detalles_attributes")
+      end
+
+    end
 
 end

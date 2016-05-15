@@ -52,6 +52,7 @@ es:
         importe_no_editable: "Importe y cantidades no se puede editar. Posee pagos asociados"
         supera_limite_de_credito: "ha superado el límite de crédito permitido"
         monto_superior_a_pendiente: "El monto a pagar no puede ser mayor al monto pendiente."
+        credito_superior_a_disponible: "El monto a usar no puede ser mayor al credito disponible."
         monto_utilizado_cero: "El monto a pagar debe ser mayor a 0(cero)."
         total_pagado_diferente_de_boletas: "El total de las formas de pago debe ser igual al total a pagar de las boletas seleccionadas."
         no_editable: "no es editable"

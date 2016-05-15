@@ -28,19 +28,21 @@ section.content
                       = f.input_field :persona_id, as: :string,
                                                    label: false,
                                                    id: 'personas-buscador',
+                                                   disabled: @compra.creditos_detalles.size > 0 && @compra.persisted?,
                                                    class: 'form-control required',
                                                    data: {"msg-required" => 'Debe seleccionar un proveedor',
                                                           persona: f.object.persona.to_json },
                                                    placeholder: 'Buscar proveedor...'
-                      .input-group-btn
-                        = link_to '<i class="fa fa-plus"></i>'.html_safe,
-                                  new_proveedor_path(from_boletas: true),
-                                  data: {toggle: 'tooltip'},
-                                  title: 'Nuevo proveedor',
-                                  class: 'btn btn-default',
-                                  remote: true
+                      - if @compra.creditos_detalles.size == 0
+                        .input-group-btn
+                          = link_to '<i class="fa fa-plus"></i>'.html_safe,
+                                    new_proveedor_path(from_boletas: true),
+                                    data: {toggle: 'tooltip'},
+                                    title: 'Nuevo proveedor',
+                                    class: 'btn btn-default',
+                                    remote: true
                   .col-sm-4
-                    = f.input :condicion, as: :radio_group_buttons, input_html: { class: 'boleta-condicion' }
+                    = f.input :condicion, as: :radio_group_buttons, disabled: @compra.persisted?, input_html: { class: 'boleta-condicion' }
                 .row
                   /// FECHA DE VENCIMENTO
                   .col-sm-4
@@ -52,9 +54,6 @@ section.content
                           i.fa.fa-calendar
                   .col-sm-4
                     = f.input :numero_comprobante, label: 'Número de Comprobante', value: @compra.new_record? && f.object.numero_comprobante.nil? ? '' : f.object.numero_comprobante
-                  .col-xs-12
-                    p
-                      /a href="#modal-credito" data-toggle="modal" Agregar Crédito de devoluciones
 
               ///////////// CREDITO DISPONIBLE /////////////
               .col-sm-3
@@ -76,36 +75,35 @@ section.content
             /////////////
               DEVOLUCIONES
             /////////////
-            /.form-subtitle
-            /  label Crédito de devoluciones
-            /br
-            /table.table.table-bordered.detalles-table
-            /  thead
-            /    tr
-            /      th Número
-            /      th Monto
-            /      th Crédito disponible
-            /      th Crédito a usar
-            /      th
-            /  tbody#compra-detalles-body
-            /    tr
-            /      td
-            /        a 00034
-            /      td.text-right 200.000
-            /      td.text-right 200.000
-            /      td
-            /        input.form-control type="text" value="200.000"
-            /      td
-            /        a.btn.btn-default
-            /          i.fa.fa-times
-            /  tfoot
-            /    tr
-            /      td colspan="2"
-            /      td.text-right.text-bold
-            /        | Total:
-            /      td.table-total.text-right.text-bold
-            /        span 200.000
-            /      td
+            #devoluciones-persona.hide
+              .form-subtitle
+                label Crédito de devoluciones
+              br
+              .row.overlay-wrapper#mensaje-devoluciones
+                .overlay.hide
+                  i.fa.fa-refresh.fa-spin
+                .col-xs-12
+                  .well.text-center
+                    h3 Seleccione un proveedor para ver los creditos disponibles
+              table.table.table-bordered.detalles-table#devoluciones-disponibles-tabla.hide
+                thead
+                  tr
+                    th Número
+                    th Fecha
+                    th Monto
+                    th Crédito disponible
+                    th Crédito a usar
+                    th
+                tbody#creditos-detalles-body
+                  = render 'credito_devoluciones', devoluciones: @compra.creditos_detalles, actualizando: true, compra: @compra
+                tfoot
+                  tr
+                    td colspan="3"
+                    td.text-right.text-bold
+                      | Total:
+                    td.table-total.text-right.text-bold
+                      span
+                    td
             .form-subtitle
               label Mercaderías
               = link_to '<i class="fa fa-plus"></i>'.html_safe,
@@ -116,6 +114,8 @@ section.content
                         style: 'margin-left: 10px;',
                         remote: true
             br
+            - if @compra.errors.has_key?(:importe_total)
+              p.text-danger = "El importe total de la compra #{t('errors.messages.less_than', count: number_to_currency(DECIMAL_LIMITE[:superior]))}"
             table.table.table-bordered.detalles-table.calcular-total
               thead
                 tr
@@ -144,26 +144,27 @@ section.content
             /////////////
               RESUMEN DE TOTALES
             /////////////
-            /.row
-            /  .col-sm-offset-8.col-sm-4
-            /    table.table.bg-warning
-            /      tbody
-            /        tr
-            /          td Total mercaderias:
-            /          td.text-right Gs. 528.200
-            /        tr
-            /          td Crédito utilizado:
-            /          td.text-right Gs. 200.000
-            /        tr
-            /          td.text-bold Total a pagar:
-            /          td.text-right.text-bold Gs. 328.200
+            br
+            .row#boleta-resumen.hide
+              .col-sm-offset-8.col-sm-4
+                table.table.bg-warning
+                  tbody
+                    tr
+                      td Total mercaderias:
+                      td.text-right#res-total-mercaderia data-total="0" Gs. 0
+                    tr
+                      td Crédito utilizado:
+                      td.text-right#res-total-creditos data-total="0" Gs. 0
+                    tr
+                      td.text-bold Total a pagar:
+                      td.text-right.text-bold#res-total-a-pagar Gs. 0
             .row#pago-detalles
               .col-xs-12
                 .form-subtitle
                   label Formas de pago
                 br
                 - esconder_validacion_detalles = @compra.errors.has_key?(:"recibos_detalles.recibo.importe_total") ? '' : 'hide'
-                p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de pago debe ser igual al total a pagar de las boletas seleccionadas.
+                p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de pago debe ser igual al total a pagar de la compra.
                 = f.simple_fields_for :recibos_detalles do |r_form|
                   = r_form.simple_fields_for :recibo, @pago do |recibo_form|
                     table.table.table-bordered.detalles-table.calcular-pagos-total
@@ -243,6 +244,7 @@ section.content
 javascript:
   BoletasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");
   BoletasUI.setBuscarPersonasUrl("#{proveedores_buscar_path}");
+  BoletasUI.setDevolucionesPendientesUrl("#{compras_buscar_devoluciones_path}");
 
 - if @compra.errors.has_key?(:stock_negativo) || @compra.errors.has_key?(:saldo_negativo)
   javascript:
