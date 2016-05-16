@@ -1,0 +1,5 @@
+- if @devoluciones.size == 0
+  | BoletasUI.noHayDevoluciones('proveedor', "#{@proveedor.nombre}");
+- else
+  | $('#creditos-detalles-body').html("#{escape_javascript(render 'credito_devoluciones', devoluciones: @devoluciones, actualizando: false, compra: nil)}");
+  | BoletasUI.mostrarDevoluciones();

@@ -5,6 +5,7 @@ table.table.table-bordered.table-hover
       th Proveedor
       th Motivo
       th Monto
+      th Credito disponible
   tbody
     - devolucion_compras.each do |devolucion|
       tr.fila-clickeable data-url="#{devolucion_compra_path(devolucion)}"
@@ -12,3 +13,4 @@ table.table.table-bordered.table-hover
         td = devolucion.persona_nombre
         td = devolucion.motivo
         td.text-right = number_to_currency(devolucion.importe_total)
+        td.text-right = number_to_currency(devolucion.credito_restante)

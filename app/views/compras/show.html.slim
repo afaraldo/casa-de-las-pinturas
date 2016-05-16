@@ -48,7 +48,7 @@ section.content
                 - if !@compra.numero_comprobante.blank?
                   .col-sm-4
                     label.control-label Nro. de Comprobante
-                    p = @compra.numero_comprobante
+                    p.text-largo = @compra.numero_comprobante
                 .col-sm-4
                   label.control-label Estado
                   p
@@ -91,7 +91,6 @@ section.content
                     | Total:
                   td.table-total.text-right.text-bold
                     span = number_to_currency(total)
-                  td
           .tab-pane#pagos
             table.table.table-bordered.detalles-table.calcular-pagos-total
               thead
@@ -114,7 +113,32 @@ section.content
                     | Total:
                   td.table-total.text-right.text-bold
                     span = number_to_currency(total)
-  - if @compra.estado.pendiente?
+          .tab-pane#creditos
+            table.table.table-bordered.detalles-table
+              thead
+                tr
+                  th Fecha
+                  th Numero
+                  th Monto
+                  th Monto usado
+              tbody#movimiento-detalles-body
+                - total = 0
+                - @compra.creditos_detalles.each do |p|
+                  - total += p.monto_utilizado
+                  tr.fila-clickeable data-url="#{devolucion_compra_path(p.notas_creditos_debito.id)}"
+                    td = localize(p.notas_creditos_debito.fecha.to_date)
+                    td = p.notas_creditos_debito.id
+                    td.text-right = number_to_currency(p.notas_creditos_debito.importe_total)
+                    td.text-right = number_to_currency(p.monto_utilizado)
+              tfoot
+                tr
+                  td
+                  td
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total)
+  - if @compra.estado.pendiente? || @compra.importe_credito_utilizado > 0
     .row
       .col-sm-offset-8.col-sm-4
         .box.box-solid
@@ -124,14 +148,15 @@ section.content
                 tr
                   td Total mercaderias:
                   td.text-right = "#{number_to_currency(@compra.importe_total)}"
-                - if @compra.importe_descontado > 0
-                    tr
-                      td Crédito utilizado:
-                      td.text-right = "#{number_to_currency(@compra.importe_descontado)}"
+                - if @compra.importe_credito_utilizado > 0
+                  tr
+                    td Crédito utilizado:
+                    td.text-right = "#{number_to_currency(@compra.importe_credito_utilizado)}"
                 - if @compra.importe_pagado > 0
-                    tr
-                      td.text-bold Total pagado:
-                      td.text-right.text-bold = number_to_currency(@compra.importe_pagado)
-                tr.bg-yellow
-                  td.text-bold Total pendiente:
-                  td.text-right.text-bold = "#{number_to_currency(@compra.importe_pendiente)}"
+                  tr
+                    td.text-bold Total pagado:
+                    td.text-right.text-bold = number_to_currency(@compra.importe_pagado)
+                - if @compra.credito?
+                  tr.bg-yellow
+                    td.text-bold Total pendiente:
+                    td.text-right.text-bold = "#{number_to_currency(@compra.importe_pendiente)}"

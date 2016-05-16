@@ -83,6 +83,11 @@ CasaDeLasPinturas = {
                 }
             });
 
+            // Evitar que se modifique los radio buttons no editables
+            $('.disabled-group').on('click', '.btn', function(e){
+                return false;
+            });
+
             TablasHelper.filasClickeablesEvent();
 
             ImprimirHelper.imprimirEvento();
