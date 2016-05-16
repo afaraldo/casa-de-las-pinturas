@@ -11,13 +11,13 @@
         .form-group.datetime.required
           label Fecha
           /<abbr title="Campo obligatorio" data-toggle="tooltip">*</abbr></label><div><div class="input-group col-sm-12">
-          .vertical_input_group
+          .input-group
             = date_field_tag :fecha, nil, class: 'datepicker form-control'
             .input-group-btn
               .btn.btn-default
                 i.fa.fa-calendar
-            label Monto
-            = text_field_tag :monto, nil, class: 'form-control'
+          label Monto
+          = text_field_tag :monto, nil, class: 'form-control'
   .modal-footer.text-right
     button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
     input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."

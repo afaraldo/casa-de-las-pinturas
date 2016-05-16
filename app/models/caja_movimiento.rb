@@ -33,7 +33,9 @@ class CajaMovimiento < ActiveRecord::Base
   # Se controlan los posibles detalles y saldos negativos y se guarda la boleta
   def self.guardar_transferencia(fecha, monto, guardar_si_o_si)
     moneda_default = Moneda.find_by_defecto(true)
-
+    if monto.blank?
+      monto = 0
+    end
     # Set attributes of CajaMovimiento - egreso
     movimiento_egreso = CajaMovimiento.new
     movimiento_egreso.fecha = fecha
@@ -67,9 +69,19 @@ class CajaMovimiento < ActiveRecord::Base
     errors.append("La operación va a provocar disponibilidad negativa en los siguientes monedas: #{saldo_negativo.map {|m| m.nombre }.to_sentence}") if saldo_negativo.size > 0
 
     unless movimiento_egreso.save && movimiento_ingreso.save
-      errors = movimiento_egreso.errors.messages.values.first
+      key = movimiento_egreso.errors.messages.keys.first
+      message = movimiento_egreso.errors.messages[key].first
+      key = 'monto' if key == :'detalles.monto'
+      errors =  [key.to_s + ' ' + message]
     end
     errors
+  end
+
+  def guardar(attributes, guardar_si_o_si)
+    self.assign_attributes(attributes)
+    saldo_negativo = guardar_si_o_si ? [] : self.check_detalles_negativos
+    errors.add(:saldo_negativo, "La operación va a provocar disponibilidad negativa en los siguientes monedas: #{saldo_negativo.map {|m| m.nombre }.to_sentence}") if saldo_negativo.size > 0
+    saldo_negativo.size >= 0 && save
   end
 
   def validar_categoria_gasto
@@ -114,7 +126,6 @@ class CajaMovimiento < ActiveRecord::Base
       caja = Caja.get_caja_por_forma(:tarjeta) # caja tarjeta
     end
     saldos = caja.saldos_por_moneda(monedas) # saldos de esas monedas
-
     detalles.each do |d|
       saldos[d.moneda_id] -= (d.monto - d.monto_was.to_f)
     end

@@ -34,12 +34,11 @@ class CajaMovimientosController < ApplicationController
   # POST /caja_movimientos
   # POST /caja_movimientos.json
   def create
-    @caja_movimiento = CajaMovimiento.new(caja_movimiento_params)
-    @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @caja_movimiento.check_detalles_negativos
+    @caja_movimiento = CajaMovimiento.new
 
     respond_to do |format|
       CajaMovimiento.transaction do
-        if @saldo_negativo.size == 0 && @caja_movimiento.save
+        if @caja_movimiento.guardar(caja_movimiento_params, params[:guardar_si_o_si].present?)
           format.html { redirect_to @caja_movimiento, notice: t('mensajes.save_success', recurso: 'el movimiento') }
           format.json { render :show, status: :created, location: @caja_movimiento }
         else
@@ -54,12 +53,10 @@ class CajaMovimientosController < ApplicationController
   # PATCH/PUT /caja_movimientos/1
   # PATCH/PUT /caja_movimientos/1.json
   def update
-    @caja_movimiento.assign_attributes(caja_movimiento_params)
-    @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @caja_movimiento.check_detalles_negativos
-
+    @caja_movimiento = CajaMovimiento.find params[:id]
     respond_to do |format|
       CajaMovimiento.transaction do
-        if @saldo_negativo.size == 0 && @caja_movimiento.save
+        if @caja_movimiento.guardar(caja_movimiento_params, params[:guardar_si_o_si].present?)
           format.html { redirect_to @caja_movimiento, notice: t('mensajes.update_success', recurso: 'el movimiento') }
           format.json { render :show, status: :ok, location: @caja_movimiento }
         else
@@ -114,9 +111,6 @@ class CajaMovimientosController < ApplicationController
 
     # GET /caja_movimientos/new
     def new_transferencia
-      @movimiento_egreso = CajaMovimiento.new
-      @moneda = Moneda.find_by_defecto(true)
-      @movimiento_egreso.detalles.build(forma: :tarjeta, moneda_id: @moneda.id, cotizacion: @moneda.cotizacion )
       render 'load_form', format: :js
     end
 

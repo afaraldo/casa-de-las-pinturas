@@ -87,10 +87,6 @@ menu:
         text: "Movimientos de cajas"
         url: :caja_movimientos
         active_submenu: :caja_movimientos_sidemenu
-      transferencias:
-        text: "Transferencias"
-        url: "transferencias/new"
-        active_submenu: :transferencias_sidemenu
   reportes:
     text: "Reportes"
     url: "#"
