@@ -105,17 +105,6 @@ ActiveRecord::Schema.define(version: 20160510030257) do
   add_index "caja_periodo_balances", ["caja_id"], name: "index_caja_periodo_balances_on_caja_id", using: :btree
   add_index "caja_periodo_balances", ["moneda_id"], name: "index_caja_periodo_balances_on_moneda_id", using: :btree
 
-  create_table "caja_saldos", force: :cascade do |t|
-    t.integer  "caja_id"
-    t.integer  "moneda_id"
-    t.decimal  "saldo_efectivo", precision: 15, scale: 2, default: 0.0, null: false
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
-  end
-
-  add_index "caja_saldos", ["caja_id"], name: "index_caja_saldos_on_caja_id", using: :btree
-  add_index "caja_saldos", ["moneda_id"], name: "index_caja_saldos_on_moneda_id", using: :btree
-
   create_table "cajas", force: :cascade do |t|
     t.string   "nombre",     limit: 50, null: false
     t.datetime "deleted_at"
@@ -402,8 +391,6 @@ ActiveRecord::Schema.define(version: 20160510030257) do
   add_foreign_key "caja_movimientos", "categoria_gastos"
   add_foreign_key "caja_periodo_balances", "cajas"
   add_foreign_key "caja_periodo_balances", "monedas"
-  add_foreign_key "caja_saldos", "cajas"
-  add_foreign_key "caja_saldos", "monedas"
   add_foreign_key "cuenta_corriente_periodo_balances", "personas"
   add_foreign_key "cuentas_corrientes_extractos", "boletas"
   add_foreign_key "cuentas_corrientes_extractos", "notas_creditos_debitos"

@@ -1,54 +1,25 @@
-section.content-header
-  h1 Cajas
-section.content
-  .row
-    .col-xs-12
-      .box
-        = simple_form_for movimiento_egreso, url: caja_movimientos_create_transferencia_path, method: :create, html: { id: 'caja-movimiento-form' }, remote: true do |f|
-          .box-header
-            h3.box-title = "#{ movimiento_egreso.new_record? ? 'Nueva Transferencia' : 'Editar Movimiento de Caja'}"
-          .box-body
-            = f.error_notification
-            .row
-              .col-sm-3
-                = f.input :fecha, wrapper: :vertical_input_group do
-                  = f.input_field :fecha, as: :string, class: 'datepicker form-control', value: movimiento_egreso.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
-                  .input-group-btn
-                    .btn.btn-default
-                      i.fa.fa-calendar
-            .row
-              .col-xs-12
-                .form-subtitle
-                  label Valores
-                br
-                - esconder_validacion_detalles = movimiento_egreso.errors.has_key?(:detalles) ? '' : 'hide'
-                p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El monto debe ser mayor a cero (0).
-                table.table.table-bordered.detalles-table.calcular-total
-                  thead
-                    tr
-                      th Forma
-                      th Moneda
-                      th Monto
-                      th.hidden cotizacion
-                  tbody#caja-movimiento-detalles-body
-                    = f.simple_fields_for :detalles do |detalle|
-                      = render 'detalle_transferencia_fields', f: detalle
-          .box-footer
-            - if @saldo_negativo && @saldo_negativo.size > 0
-              input.hidden name="guardar_si_o_si" value= "true"
-              .alert.alert-warning#mensaje-saldo-negativo
-                p
-                  | La operación va a provocar que los fondos de la caja quede en negativo para las siguientes monedas: #{@saldo_negativo.map(&:nombre).to_sentence}.
-                p Esta seguro que quiere continuar?
-                .form-actions
-                  = link_to 'Cancelar', caja_movimientos_path, class: 'btn btn-default'
-                  | #{' '}
-                  button.btn.btn-primary type="submit" Continuar
-            - else
-              .form-actions.text-right
-                = link_to 'Cancelar', caja_movimientos_path, class: 'btn btn-default'
-                | #{' '}
-                button.btn.btn-primary type="submit" Guardar transferencia
-                
+= form_tag caja_movimientos_create_transferencia_path, remote: true do
+
+  .modal-header
+    button.close type="button" data-dismiss="modal"
+      span &times;
+    h4.modal-title
+      Nueva Transferencia
+  .modal-body
+    .row
+      .col-sm-12
+        .form-group.datetime.required
+          label Fecha
+          /<abbr title="Campo obligatorio" data-toggle="tooltip">*</abbr></label><div><div class="input-group col-sm-12">
+          .vertical_input_group
+            = date_field_tag :fecha, nil, class: 'datepicker form-control'
+            .input-group-btn
+              .btn.btn-default
+                i.fa.fa-calendar
+            label Monto
+            = text_field_tag :monto, nil, class: 'form-control'
+  .modal-footer.text-right
+    button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
+    input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."
   javascript:
     TransferenciasUI.initFormEvents();

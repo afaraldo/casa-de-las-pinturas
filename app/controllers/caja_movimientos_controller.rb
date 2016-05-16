@@ -87,7 +87,7 @@ class CajaMovimientosController < ApplicationController
     end
   end
 
-  def get_caja_movimientos
+  def get_caja_movimientos(caja = nil)
     @caja_movimientos = nil
 
     # Configurando las fechas
@@ -101,6 +101,9 @@ class CajaMovimientosController < ApplicationController
 
     # buscar movimientos
     @caja_id = !params[:caja_id].blank? ? params[:caja_id] : Caja.get_caja_por_forma(:efectivo).id
+    if caja
+      @caja_id = Caja.get_caja_por_forma(caja).id
+    end
     @moneda_id = !params[:moneda_id].blank? ? params[:moneda_id] : Moneda.first.id
     @caja_movimientos = CajaExtracto.get_movimientos(caja_id: @caja_id, moneda_id: @moneda_id,
                                                              desde: @desde,
@@ -118,23 +121,18 @@ class CajaMovimientosController < ApplicationController
     end
 
     def create_transferencia
-      @movimiento_egreso = CajaMovimiento.new(caja_movimiento_params)
-      @movimiento_egreso.motivo = "Transferencia de cuenta bancaria a caja registradora"
-      @movimiento_egreso.tipo = :egreso
-      @movimiento_egreso.caja_id = Caja.get_caja_por_forma(:tarjeta).id
-
       CajaMovimiento.transaction do
-        if @movimiento_egreso.save && @movimiento_egreso.guardar_ingreso
+        @result = CajaMovimiento.guardar_transferencia(params[:fecha], params[:monto], params[:guardar_si_o_si].present?)
+        unless @result.size > 0
           @error = false
           @message = "Se ha guardado la transferencia"
+          get_caja_movimientos :tarjeta
         else
-                    @moneda = Moneda.find_by_defecto(true)
-          @movimiento_egreso.detalles.build(forma: :tarjeta, moneda_id: @moneda.id, cotizacion: @moneda.cotizacion )so.detalles.build(forma: :tarjeta, moneda_id: @moneda.id, cotizacion: @moneda.cotizacion )
           @error = true
-          @message = "Ha ocurrido un problema al tratar de guardar la transferencia. #{@movimiento_egreso.errors.full_messages.to_sentence}"
+          @message = "Ha ocurrido un problema al tratar de guardar la transferencia. #{@result.to_sentence}"
         end
       end
-      render 'load_form', format: :js
+      render 'reload_list', format: :js
     end
 
   private

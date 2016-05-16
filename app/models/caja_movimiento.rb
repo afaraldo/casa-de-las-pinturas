@@ -31,24 +31,45 @@ class CajaMovimiento < ActiveRecord::Base
   validate :validar_categoria_gasto
 
   # Se controlan los posibles detalles y saldos negativos y se guarda la boleta
-  def guardar_ingreso
+  def self.guardar_transferencia(fecha, monto, guardar_si_o_si)
     moneda_default = Moneda.find_by_defecto(true)
+
+    # Set attributes of CajaMovimiento - egreso
+    movimiento_egreso = CajaMovimiento.new
+    movimiento_egreso.fecha = fecha
+    movimiento_egreso.motivo = "Transferencia de cuenta bancaria a caja registradora"
+    movimiento_egreso.tipo = :egreso
+    movimiento_egreso.caja_id = Caja.get_caja_por_forma(:tarjeta).id
+
+    # Set attributes of CajaMovimientoDetalle
+    movimiento_egreso_detalle = movimiento_egreso.detalles.build
+    movimiento_egreso_detalle.monto = monto
+    movimiento_egreso_detalle.cotizacion = moneda_default.cotizacion
+    movimiento_egreso_detalle.moneda_id = moneda_default.id
+    movimiento_egreso_detalle.forma = :tarjeta
 
     # Set attributes of CajaMovimiento - ingreso
     movimiento_ingreso = CajaMovimiento.new
     movimiento_ingreso.fecha = fecha
     movimiento_ingreso.motivo = "Transferencia de cuenta bancaria a caja registradora"
-    movimiento_ingreso.tipo = :egreso
+    movimiento_ingreso.tipo = :ingreso
     movimiento_ingreso.caja_id = Caja.get_caja_por_forma(:efectivo).id
 
     # Set attributes of CajaMovimientoDetalle
-    movimiento_ingreso_detalle = movimiento_egreso.detalles.build
+    movimiento_ingreso_detalle = movimiento_ingreso.detalles.build
     movimiento_ingreso_detalle.monto = monto
     movimiento_ingreso_detalle.cotizacion = moneda_default.cotizacion
     movimiento_ingreso_detalle.moneda_id = moneda_default.id
     movimiento_ingreso_detalle.forma = :efectivo
 
-    movimiento_ingreso.save
+    errors = []
+    saldo_negativo = guardar_si_o_si ? [] : movimiento_egreso.check_detalles_negativos(false)
+    errors.append("La operación va a provocar disponibilidad negativa en los siguientes monedas: #{saldo_negativo.map {|m| m.nombre }.to_sentence}") if saldo_negativo.size > 0
+
+    unless movimiento_egreso.save && movimiento_ingreso.save
+      errors = movimiento_egreso.errors.messages.values.first
+    end
+    errors
   end
 
   def validar_categoria_gasto
@@ -77,7 +98,7 @@ class CajaMovimiento < ActiveRecord::Base
   end
 
   def fecha_futura
-    if fecha > Date.today
+    if fecha && fecha > Date.today
       errors.add(:fecha, I18n.t('activerecord.errors.messages.fecha_futura'))
     end
   end
