@@ -63,7 +63,8 @@ class Boleta < ActiveRecord::Base
   def guardar(atributos, guardar_si_o_si)
     self.assign_attributes(atributos)
 
-    stock_negativo = controlar_stock_negativo(guardar_si_o_si)
+    stock_negativo = controlar_stock_negativo(guardar_si_o_si) if self.instance_of?(Compra)
+    stock_negativo = guardar_si_o_si ? [] : self.check_detalles_negativos if self.instance_of?(Venta)
     saldo_negativo = guardar_si_o_si ? [] : self.check_detalles_negativos_pago
 
     errors.add(:stock_negativo, "La operación va a provocar existencia negativa en los siguientes productos: #{stock_negativo.map {|m| m.nombre }.to_sentence}") if stock_negativo.size > 0
@@ -216,7 +217,7 @@ class Boleta < ActiveRecord::Base
     else
       monto_pagado = 0
       self.recibos_detalles.each do |p|
-        monto_pagado += p.monto_utilizado
+        monto_pagado += (p.monto_utilizado ? p.monto_utilizdo : 0)
       end
       self.importe_pendiente = self.importe_total - importe_credito_utilizado - monto_pagado
     end
