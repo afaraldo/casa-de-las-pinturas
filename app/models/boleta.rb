@@ -15,9 +15,12 @@ class Boleta < ActiveRecord::Base
   has_many :nota_credito_debito_detalles, class_name: 'DevolucionesBoleta', foreign_key: "boleta_id", inverse_of: :boleta, dependent: :destroy
   has_many :notas_creditos_debitos, class_name: 'NotasCreditosDebito', dependent: :destroy, through: :nota_credito_debito_detalles
 
+  has_many :creditos_detalles, class_name: 'BoletaNotaCreditoDebito', foreign_key: "boleta_id", inverse_of: :boleta, dependent: :destroy
+  has_many :creditos, class_name: 'NotasCreditosDebito', dependent: :destroy, through: :creditos_detalles, source: :notas_creditos_debito
+
   accepts_nested_attributes_for :detalles, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :recibos_detalles, reject_if: :all_blank, allow_destroy: true
-  # accepts_nested_attributes_for :recibos, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :creditos_detalles, reject_if: :all_blank, allow_destroy: true
 
   enumerize :condicion, in: [:contado, :credito], predicates: true
   enumerize :estado, in: [:pendiente, :pagado], predicates: true
@@ -27,6 +30,7 @@ class Boleta < ActiveRecord::Base
   #Callbacks
 
   before_validation :set_importe_total
+  before_validation :set_importe_credito_utilizado
   before_validation :set_importe_pendiente
   before_validation :set_estado
   before_validation :set_pago, if: :contado?
@@ -44,6 +48,7 @@ class Boleta < ActiveRecord::Base
   validates :persona, presence: true
   validates :detalles, length: { minimum: 1 }
   validates :condicion, presence: true
+  validates :importe_total, numericality: { greater_than: 0, less_than: DECIMAL_LIMITE[:superior] }
   validate  :condicion_cambiada?, on: :update
   validate :tiene_pagos_asociados?, on: [:update, :destroy]
   validate :fecha_futura
@@ -58,13 +63,18 @@ class Boleta < ActiveRecord::Base
   def guardar(atributos, guardar_si_o_si)
     self.assign_attributes(atributos)
 
-    stock_negativo = guardar_si_o_si ? [] : self.check_detalles_negativos
+    stock_negativo = controlar_stock_negativo(guardar_si_o_si)
     saldo_negativo = guardar_si_o_si ? [] : self.check_detalles_negativos_pago
 
     errors.add(:stock_negativo, "La operación va a provocar existencia negativa en los siguientes productos: #{stock_negativo.map {|m| m.nombre }.to_sentence}") if stock_negativo.size > 0
     errors.add(:saldo_negativo, "La operación va a provocar disponibilidad negativa en los siguientes monedas: #{saldo_negativo.map {|m| m.nombre }.to_sentence}") if saldo_negativo.size > 0
 
     stock_negativo.size <= 0 && saldo_negativo.size <= 0 && save
+  end
+
+  # si la boleta es compra y es nueva no provoca stock negativo
+  def controlar_stock_negativo(guardar_si_o_si)
+    guardar_si_o_si || new_record? && self.instance_of?(Compra) ? [] : self.check_detalles_negativos
   end
 
   def numero
@@ -80,13 +90,13 @@ class Boleta < ActiveRecord::Base
   end
 
   def importe_pagado
-    self.importe_total - self.importe_pendiente
+    self.importe_total - self.importe_pendiente - self.importe_credito_utilizado
   end
 
   def set_pago
 
     recibo_boleta = recibos_detalles.first
-    recibo_boleta.monto_utilizado = importe_total
+    recibo_boleta.monto_utilizado = importe_total - importe_credito_utilizado
 
     # HACK? Para forzar que se actualize el recibo_detalle y se actualice el recibo.
     # Porque pasa esto?: es un misterio todavia. :)
@@ -162,7 +172,7 @@ class Boleta < ActiveRecord::Base
       grupo = opciones[:agrupar_por] == 'persona' ? 'personas.nombre' : "to_char(fecha, '#{SQL_PERIODOS[opciones[:agrupar_por].to_sym]}')"
 
       resultado.joins(:persona)
-               .select("#{grupo} as grupo, sum(importe_total) as total")
+               .select("#{grupo} as grupo, sum(importe_total - importe_descontado) as total")
                .order("#{opciones[:order_by]} #{opciones[:order_dir]}")
                .group("#{grupo}")
                .page(opciones[:page]).per(opciones[:limit])
@@ -187,16 +197,28 @@ class Boleta < ActiveRecord::Base
     end
   end
 
+  def set_importe_credito_utilizado
+    if credito?
+      self.importe_credito_utilizado = 0
+    else
+      monto_usado = 0
+      self.creditos_detalles.each do |p|
+        monto_usado += p.monto_utilizado
+      end
+      self.importe_credito_utilizado = monto_usado
+    end
+  end
+
   #calcula el importe_pendiente, si la boleta es nueva importe_pendiente = importe_total sino importe_pendiente = (importe_total - montos_pagados)
   def set_importe_pendiente
     if new_record?
-      self.importe_pendiente = importe_total
+      self.importe_pendiente = importe_total - importe_credito_utilizado
     else
       monto_pagado = 0
       self.recibos_detalles.each do |p|
         monto_pagado += p.monto_utilizado
       end
-      self.importe_pendiente = self.importe_total - monto_pagado
+      self.importe_pendiente = self.importe_total - importe_credito_utilizado - monto_pagado
     end
   end
 
