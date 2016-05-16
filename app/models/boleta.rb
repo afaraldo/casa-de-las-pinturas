@@ -203,7 +203,7 @@ class Boleta < ActiveRecord::Base
     else
       monto_usado = 0
       self.creditos_detalles.each do |p|
-        monto_usado += p.monto_utilizado
+        monto_usado += p.monto_utilizado unless p.marked_for_destruction?
       end
       self.importe_credito_utilizado = monto_usado
     end
