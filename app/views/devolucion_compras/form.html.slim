@@ -36,6 +36,8 @@ section.content
                         = @devolucion_compra.boletas.first.id
                       - else
                         select.form-control#devolucion_id.required
+                          -if @devolucion_compra && !@devolucion_compra.boletas_detalles.empty?
+                            option = @devolucion_compra.boletas_detalles.first.boleta_id
                 .row
                   .col-sm-4
                     = f.input :motivo, label: 'Motivo'
@@ -46,7 +48,7 @@ section.content
                 .well.seleccionar-panel.text-center
                   i.fa.fa-search
                   h3 Seleccione un proveedor para ver las boletas para la devolucion
-            .row#pago-boletas-d<abbr title data-toggle="tooltip" data-original-title="Campo obligatorio">*</abbr>evoluciones.hide
+            .row#pago-boletas-devoluciones.hide
               .col-xs-12
                 .form-subtitle
                   label Mercaderias
@@ -67,7 +69,7 @@ section.content
                         | Total:
                       td.text-right.text-bold
                       td.table-total.text-right.text-bold
-                        span 0
+                        span
                       td
 
           .box-footer
