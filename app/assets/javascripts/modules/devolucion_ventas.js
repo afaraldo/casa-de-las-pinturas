@@ -34,6 +34,9 @@ DevolucionVentasUI= (function(){
         elementos.detallesPanel.removeClass('hide');
 
     }
+    function calcularTotal(){
+        elementos.detallesTable.find('.cantidad').trigger('change');
+    }
 
 
     function initFormEvents(){
@@ -44,6 +47,7 @@ DevolucionVentasUI= (function(){
         NumberHelper.mascaraMoneda('.maskMoneda');
 
         DatepickerHelper.initDatepicker('.datepicker');
+        TablasHelper.calcularTotalEvent('.detalles-table');
 
         // Abrir el buscador de proveedores cuando se hace click en el panel inicial
         elementos.devolucionVentaForm.on('click', '.seleccionar-panel', function(e){
@@ -135,16 +139,19 @@ DevolucionVentasUI= (function(){
         'create': function(){
             initFormEvents();
             mostrarBoletas(false);
+            calcularTotal();
             
         },
         'edit': function() {
             initFormEvents();
             mostrarBoletas(false);
+            calcularTotal();
             
         },
         'update': function(){
             initFormEvents();
             mostrarBoletas(false);
+            calcularTotal();
 
         },
         setBuscarClienterUrl: function(url) {
