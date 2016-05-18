@@ -34,12 +34,11 @@ class CajaMovimientosController < ApplicationController
   # POST /caja_movimientos
   # POST /caja_movimientos.json
   def create
-    @caja_movimiento = CajaMovimiento.new(caja_movimiento_params)
-    @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @caja_movimiento.check_detalles_negativos
+    @caja_movimiento = CajaMovimiento.new
 
     respond_to do |format|
       CajaMovimiento.transaction do
-        if @saldo_negativo.size == 0 && @caja_movimiento.save
+        if @caja_movimiento.guardar(caja_movimiento_params, params[:guardar_si_o_si].present?)
           format.html { redirect_to @caja_movimiento, notice: t('mensajes.save_success', recurso: 'el movimiento') }
           format.json { render :show, status: :created, location: @caja_movimiento }
         else
@@ -54,12 +53,10 @@ class CajaMovimientosController < ApplicationController
   # PATCH/PUT /caja_movimientos/1
   # PATCH/PUT /caja_movimientos/1.json
   def update
-    @caja_movimiento.assign_attributes(caja_movimiento_params)
-    @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @caja_movimiento.check_detalles_negativos
-
+    @caja_movimiento = CajaMovimiento.find params[:id]
     respond_to do |format|
       CajaMovimiento.transaction do
-        if @saldo_negativo.size == 0 && @caja_movimiento.save
+        if @caja_movimiento.guardar(caja_movimiento_params, params[:guardar_si_o_si].present?)
           format.html { redirect_to @caja_movimiento, notice: t('mensajes.update_success', recurso: 'el movimiento') }
           format.json { render :show, status: :ok, location: @caja_movimiento }
         else
@@ -87,7 +84,7 @@ class CajaMovimientosController < ApplicationController
     end
   end
 
-  def get_caja_movimientos
+  def get_caja_movimientos(caja = nil)
     @caja_movimientos = nil
 
     # Configurando las fechas
@@ -101,12 +98,35 @@ class CajaMovimientosController < ApplicationController
 
     # buscar movimientos
     @caja_id = !params[:caja_id].blank? ? params[:caja_id] : Caja.get_caja_por_forma(:efectivo).id
+    if caja
+      @caja_id = Caja.get_caja_por_forma(caja).id
+    end
     @moneda_id = !params[:moneda_id].blank? ? params[:moneda_id] : Moneda.first.id
     @caja_movimientos = CajaExtracto.get_movimientos(caja_id: @caja_id, moneda_id: @moneda_id,
                                                              desde: @desde,
                                                              hasta: @hasta,
                                                              page: params[:page],
                                                              limit: action_name == 'imprimir_extracto' ? LIMITE_REGISTROS_IMPRIMIR : nil)
+    end
+
+    # GET /caja_movimientos/new
+    def new_transferencia
+      render 'load_form', format: :js
+    end
+
+    def create_transferencia
+      CajaMovimiento.transaction do
+        @result = CajaMovimiento.guardar_transferencia(params[:fecha], params[:monto], params[:guardar_si_o_si].present?)
+        unless @result.size > 0
+          @error = false
+          @message = "Se ha guardado la transferencia"
+          get_caja_movimientos :tarjeta
+        else
+          @error = true
+          @message = "Ha ocurrido un problema al tratar de guardar la transferencia. #{@result.to_sentence}"
+        end
+      end
+      render 'reload_list', format: :js
     end
 
   private

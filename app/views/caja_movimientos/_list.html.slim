@@ -7,7 +7,7 @@ table.table.table-bordered.table-hover
       th Egreso
       th Saldo
   tbody
-    - balance = caja_movimientos[:balance_anterior]
+    - balance = caja_movimientos[:balance_anterior] if caja_movimientos
     tr.active
       td.text-right colspan="4" Saldo anterior:
       td.text-right = number_to_currency(balance, unit: '')
