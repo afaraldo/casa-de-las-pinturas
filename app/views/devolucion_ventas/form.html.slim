@@ -26,28 +26,28 @@ section.content
                         .btn.btn-default
                           i.fa.fa-calendar
                   .col-sm-4
-                    = f.association :persona, as: :string, label: 'Proveedor', disabled: @devolucion_venta.persisted?, input_html: { id: 'personas-buscador', placeholder: 'Buscar cliente...', data: { 'msg-required' => 'Este campo es obligatorio.',persona: f.object.persona.to_json } }
-                  .col-sm-4
-                    label.has-error.control-label Venta
-                    - if @devolucion_venta.persisted?
-                      br
-                      = @devolucion_venta.boletas.first.id
-                    - else
-                      select.form-control.required#devolucion_id
+                    = f.association :persona, as: :string, label: 'Cliente', disabled: @devolucion_venta.persisted?, input_html: { id: 'personas-buscador', placeholder: 'Buscar cliente...', data: { 'msg-required' => 'Este campo es obligatorio.',persona: f.object.persona.to_json } }
+                  .form-group
+                    .col-sm-4
+                      label.has-error.control-label Venta
+                      abbr *
+                      - if @devolucion_venta.persisted?
+                        br
+                        = @devolucion_venta.boletas.first.id
+                      - else
+                        select.form-control.required#devolucion_id
+                          - if @devolucion_venta && !@devolucion_venta.boletas_detalles.empty?
+                            option = @devolucion_venta.boletas_detalles.first.boleta_id
                 .row
                   .col-sm-4
-                    = f.input :motivo, label: 'Motivo' do
-                      = f.input_field :motivo, as: :string,
-                                                   label: false,
-                                                    class: 'form-control required',
-                                                   data: {"msg-required" => 'Debe escribir un motivo'}
+                    = f.input :motivo, label: 'Motivo'
             .row.overlay-wrapper#devolucion-mensajes
               .overlay.hide
                 i.fa.fa-refresh.fa-spin
               .col-xs-12
                 .well.seleccionar-panel.text-center
                   i.fa.fa-search
-                  h3 Seleccione un cliente y una venta para ver las mercaderias para devolución
+                  h3 Seleccione un cliente para ver las boletas para la devolucion
             .row#pago-boletas-devoluciones.hide
               .col-xs-12
                 .form-subtitle
@@ -69,7 +69,7 @@ section.content
                         | Total:
                       td.text-right.text-bold
                       td.table-total.text-right.text-bold
-                        span 0
+                        span
                       td
 
           .box-footer
