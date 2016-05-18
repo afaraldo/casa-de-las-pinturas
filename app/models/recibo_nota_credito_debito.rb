@@ -37,5 +37,3 @@ class ReciboNotaCreditoDebito < ActiveRecord::Base
   end
 
 end
-
->>>>>>> 2c0ccf73eb47856c304e7904f8c4ee45e96617d1
