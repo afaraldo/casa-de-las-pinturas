@@ -49,7 +49,7 @@ section.content
                 - if !@venta.numero_comprobante.blank?
                   .col-sm-4
                     label.control-label Nro. de Comprobante
-                    p = @venta.numero_comprobante
+                    p.text-largo = @venta.numero_comprobante
                 .col-sm-4
                   label.control-label Estado
                   p
