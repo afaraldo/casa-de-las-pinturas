@@ -47,8 +47,8 @@ section.content
                       th Crédito disponible
                       th Crédito a usar
                       th
-                  tbody#venta-detalles-body
-                
+                  tbody#creditos-detalles-body
+                    = render 'credito_devoluciones', devoluciones: @cobro.recibos_creditos_detalles, actualizando: true, cobro: @cobro
                   tfoot
                     tr
                       td colspan="2"
