@@ -15,7 +15,7 @@ class CobrosController < ApplicationController
   def buscar_pendientes
     @cliente = Cliente.find(params[:cliente_id])
     @ventas = @cliente.ventas_pendientes
-    @devoluciones = []
+    @devoluciones = @cliente.devoluciones_disponibles
   end
 
   def imprimir

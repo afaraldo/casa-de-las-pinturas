@@ -17,5 +17,5 @@
     td
       - seleccionado = actualizando ? {checked: ''} : {} # checkear la compra al editar o cuando hay errores en el create
       input type="checkbox" name="cobro[creditos_detalles_attributes][#{i}][usado]" class="usar-credito" *seleccionado
-      - if !compra.nil? && compra.persisted? # incluir el id del detalle al editar
+      - if !cobro.nil? && cobro.persisted? # incluir el id del detalle al editar
         input type="hidden" name="cobro[creditos_detalles_attributes][#{i}][id]" value="#{d.id}"
