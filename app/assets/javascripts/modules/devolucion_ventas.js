@@ -47,12 +47,12 @@ DevolucionVentasUI= (function(){
         NumberHelper.mascaraMoneda('.maskMoneda');
 
         DatepickerHelper.initDatepicker('.datepicker');
-        TablasHelper.calcularTotalEvent('.detalles-table');
+        TablasHelper.calcularTotalEvent({selector: '.detalles-table'});
 
         // Abrir el buscador de proveedores cuando se hace click en el panel inicial
         elementos.devolucionVentaForm.on('click', '.seleccionar-panel', function(e){
             elementos.personasBuscador.select2('open');
-        
+
         });
         elementos.personasBuscador.on('change',function(e){
             var boleta = $('#devolucion_id');
@@ -78,20 +78,20 @@ DevolucionVentasUI= (function(){
         $('#devolucion_id').on('change',function(){
             $("#devolucion-mensajes").addClass("hide");
             $('#pago-boletas-devoluciones').removeClass("hide");
-            
+
             $.ajax({
                 url: 'buscar_venta',
                 type:'get',
                 dataType:'script',
                 data: {venta_id:$(this).val()}
-                
+
             });
         });
 
         if($('.nested-fields').length == 1){
             $('.remove_fields').addClass('hide');
         }
-        
+
         $('#venta-detalles-body').on('cocoon:after-remove', function(e, removedItem) {
 
             // Se esconde el boton de eliminar si es que ya queda solo uno
@@ -126,7 +126,8 @@ DevolucionVentasUI= (function(){
                 devolucionVentaForm: $('#devolucion-venta-form'),
                 personasBuscador: $('#personas-buscador'),
                 mensajePanel: $('#devolucion-mensajes'),
-                detallesPanel: $('#pago-boletas-devoluciones')
+                detallesPanel: $('#pago-boletas-devoluciones'),
+                detallesTable: $('.detalles-table')
             }
         },
         index: function() {
@@ -140,13 +141,13 @@ DevolucionVentasUI= (function(){
             initFormEvents();
             mostrarBoletas(false);
             calcularTotal();
-            
+
         },
         'edit': function() {
             initFormEvents();
             mostrarBoletas(false);
             calcularTotal();
-            
+
         },
         'update': function(){
             initFormEvents();
