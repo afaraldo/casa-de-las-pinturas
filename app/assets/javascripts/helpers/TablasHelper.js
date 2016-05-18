@@ -11,10 +11,10 @@ var TablasHelper = {
      * Evento para calcular subtotales y total en una tabla
      * cada fila debe tener un campo con la clase .cantidad y otro con la clase .precio-unitario
      *
-     * @param selector el selector de la tabla
+     * @param opciones el selector de la tabla {selector: , callbackParaElTotal: funcion para acceder al total}
      */
-    calcularTotalEvent: function(selector) {
-        var tabla = $(selector);
+    calcularTotalEvent: function(opciones) {
+        var tabla = $(opciones.selector);
 
         tabla.on('keyup change', '.cantidad, .precio-unitario', function(){
             var fila = $(this).parents('tr'),
@@ -31,6 +31,9 @@ var TablasHelper = {
                 tabla.find('.table-total span')
                     .data('total', total)
                     .text(NumberHelper.aMoneda(total));
+
+                if(opciones.hasOwnProperty('callbackParaElTotal'))
+                    opciones.callbackParaElTotal(total);
 
         });
 
@@ -51,12 +54,12 @@ var TablasHelper = {
         if(opciones.hasOwnProperty('autocompletarCampo'))
             autocompletar = opciones.autocompletarCampo;
 
-        tabla.on('keyup change', '.monto-a-sumar, .pagar-boleta', function(e){
+        tabla.on('keyup change', '.monto-a-sumar, .pagar-boleta, .usar-credito', function(e){
             var total = 0;
 
             tabla.find('.monto-a-sumar').each(function(){
                 var campo = $(this);
-                if(campo.parents('tr').find('.pagar-boleta').is(':checked')) {
+                if(campo.parents('tr').find('.pagar-boleta, .usar-credito').is(':checked')) {
                     total += NumberHelper.aNumero($(this).val());
                 }
             });
@@ -69,7 +72,7 @@ var TablasHelper = {
                 opciones.totalPorDefecto.val(NumberHelper.aMoneda(total)).trigger('change');
 
             if(opciones.hasOwnProperty('callbackDespuesDeSeleccionar'))
-                opciones.callbackDespuesDeSeleccionar();
+                opciones.callbackDespuesDeSeleccionar(total);
         });
     }
 };

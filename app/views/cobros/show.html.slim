@@ -24,7 +24,7 @@ section.content
               - else
                 = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, cobro_path(@cobro), method: 'delete', data: {confirm: "¿Desea eliminar el cobro?"}, class: 'btn btn-danger'
             - else
-              button.btn.btn-danger.disabled data-toggle="tooltip" title="No se puede eliminar el pago porque pertenece a una compra al contado."
+              button.btn.btn-danger.disabled data-toggle="tooltip" title="No se puede eliminar el cobro porque pertenece a una venta al contado."
                 i.fa.fa-trash
                 |  Eliminar
         .box-body

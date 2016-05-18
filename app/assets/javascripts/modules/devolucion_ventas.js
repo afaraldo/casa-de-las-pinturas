@@ -73,7 +73,7 @@ DevolucionVentasUI= (function(){
 
         $('#devolucion_id').on('change',function(){
             $("#devolucion-mensajes").addClass("hide");
-            $('#pago-boletas-devoluciones').removeClass("hide");
+            $('#cobro-boletas-devoluciones').removeClass("hide");
             
             $.ajax({
                 url: 'buscar_venta',
@@ -122,7 +122,7 @@ DevolucionVentasUI= (function(){
                 devolucionVentaForm: $('#devolucion-venta-form'),
                 personasBuscador: $('#personas-buscador'),
                 mensajePanel: $('#devolucion-mensajes'),
-                detallesPanel: $('#pago-boletas-devoluciones')
+                detallesPanel: $('#cobro-boletas-devoluciones')
             }
         },
         index: function() {

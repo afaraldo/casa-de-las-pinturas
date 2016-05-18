@@ -1,13 +1,13 @@
-class ReciboNotaCreditoDebito < ActiveRecord::Base
+class BoletaNotaCreditoDebito < ActiveRecord::Base
 
   acts_as_paranoid
 
-  self.table_name = 'recibos_notas_creditos_debitos'
+  self.table_name = 'boletas_notas_creditos_debitos'
 
   after_save :actualizar_devoluciones
   after_destroy :actualizar_devoluciones
 
-  belongs_to :recibo
+  belongs_to :boleta
   belongs_to :notas_creditos_debito
 
   validate  :monto_utilizado_devoluciones
@@ -37,5 +37,3 @@ class ReciboNotaCreditoDebito < ActiveRecord::Base
   end
 
 end
-
->>>>>>> 2c0ccf73eb47856c304e7904f8c4ee45e96617d1

@@ -2,12 +2,29 @@ class DevolucionComprasController < ApplicationController
 
   before_action :set_devolucion_compra, only: [:show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
+  before_action :editable?, only: [:edit, :update]
+  before_action :eliminable?, only: [:destroy]
 
   # configuracion del menu
   def setup_menu
     @menu_setup[:main_menu] = :compras
     @menu_setup[:side_menu] = :devolucion_compras_sidemenu
   end
+
+  def editable?
+    unless @devolucion_compra.es_editable?
+      flash[:warning] = @devolucion_compra.no_editable_mensaje
+      redirect_to @devolucion_compra
+    end
+  end
+
+  def eliminable?
+    unless @devolucion_compra.es_editable?
+      flash[:warning] = @devolucion_compra.no_eliminable_mensaje
+      redirect_to @devolucion_compra
+    end
+  end
+
   # GET /compras
   # GET /compras.json
   def index

@@ -25,7 +25,7 @@ var CajaMovimientosUI = (function(){
             }
         });
 
-        TablasHelper.calcularTotalEvent('.calcular-total');
+        TablasHelper.calcularTotalEvent({selector: '.calcular-total'});
 
         calcularTotal();
     }
@@ -38,7 +38,7 @@ var CajaMovimientosUI = (function(){
         },
         index: function() {
             DatepickerHelper.initDateRangePicker('#date-range');
-            
+
             $(".caja-tipo").on("change",function(){
                 var tipo =  $(".caja-tipo option:selected").text();
 

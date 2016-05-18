@@ -5,7 +5,7 @@ DevolucionComprasUI= (function(){
         /**
      * Mensaje que muestra un mensaje para indicar que debe seleccionar un proveedor
      */
- 
+
     function seleccioneProveedor(){
         elementos.mensajePanel.find('h3').text('Seleccione un proveedor para ver las boletas para la devolucion');
         elementos.mensajePanel.find('.seleccionar-panel i').removeClass('fa-list').addClass('fa-search');
@@ -46,7 +46,7 @@ DevolucionComprasUI= (function(){
         NumberHelper.mascaraCantidad('.maskCantidad');
 
         DatepickerHelper.initDatepicker('.datepicker');
-        TablasHelper.calcularTotalEvent('.detalles-table');
+        TablasHelper.calcularTotalEvent({selector: '.detalles-table'});
 
         // Abrir el buscador de proveedores cuando se hace click en el panel inicial
         elementos.devolucionCompraForm.on('click', '.seleccionar-panel', function(e){
@@ -77,20 +77,20 @@ DevolucionComprasUI= (function(){
         $('#devolucion_id').on('change',function(){
             $("#devolucion-mensajes").addClass("hide");
             $('#pago-boletas-devoluciones').removeClass("hide");
-            
+
             $.ajax({
                 url: 'buscar_compra',
                 type:'get',
                 dataType:'script',
                 data: {compra_id:$(this).val()}
-                
+
             });
         });
 
         if($('.nested-fields').length == 1){
             $('.remove_fields').addClass('hide');
         }
-        
+
         $('#compra-detalles-body').on('cocoon:after-remove', function(e, removedItem) {
 
             // Se esconde el boton de eliminar si es que ya queda solo uno
@@ -138,19 +138,19 @@ DevolucionComprasUI= (function(){
         'create': function(){
             initFormEvents();
             mostrarBoletas(false);
-            
+
         },
         'edit': function() {
             initFormEvents();
             mostrarBoletas(false);
-            
+
         },
         'update': function(){
             initFormEvents();
             mostrarBoletas(false);
 
         },
-        
+
         setBuscarProveedorUrl: function(url) {
             buscarProveedorUrl = url;
         }

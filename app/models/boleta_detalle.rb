@@ -6,9 +6,8 @@ class BoletaDetalle < ActiveRecord::Base
   delegate :nombre, to: :mercaderia, prefix: true
   delegate :codigo, to: :mercaderia, prefix: true
 
-  validates :cantidad, numericality: { greater_than: 0, less_than_or_equal_to: DECIMAL_LIMITE[:superior] }
-  validates :precio_unitario, numericality: { greater_than: 0, less_than: 1_000_000_000_000 }
-
+  validates :cantidad, numericality: { greater_than: 0, less_than: DECIMAL_LIMITE[:superior] }
+  validates :precio_unitario, numericality: { greater_than: 0, less_than: DECIMAL_LIMITE[:superior] }
 
   validate  :check_stock_rango
 
