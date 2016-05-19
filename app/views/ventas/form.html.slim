@@ -50,9 +50,6 @@ section.content
                           i.fa.fa-calendar
                   .col-sm-4
                     = f.input :numero_comprobante, label: 'Número de Comprobante', value: @venta.new_record? && f.object.numero_comprobante.nil? ? '' : f.object.numero_comprobante
-                  .col-xs-12
-                    p
-                      /a href="#modal-credito" data-toggle="modal" Agregar Crédito de devoluciones
 
               ///////////// CREDITO DISPONIBLE /////////////
               .col-sm-3
@@ -74,36 +71,36 @@ section.content
             /////////////
               DEVOLUCIONES
             /////////////
-            /.form-subtitle
-            /  label Crédito de devoluciones
-            /br
-            /table.table.table-bordered.detalles-table
-            /  thead
-            /    tr
-            /      th Número
-            /      th Monto
-            /      th Crédito disponible
-            /      th Crédito a usar
-            /      th
-            /  tbody#compra-detalles-body
-            /    tr
-            /      td
-            /        a 00034
-            /      td.text-right 200.000
-            /      td.text-right 200.000
-            /      td
-            /        input.form-control type="text" value="200.000"
-            /      td
-            /        a.btn.btn-default
-            /          i.fa.fa-times
-            /  tfoot
-            /    tr
-            /      td colspan="2"
-            /      td.text-right.text-bold
-            /        | Total:
-            /      td.table-total.text-right.text-bold
-            /        span 200.000
-            /      td
+            #devoluciones-persona.hide
+              .form-subtitle
+                label Crédito de devoluciones
+              br
+              .row.overlay-wrapper#mensaje-devoluciones
+                .overlay.hide
+                  i.fa.fa-refresh.fa-spin
+                .col-xs-12
+                  .well.text-center
+                    h3 Seleccione un proveedor para ver los creditos disponibles
+              table.table.table-bordered.detalles-table#devoluciones-disponibles-tabla.hide
+                thead
+                  tr
+                    th Número
+                    th Fecha
+                    th Monto
+                    th Crédito disponible
+                    th Crédito a usar
+                    th
+                tbody#creditos-detalles-body
+                  = render 'credito_devoluciones', devoluciones: @compra.creditos_detalles, actualizando: true, compra: @compra
+                tfoot
+                  tr
+                    td colspan="3"
+                    td.text-right.text-bold
+                      | Total:
+                    td.table-total.text-right.text-bold
+                      span
+                    td               
+               
             .form-subtitle
               label Mercaderías
               = link_to '<i class="fa fa-plus"></i>'.html_safe,
@@ -142,19 +139,20 @@ section.content
             /////////////
               RESUMEN DE TOTALES
             /////////////
-            /.row
-            /  .col-sm-offset-8.col-sm-4
-            /    table.table.bg-warning
-            /      tbody
-            /        tr
-            /          td Total mercaderias:
-            /          td.text-right Gs. 528.200
-            /        tr
-            /          td Crédito utilizado:
-            /          td.text-right Gs. 200.000
-            /        tr
-            /          td.text-bold Total a pagar:
-            /          td.text-right.text-bold Gs. 328.200
+            br
+            .row#boleta-resumen.hide
+              .col-sm-offset-8.col-sm-4
+                table.table.bg-warning
+                  tbody
+                    tr
+                      td Total mercaderias:
+                      td.text-right#res-total-mercaderia data-total="0" Gs. 0
+                    tr
+                      td Crédito utilizado:
+                      td.text-right#res-total-creditos data-total="0" Gs. 0
+                    tr
+                      td.text-bold Total a pagar:
+                      td.text-right.text-bold#res-total-a-pagar Gs. 0
 
             .row#pago-detalles.hide
               .col-xs-12
@@ -206,6 +204,7 @@ section.content
 javascript:
   BoletasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");
   BoletasUI.setBuscarPersonasUrl("#{clientes_buscar_path}");
+  BoletasUI.setDevolucionesPendientesUrl("#{ventas_buscar_devoluciones_path}");
 
 - if @venta.errors.has_key?(:stock_negativo) || @venta.errors.has_key?(:saldo_negativo)
   javascript:

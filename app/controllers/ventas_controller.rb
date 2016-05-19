@@ -9,6 +9,11 @@ class VentasController < ApplicationController
     @menu_setup[:side_menu] = :ventas_sidemenu
   end
 
+  def buscar_devoluciones
+    @cliente= Cliente.find(params[:persona_id])
+    @devoluciones = @cliente.devoluciones_disponibles
+  end
+
   def imprimir
     get_ventas
   end
@@ -120,6 +125,8 @@ class VentasController < ApplicationController
     def venta_params
       procesar_cantidades_mercaderias
       procesar_cantidades_cobros
+      procesar_devoluciones(params[:venta][:condicion])
+      
       params[:venta].delete("recibos_detalles_attributes") if params[:venta][:condicion] == "credito"
       params.require(:venta).permit(:persona_id, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :condicion,
                                      recibos_detalles_attributes:[:id, :_destroy,
