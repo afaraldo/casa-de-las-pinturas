@@ -44,7 +44,7 @@ class VentasController < ApplicationController
 
   # GET /ventas/1/edit
   def edit
-    @cobro.rebuild_detalles if @cobro
+    get_cobro
     render :form
   end
 
@@ -58,8 +58,7 @@ class VentasController < ApplicationController
           format.html { redirect_to @venta, notice: t('mensajes.save_success', recurso: 'la venta') }
           format.json { render :show, status: :created, location: @venta }
         else
-          @cobro = @venta.recibos_detalles.first.recibo if @venta.recibos_detalles.first
-          @cobro.rebuild_detalles if @cobro
+          get_cobro
           format.html { render :form }
           format.json { render json: @venta.errors, status: :unprocessable_entity }
         end
@@ -81,8 +80,7 @@ class VentasController < ApplicationController
           format.html { redirect_to @venta, notice: t('mensajes.save_success', recurso: 'la venta') }
           format.json { render :show, status: :created, location: @venta }
         else
-          @cobro = @venta.recibos_detalles.first.recibo if @venta.recibos_detalles.first
-          @cobro.rebuild_detalles if @cobro
+          get_cobro
           format.html { render :form }
           format.json { render json: @venta.errors, status: :unprocessable_entity }
         end
@@ -119,6 +117,17 @@ class VentasController < ApplicationController
     def set_venta
       @venta = Venta.find(params[:id])
       @cobro = @venta.recibos.first
+    end
+
+    def get_cobro
+      if @venta.recibos_detalles.first
+        @cobro = @venta.recibos_detalles.first.recibo
+        @cobro.rebuild_detalles if @cobro
+      else
+        @recibo_detalle = @venta.recibos_detalles.build
+        @cobro = @recibo_detalle.build_recibo
+        @cobro.build_detalles
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

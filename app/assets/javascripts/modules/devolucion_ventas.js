@@ -34,6 +34,9 @@ DevolucionVentasUI= (function(){
         elementos.detallesPanel.removeClass('hide');
 
     }
+    function calcularTotal(){
+        elementos.detallesTable.find('.cantidad').trigger('change');
+    }
 
 
     function initFormEvents(){
@@ -123,7 +126,8 @@ DevolucionVentasUI= (function(){
                 devolucionVentaForm: $('#devolucion-venta-form'),
                 personasBuscador: $('#personas-buscador'),
                 mensajePanel: $('#devolucion-mensajes'),
-                detallesPanel: $('#pago-boletas-devoluciones')
+                detallesPanel: $('#pago-boletas-devoluciones'),
+                detallesTable: $('.detalles-table')
             }
         },
         index: function() {
@@ -136,16 +140,17 @@ DevolucionVentasUI= (function(){
         'create': function(){
             initFormEvents();
             mostrarBoletas(false);
-
+            calcularTotal();
         },
         'edit': function() {
             initFormEvents();
             mostrarBoletas(false);
-
+            calcularTotal();
         },
         'update': function(){
             initFormEvents();
             mostrarBoletas(false);
+            calcularTotal();
 
         },
         setBuscarClienterUrl: function(url) {

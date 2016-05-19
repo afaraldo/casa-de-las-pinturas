@@ -1,0 +1,3 @@
+| var modal = $('#main-modal-sm');
+| modal.find('.modal-content').html("#{escape_javascript(render partial: 'form_transferencia', format: :html, locals: {movimiento_egreso: @movimiento_egreso, moneda: @moneda})}");
+| modal.modal('show');

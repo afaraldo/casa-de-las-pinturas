@@ -25,7 +25,7 @@ class NotasCreditosDebito < ActiveRecord::Base
 
   # Validations
   validates :fecha,  presence: true
-  validates :motivo, length: { minimum: 2, maximum: 50 }, allow_blank: false
+  validates :motivo, length: { minimum: 2, maximum: 50 }, allow_blank: false, presence: true
   validates :persona, presence: true
   validates :detalles, length: { minimum: 1 }
   validate  :fecha_futura
