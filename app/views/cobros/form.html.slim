@@ -39,10 +39,11 @@ section.content
                 .form-subtitle
                   label Crédito de devoluciones
                 br
-                table.table.table-bordered.detalles-table
+                table.table.table-bordered.detalles-table#creditos-disponibles-tabla
                   thead
                     tr
                       th Número
+                      th Fecha
                       th Monto
                       th Crédito disponible
                       th Crédito a usar
@@ -51,11 +52,11 @@ section.content
                     = render 'credito_devoluciones', devoluciones: @cobro.recibos_creditos_detalles, actualizando: true, cobro: @cobro
                   tfoot
                     tr
-                      td colspan="2"
+                      td colspan="3"
                       td.text-right.text-bold
                         | Total:
                       td.table-total.text-right.text-bold
-                        span 200.000
+                        span
                       td
 
                 .form-subtitle
@@ -93,14 +94,14 @@ section.content
                 table.table.bg-warning
                   tbody
                     tr
-                      td Total mercaderias:
-                      td.text-right#res-total-mercaderia data-total="0" Gs. 0
+                      td Total boletas:
+                      td.text-right#res-total-boleta data-total="0" Gs. 0
                     tr
                       td Crédito utilizado:
                       td.text-right#res-total-creditos data-total="0" Gs. 0
                     tr
-                      td.text-bold Total a pagar:
-                      td.text-right.text-bold#res-total-a-pagar Gs. 0
+                      td.text-bold Total a cobrar:
+                      td.text-right.text-bold#res-total-a-cobrar Gs. 0
 
             .row#cobro-detalles.hide
               .col-xs-12

@@ -26,6 +26,7 @@ class Recibo < ActiveRecord::Base
 
   accepts_nested_attributes_for :detalles, reject_if: proc { |attrs| (attrs['monto'].to_f * attrs['cotizacion'].to_f) <= 0 }, allow_destroy: true
   accepts_nested_attributes_for :boletas_detalles, allow_destroy: true
+  accepts_nested_attributes_for :recibos_creditos_detalles, reject_if: :all_blank, allow_destroy: true
 
   default_scope { order('fecha DESC') } # Ordenar por fecha por defecto
 
