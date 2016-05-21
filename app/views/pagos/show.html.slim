@@ -106,3 +106,27 @@ section.content
                   td.table-total.text-right.text-bold
                     span = number_to_currency(total_compras)
           .tab-pane#creditos
+            table.table.table-bordered.detalles-table.calcular-pagos-total
+              thead
+                tr
+                  th Fecha
+                  th Numero
+                  th Monto
+                  th Monto usado
+              tbody#movimiento-detalles-body
+                - total = 0
+                - @pago.recibos_creditos_detalle_attributes.each do |p|
+                  - total += p.monto_utilizado
+                  tr.fila-clickeable data-url="#{devolucion_compra_path(p.notas_creditos_debito.id)}"
+                    td = localize(p.notas_creditos_debito.fecha.to_date)
+                    td = p.notas_creditos_debito.id
+                    td.text-right = number_to_currency(p.notas_creditos_debito.importe_total)
+                    td.text-right = number_to_currency(p.monto_utilizado)
+              tfoot
+                tr
+                  td
+                  td
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total)

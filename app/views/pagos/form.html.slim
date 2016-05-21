@@ -27,19 +27,20 @@ section.content
                 .row
                   .col-sm-4
                     = f.input :numero_comprobante, label: 'Número de Comprobante'
+            /////////////
+              DEVOLUCIONES
+            /////////////
+            #pago-boletas-devoluciones.hide
+              .form-subtitle
+                label Crédito de devoluciones
+              br
             .row.overlay-wrapper#pago-mensajes
               .overlay.hide
                 i.fa.fa-refresh.fa-spin
               .col-xs-12
-                .well.seleccionar-panel.text-center
-                  i.fa.fa-search
-                  h3 Seleccione un proveedor para ver las boletas y devoluciones pendientes
-            .row#pago-boletas-devoluciones.hide
-              .col-xs-12#creditos-disponibles-tabla
-                .form-subtitle
-                  label Crédito de devoluciones
-                br
-                table.table.table-bordered.detalles-table
+                .well.text-center
+                    h3 = @pago.new_record? ? "Seleccione un proveedor para ver las boletas y los creditos disponibles" : "No hay devoluciones disponibles para el proveedor #{@pago.persona_nombre}"
+                table.table.table-bordered.detalles-table#creditos-disponibles-tabla.hide
                   thead
                     tr
                       th Número
@@ -48,7 +49,9 @@ section.content
                       th Crédito a usar
                       th
                   tbody#creditos-detalles-body
-                    = render 'credito_devoluciones', devoluciones: @pago.recibos_creditos_detalles, actualizando: true, pago: @pago
+                    - creditos_usados = @pago.creditos_detalles.map(&:notas_creditos_debito_id)
+                    - creditos_disponibles = @pago.persisted? ? @pago.persona.devoluciones_disponibles.reject { |d| creditos_usados.include?(d.id) } : []
+                    = render 'credito_devoluciones', devoluciones: @pago.creditos_detalles.to_a + creditos_disponibles.to_a, actualizando: true, pago: @pago
                   tfoot
                     tr
                       td colspan="3"

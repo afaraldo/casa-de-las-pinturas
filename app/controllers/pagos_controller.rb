@@ -133,7 +133,9 @@ class PagosController < ApplicationController
 
       params.require(:pago).permit(:persona_id, :numero_comprobante, :fecha,
                                    detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma, :_destroy],
-                                   boletas_detalles_attributes: [:id, :monto_utilizado, :boleta_id, :_destroy])
+                                   boletas_detalles_attributes: [:id, :monto_utilizado, :boleta_id, :_destroy],
+                                   Srecibos_creditos_detalleS_attributes: [:id, :notas_creditos_debito_id, :monto_utilizado, :_destroy],
+                                   detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy],)
 
     end
 
