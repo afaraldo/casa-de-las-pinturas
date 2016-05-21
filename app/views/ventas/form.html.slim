@@ -32,14 +32,14 @@ section.content
                                                    data: {"msg-required" => 'Debe seleccionar un cliente',
                                                           persona: f.object.persona.to_json },
                                                    placeholder: 'Buscar cliente...'
-                     - if @compra.creditos_detalles.size == 0
-                       .input-group-btn
-                         = link_to '<i class="fa fa-plus"></i>'.html_safe,
-                                   new_proveedor_path(from_boletas: true),
-                                   data: {toggle: 'tooltip'},
-                                   title: 'Nuevo proveedor',
-                                   class: 'btn btn-default',
-                                   remote: true
+                  - if @venta.creditos_detalles.size == 0
+                    .input-group-btn
+                      = link_to '<i class="fa fa-plus"></i>'.html_safe,
+                                new_proveedor_path(from_boletas: true),
+                                data: {toggle: 'tooltip'},
+                                title: 'Nuevo proveedor',
+                                class: 'btn btn-default',
+                                remote: true
                   .col-sm-4
                     = f.input :condicion, as: :radio_group_buttons, disabled: @venta.persisted?, input_html: { class: 'boleta-condicion' }
                 .row
@@ -93,7 +93,7 @@ section.content
                     th Crédito a usar
                     th
                 tbody#creditos-detalles-body
-                  = render 'credito_devoluciones', devoluciones: @venta.creditos_detalles, actualizando: true, compra: @venta
+                  = render 'credito_devoluciones', devoluciones: @venta.creditos_detalles, actualizando: true, venta: @venta
                 tfoot
                   tr
                     td colspan="3"
