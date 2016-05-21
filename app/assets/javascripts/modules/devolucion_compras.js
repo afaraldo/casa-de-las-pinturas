@@ -90,6 +90,11 @@ DevolucionComprasUI= (function(){
             });
         });
 
+        $('td .boton-de-borrado').on('click',function(){
+          $(this).parent().parent().addClass('hide');
+          $(this).parent().parent().find(".input-destroy").val("true");
+        });
+
         if($('.nested-fields').length == 1){
             $('.remove_fields').addClass('hide');
         }
