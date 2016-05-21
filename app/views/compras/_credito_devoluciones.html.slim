@@ -3,7 +3,7 @@
   - devolucion = es_devolucion ? d : d.notas_creditos_debito
   - credito_restante = devolucion.credito_restante
   - if !compra.nil? && compra.persisted? && !es_devolucion # Sumar el monto utilizado al editar la compra
-    - credito_restante += d.monto_utilizado_was
+    - credito_restante += d.monto_utilizado_was.to_f
   tr
     td = devolucion.id
     td = localize(devolucion.fecha.to_date)
