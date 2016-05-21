@@ -35,7 +35,7 @@ section.content
                   i.fa.fa-search
                   h3 Seleccione un proveedor para ver las boletas y devoluciones pendientes
             .row#pago-boletas-devoluciones.hide
-              .col-xs-12
+              .col-xs-12#creditos-disponibles-tabla
                 .form-subtitle
                   label Crédito de devoluciones
                 br
@@ -47,11 +47,11 @@ section.content
                       th Crédito disponible
                       th Crédito a usar
                       th
-                  tbody#compra-detalles-body
+                  tbody#creditos-detalles-body
                     = render 'credito_devoluciones', devoluciones: @pago.recibos_creditos_detalles, actualizando: true, pago: @pago
                   tfoot
                     tr
-                      td colspan="2"
+                      td colspan="3"
                       td.text-right.text-bold
                         | Total:
                       td.table-total.text-right.text-bold
@@ -75,7 +75,7 @@ section.content
                     = render 'compras_pendientes', compras: @pago.boletas_detalles, actualizando: true, pago: @pago
                   tfoot
                     tr
-                      td colspan="2"
+                      td colspan="3"
                       td.text-right.text-bold
                         | Total:
                       td.text-right.text-bold
@@ -92,8 +92,8 @@ section.content
                 table.table.bg-warning
                   tbody
                     tr
-                      td Total mercaderias:
-                      td.text-right#res-total-mercaderia data-total="0" Gs. 0
+                      td Total Boletas:
+                      td.text-right#res-total-boleta data-total="0" Gs. 0
                     tr
                       td Crédito utilizado:
                       td.text-right#res-total-creditos data-total="0" Gs. 0

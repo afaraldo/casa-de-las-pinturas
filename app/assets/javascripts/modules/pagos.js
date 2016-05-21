@@ -2,6 +2,7 @@ var PagosUI = (function(){
     var elementos = null,
         buscarProveedorUrl = '',
         boletasPendientesUrl = '';
+        devolucionesPendientesUrl = '';
 
     /**
      * Mensaje que indica que el proveedor seleccionado no tiene boletas pendientes
@@ -27,6 +28,34 @@ var PagosUI = (function(){
         elementos.detallesPanel.addClass('hide');
         elementos.mensajePanel.find('.overlay').addClass('hide');
     }
+    /**
+     * Mensaje que indica que el proveedor seleccionado no tiene devoluciones pendientes
+     * @param tipo
+     * @param proveedor
+     */
+    function noHayDevoluciones(proveedor){
+        elementos.mensajePanel.find('h3').text('No hay devoluciones disponibles para el proveedor ' + proveedor);
+        elementos.mensajePanel.find('.overlay').addClass('hide');
+        elementos.mensajePanel.removeClass('hide');
+        elementos.devolucionesTabla.addClass('hide');
+    }
+    /**
+     * Muestra el panel de las devoluciones
+     * Esconde el panel del mensaje inicial
+     */
+    function mostrarDevoluciones() {
+        elementos.mensajePanel.addClass('hide');
+        elementos.devolucionesTabla.removeClass('hide');
+        elementos.boletaResumen.removeClass('hide');
+
+        NumberHelper.mascaraMoneda('.mascaraMoneda');
+    }
+
+    function limpiarDevoluciones(){
+        $('#creditos-detalles-body').html('');
+        $('#res-total-creditos').data('total', 0).text('Gs. 0');
+        elementos.detallesTable.find('.cantidad').trigger('change');
+    }
 
     /**
      * Muestra el panel de las boletas y los detalles del pago
@@ -45,6 +74,12 @@ var PagosUI = (function(){
             $(elementos.boletasPanel.find('.monto-a-sumar')[0]).trigger('change');
             elementos.detallesPanel.find('.cantidad').trigger('change');
         }
+    }
+     // Usar los data attributes del resumen para calcular el total a pagar
+    function calcularTotalBoleta(){
+        var aPagar = parseInt($('#res-total-boleta').data('total')) - parseInt($('#res-total-creditos').data('total'));
+        $('.moneda-por-defecto').val(NumberHelper.aMoneda(aPagar)).trigger('change');
+        $('#res-total-a-pagar').text(NumberHelper.aMoneda(aPagar));
     }
 
     function initFormEvents(autocompletarMonedaPorDefecto){
@@ -87,15 +122,28 @@ var PagosUI = (function(){
                 MensajesHelper.irHasta(elementos.validacionBoletasSeleccionadas.offset().top);
                 e.preventDefault();
             }
-            var totalDetalles = elementos.detallesPanel.find('.table-total span').data('total'),
-                totalBoletas = elementos.boletasPanel.find('.table-total span').data('total');
+            var totalDetalles = parseInt($('#pago-detalles').find('.table-total span').data('total')),
+                totalBoletas = parseInt($('#compra-detalles-tabla').find('.table-total span').data('total')),
+                creditos = parseInt($('#res-total-creditos').data('total'));
 
-            if(totalBoletas != totalDetalles){
+            if((totalBoletas - creditos) != totalDetalles){
                 elementos.validacionTotalDetalles.removeClass('hide');
                 e.preventDefault();
             }
 
         });
+
+        // Calculador de devoluciones seleccionadas
+        TablasHelper.calcularSeleccionados(
+            {   selector: '#creditos-disponibles-tabla',
+                autocompletarCampo: false,
+                callbackDespuesDeSeleccionar: function(credito){
+                    // setear el credito utilizado en el resumen
+                    $('#res-total-creditos').data('total', credito).text(NumberHelper.aMoneda(credito));
+                    calcularTotalBoleta();
+                }
+            }
+        );
 
         TablasHelper.calcularSeleccionados(
             {   selector: '#compra-detalles-tabla',
@@ -105,6 +153,9 @@ var PagosUI = (function(){
                     if(elementos.pagosForm.find('.pagar-boleta:checked').length > 0){
                         elementos.validacionBoletasSeleccionadas.addClass('hide');
                     }
+                    // setear el credito utilizado en el resumen
+                    $('#res-total-boleta').data('total', total).text(NumberHelper.aMoneda(total));
+                    calcularTotalBoleta();
                 }
             }
         );
@@ -122,7 +173,9 @@ var PagosUI = (function(){
                 boletasPanel: $('#pago-boletas-devoluciones'),
                 detallesPanel: $('#pago-detalles'),
                 validacionBoletasSeleccionadas: $('#boletas-seleccionadas-validation'),
-                validacionTotalDetalles: $('#recibo-total-validation')
+                validacionTotalDetalles: $('#recibo-total-validation'),
+                boletaResumen: $('#boleta-resumen'),
+                devolucionesTabla: $('#creditos-disponibles-tabla')
             }
         },
         index: function() {
@@ -151,7 +204,12 @@ var PagosUI = (function(){
         },
         setboletasPendientesUrl: function(url) {
             boletasPendientesUrl = url;
-        }
+        },
+        setDevolucionesPendientesUrl: function(url) {
+            devolucionesPendientesUrl = url;
+        },
+        noHayDevoluciones: noHayDevoluciones,
+        mostrarDevoluciones: mostrarDevoluciones
     };
 
 }());

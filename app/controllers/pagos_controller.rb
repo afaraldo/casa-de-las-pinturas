@@ -14,9 +14,8 @@ class PagosController < ApplicationController
   # busca las compras y devoluciones pendientes de un proveedor dado
   def buscar_pendientes
     @proveedor = Proveedor.find(params[:proveedor_id])
-
     @compras = @proveedor.compras_pendientes
-    @devoluciones = []
+    @devoluciones = @proveedor.devoluciones_disponibles
   end
 
   def imprimir
