@@ -56,7 +56,7 @@ section.content
                       td.text-right.text-bold
                         | Total:
                       td.table-total.text-right.text-bold
-                        span
+                        span 0
                       td
 
                 .form-subtitle
@@ -76,10 +76,9 @@ section.content
                     = render 'ventas_pendientes', ventas: @cobro.boletas_detalles, actualizando: true, cobro: @cobro
                   tfoot
                     tr
-                      td colspan="2"
+                      td colspan="3"
                       td.text-right.text-bold
                         | Total:
-                      td.text-right.text-bold
                       td.table-total.text-right.text-bold
                         span 0
                       td
