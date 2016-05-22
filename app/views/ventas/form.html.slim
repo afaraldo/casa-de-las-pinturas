@@ -32,14 +32,14 @@ section.content
                                                    data: {"msg-required" => 'Debe seleccionar un cliente',
                                                           persona: f.object.persona.to_json },
                                                    placeholder: 'Buscar cliente...'
-                  - if @venta.creditos_detalles.size == 0
-                    .input-group-btn
-                      = link_to '<i class="fa fa-plus"></i>'.html_safe,
-                                new_proveedor_path(from_boletas: true),
-                                data: {toggle: 'tooltip'},
-                                title: 'Nuevo proveedor',
-                                class: 'btn btn-default',
-                                remote: true
+                      - if @venta.creditos_detalles.size == 0
+                        .input-group-btn
+                          = link_to '<i class="fa fa-plus"></i>'.html_safe,
+                                    new_cliente_path(from_boletas: true),
+                                    data: {toggle: 'tooltip'},
+                                    title: 'Nuevo cliente',
+                                    class: 'btn btn-default',
+                                    remote: true
                   .col-sm-4
                     = f.input :condicion, as: :radio_group_buttons, disabled: @venta.persisted?, input_html: { class: 'boleta-condicion' }
                 .row
@@ -68,7 +68,7 @@ section.content
                     - if @venta.new_record?
                       = link_to 'Actualizar límite', "#", id: 'link_to_persona', remote: true
                     - else
-                      = link_to 'Actualizar límite', edit_proveedor_path(@venta.persona.id), id: 'link_to_persona', remote: true
+                      = link_to 'Actualizar límite', edit_cliente_path(@venta.persona.id), id: 'link_to_persona', remote: true
 
             /////////////
               DEVOLUCIONES
@@ -82,7 +82,7 @@ section.content
                   i.fa.fa-refresh.fa-spin
                 .col-xs-12
                   .well.text-center
-                    h3 Seleccione un proveedor para ver los creditos disponibles
+                    h3 Seleccione un cliente para ver los creditos disponibles
               table.table.table-bordered.detalles-table#devoluciones-disponibles-tabla.hide
                 thead
                   tr
@@ -163,8 +163,11 @@ section.content
                 .form-subtitle
                   label Formas de cobro
                 br
-                - esconder_validacion_detalles = @venta.errors.has_key?(:"recibos_detalles.recibo.importe_total") ? '' : 'hide'
-                  p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de pago debe ser igual al total a pagar de la venta.
+                - if @venta.errors.has_key?(:"recibos_detalles.recibo.importe_total")
+                  - esconder_validacion_detalles = ""
+                - else
+                  - esconder_validacion_detalles = 'hide'
+                p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de pago debe ser igual al total a pagar de la venta.
                 = f.simple_fields_for :recibos_detalles do |r_form|
                   = r_form.simple_fields_for :recibo, @cobro do |recibo_form|
                     table.table.table-bordered.detalles-table.calcular-pagos-total
