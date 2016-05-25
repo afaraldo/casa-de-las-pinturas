@@ -25,8 +25,8 @@
     td.subtotal-col.text-right
       span
         = number_with_precision(subtotal, delimiter: '.')
-    - if total ==1
-      td
+    - if total == 1
+        td
     - else
-       td
-        = link_to '<i class="fa fa-times"></i>'.html_safe,"#", class: 'btn btn-default btn-sm boton-de-borrado remove_fields'
+        td
+          = link_to '<i class="fa fa-times"></i>'.html_safe,"#",id: 'borrar', class: 'btn btn-default btn-sm boton-de-borrado'

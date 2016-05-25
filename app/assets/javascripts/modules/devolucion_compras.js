@@ -90,40 +90,12 @@ DevolucionComprasUI= (function(){
             });
         });
 
-        $('td .boton-de-borrado').on('click',function(){
-          $(this).parent().parent().addClass('hide');
-          $(this).parent().parent().find(".input-destroy").val("true");
-        });
-
-        if($('.nested-fields').length == 1){
-            $('.remove_fields').addClass('hide');
-        }
-
-        $('#compra-detalles-body').on('cocoon:after-remove', function(e, removedItem) {
-
-            // Se esconde el boton de eliminar si es que ya queda solo uno
-            var tBody = $(this);
-            if(tBody.find('.nested-fields:visible').length == 1){
-                $('.remove_fields').addClass('hide');
-            }
-
-        });
+        $('td #borrar').on('click',function(){
+            $(this).parent().parent().addClass('hide');
+            $(this).parent().parent().find(".input-destroy").val("true");
+       });
 
 
-    }
-
-    // Recibe una lista de mercaderias y elimina si alguno ya esta seleccionado entre los detalles
-    // se asume que los inputs tengan las clase .proveedor-select
-    function eliminarItemsSeleccionados(items) {
-        var seleccionados = $.map($('input.proveedor-select'), function(v,i){ return $(v).val();});
-
-        for(var i = 0; i < items.length; i++) {
-            if($.inArray(items[0].id, seleccionados) > -1) {
-                items.splice(i, 1);
-            }
-        }
-
-        return items;
     }
 
 
@@ -148,13 +120,11 @@ DevolucionComprasUI= (function(){
             initFormEvents();
             mostrarBoletas(false);
             calcularTotal();
-            
         },
         'edit': function() {
             initFormEvents();
             mostrarBoletas(false);
             calcularTotal();
-            
         },
         'update': function(){
             initFormEvents();
