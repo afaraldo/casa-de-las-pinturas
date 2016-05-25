@@ -39,7 +39,6 @@ DevolucionComprasUI= (function(){
         elementos.detallesTable.find('.cantidad').trigger('change');
     }
 
-
     function initFormEvents(){
         PersonasUI.buscador({elemento: elementos.proveedorBuscador, url: buscarProveedorUrl});
 
@@ -90,10 +89,13 @@ DevolucionComprasUI= (function(){
             });
         });
 
-        $('td #borrar').on('click',function(){
+        $('.boton-de-borrado').on('click',function(){
             $(this).parent().parent().addClass('hide');
             $(this).parent().parent().find(".input-destroy").val("true");
-       });
+            if($("tr.nested-fields:not(.hide)").length < 2){
+                $("tr.nested-fields:not(.hide)").find(".boton-de-borrado").addClass("hide");
+            }
+        });
 
 
     }
