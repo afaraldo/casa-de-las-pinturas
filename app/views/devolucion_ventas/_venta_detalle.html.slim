@@ -21,6 +21,7 @@
     td.precio_unitario.text-right
       = number_with_precision(precio, delimiter: '.')
       = text_field "devolucion_venta[detalles_attributes][#{i}]", :precio_unitario, value: number_with_precision(precio), class: 'form-control text-right precio-unitario hide'
+      = hidden_field "devolucion_venta[detalles_attributes][#{i}]", :_destroy, value: false, class: 'input-destroy'
     td.subtotal-col.text-right
       span
         = number_with_precision(subtotal, delimiter: '.')
@@ -28,5 +29,4 @@
       td
     - else
       td
-        =  link_to '<i class="fa fa-times"></i>'.html_safe,"#", class: 'btn btn-default btn-sm remove_fields dynamic'
-        = hidden_field "devolucion_venta[detalles_attributes][#{i}]", :_destroy, value: false
+        = link_to '<i class="fa fa-times"></i>'.html_safe,"#", class: 'btn btn-default btn-sm boton-de-borrado existing'
