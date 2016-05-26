@@ -10,8 +10,6 @@ class Recibo < ActiveRecord::Base
 
   after_initialize :set_condicion
   before_validation :set_importes
-  before_validation :total_efectivo
-  before_validation :total_tarjeta
   before_validation :set_total_credito_utilizado
   after_save :actualizar_cuenta_corriente, if: :credito?
   after_destroy :actualizar_cuenta_corriente, if: :credito?
@@ -90,7 +88,6 @@ class Recibo < ActiveRecord::Base
   def set_importes
     self.total_efectivo = 0
     self.total_tarjeta = 0
-    self.total_credito_utilizado = 0
 
     detalles.each do |d|
       self.total_efectivo += (d.monto * d.cotizacion) if d.forma.efectivo?
@@ -117,7 +114,7 @@ class Recibo < ActiveRecord::Base
   def pagos_boletas_seleccionadas
     boletas_seleccionadas = 0
     creditos_seleccionados = 0
-    - binding.pry
+
     recibos_creditos_detalles.each do |r|
       unless r.marked_for_destruction?
         creditos_seleccionados += r.monto_utilizado
