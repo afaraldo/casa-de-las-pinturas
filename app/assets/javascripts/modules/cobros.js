@@ -173,7 +173,7 @@ var CobrosUI = (function(){
                 cobrosForm: $('#cobro-form'),
                 personasBuscador: $('#personas-buscador'),
                 mensajePanel: $('#cobro-mensajes'),
-                boletasPanel: $('#cobro-boletas-devoluciones'),
+                boletasPanel: $('#pago-boletas-devoluciones'),
                 detallesPanel: $('#cobro-detalles'),
                 validacionBoletasSeleccionadas: $('#boletas-seleccionadas-validation'),
                 validacionTotalDetalles: $('#recibo-total-validation'),
