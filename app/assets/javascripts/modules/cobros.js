@@ -55,7 +55,7 @@ var CobrosUI = (function(){
         if(limpiarDetalles) {
             elementos.detallesPanel.find('.cantidad').val('0');
         } else {
-            $(elementos.boletasPanel.find('.monto-a-sumar')[0]).trigger('change');
+            elementos.boletasPanel.find('.monto-a-sumar').trigger('change');
             elementos.detallesPanel.find('.cantidad').trigger('change');
         }
     }
@@ -173,7 +173,7 @@ var CobrosUI = (function(){
                 cobrosForm: $('#cobro-form'),
                 personasBuscador: $('#personas-buscador'),
                 mensajePanel: $('#cobro-mensajes'),
-                boletasPanel: $('#cobro-boletas-devoluciones'),
+                boletasPanel: $('#pago-boletas-devoluciones'),
                 detallesPanel: $('#cobro-detalles'),
                 validacionBoletasSeleccionadas: $('#boletas-seleccionadas-validation'),
                 validacionTotalDetalles: $('#recibo-total-validation'),
