@@ -47,6 +47,7 @@ es:
         tipo: "Tipo de movimiento"
     errors:
       messages:
+        ingresar_categoria: "Ingrese una categoria de gasto"
         limite_credito_invalido: "El limite de crédito no puede ser menor a %{limite}"
         persona_no_editable: "No se puede editar. Posee pagos asociados"
         importe_no_editable: "Importe y cantidades no se puede editar. Posee pagos asociados"

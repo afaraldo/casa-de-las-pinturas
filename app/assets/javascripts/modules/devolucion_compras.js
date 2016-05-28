@@ -35,6 +35,9 @@ DevolucionComprasUI= (function(){
         elementos.detallesPanel.removeClass('hide');
 
     }
+    function calcularTotal(){
+        elementos.detallesTable.find('.cantidad').trigger('change');
+    }
 
 
     function initFormEvents(){
@@ -125,7 +128,8 @@ DevolucionComprasUI= (function(){
                 devolucionCompraForm: $('#devolucion-compra-form'),
                 proveedorBuscador: $('#personas-buscador'),
                 mensajePanel: $('#devolucion-mensajes'),
-                detallesPanel: $('#pago-boletas-devoluciones')
+                detallesPanel: $('#pago-boletas-devoluciones'),
+                detallesTable: $('.detalles-table')
             }
         },
         index: function() {
@@ -138,16 +142,19 @@ DevolucionComprasUI= (function(){
         'create': function(){
             initFormEvents();
             mostrarBoletas(false);
-
+            calcularTotal();
+            
         },
         'edit': function() {
             initFormEvents();
             mostrarBoletas(false);
-
+            calcularTotal();
+            
         },
         'update': function(){
             initFormEvents();
             mostrarBoletas(false);
+            calcularTotal();
 
         },
 

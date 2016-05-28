@@ -28,7 +28,74 @@ class CajaMovimiento < ActiveRecord::Base
   validates :tipo,   presence: true
   validates :detalles, length: { minimum: 1 }
   validate  :fecha_futura
-  validates :categoria_gasto, presence: true, if: :egreso?
+  validate :validar_categoria_gasto
+
+  # Se controlan los posibles detalles y saldos negativos y se guarda la boleta
+  def self.guardar_transferencia(fecha, monto, guardar_si_o_si)
+    moneda_default = Moneda.find_by_defecto(true)
+    if monto.blank?
+      monto = 0
+    end
+    # Set attributes of CajaMovimiento - egreso
+    movimiento_egreso = CajaMovimiento.new
+    movimiento_egreso.fecha = fecha
+    movimiento_egreso.motivo = "Transferencia de cuenta bancaria a caja registradora"
+    movimiento_egreso.tipo = :egreso
+    movimiento_egreso.caja_id = Caja.get_caja_por_forma(:tarjeta).id
+
+    # Set attributes of CajaMovimientoDetalle
+    movimiento_egreso_detalle = movimiento_egreso.detalles.build
+    movimiento_egreso_detalle.monto = monto
+    movimiento_egreso_detalle.cotizacion = moneda_default.cotizacion
+    movimiento_egreso_detalle.moneda_id = moneda_default.id
+    movimiento_egreso_detalle.forma = :tarjeta
+
+    # Set attributes of CajaMovimiento - ingreso
+    movimiento_ingreso = CajaMovimiento.new
+    movimiento_ingreso.fecha = fecha
+    movimiento_ingreso.motivo = "Transferencia de cuenta bancaria a caja registradora"
+    movimiento_ingreso.tipo = :ingreso
+    movimiento_ingreso.caja_id = Caja.get_caja_por_forma(:efectivo).id
+
+    # Set attributes of CajaMovimientoDetalle
+    movimiento_ingreso_detalle = movimiento_ingreso.detalles.build
+    movimiento_ingreso_detalle.monto = monto
+    movimiento_ingreso_detalle.cotizacion = moneda_default.cotizacion
+    movimiento_ingreso_detalle.moneda_id = moneda_default.id
+    movimiento_ingreso_detalle.forma = :efectivo
+
+    errors = []
+    saldo_negativo = guardar_si_o_si ? [] : movimiento_egreso.check_detalles_negativos(false)
+    errors.append("La operación va a provocar disponibilidad negativa en los siguientes monedas: #{saldo_negativo.map {|m| m.nombre }.to_sentence}") if saldo_negativo.size > 0
+
+    unless movimiento_egreso.save && movimiento_ingreso.save
+      key = movimiento_egreso.errors.messages.keys.first
+      message = movimiento_egreso.errors.messages[key].first
+      key = 'monto' if key == :'detalles.monto'
+      errors =  [key.to_s + ' ' + message]
+    end
+    errors
+  end
+
+  def guardar(attributes, guardar_si_o_si)
+    self.assign_attributes(attributes)
+    saldo_negativo = guardar_si_o_si ? [] : self.check_detalles_negativos
+    errors.add(:saldo_negativo, "La operación va a provocar disponibilidad negativa en los siguientes monedas: #{saldo_negativo.map {|m| m.nombre }.to_sentence}") if saldo_negativo.size > 0
+    saldo_negativo.size >= 0 && save
+  end
+
+  def validar_categoria_gasto
+    caja = Caja.get_caja_por_forma(:efectivo)
+    if egreso? && caja_id == caja.id
+      if !categoria_gasto
+        errors.add(:categoria_gasto, I18n.t('activerecord.errors.messages.ingresar_categoria'))
+      else
+        true
+      end
+    else
+      true
+    end
+  end
 
   def set_caja
     self.caja_id ||= Caja.get_caja_por_forma(:efectivo).id
@@ -43,18 +110,22 @@ class CajaMovimiento < ActiveRecord::Base
   end
 
   def fecha_futura
-    if fecha > Date.today
+    if fecha && fecha > Date.today
       errors.add(:fecha, I18n.t('activerecord.errors.messages.fecha_futura'))
     end
   end
 
   # calcula si se va a producir saldo negativo para algunas monedas en la caja efectivo
-  def check_detalles_negativos
+  def check_detalles_negativos(caja_efectivo = true)
 
     monedas = detalles.map(&:moneda_id) # monedas de los detalles
-    caja = Caja.get_caja_por_forma(:efectivo) # caja efectivo
-    saldos = caja.saldos_por_moneda(monedas) # saldos de esas monedas
 
+    if caja_efectivo
+      caja = Caja.get_caja_por_forma(:efectivo) # caja efectivo
+    else
+      caja = Caja.get_caja_por_forma(:tarjeta) # caja tarjeta
+    end
+    saldos = caja.saldos_por_moneda(monedas) # saldos de esas monedas
     detalles.each do |d|
       saldos[d.moneda_id] -= (d.monto - d.monto_was.to_f)
     end
