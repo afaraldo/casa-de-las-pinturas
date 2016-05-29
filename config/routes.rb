@@ -2,10 +2,12 @@ Rails.application.routes.draw do
 
   get 'devolucion_compras/get_compras' => 'devolucion_compras#get_compras'
   get 'devolucion_compras/buscar_compra' => 'devolucion_compras#buscar_compra'
+  get 'devolucion_compras/imprimir' => 'devolucion_compras#imprimir'
   resources :devolucion_compras
 
   get 'devolucion_ventas/get_ventas' => 'devolucion_ventas#get_ventas'
   get 'devolucion_ventas/buscar_venta' => 'devolucion_ventas#buscar_venta'
+  get 'devolucion_ventas/imprimir' => 'devolucion_ventas#imprimir'
   resources :devolucion_ventas
 
   devise_for :users

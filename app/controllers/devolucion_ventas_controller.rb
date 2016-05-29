@@ -1,5 +1,5 @@
 class DevolucionVentasController < ApplicationController
-
+  layout 'imprimir', only: [:imprimir]
   before_action :set_devolucion_venta, only: [:show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
 
