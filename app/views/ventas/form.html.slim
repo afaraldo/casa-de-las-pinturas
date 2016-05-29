@@ -27,17 +27,19 @@ section.content
                       = f.input_field :persona_id, as: :string,
                                                    label: false,
                                                    id: 'personas-buscador',
+                                                   disabled: @venta.creditos_detalles.size > 0 && @venta.persisted?,
                                                    class: 'form-control required',
                                                    data: {"msg-required" => 'Debe seleccionar un cliente',
                                                           persona: f.object.persona.to_json },
                                                    placeholder: 'Buscar cliente...'
-                      .input-group-btn
-                        = link_to '<i class="fa fa-plus"></i>'.html_safe,
-                                  new_cliente_path(from_boletas: true),
-                                  data: {toggle: 'tooltip'},
-                                  title: 'Nuevo cliente',
-                                  class: 'btn btn-default',
-                                  remote: true
+                      - if @venta.creditos_detalles.size == 0
+                        .input-group-btn
+                          = link_to '<i class="fa fa-plus"></i>'.html_safe,
+                                    new_cliente_path(from_boletas: true),
+                                    data: {toggle: 'tooltip'},
+                                    title: 'Nuevo cliente',
+                                    class: 'btn btn-default',
+                                    remote: true
                   .col-sm-4
                     = f.input :condicion, as: :radio_group_buttons, disabled: @venta.persisted?, input_html: { class: 'boleta-condicion' }
                 .row
@@ -50,9 +52,6 @@ section.content
                           i.fa.fa-calendar
                   .col-sm-4
                     = f.input :numero_comprobante, label: 'Número de Comprobante', value: @venta.new_record? && f.object.numero_comprobante.nil? ? '' : f.object.numero_comprobante
-                  .col-xs-12
-                    p
-                      /a href="#modal-credito" data-toggle="modal" Agregar Crédito de devoluciones
 
               ///////////// CREDITO DISPONIBLE /////////////
               .col-sm-3
@@ -69,41 +68,41 @@ section.content
                     - if @venta.new_record?
                       = link_to 'Actualizar límite', "#", id: 'link_to_persona', remote: true
                     - else
-                      = link_to 'Actualizar límite', edit_proveedor_path(@venta.persona.id), id: 'link_to_persona', remote: true
+                      = link_to 'Actualizar límite', edit_cliente_path(@venta.persona.id), id: 'link_to_persona', remote: true
 
             /////////////
               DEVOLUCIONES
             /////////////
-            /.form-subtitle
-            /  label Crédito de devoluciones
-            /br
-            /table.table.table-bordered.detalles-table
-            /  thead
-            /    tr
-            /      th Número
-            /      th Monto
-            /      th Crédito disponible
-            /      th Crédito a usar
-            /      th
-            /  tbody#compra-detalles-body
-            /    tr
-            /      td
-            /        a 00034
-            /      td.text-right 200.000
-            /      td.text-right 200.000
-            /      td
-            /        input.form-control type="text" value="200.000"
-            /      td
-            /        a.btn.btn-default
-            /          i.fa.fa-times
-            /  tfoot
-            /    tr
-            /      td colspan="2"
-            /      td.text-right.text-bold
-            /        | Total:
-            /      td.table-total.text-right.text-bold
-            /        span 200.000
-            /      td
+            #devoluciones-persona.hide
+              .form-subtitle
+                label Crédito de devoluciones
+              br
+              .row.overlay-wrapper#mensaje-devoluciones
+                .overlay.hide
+                  i.fa.fa-refresh.fa-spin
+                .col-xs-12
+                  .well.text-center
+                    h3 Seleccione un cliente para ver los creditos disponibles
+              table.table.table-bordered.detalles-table#devoluciones-disponibles-tabla.hide
+                thead
+                  tr
+                    th Número
+                    th Fecha
+                    th Monto
+                    th Crédito disponible
+                    th Crédito a usar
+                    th
+                tbody#creditos-detalles-body
+                  = render 'credito_devoluciones', devoluciones: @venta.creditos_detalles, actualizando: true, venta: @venta
+                tfoot
+                  tr
+                    td colspan="3"
+                    td.text-right.text-bold
+                      | Total:
+                    td.table-total.text-right.text-bold
+                      span
+                    td               
+               
             .form-subtitle
               label Mercaderías
               = link_to '<i class="fa fa-plus"></i>'.html_safe,
@@ -144,27 +143,31 @@ section.content
             /////////////
               RESUMEN DE TOTALES
             /////////////
-            /.row
-            /  .col-sm-offset-8.col-sm-4
-            /    table.table.bg-warning
-            /      tbody
-            /        tr
-            /          td Total mercaderias:
-            /          td.text-right Gs. 528.200
-            /        tr
-            /          td Crédito utilizado:
-            /          td.text-right Gs. 200.000
-            /        tr
-            /          td.text-bold Total a pagar:
-            /          td.text-right.text-bold Gs. 328.200
+            br
+            .row#boleta-resumen.hide
+              .col-sm-offset-8.col-sm-4
+                table.table.bg-warning
+                  tbody
+                    tr
+                      td Total mercaderias:
+                      td.text-right#res-total-mercaderia data-total="0" Gs. 0
+                    tr
+                      td Crédito utilizado:
+                      td.text-right#res-total-creditos data-total="0" Gs. 0
+                    tr
+                      td.text-bold Total a pagar:
+                      td.text-right.text-bold#res-total-a-pagar Gs. 0
 
             .row#pago-detalles.hide
               .col-xs-12
                 .form-subtitle
                   label Formas de cobro
                 br
-                - esconder_validacion_detalles = @venta.errors.has_key?(:"recibos_detalles.recibo.importe_total") ? '' : 'hide'
-                p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de cobro debe ser igual al total a cobrar de las boletas seleccionadas.
+                - if @venta.errors.has_key?(:"recibos_detalles.recibo.importe_total")
+                  - esconder_validacion_detalles = ""
+                - else
+                  - esconder_validacion_detalles = 'hide'
+                p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de pago debe ser igual al total a pagar de la venta.
                 = f.simple_fields_for :recibos_detalles do |r_form|
                   = r_form.simple_fields_for :recibo, @cobro do |recibo_form|
                     table.table.table-bordered.detalles-table.calcular-pagos-total
@@ -208,6 +211,7 @@ section.content
 javascript:
   BoletasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");
   BoletasUI.setBuscarPersonasUrl("#{clientes_buscar_path}");
+  BoletasUI.setDevolucionesPendientesUrl("#{ventas_buscar_devoluciones_path}");
 
 - if @venta.errors.has_key?(:stock_negativo) || @venta.errors.has_key?(:saldo_negativo)
   javascript:

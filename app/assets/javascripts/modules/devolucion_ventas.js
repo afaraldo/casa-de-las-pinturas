@@ -134,13 +134,11 @@ DevolucionVentasUI= (function(){
             initFormEvents();
             mostrarBoletas(false);
             calcularTotal();
-
         },
         'edit': function() {
             initFormEvents();
             mostrarBoletas(false);
             calcularTotal();
-
         },
         'update': function(){
             initFormEvents();

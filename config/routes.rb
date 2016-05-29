@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   get 'compras/imprimir' => 'compras#imprimir'
   resources :compras
 
+  get 'ventas/buscar_devoluciones' => 'ventas#buscar_devoluciones'
   get 'ventas/imprimir' => 'ventas#imprimir'
   resources :ventas
 
