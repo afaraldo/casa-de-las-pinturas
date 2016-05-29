@@ -34,6 +34,7 @@ class Boleta < ActiveRecord::Base
   before_validation :set_importe_pendiente
   before_validation :set_estado
   before_validation :set_pago, if: :contado?
+  after_validation :check_detalles, on: :update
 
   after_save :actualizar_extracto_de_cuenta_corriente, if: :credito?
   after_destroy :actualizar_extracto_de_cuenta_corriente, if: :credito?
@@ -120,6 +121,11 @@ class Boleta < ActiveRecord::Base
     end
   end
 
+  # recargar los detalles si hay algun error
+  def check_detalles
+    detalles.reload if errors.size > 0
+  end
+
   def check_detalles_negativos(borrado = false)
     m = []
     detalles.each do |d|
@@ -197,7 +203,7 @@ class Boleta < ActiveRecord::Base
   def set_importe_total
     self.importe_total = 0
     self.detalles.each do |detalle|
-        self.importe_total += detalle.precio_unitario * detalle.cantidad
+        self.importe_total += detalle.precio_unitario * detalle.cantidad unless detalle.marked_for_destruction?
     end
   end
 
