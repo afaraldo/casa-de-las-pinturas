@@ -10,6 +10,7 @@ class Recibo < ActiveRecord::Base
 
   after_initialize :set_condicion
   before_validation :set_importes
+  before_validation :set_total_credito_utilizado
   after_save :actualizar_cuenta_corriente, if: :credito?
   after_destroy :actualizar_cuenta_corriente, if: :credito?
   after_save :actualizar_extracto_cajas
@@ -21,8 +22,12 @@ class Recibo < ActiveRecord::Base
   has_many :boletas_detalles, class_name: 'ReciboBoleta', dependent: :destroy, foreign_key: "recibo_id", inverse_of: :recibo
   has_many :boletas, dependent: :destroy, class_name: 'Boleta', through: :boletas_detalles
 
+  has_many :recibos_creditos_detalles, class_name: 'ReciboNotaCreditoDebito', foreign_key: "recibo_id", inverse_of: :recibo, dependent: :destroy
+  has_many :recibos_creditos, class_name: 'NotasCreditosDebito', dependent: :destroy, through: :recibos_creditos_detalles, source: :notas_creditos_debito
+
   accepts_nested_attributes_for :detalles, reject_if: proc { |attrs| (attrs['monto'].to_f * attrs['cotizacion'].to_f) <= 0 }, allow_destroy: true
   accepts_nested_attributes_for :boletas_detalles, allow_destroy: true
+  accepts_nested_attributes_for :recibos_creditos_detalles, reject_if: :all_blank, allow_destroy: true
 
   default_scope { order('fecha DESC') } # Ordenar por fecha por defecto
 
@@ -36,11 +41,11 @@ class Recibo < ActiveRecord::Base
   validate  :condicion_cambiada?, on: :update
 
   def total_pagado
-    total_efectivo + total_tarjeta - total_credito_utilizado
+    total_efectivo + total_tarjeta
   end
 
   def total_pagado_was
-    total_efectivo_was.to_f + total_tarjeta_was.to_f - total_credito_utilizado_was.to_f
+    total_efectivo_was.to_f + total_tarjeta_was.to_f
   end
 
   def numero
@@ -83,12 +88,20 @@ class Recibo < ActiveRecord::Base
   def set_importes
     self.total_efectivo = 0
     self.total_tarjeta = 0
-    self.total_credito_utilizado = 0
 
     detalles.each do |d|
       self.total_efectivo += (d.monto * d.cotizacion) if d.forma.efectivo?
       self.total_tarjeta += (d.monto * d.cotizacion) if d.forma.tarjeta?
     end
+  end
+
+  def set_total_credito_utilizado
+    self.total_credito_utilizado = 0
+    monto_usado = 0
+    self.recibos_creditos_detalles.each do |p|
+      monto_usado += p.monto_utilizado unless p.marked_for_destruction?
+    end
+    self.total_credito_utilizado = monto_usado
   end
 
   def fecha_futura
@@ -100,6 +113,13 @@ class Recibo < ActiveRecord::Base
   # Validar que el total de las formas de pago sea igual al total de las boletas seleccionadas
   def pagos_boletas_seleccionadas
     boletas_seleccionadas = 0
+    creditos_seleccionados = 0
+
+    recibos_creditos_detalles.each do |r|
+      unless r.marked_for_destruction?
+        creditos_seleccionados += r.monto_utilizado
+      end
+    end
 
     boletas_detalles.each do |b|
       unless b.marked_for_destruction?
@@ -107,7 +127,7 @@ class Recibo < ActiveRecord::Base
       end
     end
 
-    if total_pagado != boletas_seleccionadas
+    if total_pagado != (boletas_seleccionadas - creditos_seleccionados)
       errors.add(:importe_total, I18n.t('activerecord.errors.messages.total_pagado_diferente_de_boletas'))
       false
     end

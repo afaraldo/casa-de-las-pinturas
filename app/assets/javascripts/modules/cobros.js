@@ -2,6 +2,7 @@ var CobrosUI = (function(){
     var elementos = null,
         buscarClienteUrl = '',
         boletasPendientesUrl = '';
+        devolucionesPendientesUrl = '';
 
     /**
      * Mensaje que indica que el cliente seleccionado no tiene boletas pendientes
@@ -14,6 +15,18 @@ var CobrosUI = (function(){
         elementos.boletasPanel.addClass('hide');
         elementos.detallesPanel.addClass('hide');
         elementos.mensajePanel.removeClass('hide');
+    }
+
+    /**
+     * Mensaje que indica que el cliente seleccionado no tiene devoluciones pendientes
+     * @param tipo
+     * @param cliente
+     */
+    function noHayDevoluciones(tipo, cliente){
+        elementos.mensajePanel.find('h3').text('No hay devoluciones disponibles para el '+tipo+' ' + cliente);
+        elementos.mensajePanel.find('.overlay').addClass('hide');
+        elementos.mensajePanel.removeClass('hide');
+        elementos.devolucionesTabla.addClass('hide');
     }
 
     /**
@@ -42,9 +55,34 @@ var CobrosUI = (function(){
         if(limpiarDetalles) {
             elementos.detallesPanel.find('.cantidad').val('0');
         } else {
-            $(elementos.boletasPanel.find('.monto-a-sumar')[0]).trigger('change');
+            elementos.boletasPanel.find('.monto-a-sumar').trigger('change');
             elementos.detallesPanel.find('.cantidad').trigger('change');
         }
+    }
+
+    /**
+     * Muestra el panel de las devoluciones
+     * Esconde el panel del mensaje inicial
+     */
+    function mostrarDevoluciones() {
+        elementos.mensajePanel.addClass('hide');
+        elementos.devolucionesTabla.removeClass('hide');
+        elementos.boletaResumen.removeClass('hide');
+
+        NumberHelper.mascaraMoneda('.mascaraMoneda');
+    }
+
+    function limpiarDevoluciones(){
+        $('#creditos-detalles-body').html('');
+        $('#res-total-creditos').data('total', 0).text('Gs. 0');
+        elementos.detallesTable.find('.cantidad').trigger('change');
+    }
+
+    // Usar los data attributes del resumen para calcular el total a cobrar
+    function calcularTotalBoleta(){
+        var aCobrar = parseInt($('#res-total-boleta').data('total')) - parseInt($('#res-total-creditos').data('total'));
+        $('.moneda-por-defecto').val(NumberHelper.aMoneda(aCobrar)).trigger('change');
+        $('#res-total-a-cobrar').text(NumberHelper.aMoneda(aCobrar));
     }
 
     function initFormEvents(autocompletarMonedaPorDefecto){
@@ -57,7 +95,7 @@ var CobrosUI = (function(){
 
         DatepickerHelper.initDatepicker('.datepicker');
 
-        // Abrir el buscador de proveedores cuando se hace click en el panel inicial
+        // Abrir el buscador de clientes cuando se hace click en el panel inicial
         elementos.cobrosForm.on('click', '.seleccionar-panel', function(e){
             elementos.personasBuscador.select2('open');
         });
@@ -78,7 +116,7 @@ var CobrosUI = (function(){
         });
 
         // Validar que se seleccione por lo menos una boleta
-        // y que el total de boletas seleccionadas sea igual al total de detalles de l cobro
+        // y que el total de boletas seleccionadas sea igual al total de detalles del cobro
         elementos.cobrosForm.on('submit', function(e){
             var form = $(this);
 
@@ -87,24 +125,41 @@ var CobrosUI = (function(){
                 MensajesHelper.irHasta(elementos.validacionBoletasSeleccionadas.offset().top);
                 e.preventDefault();
             }
-            var totalDetalles = elementos.detallesPanel.find('.table-total span').data('total'),
-                totalBoletas = elementos.boletasPanel.find('.table-total span').data('total');
+            var totalDetalles = parseInt($('#cobro-detalles').find('.table-total span').data('total')),
+                totalBoletas = parseInt($('#venta-detalles-tabla').find('.table-total span').data('total')),
+                creditos = parseInt($('#res-total-creditos').data('total'));
 
-            if(totalBoletas != totalDetalles){
+            if((totalBoletas - creditos) != totalDetalles){
                 elementos.validacionTotalDetalles.removeClass('hide');
                 e.preventDefault();
             }
 
         });
 
+        // Calculador de devoluciones seleccionadas
+        TablasHelper.calcularSeleccionados(
+            {   selector: '#creditos-disponibles-tabla',
+                autocompletarCampo: false,
+                callbackDespuesDeSeleccionar: function(credito){
+                    // setear el credito utilizado en el resumen
+                    $('#res-total-creditos').data('total', credito).text(NumberHelper.aMoneda(credito));
+                    calcularTotalBoleta();
+                }
+            }
+        );
+
         TablasHelper.calcularSeleccionados(
             {   selector: '#venta-detalles-tabla',
                 totalPorDefecto: $('.moneda-por-defecto'),
-                autocompletarCampo: autocompletarMonedaPorDefecto,
+                autocompletarCampo: false,
                 callbackDespuesDeSeleccionar: function(total){ // Cuando se selecciona alguna boleta se esconde la validacion
                     if(elementos.cobrosForm.find('.pagar-boleta:checked').length > 0){
                         elementos.validacionBoletasSeleccionadas.addClass('hide');
                     }
+                    // setear el credito utilizado en el resumen
+                    $('#res-total-boleta').data('total', total).text(NumberHelper.aMoneda(total));
+                    calcularTotalBoleta();
+
                 }
             }
         );
@@ -118,10 +173,12 @@ var CobrosUI = (function(){
                 cobrosForm: $('#cobro-form'),
                 personasBuscador: $('#personas-buscador'),
                 mensajePanel: $('#cobro-mensajes'),
-                boletasPanel: $('#cobro-boletas-devoluciones'),
+                boletasPanel: $('#pago-boletas-devoluciones'),
                 detallesPanel: $('#cobro-detalles'),
                 validacionBoletasSeleccionadas: $('#boletas-seleccionadas-validation'),
-                validacionTotalDetalles: $('#recibo-total-validation')
+                validacionTotalDetalles: $('#recibo-total-validation'),
+                boletaResumen: $('#boleta-resumen'),
+                devolucionesTabla: $('#creditos-disponibles-tabla')
             }
         },
         index: function() {
@@ -150,7 +207,12 @@ var CobrosUI = (function(){
         },
         setboletasPendientesUrl: function(url) {
             boletasPendientesUrl = url;
-        }
+        },
+        setDevolucionesPendientesUrl: function(url) {
+            devolucionesPendientesUrl = url;
+        },
+        noHayDevoluciones: noHayDevoluciones,
+        mostrarDevoluciones: mostrarDevoluciones
     };
 
 }());

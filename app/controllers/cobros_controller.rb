@@ -15,7 +15,7 @@ class CobrosController < ApplicationController
   def buscar_pendientes
     @cliente = Cliente.find(params[:cliente_id])
     @ventas = @cliente.ventas_pendientes
-    @devoluciones = []
+    @devoluciones = @cliente.devoluciones_disponibles
   end
 
   def imprimir
@@ -131,8 +131,9 @@ class CobrosController < ApplicationController
 
       params.require(:cobro).permit(:persona_id, :numero_comprobante, :fecha,
                                    detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma, :_destroy],
-                                   boletas_detalles_attributes: [:id, :monto_utilizado, :boleta_id, :_destroy])
-
+                                   boletas_detalles_attributes: [:id, :monto_utilizado, :boleta_id, :_destroy],
+                                   recibos_creditos_detalles_attributes: [:id, :notas_creditos_debito_id, :monto_utilizado, :_destroy],
+                                   )
     end
 
     def procesar_cantidades

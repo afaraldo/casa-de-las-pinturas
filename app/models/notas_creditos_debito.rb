@@ -18,6 +18,11 @@ class NotasCreditosDebito < ActiveRecord::Base
   has_many :creditos_detalles, class_name: 'BoletaNotaCreditoDebito', foreign_key: "notas_creditos_debito_id", inverse_of: :notas_creditos_debito, dependent: :destroy
   has_many :creditos, class_name: 'Boleta', dependent: :destroy, through: :creditos_detalles, source: :boleta
 
+  # Recibos donde se uso el credito de la devolucion
+  has_many :recibos_creditos_detalles, class_name: 'ReciboNotaCreditoDebito', foreign_key: "notas_creditos_debito_id", inverse_of: :notas_creditos_debito, dependent: :destroy
+  has_many :recibos_creditos, class_name: 'Recibo', dependent: :destroy, through: :recibos_creditos_detalles, source: :recibo
+
+
   accepts_nested_attributes_for :boletas_detalles, allow_destroy: true
   accepts_nested_attributes_for :detalles, allow_destroy: true
 
