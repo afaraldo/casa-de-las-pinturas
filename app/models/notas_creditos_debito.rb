@@ -83,9 +83,8 @@ class NotasCreditosDebito < ActiveRecord::Base
   def set_importe_total
     self.importe_total = 0
     self.detalles.each do |detalle|
-        self.importe_total += detalle.precio_unitario * detalle.cantidad
+        self.importe_total += detalle.precio_unitario * detalle.cantidad unless detalle.marked_for_destruction?
     end
-
     self.credito_restante = self.importe_total
   end
 

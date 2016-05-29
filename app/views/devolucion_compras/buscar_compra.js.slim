@@ -2,3 +2,11 @@
   | DevolucionComprasUI.noHayBoletas("#{@proveedor.nombre}");
 - else
   | $('#compra-detalles-body').html("#{escape_javascript(render 'compra_detalle', devolucion_compra:@devolucion_compra, compras: @compra_detalles, actualizando: false)}");
+
+  | $('.boton-de-borrado').on('click',function(){
+        $(this).parent().parent().addClass('hide');
+        $(this).parent().parent().find(".input-destroy").val("true");
+        if($("tr.nested-fields:not(.hide)").length < 2){
+             $("tr.nested-fields:not(.hide)").find(".boton-de-borrado").addClass("hide");
+        }
+     });

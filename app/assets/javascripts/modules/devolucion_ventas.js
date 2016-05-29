@@ -88,20 +88,13 @@ DevolucionVentasUI= (function(){
             });
         });
 
-        if($('.nested-fields').length == 1){
-            $('.remove_fields').addClass('hide');
-        }
-
-        $('#venta-detalles-body').on('cocoon:after-remove', function(e, removedItem) {
-
-            // Se esconde el boton de eliminar si es que ya queda solo uno
-            var tBody = $(this);
-            if(tBody.find('.nested-fields:visible').length == 1){
-                $('.remove_fields').addClass('hide');
+        $('.boton-de-borrado').on('click',function(){
+            $(this).parent().parent().addClass('hide');
+            $(this).parent().parent().find(".input-destroy").val("true");
+            if($("tr.nested-fields:not(.hide)").length < 2){
+                $("tr.nested-fields:not(.hide)").find(".boton-de-borrado").addClass("hide");
             }
-
         });
-
 
     }
 

@@ -2,3 +2,11 @@
   | DevolucionVentasUI.noHayBoletas("#{@cliente.nombre}");
 - else
   | $('#venta-detalles-body').html("#{escape_javascript(render 'venta_detalle', devolucion_venta: @devolucion_venta, ventas: @venta_detalles, actualizando: false)}");
+
+  | $('.boton-de-borrado').on('click',function(){
+        $(this).parent().parent().addClass('hide');
+        $(this).parent().parent().find(".input-destroy").val("true");
+        if($("tr.nested-fields:not(.hide)").length < 2){
+             $("tr.nested-fields:not(.hide)").find(".boton-de-borrado").addClass("hide");
+        }
+     });
