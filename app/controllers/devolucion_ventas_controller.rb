@@ -6,16 +6,16 @@ class DevolucionVentasController < ApplicationController
   before_action :eliminable?, only: [:destroy]
 
   def editable?
-    unless @devolucion_compra.es_editable?
-      flash[:warning] = @devolucion_compra.no_editable_mensaje
-      redirect_to @devolucion_compra
+    unless @devolucion_venta.es_editable?
+      flash[:warning] = @devolucion_venta.no_editable_mensaje
+      redirect_to @devolucion_venta
     end
   end
 
   def eliminable?
-    unless @devolucion_compra.es_editable?
-      flash[:warning] = @devolucion_compra.no_eliminable_mensaje
-      redirect_to @devolucion_compra
+    unless @devolucion_venta.es_editable?
+      flash[:warning] = @devolucion_venta.no_eliminable_mensaje
+      redirect_to @devolucion_venta
     end
   end
   # configuracion del menu
