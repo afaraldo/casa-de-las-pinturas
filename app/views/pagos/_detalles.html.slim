@@ -8,7 +8,7 @@ tr.nested-fields
   td
     = f.input :monto, as: :string,
                          label: false,
-                         input_html: { class: "cantidad form-control maskMoneda #{'moneda-por-defecto' if f.object.moneda.defecto}", value: number_with_precision(f.object.monto) }
+                         input_html: { class: "cantidad form-control maskMoneda #{'moneda-por-defecto' if f.object.moneda.defecto && !f.object.forma.tarjeta?}", value: number_with_precision(f.object.monto) }
   td
     = f.input :cotizacion, as: :string,
                          label: false,

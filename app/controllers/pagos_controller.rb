@@ -50,7 +50,6 @@ class PagosController < ApplicationController
   # POST /pagos.json
   def create
     @pago = Pago.new(pago_params)
-    @pago.condicion = "credito"
     @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @pago.check_detalles_negativos
 
     respond_to do |format|
@@ -71,7 +70,6 @@ class PagosController < ApplicationController
   # PATCH/PUT /pagos/1.json
   def update
     @pago.assign_attributes(pago_params)
-    @pago.condicion = "credito"
     @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @pago.check_detalles_negativos
 
     respond_to do |format|
@@ -134,8 +132,8 @@ class PagosController < ApplicationController
       params.require(:pago).permit(:persona_id, :numero_comprobante, :fecha,
                                    detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma, :_destroy],
                                    boletas_detalles_attributes: [:id, :monto_utilizado, :boleta_id, :_destroy],
-                                   Srecibos_creditos_detalleS_attributes: [:id, :notas_creditos_debito_id, :monto_utilizado, :_destroy],
-                                   detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy],)
+                                   recibos_creditos_detalleS_attributes: [:id, :notas_creditos_debito_id, :monto_utilizado, :_destroy],
+                                   )
 
     end
 
