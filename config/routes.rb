@@ -62,6 +62,7 @@ Rails.application.routes.draw do
 
   get 'caja_movimientos/new_transferencia' => 'caja_movimientos#new_transferencia'
   post 'caja_movimientos/create_transferencia' => 'caja_movimientos#create_transferencia'
+  get 'caja_movimientos/imprimir' => 'caja_movimientos#imprimir'
   resources :caja_movimientos
 
   get 'cobros/buscar_pendientes' => 'cobros#buscar_pendientes'

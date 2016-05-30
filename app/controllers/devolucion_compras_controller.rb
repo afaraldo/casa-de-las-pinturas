@@ -25,6 +25,10 @@ class DevolucionComprasController < ApplicationController
     end
   end
 
+  def imprimir
+    get_devolucion_compras
+  end
+  
   # GET /compras
   # GET /compras.json
   def index

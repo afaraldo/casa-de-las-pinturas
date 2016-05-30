@@ -8,6 +8,11 @@ class DevolucionVentasController < ApplicationController
     @menu_setup[:main_menu] = :ventas
     @menu_setup[:side_menu] = :devolucion_ventas_sidemenu
   end
+  
+  def imprimir
+    get_devolucion_ventas
+  end
+  
   # GET /ventas
   # GET s.json
   def index
