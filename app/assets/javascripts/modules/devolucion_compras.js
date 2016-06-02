@@ -35,7 +35,9 @@ DevolucionComprasUI= (function(){
         elementos.detallesPanel.removeClass('hide');
 
     }
-
+    function calcularTotal(){
+        elementos.detallesTable.find('.cantidad').trigger('change');
+    }
 
     function initFormEvents(){
         PersonasUI.buscador({elemento: elementos.proveedorBuscador, url: buscarProveedorUrl});
@@ -87,35 +89,15 @@ DevolucionComprasUI= (function(){
             });
         });
 
-        if($('.nested-fields').length == 1){
-            $('.remove_fields').addClass('hide');
-        }
-
-        $('#compra-detalles-body').on('cocoon:after-remove', function(e, removedItem) {
-
-            // Se esconde el boton de eliminar si es que ya queda solo uno
-            var tBody = $(this);
-            if(tBody.find('.nested-fields:visible').length == 1){
-                $('.remove_fields').addClass('hide');
+        $('.boton-de-borrado').on('click',function(){
+            $(this).parent().parent().addClass('hide');
+            $(this).parent().parent().find(".input-destroy").val("true");
+            if($("tr.nested-fields:not(.hide)").length < 2){
+                $("tr.nested-fields:not(.hide)").find(".boton-de-borrado").addClass("hide");
             }
-
         });
 
 
-    }
-
-    // Recibe una lista de mercaderias y elimina si alguno ya esta seleccionado entre los detalles
-    // se asume que los inputs tengan las clase .proveedor-select
-    function eliminarItemsSeleccionados(items) {
-        var seleccionados = $.map($('input.proveedor-select'), function(v,i){ return $(v).val();});
-
-        for(var i = 0; i < items.length; i++) {
-            if($.inArray(items[0].id, seleccionados) > -1) {
-                items.splice(i, 1);
-            }
-        }
-
-        return items;
     }
 
 
@@ -125,7 +107,8 @@ DevolucionComprasUI= (function(){
                 devolucionCompraForm: $('#devolucion-compra-form'),
                 proveedorBuscador: $('#personas-buscador'),
                 mensajePanel: $('#devolucion-mensajes'),
-                detallesPanel: $('#pago-boletas-devoluciones')
+                detallesPanel: $('#pago-boletas-devoluciones'),
+                detallesTable: $('.detalles-table')
             }
         },
         index: function() {
@@ -138,16 +121,17 @@ DevolucionComprasUI= (function(){
         'create': function(){
             initFormEvents();
             mostrarBoletas(false);
-
+            calcularTotal();
         },
         'edit': function() {
             initFormEvents();
             mostrarBoletas(false);
-
+            calcularTotal();
         },
         'update': function(){
             initFormEvents();
             mostrarBoletas(false);
+            calcularTotal();
 
         },
 

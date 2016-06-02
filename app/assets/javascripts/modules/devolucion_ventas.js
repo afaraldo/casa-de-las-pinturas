@@ -34,6 +34,9 @@ DevolucionVentasUI= (function(){
         elementos.detallesPanel.removeClass('hide');
 
     }
+    function calcularTotal(){
+        elementos.detallesTable.find('.cantidad').trigger('change');
+    }
 
 
     function initFormEvents(){
@@ -44,11 +47,12 @@ DevolucionVentasUI= (function(){
         NumberHelper.mascaraMoneda('.maskMoneda');
 
         DatepickerHelper.initDatepicker('.datepicker');
+        TablasHelper.calcularTotalEvent({selector: '.detalles-table'});
 
         // Abrir el buscador de proveedores cuando se hace click en el panel inicial
         elementos.devolucionVentaForm.on('click', '.seleccionar-panel', function(e){
             elementos.personasBuscador.select2('open');
-        
+
         });
         elementos.personasBuscador.on('change',function(e){
             var boleta = $('#devolucion_id');
@@ -74,30 +78,23 @@ DevolucionVentasUI= (function(){
         $('#devolucion_id').on('change',function(){
             $("#devolucion-mensajes").addClass("hide");
             $('#pago-boletas-devoluciones').removeClass("hide");
-            
+
             $.ajax({
                 url: 'buscar_venta',
                 type:'get',
                 dataType:'script',
                 data: {venta_id:$(this).val()}
-                
+
             });
         });
 
-        if($('.nested-fields').length == 1){
-            $('.remove_fields').addClass('hide');
-        }
-        
-        $('#venta-detalles-body').on('cocoon:after-remove', function(e, removedItem) {
-
-            // Se esconde el boton de eliminar si es que ya queda solo uno
-            var tBody = $(this);
-            if(tBody.find('.nested-fields:visible').length == 1){
-                $('.remove_fields').addClass('hide');
+        $('.boton-de-borrado').on('click',function(){
+            $(this).parent().parent().addClass('hide');
+            $(this).parent().parent().find(".input-destroy").val("true");
+            if($("tr.nested-fields:not(.hide)").length < 2){
+                $("tr.nested-fields:not(.hide)").find(".boton-de-borrado").addClass("hide");
             }
-
         });
-
 
     }
 
@@ -122,7 +119,8 @@ DevolucionVentasUI= (function(){
                 devolucionVentaForm: $('#devolucion-venta-form'),
                 personasBuscador: $('#personas-buscador'),
                 mensajePanel: $('#devolucion-mensajes'),
-                detallesPanel: $('#pago-boletas-devoluciones')
+                detallesPanel: $('#pago-boletas-devoluciones'),
+                detallesTable: $('.detalles-table')
             }
         },
         index: function() {
@@ -135,16 +133,17 @@ DevolucionVentasUI= (function(){
         'create': function(){
             initFormEvents();
             mostrarBoletas(false);
-            
+            calcularTotal();
         },
         'edit': function() {
             initFormEvents();
             mostrarBoletas(false);
-            
+            calcularTotal();
         },
         'update': function(){
             initFormEvents();
             mostrarBoletas(false);
+            calcularTotal();
 
         },
         setBuscarClienterUrl: function(url) {

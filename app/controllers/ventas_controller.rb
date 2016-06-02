@@ -9,6 +9,11 @@ class VentasController < ApplicationController
     @menu_setup[:side_menu] = :ventas_sidemenu
   end
 
+  def buscar_devoluciones
+    @cliente= Cliente.find(params[:persona_id])
+    @devoluciones = @cliente.devoluciones_disponibles
+  end
+
   def imprimir
     get_ventas
   end
@@ -39,7 +44,7 @@ class VentasController < ApplicationController
 
   # GET /ventas/1/edit
   def edit
-    @cobro.rebuild_detalles if @cobro
+    get_cobro
     render :form
   end
 
@@ -53,8 +58,7 @@ class VentasController < ApplicationController
           format.html { redirect_to @venta, notice: t('mensajes.save_success', recurso: 'la venta') }
           format.json { render :show, status: :created, location: @venta }
         else
-          @cobro = @venta.recibos_detalles.first.recibo if @venta.recibos_detalles.first
-          @cobro.rebuild_detalles if @cobro
+          get_cobro
           format.html { render :form }
           format.json { render json: @venta.errors, status: :unprocessable_entity }
         end
@@ -76,8 +80,7 @@ class VentasController < ApplicationController
           format.html { redirect_to @venta, notice: t('mensajes.save_success', recurso: 'la venta') }
           format.json { render :show, status: :created, location: @venta }
         else
-          @cobro = @venta.recibos_detalles.first.recibo if @venta.recibos_detalles.first
-          @cobro.rebuild_detalles if @cobro
+          get_cobro
           format.html { render :form }
           format.json { render json: @venta.errors, status: :unprocessable_entity }
         end
@@ -116,10 +119,23 @@ class VentasController < ApplicationController
       @cobro = @venta.recibos.first
     end
 
+    def get_cobro
+      if @venta.recibos_detalles.first
+        @cobro = @venta.recibos_detalles.first.recibo
+        @cobro.rebuild_detalles if @cobro
+      else
+        @recibo_detalle = @venta.recibos_detalles.build
+        @cobro = @recibo_detalle.build_recibo
+        @cobro.build_detalles
+      end
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def venta_params
       procesar_cantidades_mercaderias
       procesar_cantidades_cobros
+      procesar_devoluciones(params[:venta][:condicion])
+
       params[:venta].delete("recibos_detalles_attributes") if params[:venta][:condicion] == "credito"
       params.require(:venta).permit(:persona_id, :numero_comprobante, :fecha, :fecha_vencimiento, :estado, :condicion,
                                      recibos_detalles_attributes:[:id, :_destroy,
@@ -127,6 +143,7 @@ class VentasController < ApplicationController
                                          detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma, :_destroy]
                                        ]
                                      ],
+                                     creditos_detalles_attributes: [:id, :notas_creditos_debito_id, :monto_utilizado, :_destroy],
                                      detalles_attributes: [:id, :mercaderia_id, :cantidad, :precio_unitario, :_destroy],
                                      )
     end
@@ -157,5 +174,19 @@ class VentasController < ApplicationController
       end
     end
 
-
+    def procesar_devoluciones(condicion)
+      if condicion == 'contado' && !params[:venta][:creditos_detalles_attributes].blank?
+        params[:venta][:creditos_detalles_attributes].each do |k, valor|
+          params[:venta][:creditos_detalles_attributes][k][:monto_utilizado] = cantidad_a_numero(valor[:monto_utilizado])
+          # se eliminan de params las boletas que no se seleccionaron o se marcan para eliminar
+          if valor[:id].present?
+            params[:venta][:creditos_detalles_attributes][k][:_destroy] = '1' unless valor[:usado].present?
+          else
+            params[:venta][:creditos_detalles_attributes].delete(k) unless valor[:usado].present?
+          end
+        end
+      else
+        params[:venta].delete("creditos_detalles_attributes")
+      end
+    end
 end

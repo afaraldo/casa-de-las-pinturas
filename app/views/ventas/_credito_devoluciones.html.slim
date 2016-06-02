@@ -1,0 +1,21 @@
+- devoluciones.each_with_index do |d, i|
+  - devolucion = actualizando ? d.notas_creditos_debito : d
+  - credito_restante = devolucion.credito_restante
+  - if !venta.nil? && venta.persisted? # Sumar el monto utilizado al editar la venta
+    - credito_restante += d.monto_utilizado_was
+  tr
+    td = devolucion.id
+    td = localize(devolucion.fecha.to_date)
+    td.text-right = number_to_currency(devolucion.importe_total)
+    td.text-right = number_to_currency(credito_restante)
+    td
+      div class="form-group #{'has-error' if d.errors.has_key?(:monto_utilizado)}"
+        = hidden_field "venta[creditos_detalles_attributes][#{i}]", :notas_creditos_debito_id, value: devolucion.id
+        = text_field "venta[creditos_detalles_attributes][#{i}]", :monto_utilizado, value: number_with_precision(actualizando ? d.monto_utilizado : devolucion.credito_restante), class: 'form-control mascaraMoneda monto-a-sumar'
+        - if d.errors.has_key?(:monto_utilizado)
+          span.help-block = d.errors.get(:monto_utilizado).to_sentence
+    td
+      - seleccionado = actualizando ? {checked: ''} : {} # checkear la venta al editar o cuando hay errores en el create
+      input type="checkbox" name="venta[creditos_detalles_attributes][#{i}][usado]" class="usar-credito" *seleccionado
+      - if !venta.nil? && venta.persisted? # incluir el id del detalle al editar
+        input type="hidden" name="venta[creditos_detalles_attributes][#{i}][id]" value="#{d.id}"

@@ -30,7 +30,7 @@ class NotasCreditosDebito < ActiveRecord::Base
 
   # Validations
   validates :fecha,  presence: true
-  validates :motivo, length: { minimum: 2, maximum: 50 }, allow_blank: false
+  validates :motivo, length: { minimum: 2, maximum: 50 }, allow_blank: false, presence: true
   validates :persona, presence: true
   validates :detalles, length: { minimum: 1 }
   validate  :fecha_futura
@@ -88,9 +88,8 @@ class NotasCreditosDebito < ActiveRecord::Base
   def set_importe_total
     self.importe_total = 0
     self.detalles.each do |detalle|
-        self.importe_total += detalle.precio_unitario * detalle.cantidad
+        self.importe_total += detalle.precio_unitario * detalle.cantidad unless detalle.marked_for_destruction?
     end
-
     self.credito_restante = self.importe_total
   end
 

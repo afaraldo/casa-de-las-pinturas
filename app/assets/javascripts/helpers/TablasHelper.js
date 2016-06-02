@@ -20,9 +20,14 @@ var TablasHelper = {
             var fila = $(this).parents('tr'),
                 cantidad = NumberHelper.aNumero(fila.find('.cantidad').val()),
                 precio =   NumberHelper.aNumero(fila.find('.precio-unitario').val()),
-                total = 0;
+                total = 0,
+                subtotal = cantidad * precio;
 
-                fila.find('.subtotal-col span').text(I18n.toCurrency(cantidad * precio, {unit: ''}));
+                // si ambos campos no son visibles no se cuenta
+                if((fila.find('.cantidad:visible').length + fila.find('.precio-unitario:visible').length) == 0)
+                    subtotal = 0;
+
+                fila.find('.subtotal-col span').text(I18n.toCurrency(subtotal, {unit: ''}));
 
                 tabla.find('.subtotal-col span').each(function(){
                     total += NumberHelper.aNumero($(this).text());

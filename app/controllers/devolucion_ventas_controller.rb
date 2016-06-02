@@ -2,12 +2,28 @@ class DevolucionVentasController < ApplicationController
 
   before_action :set_devolucion_venta, only: [:show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
+  before_action :editable?, only: [:edit, :update]
+  before_action :eliminable?, only: [:destroy]
 
+  def editable?
+    unless @devolucion_compra.es_editable?
+      flash[:warning] = @devolucion_compra.no_editable_mensaje
+      redirect_to @devolucion_compra
+    end
+  end
+
+  def eliminable?
+    unless @devolucion_compra.es_editable?
+      flash[:warning] = @devolucion_compra.no_eliminable_mensaje
+      redirect_to @devolucion_compra
+    end
+  end
   # configuracion del menu
   def setup_menu
     @menu_setup[:main_menu] = :ventas
     @menu_setup[:side_menu] = :devolucion_ventas_sidemenu
   end
+
   # GET /ventas
   # GET s.json
   def index
@@ -117,7 +133,7 @@ class DevolucionVentasController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def devolucion_venta_params
       params.require(:devolucion_venta).permit(:persona_id, :motivo, :fecha,
-                                   detalles_attributes: [:id,:mercaderia_id, :cantidad, :precio_unitario],
+                                   detalles_attributes: [:id,:mercaderia_id, :cantidad, :precio_unitario, :_destroy],
                                    boletas_detalles_attributes: [:id, :boleta_id, :_destroy])
 
     end

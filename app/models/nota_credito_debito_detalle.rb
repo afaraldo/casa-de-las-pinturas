@@ -23,7 +23,7 @@ class NotaCreditoDebitoDetalle < ActiveRecord::Base
     boleta.notas_creditos_debitos.each do |d|
       detalle_devolucion = d.detalles.find_by(mercaderia_id: mercaderia_id)
 
-      if self.id != detalle_devolucion.id
+      if detalle_devolucion && self.id != detalle_devolucion.id
         total_devuelto += detalle_devolucion.cantidad
       end
 

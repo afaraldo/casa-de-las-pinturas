@@ -34,6 +34,7 @@ class Boleta < ActiveRecord::Base
   before_validation :set_importe_pendiente
   before_validation :set_estado
   before_validation :set_pago, if: :contado?
+  after_validation :check_detalles, on: :update
 
   after_save :actualizar_extracto_de_cuenta_corriente, if: :credito?
   after_destroy :actualizar_extracto_de_cuenta_corriente, if: :credito?
@@ -61,14 +62,18 @@ class Boleta < ActiveRecord::Base
 
   # Se controlan los posibles detalles y saldos negativos y se guarda la boleta
   def guardar(atributos, guardar_si_o_si)
-    self.assign_attributes(atributos)
+    if new_record?
+      self.assign_attributes(atributos)
+    else
+      self.update_attributes(atributos)
+    end
 
-    stock_negativo = controlar_stock_negativo(guardar_si_o_si)
+    stock_negativo = controlar_stock_negativo(guardar_si_o_si) if self.instance_of?(Compra)
+    stock_negativo = guardar_si_o_si ? [] : self.check_detalles_negativos if self.instance_of?(Venta)
     saldo_negativo = guardar_si_o_si ? [] : self.check_detalles_negativos_pago
 
     errors.add(:stock_negativo, "La operación va a provocar existencia negativa en los siguientes productos: #{stock_negativo.map {|m| m.nombre }.to_sentence}") if stock_negativo.size > 0
     errors.add(:saldo_negativo, "La operación va a provocar disponibilidad negativa en los siguientes monedas: #{saldo_negativo.map {|m| m.nombre }.to_sentence}") if saldo_negativo.size > 0
-
     stock_negativo.size <= 0 && saldo_negativo.size <= 0 && save
   end
 
@@ -114,6 +119,11 @@ class Boleta < ActiveRecord::Base
     unless recibos.empty?
       recibos.each(&:destroy)
     end
+  end
+
+  # recargar los detalles si hay algun error
+  def check_detalles
+    detalles.reload if errors.size > 0
   end
 
   def check_detalles_negativos(borrado = false)
@@ -193,7 +203,7 @@ class Boleta < ActiveRecord::Base
   def set_importe_total
     self.importe_total = 0
     self.detalles.each do |detalle|
-        self.importe_total += detalle.precio_unitario * detalle.cantidad
+        self.importe_total += detalle.precio_unitario * detalle.cantidad unless detalle.marked_for_destruction?
     end
   end
 
@@ -216,7 +226,7 @@ class Boleta < ActiveRecord::Base
     else
       monto_pagado = 0
       self.recibos_detalles.each do |p|
-        monto_pagado += p.monto_utilizado
+        monto_pagado += (p.monto_utilizado ? p.monto_utilizado : 0)
       end
       self.importe_pendiente = self.importe_total - importe_credito_utilizado - monto_pagado
     end
