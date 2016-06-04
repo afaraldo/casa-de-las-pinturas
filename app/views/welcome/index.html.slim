@@ -13,19 +13,23 @@ section.content
           .row
             .col-sm-3.col-xs-6
               .description-block.border-right
-                h5.description-header Gs. 22.330.000
+                h5.description-header
+                  = "#{number_to_currency(@total_venta_contado)}"
                 span.description-text Ventas al contado
             .col-sm-3.col-xs-6
               .description-block.border-right
-                h5.description-header Gs. 22.330.000
+                h5.description-header
+                  = "#{number_to_currency(@total_venta_credito)}"
                 span.description-text Ventas a crédito
             .col-sm-3.col-xs-6
               .description-block.border-right
-                h5.description-header Gs. 22.330.000
+                h5.description-header
+                  = "#{number_to_currency(@total_compra_contado)}"
                 span.description-text Compras al contado
             .col-sm-3.col-xs-6
               .description-block.border-right
-                h5.description-header Gs. 22.330.000
+                h5.description-header
+                  = "#{number_to_currency(@total_compra_credito)}"
                 span.description-text Compras a crédito
   .row
     .col-sm-3
@@ -35,7 +39,7 @@ section.content
         .info-box-content
           .info-box-text Inventario
           .info-box-number
-            = "#{@mercaderias} Mercaderías"
+            = "#{number_with_precision(@mercaderias)} Mercaderías"
     .col-sm-3
       .info-box
         span.info-box-icon.bg-yellow
@@ -50,14 +54,16 @@ section.content
           i.fa.fa-money
         .info-box-content
           .info-box-text Cuentas a cobrar
-          .info-box-number Gs. 12.000.000
+          .info-box-number
+            = "#{number_to_currency(@saldo_total_clientes)}"
     .col-sm-3
       .info-box
         span.info-box-icon.bg-red
           i.fa.fa-shopping-cart
         .info-box-content
           .info-box-text Cuentas a pagar
-          .info-box-number Gs. 3.400.000
+          .info-box-number
+            = "#{number_to_currency(@saldo_total_proveedores)}"
 javascript:
   var ctx = $('#dashboard-chart-canvas').get(0).getContext('2d');
 

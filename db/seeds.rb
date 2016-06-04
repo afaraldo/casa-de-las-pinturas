@@ -28,7 +28,7 @@ Fabricator(:mercaderia) do
   codigo { Faker::Code.ean(8) }
   precio_venta_contado { Faker::Number.between(2000, 50000) }
   precio_venta_credito { Faker::Number.between(2000, 50000) }
-  stock { Faker::Number.positive(20, 200) }
+  stock_inicial { Faker::Number.positive(20, 200) }
   stock_minimo { Faker::Number.positive(20, 30) }
   unidad_de_medida { :unidad }
 end

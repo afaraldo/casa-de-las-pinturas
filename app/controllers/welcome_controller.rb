@@ -1,7 +1,7 @@
 class WelcomeController < ApplicationController
   def index
+    setup_fechas
     get_reporte
-
   end
 
   def setup_fechas
@@ -10,8 +10,14 @@ class WelcomeController < ApplicationController
   end
 
   def get_reporte
-    @mercaderias = Mercaderia.all.count
+    @mercaderias = Mercaderia.cantidad_total_de_existencias
     @saldo_en_caja =  Caja.get_caja_por_forma(:efectivo).saldos_total_en_moneda_por_defecto
+    @saldo_total_clientes = Persona.saldo_total "clientes"
+    @saldo_total_proveedores = Persona.saldo_total "proveedores"
+    @total_venta_contado = Boleta.importe_total_boletas(@desde, @hasta, "Venta", "contado")
+    @total_venta_credito = Boleta.importe_total_boletas(@desde, @hasta, "Venta", "credito")
+    @total_compra_contado = Boleta.importe_total_boletas(@desde, @hasta, "Compra", "contado")
+    @total_compra_credito = Boleta.importe_total_boletas(@desde, @hasta, "Compra", "credito")
     @reporte_compra = Compra.reporte(desde: @desde,
                               hasta: @hasta,
                               persona_id: params[:persona_id],

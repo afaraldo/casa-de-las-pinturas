@@ -33,4 +33,10 @@ class Mercaderia < ActiveRecord::Base
     movimiento.save
   end
 
+  def self.cantidad_total_de_existencias
+    cantidad = 0
+    Mercaderia.all.map{|m| cantidad += m.stock_actual}
+    cantidad
+  end
+
 end

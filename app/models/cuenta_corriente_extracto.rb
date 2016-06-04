@@ -8,4 +8,5 @@ class CuentaCorrienteExtracto < MovimientoModel
   belongs_to :boleta
   belongs_to :recibo
 
+
 end

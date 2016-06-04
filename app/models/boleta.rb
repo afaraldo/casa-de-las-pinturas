@@ -303,4 +303,13 @@ class Boleta < ActiveRecord::Base
     Arel.sql("to_char(\"#{table_name}\".\"id\", '99999')")
   end
 
+  # Devuelve la sumatoria de todos importes_totales de las boletas de un tipo
+  # durante un periodo de tiempo seleccionado
+  def self.importe_total_boletas(fecha_inicio, fecha_fin, tipo, condicion)
+    saldo = 0
+    boletas = Boleta.where("fecha >= ? AND fecha <= ? AND tipo = ? AND condicion = ?", fecha_inicio, fecha_fin, tipo, condicion)
+    boletas.map{|b| saldo += b.importe_total }
+    saldo
+  end
+
 end
