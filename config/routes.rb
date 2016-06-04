@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get 'devolucion_compras/get_compras' => 'devolucion_compras#get_compras'
   get 'devolucion_compras/buscar_compra' => 'devolucion_compras#buscar_compra'
   get 'devolucion_compras/imprimir' => 'devolucion_compras#imprimir'
+  get 'devolucion_compras/imprimir_show' => 'devolucion_compras#imprimir_show'
   resources :devolucion_compras
 
   get 'devolucion_ventas/get_ventas' => 'devolucion_ventas#get_ventas'

@@ -29,6 +29,10 @@ class DevolucionComprasController < ApplicationController
     get_devolucion_compras
   end
   
+  def imprimir_show
+    get_devolucion_compras
+  end
+
   # GET /compras
   # GET /compras.json
   def index
@@ -121,7 +125,7 @@ class DevolucionComprasController < ApplicationController
     def get_devolucion_compras
       procesar_fechas
       @search = DevolucionCompra.search(params[:q])
-      @devolucion_compras = @search.result.includes(:persona).page(params[:page]).per(action_name == 'imprimir' ? LIMITE_REGISTROS_IMPRIMIR : 25)
+      @devolucion_compras = @search.result.includes(:persona).page(params[:page]).per((action_name == 'imprimir') | (action_name == 'imprimir_show') ? LIMITE_REGISTROS_IMPRIMIR : 25)
     end
     # Setear las fechas "hasta" para que incluya el dia entero
     # 01/03/2016 => 2016-03-01 23:59:59
