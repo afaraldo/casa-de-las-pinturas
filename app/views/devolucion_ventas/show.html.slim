@@ -12,6 +12,8 @@ section.content
           h3.box-title
             = "Devolucion Nro. #{@devolucion_venta.id}".html_safe
           .box-tools
+            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, devolucion_ventas_imprimir_show_url, class: 'btn btn-default imprimir-listado'
+            = ' '
             = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_devolucion_venta_path(@devolucion_venta),  html_options = {class: 'btn btn-default'}
             = ' '
             = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, devolucion_venta_path(@devolucion_venta), method: 'delete', data: {confirm: "¿Desea eliminar la devolución?"}, class: 'btn btn-danger'

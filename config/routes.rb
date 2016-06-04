@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get 'devolucion_ventas/get_ventas' => 'devolucion_ventas#get_ventas'
   get 'devolucion_ventas/buscar_venta' => 'devolucion_ventas#buscar_venta'
   get 'devolucion_ventas/imprimir' => 'devolucion_ventas#imprimir'
+  get 'devolucion_ventas/imprimir_show' => 'devolucion_ventas#imprimir_show'
   resources :devolucion_ventas
 
   devise_for :users

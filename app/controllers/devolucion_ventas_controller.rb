@@ -1,6 +1,6 @@
 class DevolucionVentasController < ApplicationController
   layout 'imprimir', only: [:imprimir]
-  before_action :set_devolucion_venta, only: [:show, :edit, :update, :destroy]
+  before_action :set_devolucion_venta, only: [:show, :imprimir_show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
 
   # configuracion del menu
@@ -11,6 +11,11 @@ class DevolucionVentasController < ApplicationController
   
   def imprimir
     get_devolucion_ventas
+  end
+
+  def imprimir_show
+    @devolucion_ventas = @search.result.includes(:persona).page(params[:page]).per(action_name == 'imprimir' ? LIMITE_REGISTROS_IMPRIMIR : 25)
+    
   end
   
   # GET /ventas
