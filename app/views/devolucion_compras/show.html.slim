@@ -5,14 +5,14 @@ section.content
     .col-xs-12
       .box
         .box-header
-          a.volver-link href= devolucion_compras_path
+          a.volver-link.hidden-print href= devolucion_compras_path
             i.fa.fa-angle-double-left style="margin-right: 5px;"
             | Volver al listado de devoluciones
           .clearfix
           h3.box-title
             = "Devolución Nro. #{@devolucion_compra.id}".html_safe
-          .box-tools
-            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, "#{@devolucion_compra.id}", class: 'btn btn-default imprimir-listado'
+          .box-tools.hidden-print
+            = link_to 'Imprimir'.html_safe, "/devolucion_compras/#{@devolucion_compra.id}/imprimir_show", class: 'btn btn-default imprimir-listado'
             = ' '
             = editar_btn(@devolucion_compra, edit_devolucion_compra_path(@devolucion_compra))
             = ' '
