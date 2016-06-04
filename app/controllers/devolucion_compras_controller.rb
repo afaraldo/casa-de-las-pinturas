@@ -1,6 +1,6 @@
 class DevolucionComprasController < ApplicationController
   layout 'imprimir', only: [:imprimir]
-  before_action :set_devolucion_compra, only: [:show, :edit, :update, :destroy]
+  before_action :set_devolucion_compra, only: [:show, :imprimir_show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
   before_action :editable?, only: [:edit, :update]
   before_action :eliminable?, only: [:destroy]
@@ -30,7 +30,6 @@ class DevolucionComprasController < ApplicationController
   end
   
   def imprimir_show
-    get_devolucion_compras
   end
 
   # GET /compras
@@ -125,7 +124,7 @@ class DevolucionComprasController < ApplicationController
     def get_devolucion_compras
       procesar_fechas
       @search = DevolucionCompra.search(params[:q])
-      @devolucion_compras = @search.result.includes(:persona).page(params[:page]).per((action_name == 'imprimir') | (action_name == 'imprimir_show') ? LIMITE_REGISTROS_IMPRIMIR : 25)
+      @devolucion_compras = @search.result.includes(:persona).page(params[:page]).per(action_name == 'imprimir' ? LIMITE_REGISTROS_IMPRIMIR : 25)
     end
     # Setear las fechas "hasta" para que incluya el dia entero
     # 01/03/2016 => 2016-03-01 23:59:59
@@ -141,7 +140,7 @@ class DevolucionComprasController < ApplicationController
     end
     # Never trust parameters from the scary internet, only allow the white list through.
     def devolucion_compra_params
-      params.require(:devolucion_compra).permit(:persona_id, :motivo, :fecha,
+      params.require(:devolucion_compra).permit(:id, :persona_id, :motivo, :fecha,
                                    detalles_attributes: [:id,:mercaderia_id, :cantidad, :precio_unitario],
                                    boletas_detalles_attributes: [:id, :boleta_id, :_destroy])
 
