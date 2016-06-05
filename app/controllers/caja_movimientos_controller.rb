@@ -1,8 +1,8 @@
 class CajaMovimientosController < ApplicationController
 
-  layout 'imprimir', only: [:imprimir]
+  layout 'imprimir', only: [:imprimir, :imprimir_show]
 
-  before_action :set_caja_movimiento, only: [:show, :edit, :update, :destroy]
+  before_action :set_caja_movimiento, only: [:show, :imprimir_show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
 
   # configuracion del menu
@@ -13,6 +13,9 @@ class CajaMovimientosController < ApplicationController
 
   def imprimir
     get_caja_movimientos
+  end
+
+  def imprimir_show
   end
 
   # GET /caja_movimientos

@@ -1,6 +1,6 @@
 class VentasController < ApplicationController
-  layout 'imprimir', only: [:imprimir]
-  before_action :set_venta, only: [:show, :edit, :update, :destroy]
+  layout 'imprimir', only: [:imprimir, :imprimir_show]
+  before_action :set_venta, only: [:show, :imprimir_show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
 
   # configuracion del menu
@@ -11,6 +11,9 @@ class VentasController < ApplicationController
 
   def imprimir
     get_ventas
+  end
+
+  def imprimir_show
   end
 
   # GET /ventas

@@ -5,14 +5,16 @@ section.content
     .col-xs-12
       .box
         .box-header
-          a.volver-link href="#{caja_movimientos_path}"
+          a.volver-link.hidden-print href="#{caja_movimientos_path}"
             i.fa.fa-angle-double-left
             | Volver al listado de movimientos
           .clearfix
           .row
             .col-xs-12
               h3.box-title Movimiento de caja
-          .box-tools
+          .box-tools.hidden-print
+            = link_to 'Imprimir'.html_safe, "/caja_movimientos/#{@caja_movimiento.id}/imprimir_show", class: 'btn btn-default imprimir-listado'
+            = ' '
             = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_caja_movimiento_path(@caja_movimiento), class: 'btn btn-default'
             = " "
             = link_to ' <i class="fa fa-trash"></i> Eliminar'.html_safe, caja_movimiento_path(@caja_movimiento), method: 'delete', data: {confirm: "¿Esta seguro que desea eliminar el movimiento?"}, class: 'btn btn-danger'

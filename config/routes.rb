@@ -53,9 +53,11 @@ Rails.application.routes.draw do
 
   get 'compras/buscar_devoluciones' => 'compras#buscar_devoluciones'
   get 'compras/imprimir' => 'compras#imprimir'
+  get 'compras/:id/imprimir_show' => 'compras#imprimir_show'
   resources :compras
 
   get 'ventas/imprimir' => 'ventas#imprimir'
+  get 'ventas/:id/imprimir_show' => 'ventas#imprimir_show'
   resources :ventas
 
   get 'pagos/buscar_pendientes' => 'pagos#buscar_pendientes'
@@ -66,6 +68,7 @@ Rails.application.routes.draw do
   get 'caja_movimientos/new_transferencia' => 'caja_movimientos#new_transferencia'
   post 'caja_movimientos/create_transferencia' => 'caja_movimientos#create_transferencia'
   get 'caja_movimientos/imprimir' => 'caja_movimientos#imprimir'
+  get 'caja_movimientos/:id/imprimir_show' => 'caja_movimientos#imprimir_show'
   resources :caja_movimientos
 
   get 'cobros/buscar_pendientes' => 'cobros#buscar_pendientes'
