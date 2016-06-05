@@ -5,12 +5,14 @@ section.content
     .col-xs-12
       .box
         .box-header
-          a.volver-link href="#{cobros_path}"
+          a.volver-link.hidden-print href="#{cobros_path}"
             i.fa.fa-angle-double-left
             | Volver al listado de cobros
           .clearfix
           h3.box-title Cobro Nro. #{@cobro.numero}
-          .box-tools
+          .box-tools.hidden-print
+            = link_to 'Imprimir'.html_safe, "/cobros/#{@cobro.id}/imprimir_show", class: 'btn btn-default imprimir-listado'
+            = ' '
             - if @cobro.credito?
               = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_cobro_path(@cobro), class: 'btn btn-default'
             - else
@@ -45,7 +47,7 @@ section.content
     .col-xs-12
       .nav-tabs-custom
         ul.nav.nav-tabs
-          li.active
+          li.active.hidden-print
             a href="#detalles" data-toggle="tab" Formas de cobro
           li
             a href="#ventas" data-toggle="tab" Ventas Cobradas
