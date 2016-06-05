@@ -5,12 +5,14 @@ section.content
     .col-xs-12
       .box
         .box-header
-          a.volver-link href="#{pagos_path}"
+          a.volver-link.hidden-print href="#{pagos_path}"
             i.fa.fa-angle-double-left
             | Volver al listado de pagos
           .clearfix
           h3.box-title Pago Nro. #{@pago.numero}
-          .box-tools
+          .box-tools.hidden-print
+            = link_to 'Imprimir'.html_safe, "/pagos/#{@pago.id}/imprimir_show", class: 'btn btn-default imprimir-listado'
+            = ' '
             - if @pago.credito?
               = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_pago_path(@pago), class: 'btn btn-default'
             - else

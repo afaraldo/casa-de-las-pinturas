@@ -1,7 +1,7 @@
 class PagosController < ApplicationController
-  layout 'imprimir', only: [:imprimir]
+  layout 'imprimir', only: [:imprimir, :imprimir_show]
 
-  before_action :set_pago, only: [:show, :edit, :update, :destroy]
+  before_action :set_pago, only: [:show, :imprimir_show, :edit, :update, :destroy]
 
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
 
@@ -21,6 +21,9 @@ class PagosController < ApplicationController
 
   def imprimir
     get_pagos
+  end
+
+  def imprimir_show
   end
 
   # GET /pagos
