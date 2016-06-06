@@ -82,7 +82,7 @@ section.content
                   i.fa.fa-refresh.fa-spin
                 .col-xs-12
                   .well.text-center
-                    h3 = @venta.new_record? ? "Seleccione un cliente para ver los creditos disponibles" : "No hay devoluciones disponibles para el cliente #{@venta.persona_nombre}" 
+                    h3 = @venta.new_record? ? "Seleccione un cliente para ver los creditos disponibles" : "No hay devoluciones disponibles para el cliente #{@venta.persona_nombre}"
               table.table.table-bordered.detalles-table#devoluciones-disponibles-tabla.hide
                 thead
                   tr
@@ -104,8 +104,8 @@ section.content
                       | Total:
                     td.table-total.text-right.text-bold
                       span
-                    td               
-               
+                    td
+
             .form-subtitle
               label Mercaderías
               = link_to '<i class="fa fa-plus"></i>'.html_safe,

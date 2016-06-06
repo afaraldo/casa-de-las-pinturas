@@ -12,7 +12,7 @@
     td
       div class="form-group #{'has-error' if d.errors.has_key?(:monto_utilizado)}"
         = hidden_field "venta[creditos_detalles_attributes][#{i}]", :notas_creditos_debito_id, value: devolucion.id
-        = text_field "venta[creditos_detalles_attributes][#{i}]", :monto_utilizado, value: number_with_precision(es_devolucion ? devolucion.credito_restante : d.monto_utilizado), class: 'form-control mascaraMoneda monto-a-sumar'         
+        = text_field "venta[creditos_detalles_attributes][#{i}]", :monto_utilizado, value: number_with_precision(es_devolucion ? devolucion.credito_restante : d.monto_utilizado), class: 'form-control mascaraMoneda monto-a-sumar'
         - if d.errors.has_key?(:monto_utilizado)
           span.help-block = d.errors.get(:monto_utilizado).to_sentence
     td
