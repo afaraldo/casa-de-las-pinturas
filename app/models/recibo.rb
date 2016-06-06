@@ -14,7 +14,7 @@ class Recibo < ActiveRecord::Base
   after_destroy :actualizar_cuenta_corriente, if: :credito?
   after_save :actualizar_extracto_cajas
 
-  belongs_to :persona, foreign_key: "persona_id", inverse_of: :recibos
+  belongs_to :persona, -> { with_deleted }, foreign_key: "persona_id", inverse_of: :recibos
 
   has_many :detalles, class_name: 'ReciboDetalle', dependent: :destroy, inverse_of: :recibo
 

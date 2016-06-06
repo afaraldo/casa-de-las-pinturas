@@ -6,7 +6,7 @@ class NotaCreditoDebitoDetalle < ActiveRecord::Base
   after_destroy :update_stock
 
   belongs_to :notas_creditos_debito
-  belongs_to :mercaderia
+  belongs_to :mercaderia, -> { with_deleted }
 
   delegate :nombre, to: :mercaderia, prefix: true
   delegate :codigo, to: :mercaderia, prefix: true

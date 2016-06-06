@@ -5,7 +5,7 @@ class Boleta < ActiveRecord::Base
 
   self.inheritance_column = 'tipo'
 
-  belongs_to :persona, foreign_key: "persona_id", inverse_of: :boletas
+  belongs_to :persona, -> { with_deleted }, foreign_key: "persona_id", inverse_of: :boletas
 
   has_many :detalles, class_name: 'BoletaDetalle', dependent: :destroy, inverse_of: :boleta
 
