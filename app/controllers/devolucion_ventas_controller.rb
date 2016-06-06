@@ -5,6 +5,12 @@ class DevolucionVentasController < ApplicationController
   before_action :editable?, only: [:edit, :update]
   before_action :eliminable?, only: [:destroy]
 
+  # configuracion del menu
+  def setup_menu
+    @menu_setup[:main_menu] = :ventas
+    @menu_setup[:side_menu] = :devolucion_ventas_sidemenu
+  end
+  
   def editable?
     unless @devolucion_venta.es_editable?
       flash[:warning] = @devolucion_venta.no_editable_mensaje
@@ -18,12 +24,6 @@ class DevolucionVentasController < ApplicationController
       redirect_to @devolucion_venta
     end
   end
-  # configuracion del menu
-  def setup_menu
-    @menu_setup[:main_menu] = :ventas
-    @menu_setup[:side_menu] = :devolucion_ventas_sidemenu
-  end
-
   # GET /ventas
   # GET s.json
   def index

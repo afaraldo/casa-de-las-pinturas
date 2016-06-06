@@ -21,11 +21,11 @@ section.content
               - else
                 = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, venta_path(@venta), method: 'delete', data: {confirm: "¿Desea eliminar la venta?"}, class: 'btn btn-danger'
             - else
-              button.btn.btn-default.disabled data-toggle="tooltip" title="No se puede eliminar la venta porque tiene pagos asociados."
+              button.btn.btn-default.disabled data-toggle="tooltip" title="No se puede eliminar la venta porque tiene cobros o creditos asociados."
                 i.fa.fa-trash
                 |  Editar
               = ' '
-              button.btn.btn-danger.disabled data-toggle="tooltip" title="No se puede eliminar la venta porque tiene pagos asociados."
+              button.btn.btn-danger.disabled data-toggle="tooltip" title="No se puede eliminar la venta porque tiene cobros o creditos asociados."
                 i.fa.fa-trash
                 |  Eliminar
         .box-body
@@ -39,7 +39,7 @@ section.content
                   label.control-label Cliente
                   p = @venta.persona_nombre
                 .col-sm-4
-                  label.control-label Condición de pago
+                  label.control-label Condición de cobro
                   p = @venta.condicion.capitalize
               .row
                 - if @venta.credito?

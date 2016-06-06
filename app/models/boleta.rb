@@ -87,7 +87,7 @@ class Boleta < ActiveRecord::Base
   end
 
   def es_editable?
-    if (credito? && recibos_detalles.empty?) || contado?
+    if (credito? && recibos_detalles.empty?) || (contado? && (self.importe_credito_utilizado < 1))
       true
     else
       false
