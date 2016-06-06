@@ -61,7 +61,6 @@ class VentasController < ApplicationController
           get_cobro
           format.html { render :form }
           format.json { render json: @venta.errors, status: :unprocessable_entity }
-          binding.pry
         end
       end
     end
@@ -133,6 +132,7 @@ class VentasController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def venta_params
+      procesar_fechas
       procesar_cantidades_mercaderias
       procesar_cantidades_cobros
       procesar_devoluciones(params[:venta][:condicion])
