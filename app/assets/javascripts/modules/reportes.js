@@ -23,6 +23,7 @@ var ReportesUI = (function(){
                 {
                     name: s.nombre,
                     showInLegend: mostrarReferencia,
+                    color: ((s.color) ? s.color : null),
                     data: $.map(s.totales, function(v){ return parseInt(v); })
                 }
             );

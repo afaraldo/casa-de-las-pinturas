@@ -194,14 +194,17 @@ class Boleta < ActiveRecord::Base
 
       {todo: resultado, agrupado: resultado.group_by { |b| (opciones[:agrupar_por] == 'persona') ? b.persona_nombre :  I18n.localize(b.fecha.to_date, format: grupo_formato.to_sym).capitalize }}
     end
+  end
 
-    def self.reporte_mensual(*args)
-      fechas = Boleta.select("fecha").group(:fecha)
-      compras = Compra.reporte(args)
-      ventas = Venta.reporte(args)
-
+  def self.reporte_mensual(*args)
+    boletas = reporte(args.first)
+    opciones = args.extract_options!
+    boleta_hash = Hash.new
+    boletas.map{ |b|  boleta_hash[b.grupo] = b.total}
+    for fecha in opciones[:desde] .. opciones[:hasta]
+      boleta_hash[fecha.to_s] = 0 unless boleta_hash[fecha.to_s]
     end
-
+    boleta_hash
   end
 
   private

@@ -23,7 +23,17 @@ class WelcomeController < ApplicationController
     params[:persona_id]= ""
     params[:agrupar_por]= "dia"
     params[:modo_resumido]= "on"
-    @reporte = Boleta.reporte_mensual(desde: @desde,
+    @compra_hash = Compra.reporte_mensual(desde: @desde,
+                              hasta: @hasta,
+                              persona_id: params[:persona_id],
+                              agrupar_por: params[:agrupar_por],
+                              resumido: params[:modo_resumido].present?,
+                              order_by: params[:order_by],
+                              order_dir: params[:order_dir],
+                              page: params[:page],
+                              limit: action_name == 'imprimir_reporte_compras' ? LIMITE_REGISTROS_IMPRIMIR : 100)
+
+    @venta_hash = Venta.reporte_mensual(desde: @desde,
                               hasta: @hasta,
                               persona_id: params[:persona_id],
                               agrupar_por: params[:agrupar_por],

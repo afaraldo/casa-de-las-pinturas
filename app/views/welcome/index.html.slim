@@ -11,13 +11,7 @@ section.content
             canvas#dashboard-chart-canvas
             - total_reporte = 0
             - chart_data = {}
-            - @reporte.each do |grupo|
-              - chart_data[grupo_label(grupo.grupo, params[:agrupar_por])] = grupo.total
-              - total_reporte += grupo.total
-            - chart_data = {}
-            - @reporte.each do |grupo|
-              - chart_data[grupo_label(grupo.grupo, params[:agrupar_por])] = grupo.total
-              - total_reporte += grupo.total
+            
         .box-footer
           .row
             .col-sm-3.col-xs-6
@@ -75,6 +69,6 @@ section.content
             = "#{number_to_currency(@saldo_total_proveedores)}"
             
   javascript:
-    ReportesUI.dibujarChart(#{chart_data.keys.to_json.html_safe},
-      [{nombre: 'Compra', totales: #{chart_data.values.to_json.html_safe}},{nombre: 'Venta', totales: #{chart_data.values.to_json.html_safe}}],
+    ReportesUI.dibujarChart(#{@compra_hash.keys.to_json.html_safe},
+      [{nombre: 'Compra', totales: #{@compra_hash.values.to_json.html_safe}},{nombre: 'Venta', totales: #{@venta_hash.values.to_json.html_safe}, color: "#f7a35c"}],
       "#{params[:agrupar_por] == 'persona' ? 'bar' : 'areaspline'}", false);
