@@ -195,6 +195,13 @@ class Boleta < ActiveRecord::Base
       {todo: resultado, agrupado: resultado.group_by { |b| (opciones[:agrupar_por] == 'persona') ? b.persona_nombre :  I18n.localize(b.fecha.to_date, format: grupo_formato.to_sym).capitalize }}
     end
 
+    def self.reporte_mensual(*args)
+      fechas = Boleta.select("fecha").group(:fecha)
+      compras = Compra.reporte(args)
+      ventas = Venta.reporte(args)
+
+    end
+
   end
 
   private

@@ -18,7 +18,12 @@ class WelcomeController < ApplicationController
     @total_venta_credito = Boleta.importe_total_boletas(@desde, @hasta, "Venta", "credito")
     @total_compra_contado = Boleta.importe_total_boletas(@desde, @hasta, "Compra", "contado")
     @total_compra_credito = Boleta.importe_total_boletas(@desde, @hasta, "Compra", "credito")
-    @reporte_compra = Compra.reporte(desde: @desde,
+    params[:order_by]= "grupo"
+    params[:order_dir]= "asc"
+    params[:persona_id]= ""
+    params[:agrupar_por]= "dia"
+    params[:modo_resumido]= "on"
+    @reporte = Boleta.reporte_mensual(desde: @desde,
                               hasta: @hasta,
                               persona_id: params[:persona_id],
                               agrupar_por: params[:agrupar_por],
@@ -28,14 +33,5 @@ class WelcomeController < ApplicationController
                               page: params[:page],
                               limit: action_name == 'imprimir_reporte_compras' ? LIMITE_REGISTROS_IMPRIMIR : 100)
 
-    @reporte_venta = Venta.reporte(desde: @desde,
-                              hasta: @hasta,
-                              persona_id: params[:persona_id],
-                              agrupar_por: params[:agrupar_por],
-                              resumido: params[:modo_resumido].present?,
-                              order_by: params[:order_by],
-                              order_dir: params[:order_dir],
-                              page: params[:page],
-                              limit: action_name == 'imprimir_reporte_ventas' ? LIMITE_REGISTROS_IMPRIMIR : 100)
   end
 end

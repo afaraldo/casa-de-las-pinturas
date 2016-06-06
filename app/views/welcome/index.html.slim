@@ -7,8 +7,17 @@ section.content
         .box-header.with-border
           h3.box-title Compras y Ventas de la Semana
         .box-body
-          #dashboard-chart.chart style="height: 300px;"
+          #reporte-chart style="height: 300px;"
             canvas#dashboard-chart-canvas
+            - total_reporte = 0
+            - chart_data = {}
+            - @reporte.each do |grupo|
+              - chart_data[grupo_label(grupo.grupo, params[:agrupar_por])] = grupo.total
+              - total_reporte += grupo.total
+            - chart_data = {}
+            - @reporte.each do |grupo|
+              - chart_data[grupo_label(grupo.grupo, params[:agrupar_por])] = grupo.total
+              - total_reporte += grupo.total
         .box-footer
           .row
             .col-sm-3.col-xs-6
@@ -64,43 +73,8 @@ section.content
           .info-box-text Cuentas a pagar
           .info-box-number
             = "#{number_to_currency(@saldo_total_proveedores)}"
-javascript:
-  var ctx = $('#dashboard-chart-canvas').get(0).getContext('2d');
-
-  var data = {
-    labels: ["01/04/2016", "02/04/2016", "03/04/2016", "04/04/2016", "05/04/2016", "06/04/2016", "07/04/2016"],
-    datasets: [
-      {
-        label: "Compras",
-        fill: true,
-        backgroundColor: "rgba(253, 72, 1, 0.6)",
-        borderColor: "rgb(253, 72, 1)",
-        pointBorderColor: "rgba(220,220,220,1)",
-        pointBackgroundColor: "#fff",
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: "rgba(220,220,220,1)",
-        pointHoverBorderColor: "rgba(220,220,220,1)",
-        pointHoverBorderWidth: 2,
-        data: [6500000, 5900000, 8000000, 8100000, 5600000, 5500000, 400000]
-      },
-      {
-        label: "Ventas",
-        fill: true,
-        backgroundColor: "rgba(3, 192, 1, 0.67)",
-        borderColor: "rgb(3, 192, 1)",
-        pointBorderColor: "rgba(220,220,220,1)",
-        pointBackgroundColor: "#fff",
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: "rgba(220,220,220,1)",
-        pointHoverBorderColor: "rgba(220,220,220,1)",
-        pointHoverBorderWidth: 2,
-        data: [280000, 4800000, 4000000, 1900000, 8600000, 2700000, 9000000]
-      }
-    ]
-  };
-
-  var myLineChart = new Chart(ctx,  {type: 'line', data: data, options: {responsive: true, maintainAspectRatio: false}});
-
-//  ReportesUI.dibujarChart(#{chart_data.keys.to_json.html_safe}, [{nombre: 'Total', totales: #{chart_data.values.to_json.html_safe}}], "#{params[:agrupar_por] == 'persona' ? 'bar' : 'areaspline'}", false);
+            
+  javascript:
+    ReportesUI.dibujarChart(#{chart_data.keys.to_json.html_safe},
+      [{nombre: 'Compra', totales: #{chart_data.values.to_json.html_safe}},{nombre: 'Venta', totales: #{chart_data.values.to_json.html_safe}}],
+      "#{params[:agrupar_por] == 'persona' ? 'bar' : 'areaspline'}", false);
