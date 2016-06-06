@@ -46,8 +46,8 @@ section.content
   .row
     .col-xs-12
       .nav-tabs-custom
-        ul.nav.nav-tabs
-          li.active.hidden-print
+        ul.nav.nav-tabs.hidden-print
+          li.active
             a href="#detalles" data-toggle="tab" Formas de cobro
           li
             a href="#ventas" data-toggle="tab" Ventas Cobradas
@@ -55,6 +55,7 @@ section.content
             a href="#creditos" data-toggle="tab" Credito utilizado
         .tab-content
           .tab-pane.active#detalles
+            h4.visible-print Formas de Cobro
             table.table.table-bordered.detalles-table.calcular-total
               thead
                 tr
@@ -81,6 +82,7 @@ section.content
                   td.table-total.text-right.text-bold
                     span = number_to_currency(total)
           .tab-pane#ventas
+            h4.visible-print Ventas Cobradas
             table.table.table-bordered.detalles-table.calcular-cobros-total
               thead
                 tr
@@ -108,6 +110,7 @@ section.content
                   td.table-total.text-right.text-bold
                     span = number_to_currency(total_ventas)
           .tab-pane#creditos
+            h4.visible-print Credito Utilizado
             table.table.table-bordered.detalles-table
               thead
                 tr
@@ -137,11 +140,12 @@ section.content
       .col-sm-offset-8.col-sm-4
         .box.box-solid
           .box-body
+            h4.visible-print Resumen
             table.table.bg-warning
               tbody
                 tr
                   td Total boletas:
-                  td.text-right = "#{number_to_currency(@cobro.total_pagado)}"
+                  td.text-right = "#{number_to_currency(@cobro.total_pagado + @cobro.total_credito_utilizado)}"
                 - if @cobro.total_credito_utilizado > 0
                   tr
                     td Crédito utilizado:
