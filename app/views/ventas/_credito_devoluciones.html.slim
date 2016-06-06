@@ -16,5 +16,7 @@
         - if d.errors.has_key?(:monto_utilizado)
           span.help-block = d.errors.get(:monto_utilizado).to_sentence
     td
-      - seleccionado = actualizando && !es_devolucion ? {checked: ''} : {} # checkear la venta al editar o cuando hay errores en el create       input type="checkbox" name="venta[creditos_detalles_attributes][#{i}][usado]" class="usar-credito" *seleccionado
-      - if !venta.nil? && venta.persisted? && !es_devolucion# incluir el id del detalle al editar         input type="hidden" name="venta[creditos_detalles_attributes][#{i}][id]" value="#{d.id}"
+      - seleccionado = actualizando && !es_devolucion ? {checked: ''} : {} # checkear la venta al editar o cuando hay errores en el create
+      input type="checkbox" name="venta[creditos_detalles_attributes][#{i}][usado]" class="usar-credito" *seleccionado
+      - if !venta.nil? && venta.persisted? && !es_devolucion# incluir el id del detalle al editar
+        input type="hidden" name="venta[creditos_detalles_attributes][#{i}][id]" value="#{d.id}"

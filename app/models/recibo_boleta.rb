@@ -19,7 +19,7 @@ class ReciboBoleta < ActiveRecord::Base
     importe_pendiente = boleta.importe_pendiente
     importe_pendiente += monto_utilizado_was if persisted? # sumar el monto_utilizado anterior si se esta editando
     errors.add(:monto_utilizado, I18n.t('activerecord.errors.messages.monto_superior_a_pendiente')) if importe_pendiente < monto_utilizado
-    errors.add(:monto_utilizado, I18n.t('activerecord.errors.messages.monto_utilizado_cero')) if monto_utilizado <= 0
+    errors.add(:monto_utilizado, I18n.t('activerecord.errors.messages.monto_utilizado_cero')) if monto_utilizado < 0
     false if errors.size > 0
   end
 

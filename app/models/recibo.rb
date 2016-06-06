@@ -27,7 +27,6 @@ class Recibo < ActiveRecord::Base
   default_scope { order('fecha DESC') } # Ordenar por fecha por defecto
 
   validates :fecha,  presence: true
-  validates :detalles, length: { minimum: 1 }
   validates :numero_comprobante, length: { minimum: 2, maximum: 50 }, allow_blank: true
   validates :persona_id, presence: true
   validate  :fecha_futura

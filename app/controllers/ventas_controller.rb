@@ -61,6 +61,7 @@ class VentasController < ApplicationController
           get_cobro
           format.html { render :form }
           format.json { render json: @venta.errors, status: :unprocessable_entity }
+          binding.pry
         end
       end
     end
