@@ -53,5 +53,4 @@ class Persona < ActiveRecord::Base
     end
     saldo
   end
-  
 end

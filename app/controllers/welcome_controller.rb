@@ -18,10 +18,6 @@ class WelcomeController < ApplicationController
     @total_venta_credito = Boleta.importe_total_boletas(@desde, @hasta, "Venta", "credito")
     @total_compra_contado = Boleta.importe_total_boletas(@desde, @hasta, "Compra", "contado")
     @total_compra_credito = Boleta.importe_total_boletas(@desde, @hasta, "Compra", "credito")
-    params[:order_by]= "grupo"
-    params[:order_dir]= "asc"
-    params[:persona_id]= ""
-    params[:agrupar_por]= "dia"
     params[:modo_resumido]= "on"
     @compra_hash = Compra.reporte_mensual(desde: @desde,
                               hasta: @hasta,

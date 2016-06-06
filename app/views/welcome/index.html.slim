@@ -9,9 +9,6 @@ section.content
         .box-body
           #reporte-chart style="height: 300px;"
             canvas#dashboard-chart-canvas
-            - total_reporte = 0
-            - chart_data = {}
-            
         .box-footer
           .row
             .col-sm-3.col-xs-6
@@ -49,7 +46,7 @@ section.content
           i.fa.fa-dollar
         .info-box-content
           .info-box-text Saldo en caja
-          .info-box-number 
+          .info-box-number
             = "#{number_to_currency(@saldo_en_caja)}"
     .col-sm-3
       .info-box
@@ -67,7 +64,6 @@ section.content
           .info-box-text Cuentas a pagar
           .info-box-number
             = "#{number_to_currency(@saldo_total_proveedores)}"
-            
   javascript:
     ReportesUI.dibujarChart(#{@compra_hash.keys.to_json.html_safe},
       [{nombre: 'Compra', totales: #{@compra_hash.values.to_json.html_safe}},{nombre: 'Venta', totales: #{@venta_hash.values.to_json.html_safe}, color: "#f7a35c"}],
