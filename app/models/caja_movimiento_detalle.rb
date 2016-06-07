@@ -5,7 +5,7 @@ class CajaMovimientoDetalle < ActiveRecord::Base
   after_destroy :actualizar_extractos
 
   belongs_to :caja_movimiento, inverse_of: :detalles
-  belongs_to :moneda
+  belongs_to :moneda, -> { with_deleted }
 
   delegate :nombre, to: :caja, prefix: true
 

@@ -132,6 +132,7 @@ class VentasController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def venta_params
+      procesar_fechas
       procesar_cantidades_mercaderias
       procesar_cantidades_cobros
       procesar_devoluciones(params[:venta][:condicion])

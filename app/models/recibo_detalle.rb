@@ -8,7 +8,7 @@ class ReciboDetalle < ActiveRecord::Base
   after_destroy :actualizar_extractos
 
   belongs_to :recibo
-  belongs_to :moneda
+  belongs_to :moneda, -> { with_deleted }
   belongs_to :caja
 
   enumerize :forma, in: [:efectivo, :tarjeta], predicates: true

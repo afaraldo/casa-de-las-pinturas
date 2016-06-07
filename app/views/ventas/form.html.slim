@@ -82,7 +82,7 @@ section.content
                   i.fa.fa-refresh.fa-spin
                 .col-xs-12
                   .well.text-center
-                    h3 Seleccione un cliente para ver los creditos disponibles
+                    h3 = @venta.new_record? ? "Seleccione un cliente para ver los creditos disponibles" : "No hay devoluciones disponibles para el cliente #{@venta.persona_nombre}"
               table.table.table-bordered.detalles-table#devoluciones-disponibles-tabla.hide
                 thead
                   tr
@@ -93,7 +93,10 @@ section.content
                     th Crédito a usar
                     th
                 tbody#creditos-detalles-body
-                  = render 'credito_devoluciones', devoluciones: @venta.creditos_detalles, actualizando: true, venta: @venta
+                  // Al editar Incluir devoluciones disponibles del proveedor que no sean las que ya estan asociadas a la venta
+                  - creditos_usados = @venta.creditos_detalles.map(&:notas_creditos_debito_id)
+                  - creditos_disponibles = @venta.persisted? ? @venta.persona.devoluciones_disponibles.reject { |d| creditos_usados.include?(d.id) } : []
+                  = render 'credito_devoluciones', devoluciones: @venta.creditos_detalles.to_a + creditos_disponibles.to_a, actualizando: true, venta: @venta
                 tfoot
                   tr
                     td colspan="3"
@@ -102,6 +105,7 @@ section.content
                     td.table-total.text-right.text-bold
                       span
                     td
+
             .form-subtitle
               label Mercaderías
               = link_to '<i class="fa fa-plus"></i>'.html_safe,

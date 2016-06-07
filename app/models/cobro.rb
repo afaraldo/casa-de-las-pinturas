@@ -1,6 +1,6 @@
 class Cobro < Recibo
 
-  belongs_to :persona, foreign_key: "persona_id", inverse_of: :boletas, class_name: 'Cliente'
+  belongs_to :persona, -> { with_deleted }, foreign_key: "persona_id", inverse_of: :boletas, class_name: 'Cliente'
 
   has_many :boletas_detalles, class_name: 'CobroVenta', dependent: :destroy, foreign_key: "recibo_id", inverse_of: :recibo
   has_many :boletas, class_name: 'Venta', through: :boletas_detalles

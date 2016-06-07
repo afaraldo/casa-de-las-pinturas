@@ -153,7 +153,7 @@ var BoletasUI = (function(){
                     elementos.mensajePanel.find('.overlay').removeClass('hide');
                 }
             })
-        });
+        }).trigger('change');
 
         // Calculador de mercaderias
         TablasHelper.calcularTotalEvent({
