@@ -194,7 +194,17 @@ class Boleta < ActiveRecord::Base
 
       {todo: resultado, agrupado: resultado.group_by { |b| (opciones[:agrupar_por] == 'persona') ? b.persona_nombre :  I18n.localize(b.fecha.to_date, format: grupo_formato.to_sym).capitalize }}
     end
+  end
 
+  def self.reporte_mensual(*args)
+    boletas = reporte(args.first)
+    opciones = args.extract_options!
+    boleta_hash = Hash.new
+    boletas.map{ |b|  boleta_hash[b.grupo] = b.total}
+    for fecha in opciones[:desde] .. opciones[:hasta]
+      boleta_hash[fecha.to_s] = 0 unless boleta_hash[fecha.to_s]
+    end
+    boleta_hash
   end
 
   private
@@ -301,6 +311,15 @@ class Boleta < ActiveRecord::Base
   # para poder buscar por el id y numero comprobante
   ransacker :id do
     Arel.sql("to_char(\"#{table_name}\".\"id\", '99999')")
+  end
+
+  # Devuelve la sumatoria de todos importes_totales de las boletas de un tipo
+  # durante un periodo de tiempo seleccionado
+  def self.importe_total_boletas(fecha_inicio, fecha_fin, tipo, condicion)
+    saldo = 0
+    boletas = Boleta.where("fecha >= ? AND fecha <= ? AND tipo = ? AND condicion = ?", fecha_inicio, fecha_fin, tipo, condicion)
+    boletas.map{|b| saldo += b.importe_total }
+    saldo
   end
 
 end

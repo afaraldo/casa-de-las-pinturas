@@ -23,4 +23,13 @@ class Caja < ActiveRecord::Base
     saldos
   end
 
+  # retorna el saldo de las monedas dadas de la caja
+  def saldos_total_en_moneda_por_defecto
+    saldo = 0
+    monedas = Moneda.all
+    saldo_monedas = saldos_por_moneda(Moneda.all.map(&:id))
+    saldo_monedas.each_with_index{|monto, i| saldo += monto[1] * monedas[i].cotizacion}
+    saldo
+  end
+
 end

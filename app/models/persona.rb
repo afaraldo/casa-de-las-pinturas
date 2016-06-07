@@ -42,4 +42,15 @@ class Persona < ActiveRecord::Base
     super(:methods => [:saldo_actual])
   end
 
+  # devuelve la sumatoria de todos los saldos el tipo de persona selecciona con
+  # el parametro tipo
+  def self.saldo_total(tipo)
+    saldo = 0;
+    if "clientes" == tipo
+      Cliente.all.map{|c| saldo += c.saldo_actual}
+    else
+      Proveedor.all.map{|p| saldo += p.saldo_actual}
+    end
+    saldo
+  end
 end

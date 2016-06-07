@@ -107,7 +107,8 @@ CasaDeLasPinturas = {
     caja_movimientos: CajaMovimientosUI,
     reportes: ReportesUI,
     cobros: CobrosUI,
-    transferencias: TransferenciasUI
+    transferencias: TransferenciasUI,
+    welcome: ReportesUI
 
 };
 
