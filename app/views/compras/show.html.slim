@@ -22,11 +22,11 @@ section.content
               - else
                 = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, compra_path(@compra), method: 'delete', data: {confirm: "¿Desea eliminar la compra?"}, class: 'btn btn-danger'
             - else
-              button.btn.btn-default.disabled data-toggle="tooltip" title="No se puede editar la compra porque tiene pagos asociados."
+              button.btn.btn-default.disabled data-toggle="tooltip" title="No se puede editar la compra porque tiene pagos o creditos asociados."
                 i.fa.fa-trash
                 |  Editar
               = ' '
-              button.btn.btn-danger.disabled data-toggle="tooltip" title="No se puede eliminar la compra porque tiene pagos asociados."
+              button.btn.btn-danger.disabled data-toggle="tooltip" title="No se puede eliminar la compra porque tiene pagos o creditos asociados."
                 i.fa.fa-trash
                 |  Eliminar
         .box-body

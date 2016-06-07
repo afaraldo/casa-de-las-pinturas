@@ -5,11 +5,11 @@ class CajaMovimientoDetalle < ActiveRecord::Base
   after_destroy :actualizar_extractos
 
   belongs_to :caja_movimiento, inverse_of: :detalles
-  belongs_to :moneda
+  belongs_to :moneda, -> { with_deleted }
 
   delegate :nombre, to: :caja, prefix: true
 
-  validates :monto, numericality: { greater_than: 0, less_than_or_equal_to: DECIMAL_LIMITE[:superior] }
+  validates :monto, numericality: { greater_than: 0, less_than: DECIMAL_LIMITE[:superior] }
   validates :forma, presence: true
 
   def actualizar_extractos

@@ -1,7 +1,9 @@
 class DevolucionVentasController < ApplicationController
-  layout 'imprimir', only: [:imprimir, :imprimir_show]
-  before_action :set_devolucion_venta, only: [:show, :imprimir_show, :edit, :update, :destroy]
+
+  before_action :set_devolucion_venta, only: [:show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
+  before_action :editable?, only: [:edit, :update]
+  before_action :eliminable?, only: [:destroy]
 
   # configuracion del menu
   def setup_menu
@@ -9,13 +11,19 @@ class DevolucionVentasController < ApplicationController
     @menu_setup[:side_menu] = :devolucion_ventas_sidemenu
   end
   
-  def imprimir
-    get_devolucion_ventas
+  def editable?
+    unless @devolucion_venta.es_editable?
+      flash[:warning] = @devolucion_venta.no_editable_mensaje
+      redirect_to @devolucion_venta
+    end
   end
 
-  def imprimir_show
+  def eliminable?
+    unless @devolucion_venta.es_editable?
+      flash[:warning] = @devolucion_venta.no_eliminable_mensaje
+      redirect_to @devolucion_venta
+    end
   end
-
   # GET /ventas
   # GET s.json
   def index
@@ -125,7 +133,7 @@ class DevolucionVentasController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def devolucion_venta_params
       params.require(:devolucion_venta).permit(:persona_id, :motivo, :fecha,
-                                   detalles_attributes: [:id,:mercaderia_id, :cantidad, :precio_unitario],
+                                   detalles_attributes: [:id,:mercaderia_id, :cantidad, :precio_unitario, :_destroy],
                                    boletas_detalles_attributes: [:id, :boleta_id, :_destroy])
 
     end

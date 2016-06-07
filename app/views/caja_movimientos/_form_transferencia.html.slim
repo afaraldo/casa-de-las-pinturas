@@ -16,8 +16,9 @@
             .input-group-btn
               .btn.btn-default
                 i.fa.fa-calendar
+        .form-group
           label Monto
-          = text_field_tag :monto, nil, class: 'form-control'
+          = text_field_tag :monto, nil, class: 'form-control maskMoneda'
   .modal-footer.text-right
     button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
     input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."

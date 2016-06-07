@@ -5,7 +5,7 @@ class Boleta < ActiveRecord::Base
 
   self.inheritance_column = 'tipo'
 
-  belongs_to :persona, foreign_key: "persona_id", inverse_of: :boletas
+  belongs_to :persona, -> { with_deleted }, foreign_key: "persona_id", inverse_of: :boletas
 
   has_many :detalles, class_name: 'BoletaDetalle', dependent: :destroy, inverse_of: :boleta
 
@@ -34,6 +34,7 @@ class Boleta < ActiveRecord::Base
   before_validation :set_importe_pendiente
   before_validation :set_estado
   before_validation :set_pago, if: :contado?
+  after_validation :check_detalles, on: :update
 
   after_save :actualizar_extracto_de_cuenta_corriente, if: :credito?
   after_destroy :actualizar_extracto_de_cuenta_corriente, if: :credito?
@@ -86,11 +87,9 @@ class Boleta < ActiveRecord::Base
   end
 
   def es_editable?
-    if (credito? && recibos_detalles.empty?) || contado?
-      true
-    else
-      false
-    end
+    return false unless notas_creditos_debitos.empty?
+
+    (credito? && recibos_detalles.empty?) || contado?
   end
 
   def importe_pagado
@@ -118,6 +117,11 @@ class Boleta < ActiveRecord::Base
     unless recibos.empty?
       recibos.each(&:destroy)
     end
+  end
+
+  # recargar los detalles si hay algun error
+  def check_detalles
+    detalles.reload if errors.size > 0
   end
 
   def check_detalles_negativos(borrado = false)
@@ -188,7 +192,17 @@ class Boleta < ActiveRecord::Base
 
       {todo: resultado, agrupado: resultado.group_by { |b| (opciones[:agrupar_por] == 'persona') ? b.persona_nombre :  I18n.localize(b.fecha.to_date, format: grupo_formato.to_sym).capitalize }}
     end
+  end
 
+  def self.reporte_mensual(*args)
+    boletas = reporte(args.first)
+    opciones = args.extract_options!
+    boleta_hash = Hash.new
+    boletas.map{ |b|  boleta_hash[b.grupo] = b.total}
+    for fecha in opciones[:desde] .. opciones[:hasta]
+      boleta_hash[fecha.to_s] = 0 unless boleta_hash[fecha.to_s]
+    end
+    boleta_hash
   end
 
   private
@@ -197,7 +211,7 @@ class Boleta < ActiveRecord::Base
   def set_importe_total
     self.importe_total = 0
     self.detalles.each do |detalle|
-        self.importe_total += detalle.precio_unitario * detalle.cantidad
+        self.importe_total += detalle.precio_unitario * detalle.cantidad unless detalle.marked_for_destruction?
     end
   end
 
@@ -295,6 +309,15 @@ class Boleta < ActiveRecord::Base
   # para poder buscar por el id y numero comprobante
   ransacker :id do
     Arel.sql("to_char(\"#{table_name}\".\"id\", '99999')")
+  end
+
+  # Devuelve la sumatoria de todos importes_totales de las boletas de un tipo
+  # durante un periodo de tiempo seleccionado
+  def self.importe_total_boletas(fecha_inicio, fecha_fin, tipo, condicion)
+    saldo = 0
+    boletas = Boleta.where("fecha >= ? AND fecha <= ? AND tipo = ? AND condicion = ?", fecha_inicio, fecha_fin, tipo, condicion)
+    boletas.map{|b| saldo += b.importe_total }
+    saldo
   end
 
 end

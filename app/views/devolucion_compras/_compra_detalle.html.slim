@@ -4,7 +4,7 @@
   - precio = c.precio_unitario
   - cantidad = c.cantidad
   - subtotal = c.cantidad*c.precio_unitario
-  tr.nested-fields
+  tr.nested-fields class="#{'hide' if c.marked_for_destruction?}"
     td = c.mercaderia_codigo
     td = c.mercaderia_nombre
     td
@@ -24,9 +24,9 @@
     td.subtotal-col.text-right
       span
         = number_with_precision(subtotal, delimiter: '.')
-    - if total ==1
-      td
+    - if total == 1
+        td
     - else
-      td
-        =  link_to '<i class="fa fa-times"></i>'.html_safe,"#", class: 'btn btn-default btn-sm remove_fields dynamic'
-        = hidden_field "devolucion_compra[detalles_attributes][#{i}]", :_destroy, value: false
+        td
+          = hidden_field "devolucion_compra[detalles_attributes][#{i}]", :_destroy, value: c.marked_for_destruction?, class: 'input-destroy'
+          = link_to '<i class="fa fa-times"></i>'.html_safe,"#", class: 'btn btn-default btn-sm boton-de-borrado '

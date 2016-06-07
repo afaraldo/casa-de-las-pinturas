@@ -15,7 +15,7 @@ class Recibo < ActiveRecord::Base
   after_destroy :actualizar_cuenta_corriente, if: :credito?
   after_save :actualizar_extracto_cajas
 
-  belongs_to :persona, foreign_key: "persona_id", inverse_of: :recibos
+  belongs_to :persona, -> { with_deleted }, foreign_key: "persona_id", inverse_of: :recibos
 
   has_many :detalles, class_name: 'ReciboDetalle', dependent: :destroy, inverse_of: :recibo
 
@@ -32,7 +32,6 @@ class Recibo < ActiveRecord::Base
   default_scope { order('fecha DESC') } # Ordenar por fecha por defecto
 
   validates :fecha,  presence: true
-  validates :detalles, length: { minimum: 1 }
   validates :numero_comprobante, length: { minimum: 2, maximum: 50 }, allow_blank: true
   validates :persona_id, presence: true
   validate  :fecha_futura

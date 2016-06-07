@@ -134,6 +134,7 @@ class CajaMovimientosController < ApplicationController
         else
           @error = true
           @message = "Ha ocurrido un problema al tratar de guardar la transferencia. #{@result.to_sentence}"
+          raise ActiveRecord::Rollback
         end
       end
       render 'reload_list', format: :js

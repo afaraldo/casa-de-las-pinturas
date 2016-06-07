@@ -84,7 +84,7 @@ section.content
                   i.fa.fa-refresh.fa-spin
                 .col-xs-12
                   .well.text-center
-                    h3 = @compra.new_record? ? "Seleccione un proveedor para ver los creditos disponibles" : "No hay devoluciones disponibles para el proveedor #{@compra.persona_nombre}"
+                    h3 = @compra.persona.nil? ? "Seleccione un proveedor para ver los creditos disponibles" : "No hay devoluciones disponibles para el proveedor #{@compra.persona_nombre}"
               table.table.table-bordered.detalles-table#devoluciones-disponibles-tabla.hide
                 thead
                   tr
@@ -97,7 +97,7 @@ section.content
                 tbody#creditos-detalles-body
                   // Al editar Incluir devoluciones disponibles del proveedor que no sean las que ya estan asociadas a la compra
                   - creditos_usados = @compra.creditos_detalles.map(&:notas_creditos_debito_id)
-                  - creditos_disponibles = @compra.persisted? ? @compra.persona.devoluciones_disponibles.reject { |d| creditos_usados.include?(d.id) } : []
+                  - creditos_disponibles = @compra.persona ? @compra.persona.devoluciones_disponibles.reject { |d| creditos_usados.include?(d.id) } : []
                   = render 'credito_devoluciones', devoluciones: @compra.creditos_detalles.to_a + creditos_disponibles.to_a, actualizando: true, compra: @compra
                 tfoot
                   tr

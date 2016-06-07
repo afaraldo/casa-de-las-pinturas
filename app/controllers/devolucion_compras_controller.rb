@@ -140,8 +140,8 @@ class DevolucionComprasController < ApplicationController
     end
     # Never trust parameters from the scary internet, only allow the white list through.
     def devolucion_compra_params
-      params.require(:devolucion_compra).permit(:id, :persona_id, :motivo, :fecha,
-                                   detalles_attributes: [:id,:mercaderia_id, :cantidad, :precio_unitario],
+      params.require(:devolucion_compra).permit(:persona_id, :motivo, :fecha,
+                                   detalles_attributes: [:id,:mercaderia_id, :cantidad, :precio_unitario, :_destroy],
                                    boletas_detalles_attributes: [:id, :boleta_id, :_destroy])
 
     end

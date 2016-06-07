@@ -6,7 +6,7 @@ class NotaCreditoDebitoDetalle < ActiveRecord::Base
   after_destroy :update_stock
 
   belongs_to :notas_creditos_debito
-  belongs_to :mercaderia
+  belongs_to :mercaderia, -> { with_deleted }
 
   delegate :nombre, to: :mercaderia, prefix: true
   delegate :codigo, to: :mercaderia, prefix: true
@@ -23,7 +23,7 @@ class NotaCreditoDebitoDetalle < ActiveRecord::Base
     boleta.notas_creditos_debitos.each do |d|
       detalle_devolucion = d.detalles.find_by(mercaderia_id: mercaderia_id)
 
-      if self.id != detalle_devolucion.id
+      if detalle_devolucion && self.id != detalle_devolucion.id
         total_devuelto += detalle_devolucion.cantidad
       end
 
