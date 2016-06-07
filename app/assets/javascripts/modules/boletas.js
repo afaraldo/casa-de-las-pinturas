@@ -7,7 +7,7 @@ var BoletasUI = (function(){
     function getModulo() {
         return $('body').data('controller');
     }
-
+    
     function calcularTotal(){
         elementos.detallesTable.find('.cantidad').trigger('change');
         elementos.devolucionesTabla.find('.monto-a-sumar').trigger('change');
@@ -152,8 +152,9 @@ var BoletasUI = (function(){
                 beforeSend: function(){
                     elementos.mensajePanel.find('.overlay').removeClass('hide');
                 }
-            })
-        }).trigger('change');
+            });
+
+        });
 
         // Calculador de mercaderias
         TablasHelper.calcularTotalEvent({
