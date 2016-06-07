@@ -9,7 +9,7 @@ class CajaMovimientoDetalle < ActiveRecord::Base
 
   delegate :nombre, to: :caja, prefix: true
 
-  validates :monto, numericality: { greater_than: 0, less_than_or_equal_to: DECIMAL_LIMITE[:superior] }
+  validates :monto, numericality: { greater_than: 0, less_than: DECIMAL_LIMITE[:superior] }
   validates :forma, presence: true
 
   def actualizar_extractos
