@@ -11,6 +11,6 @@ table.table.table-bordered.table-hover
       tr.fila-clickeable data-url="#{pago_path(pago)}"
         td = localize(pago.fecha.to_date)
         td = pago.numero
-        td = pago.numero_comprobante
+        td.wordbreak = pago.numero_comprobante
         td = pago.persona_nombre
         td.text-right = number_to_currency(pago.total_pagado)

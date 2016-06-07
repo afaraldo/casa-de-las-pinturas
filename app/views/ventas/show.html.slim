@@ -59,15 +59,16 @@ section.content
   .row
     .col-xs-12
       .nav-tabs-custom
-        ul.nav.nav-tabs
+        ul.nav.nav-tabs.hidden-print
           li.active
             a href="#mercaderias" data-toggle="tab" Mercaderías
           li
             a href="#pagos" data-toggle="tab" Cobros
           li
-            a href="#creditos" data-toggle="tab" Credito utilizado
+            a href="#creditos" data-toggle="tab" Crédito utilizado
         .tab-content
           .tab-pane.active#mercaderias
+            h4.visible-print Mercaderías
             table.table.table-bordered.detalles-table.calcular-total
               thead
                 tr
@@ -96,6 +97,7 @@ section.content
                     span = number_to_currency(total)
                   td
           .tab-pane#pagos
+            h4.visible-print Cobros
             table.table.table-bordered.detalles-table.calcular-pagos-total
               thead
                 tr
@@ -117,6 +119,8 @@ section.content
                     | Total:
                   td.table-total.text-right.text-bold
                     span = number_to_currency(total)
+          .tab-pane#creditos
+            h4.visible-print Crédito utilizado
   - if @venta.estado.pendiente?
     .row
       .col-sm-offset-8.col-sm-4

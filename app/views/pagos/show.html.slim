@@ -46,15 +46,16 @@ section.content
   .row
     .col-xs-12
       .nav-tabs-custom
-        ul.nav.nav-tabs
+        ul.nav.nav-tabs.hidden-print
           li.active
             a href="#detalles" data-toggle="tab" Formas de pago
           li
             a href="#compras" data-toggle="tab" Compras Pagadas
           li
-            a href="#creditos" data-toggle="tab" Credito utilizado
+            a href="#creditos" data-toggle="tab" Crédito utilizado
         .tab-content
           .tab-pane.active#detalles
+            h4.visible-print Formas de Cobro
             table.table.table-bordered.detalles-table.calcular-total
               thead
                 tr
@@ -81,6 +82,7 @@ section.content
                   td.table-total.text-right.text-bold
                     span = number_to_currency(total)
           .tab-pane#compras
+            h4.visible-print Compras Pagadas
             table.table.table-bordered.detalles-table.calcular-pagos-total
               thead
                 tr
@@ -108,3 +110,4 @@ section.content
                   td.table-total.text-right.text-bold
                     span = number_to_currency(total_compras)
           .tab-pane#creditos
+            h4.visible-print Crédito utilizado

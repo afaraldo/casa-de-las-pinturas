@@ -13,7 +13,7 @@ table.table.table-bordered.table-hover
       tr.fila-clickeable data-url="#{compra_path(compra)}"
         td = localize(compra.fecha.to_date)
         td = link_to compra.numero, compra_path(compra.id)
-        td = compra.numero_comprobante
+        td.wordbreak = compra.numero_comprobante
         td = compra.condicion_text
         td = compra.persona_nombre
         td.text-right = number_to_currency(compra.importe_total)
