@@ -27,6 +27,7 @@ var CobrosUI = (function(){
         elementos.mensajePanel.find('.overlay').addClass('hide');
         elementos.mensajePanel.removeClass('hide');
         elementos.devolucionesTabla.addClass('hide');
+        elementos.boletaResumen.addClass('hide');
     }
 
     /**
@@ -178,7 +179,7 @@ var CobrosUI = (function(){
                 validacionBoletasSeleccionadas: $('#boletas-seleccionadas-validation'),
                 validacionTotalDetalles: $('#recibo-total-validation'),
                 boletaResumen: $('#boleta-resumen'),
-                devolucionesTabla: $('#creditos-disponibles-tabla')
+                devolucionesTabla: $('#credito-devoluciones')
             }
         },
         index: function() {
