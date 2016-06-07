@@ -49,7 +49,10 @@ section.content
                       th Crédito a usar
                       th
                   tbody#creditos-detalles-body
-                    = render 'credito_devoluciones', devoluciones: @pago.recibos_creditos_detalles, actualizando: true, pago: @pago
+                    // Al editar Incluir devoluciones disponibles del proveedor que no sean las que ya estan asociadas al pago
+                    - creditos_usados = @pago.recibos_creditos_detalles.map(&:notas_creditos_debito_id)
+                    - creditos_disponibles = @pago.persisted? ? @pago.persona.devoluciones_disponibles.reject { |d| creditos_usados.include?(d.id) } : []
+                    = render 'credito_devoluciones', devoluciones: @pago.recibos_creditos_detalles.to_a + creditos_disponibles.to_a, actualizando: true, pago: @pago
                   tfoot
                     tr
                       td colspan="3"
@@ -83,31 +86,31 @@ section.content
                         span 0
                       td
 
-            .clearfix
-            /////////////
-              RESUMEN DE TOTALES
-            /////////////
-            br
-            .row#boleta-resumen.hide
-              .col-sm-offset-8.col-sm-4
-                table.table.bg-warning
-                  tbody
-                    tr
-                      td Total boletas:
-                      td.text-right#res-total-boleta data-total="0" Gs. 0
-                    tr
-                      td Crédito utilizado:
-                      td.text-right#res-total-creditos data-total="0" Gs. 0
-                    tr
-                      td.text-bold Total a pagar:
-                      td.text-right.text-bold#res-total-a-pagar Gs. 0
+                .clearfix
+                /////////////
+                  RESUMEN DE TOTALES
+                /////////////
+                br
+                .row#boleta-resumen.hide
+                  .col-sm-offset-8.col-sm-4
+                    table.table.bg-warning
+                      tbody
+                        tr
+                          td Total boletas:
+                          td.text-right#res-total-boleta data-total="0" Gs. 0
+                        tr
+                          td Crédito utilizado:
+                          td.text-right#res-total-creditos data-total="0" Gs. 0
+                        tr
+                          td.text-bold Total a pagar:
+                          td.text-right.text-bold#res-total-a-pagar Gs. 0
 
             .row#pago-detalles.hide
               .col-xs-12
                 .form-subtitle
                   label Formas de pago
                 br
-                - esconder_validacion_detalles = @pago.errors.has_key?(:importe_total) ? '' : 'hide'
+                - esconder_validacion_detalles = @pago.errors.has_key?(:"recibos_detalles.recibo.importe_total") ? '' : 'hide'
                 p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de pago debe ser igual al total a cobrar de las boletas seleccionadas.
 
                 table.table.table-bordered.detalles-table.calcular-pagos-total
