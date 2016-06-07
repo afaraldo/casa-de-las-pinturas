@@ -26,9 +26,9 @@ section.content
                   label.control-label Cliente
                   p = @devolucion_venta.persona_nombre
                 .col-sm-4
-                    label.control-label Nro. de Venta
-                    br
-                    = link_to @devolucion_venta.boletas.first.id, venta_path(@devolucion_venta.boletas.first.id)
+                  label.control-label Nro. de Venta
+                  br
+                  = link_to @devolucion_venta.boletas.first.id, venta_path(@devolucion_venta.boletas.first.id)
   .row#pago-boletas-devoluciones
     .col-xs-12
       .nav-tabs-custom

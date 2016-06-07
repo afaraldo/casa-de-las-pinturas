@@ -10,7 +10,7 @@ class DevolucionVentasController < ApplicationController
     @menu_setup[:main_menu] = :ventas
     @menu_setup[:side_menu] = :devolucion_ventas_sidemenu
   end
-  
+
   def editable?
     unless @devolucion_venta.es_editable?
       flash[:warning] = @devolucion_venta.no_editable_mensaje
