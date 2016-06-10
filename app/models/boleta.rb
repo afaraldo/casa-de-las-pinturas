@@ -87,11 +87,8 @@ class Boleta < ActiveRecord::Base
   end
 
   def es_editable?
-    if (credito? && recibos_detalles.empty?) || (contado? && (creditos_detalles.size == 0))
-      true
-    else
-      false
-    end
+    return false unless notas_creditos_debitos.empty?
+    (credito? && recibos_detalles.empty?) || (contado? && (creditos_detalles.size == 0))
   end
 
   def importe_pagado
