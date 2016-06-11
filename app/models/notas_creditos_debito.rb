@@ -47,7 +47,7 @@ class NotasCreditosDebito < ActiveRecord::Base
   end
 
   def es_editable?
-    self.creditos.size == 0
+    self.credito_restante  == self.importe_total
   end
 
   def es_eliminable?
