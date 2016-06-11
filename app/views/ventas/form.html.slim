@@ -93,10 +93,10 @@ section.content
                     th Crédito a usar
                     th
                 tbody#creditos-detalles-body
-                  // Al editar Incluir devoluciones disponibles del proveedor que no sean las que ya estan asociadas a la venta
-                  - creditos_usados = @venta.creditos_detalles.map(&:notas_creditos_debito_id)
-                  - creditos_disponibles = @venta.persona ? @venta.persona.devoluciones_disponibles.reject { |d| creditos_usados.include?(d.id) } : []
-                  = render 'credito_devoluciones', devoluciones: @venta.creditos_detalles.to_a + creditos_disponibles.to_a, actualizando: true, venta: @venta
+                // Al editar Incluir devoluciones disponibles del proveedor que no sean las que ya estan asociadas a la compra
+                - creditos_usados = @venta.creditos_detalles.map(&:notas_creditos_debito_id)
+                - creditos_disponibles = @venta.persona ? @venta.persona.devoluciones_disponibles.reject { |d| creditos_usados.include?(d.id) } : []
+                = render 'credito_devoluciones', devoluciones: @venta.creditos_detalles.to_a + creditos_disponibles.to_a, actualizando: true, venta: @venta
                 tfoot
                   tr
                     td colspan="3"

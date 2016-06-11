@@ -8,6 +8,7 @@ tr.nested-fields
   td
     = f.input :monto, as: :string,
                       label: false,
+                      disabled: f.object.caja_movimiento.es_transferencia,
                       input_html: { class: 'form-control cantidad maskMoneda required', data: { 'msg-required' => 'Debe ingresar un monto' }, value: number_with_precision(f.object.monto) }
   td
     = f.input :cotizacion, as: :string,
