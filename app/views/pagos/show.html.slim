@@ -5,12 +5,14 @@ section.content
     .col-xs-12
       .box
         .box-header
-          a.volver-link href="#{pagos_path}"
+          a.volver-link.hidden-print href="#{pagos_path}"
             i.fa.fa-angle-double-left
             | Volver al listado de pagos
           .clearfix
           h3.box-title Pago Nro. #{@pago.numero}
-          .box-tools
+          .box-tools.hidden-print
+            = link_to 'Imprimir'.html_safe, "/pagos/#{@pago.id}/imprimir_show", class: 'btn btn-default imprimir-listado'
+            = ' '
             - if @pago.credito?
               = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_pago_path(@pago), class: 'btn btn-default'
             - else
@@ -44,15 +46,16 @@ section.content
   .row
     .col-xs-12
       .nav-tabs-custom
-        ul.nav.nav-tabs
+        ul.nav.nav-tabs.hidden-print
           li.active
             a href="#detalles" data-toggle="tab" Formas de pago
           li
             a href="#compras" data-toggle="tab" Compras Pagadas
           li
-            a href="#creditos" data-toggle="tab" Credito utilizado
+            a href="#creditos" data-toggle="tab" Crédito utilizado
         .tab-content
           .tab-pane.active#detalles
+            h4.visible-print Formas de Cobro
             table.table.table-bordered.detalles-table.calcular-total
               thead
                 tr
@@ -79,6 +82,7 @@ section.content
                   td.table-total.text-right.text-bold
                     span = number_to_currency(total)
           .tab-pane#compras
+            h4.visible-print Compras Pagadas
             table.table.table-bordered.detalles-table.calcular-pagos-total
               thead
                 tr
@@ -106,3 +110,4 @@ section.content
                   td.table-total.text-right.text-bold
                     span = number_to_currency(total_compras)
           .tab-pane#creditos
+            h4.visible-print Crédito utilizado

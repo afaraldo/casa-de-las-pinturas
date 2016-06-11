@@ -16,7 +16,12 @@ body.vista-imprimir {
   .label {
     border: 0px solid #000;
   }
-
+  .wordbreak {
+      word-break: break-all
+    }
+  .tab-pane {
+    display: block !important;
+  }
   table { page-break-inside:auto }
   tr    { page-break-inside:avoid; page-break-after:auto }
 }
