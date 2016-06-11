@@ -5,13 +5,15 @@ section.content
     .col-xs-12
       .box
         .box-header
-          a.volver-link href= compras_path
+          a.volver-link.hidden-print href= compras_path
             i.fa.fa-angle-double-left style="margin-right: 5px;"
             | Volver al listado de compras
           .clearfix
           h3.box-title
             = "Compra Nro. #{@compra.numero}".html_safe
-          .box-tools
+          .box-tools.hidden-print
+            = link_to 'Imprimir'.html_safe, "/compras/#{@compra.id}/imprimir_show", class: 'btn btn-default imprimir-listado'
+            = ' '
             - if @compra.es_editable?
               = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_compra_path(@compra),  html_options = {class: 'btn btn-default'}
               = ' '
@@ -56,15 +58,16 @@ section.content
   .row
     .col-xs-12
       .nav-tabs-custom
-        ul.nav.nav-tabs
+        ul.nav.nav-tabs.hidden-print
           li.active
             a href="#mercaderias" data-toggle="tab" Mercaderías
           li
             a href="#pagos" data-toggle="tab" Pagos
           li
-            a href="#creditos" data-toggle="tab" Credito utilizado
+            a href="#creditos" data-toggle="tab" Crédito utilizado
         .tab-content
           .tab-pane.active#mercaderias
+            h4.visible-print Mercaderías
             table.table.table-bordered.detalles-table.calcular-total
               thead
                 tr
@@ -92,6 +95,7 @@ section.content
                   td.table-total.text-right.text-bold
                     span = number_to_currency(total)
           .tab-pane#pagos
+            h4.visible-print Pagos
             table.table.table-bordered.detalles-table.calcular-pagos-total
               thead
                 tr
@@ -114,6 +118,7 @@ section.content
                   td.table-total.text-right.text-bold
                     span = number_to_currency(total)
           .tab-pane#creditos
+            h4.visible-print Crédito utilizado
             table.table.table-bordered.detalles-table
               thead
                 tr

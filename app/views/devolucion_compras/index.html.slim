@@ -7,6 +7,8 @@ section.content
         .box-header
           h3.box-title Listado de devoluciones
           .box-tools.pull-right.hidden-print
+            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, devolucion_compras_imprimir_url, class: 'btn btn-default imprimir-listado'
+            = ' '
             = link_to 'Nueva devolucion', new_devolucion_compra_path, class: 'btn btn-primary'
         .box-body#boletas-lista
           #compra-search.buscador-listado.hidden-print

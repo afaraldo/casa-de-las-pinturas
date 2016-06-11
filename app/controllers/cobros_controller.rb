@@ -1,7 +1,7 @@
 class CobrosController < ApplicationController
-  layout 'imprimir', only: [:imprimir]
+  layout 'imprimir', only: [:imprimir, :imprimir_show]
 
-  before_action :set_cobro, only: [:show, :edit, :update, :destroy]
+  before_action :set_cobro, only: [:show, :imprimir_show, :edit, :update, :destroy]
 
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
 
@@ -20,6 +20,9 @@ class CobrosController < ApplicationController
 
   def imprimir
     get_cobros
+  end
+
+  def imprimir_show
   end
 
   # GET /cobros

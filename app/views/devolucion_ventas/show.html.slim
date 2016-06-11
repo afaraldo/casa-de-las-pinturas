@@ -5,13 +5,15 @@ section.content
     .col-xs-12
       .box
         .box-header
-          a.volver-link href= devolucion_ventas_path
+          a.volver-link.hidden-print href= devolucion_ventas_path
             i.fa.fa-angle-double-left style="margin-right: 5px;"
             | Volver al listado de devoluciones
           .clearfix
           h3.box-title
             = "Devolucion Nro. #{@devolucion_venta.id}".html_safe
-          .box-tools
+          .box-tools.hidden-print
+            = link_to 'Imprimir'.html_safe, "/devolucion_ventas/#{@devolucion_venta.id}/imprimir_show", class: 'btn btn-default imprimir-listado'
+            = ' '
             = editar_btn(@devolucion_venta, edit_devolucion_venta_path(@devolucion_venta))
             = ' '
             = eliminar_btn(@devolucion_venta, devolucion_venta_path(@devolucion_venta), "¿Está seguro que desea eliminar la devolución?")
@@ -26,9 +28,9 @@ section.content
                   label.control-label Cliente
                   p = @devolucion_venta.persona_nombre
                 .col-sm-4
-                    label.control-label Nro. de Venta
-                    br
-                    = link_to @devolucion_venta.boletas.first.id, venta_path(@devolucion_venta.boletas.first.id)
+                  label.control-label Nro. de Venta
+                  br
+                  = link_to @devolucion_venta.boletas.first.id, venta_path(@devolucion_venta.boletas.first.id)
   .row#pago-boletas-devoluciones
     .col-xs-12
       .nav-tabs-custom

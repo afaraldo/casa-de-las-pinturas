@@ -1,6 +1,6 @@
 class ComprasController < ApplicationController
-  layout 'imprimir', only: [:imprimir]
-  before_action :set_compra, only: [:show, :edit, :update, :destroy]
+  layout 'imprimir', only: [:imprimir, :imprimir_show]
+  before_action :set_compra, only: [:show, :imprimir_show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
 
   # configuracion del menu
@@ -17,6 +17,9 @@ class ComprasController < ApplicationController
 
   def imprimir
     get_compras
+  end
+
+  def imprimir_show
   end
 
   # GET /compras

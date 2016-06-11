@@ -5,8 +5,8 @@ class WelcomeController < ApplicationController
   end
 
   def setup_fechas
-    @desde = params[:fecha_desde].blank? ? DateTime.now.to_date.beginning_of_month : params[:fecha_desde].to_datetime.beginning_of_day
-    @hasta = params[:fecha_hasta].blank? ? DateTime.now.to_date.end_of_month : params[:fecha_hasta].to_datetime.end_of_day
+    @desde = params[:fecha_desde].blank? ? DateTime.now.to_date.beginning_of_week : params[:fecha_desde].to_datetime.beginning_of_day
+    @hasta = params[:fecha_hasta].blank? ? DateTime.now.to_date.end_of_week : params[:fecha_hasta].to_datetime.end_of_day
   end
 
   def get_reporte

@@ -88,8 +88,7 @@ class Boleta < ActiveRecord::Base
 
   def es_editable?
     return false unless notas_creditos_debitos.empty?
-
-    (credito? && recibos_detalles.empty?) || contado?
+    (credito? && recibos_detalles.empty?) || (contado? && (creditos_detalles.size == 0))
   end
 
   def importe_pagado
@@ -202,7 +201,7 @@ class Boleta < ActiveRecord::Base
     for fecha in opciones[:desde] .. opciones[:hasta]
       boleta_hash[fecha.to_s] = 0 unless boleta_hash[fecha.to_s]
     end
-    boleta_hash
+    boleta_hash.sort.to_h
   end
 
   private

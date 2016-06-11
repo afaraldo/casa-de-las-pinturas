@@ -1,6 +1,6 @@
 class DevolucionComprasController < ApplicationController
-
-  before_action :set_devolucion_compra, only: [:show, :edit, :update, :destroy]
+  layout 'imprimir', only: [:imprimir, :imprimir_show]
+  before_action :set_devolucion_compra, only: [:show, :imprimir_show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
   before_action :editable?, only: [:edit, :update]
   before_action :eliminable?, only: [:destroy]
@@ -23,6 +23,13 @@ class DevolucionComprasController < ApplicationController
       flash[:warning] = @devolucion_compra.no_eliminable_mensaje
       redirect_to @devolucion_compra
     end
+  end
+
+  def imprimir
+    get_devolucion_compras
+  end
+  
+  def imprimir_show
   end
 
   # GET /compras
