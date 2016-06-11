@@ -202,7 +202,7 @@ class Boleta < ActiveRecord::Base
     for fecha in opciones[:desde] .. opciones[:hasta]
       boleta_hash[fecha.to_s] = 0 unless boleta_hash[fecha.to_s]
     end
-    boleta_hash
+    boleta_hash.sort.to_h
   end
 
   private
