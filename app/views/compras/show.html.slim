@@ -100,7 +100,7 @@ section.content
               thead
                 tr
                   th Fecha
-                  th Numero
+                  th Número
                   th Monto
               tbody#movimiento-detalles-body
                 - total = 0
@@ -123,7 +123,7 @@ section.content
               thead
                 tr
                   th Fecha
-                  th Numero
+                  th Número
                   th Monto
                   th Monto usado
               tbody#movimiento-detalles-body
@@ -151,7 +151,7 @@ section.content
             table.table.bg-warning
               tbody
                 tr
-                  td Total mercaderias:
+                  td Total mercaderías:
                   td.text-right = "#{number_to_currency(@compra.importe_total)}"
                 - if @compra.importe_credito_utilizado > 0
                   tr

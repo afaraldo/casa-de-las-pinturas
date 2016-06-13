@@ -1,6 +1,6 @@
 class DevolucionVentasController < ApplicationController
-
-  before_action :set_devolucion_venta, only: [:show, :edit, :update, :destroy]
+  layout 'imprimir', only: [:imprimir, :imprimir_show]
+  before_action :set_devolucion_venta, only: [:show, :imprimir_show, :edit, :update, :destroy]
   before_action :setup_menu, only: [:index, :new, :edit, :show, :create, :update]
   before_action :editable?, only: [:edit, :update]
   before_action :eliminable?, only: [:destroy]
@@ -24,6 +24,14 @@ class DevolucionVentasController < ApplicationController
       redirect_to @devolucion_venta
     end
   end
+
+  def imprimir
+    get_devolucion_ventas
+  end
+  
+  def imprimir_show
+  end
+
   # GET /ventas
   # GET s.json
   def index
