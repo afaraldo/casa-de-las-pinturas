@@ -59,15 +59,15 @@ menu:
         url: :inventarios
         active_submenu: :inventario_sidemenu
       mercaderias:
-        text: "Mercaderias"
+        text: "Mercaderías"
         url: :mercaderias
         active_submenu: :mercaderias_sidemenu
       movimientos_inventario:
-        text: "Movimientos de mercaderias"
+        text: "Movimientos de mercaderías"
         url: :movimiento_mercaderias
         active_submenu: :movimientos_mercaderias_sidemenu
       historico:
-        text: "Histórico de mercaderias"
+        text: "Histórico de mercaderías"
         url: :mercaderias_historico
         active_submenu: :mercaderias_historico
   cajas:
@@ -76,11 +76,11 @@ menu:
     active_menu: :cajas
     submenus:
       cotizacion:
-        text: "Cotizacion"
+        text: "Cotización"
         url: :monedas
         active_submenu: :monedas_sidemenu
       categoria_gastos:
-        text: "Categoria de Gastos"
+        text: "Categoría de Gastos"
         url: :categoria_gastos
         active_submenu: :categoria_gastos_sidemenu
       caja_movimientos:
