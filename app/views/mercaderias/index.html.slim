@@ -5,7 +5,7 @@ section.content
     .col-xs-8
       .box
         .box-header
-          h3.box-title Mercaderias
+          h3.box-title Mercaderías
           .box-tools.pull-right
             = link_to 'Nueva mercaderia', new_mercaderia_path, class: 'btn btn-primary', remote: true
         .box-body#mercaderias-lista
@@ -14,7 +14,7 @@ section.content
               .row
                 .col-xs-7
                   .input-group
-                    = f.text_field :nombre_or_codigo_cont, class: 'form-control', placeholder: 'Buscar por nombre o codigo...'
+                    = f.text_field :nombre_or_codigo_cont, class: 'form-control', placeholder: 'Buscar por nombre o código...'
                     .input-group-btn
                       button.btn.btn-default type="submit" name="commit"
                         i.fa.fa-search
