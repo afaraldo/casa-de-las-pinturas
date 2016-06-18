@@ -79,7 +79,7 @@ class ProveedoresController < ApplicationController
       get_proveedores
     else
       @error = true
-      @message = "Ha ocurrido un problema al tratar de eliminar el proveedor"
+      @message = "Ha ocurrido un problema al tratar de eliminar el proveedor. #{@proveedor.errors.full_messages.to_sentence}"
     end
 
     render 'reload_list', format: :js

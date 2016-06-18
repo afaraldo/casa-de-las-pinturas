@@ -79,7 +79,7 @@ class ClientesController < ApplicationController
       get_clientes
     else
       @error = true
-      @message = "Ha ocurrido un problema al tratar de eliminar el cliente"
+      @message = "Ha ocurrido un problema al tratar de eliminar el cliente. #{@cliente.errors.full_messages.to_sentence}"
     end
 
     render 'reload_list', format: :js

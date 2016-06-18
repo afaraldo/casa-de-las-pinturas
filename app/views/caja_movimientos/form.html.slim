@@ -17,7 +17,7 @@ section.content
                     .btn.btn-default
                       i.fa.fa-calendar
               .col-sm-3
-                = f.input :tipo, as: :radio_group_buttons, input_html: {class: 'movimiento-tipo'}
+                = f.input :tipo, as: :radio_group_buttons, disabled: @caja_movimiento.es_transferencia, input_html: {class: 'movimiento-tipo'}
             .row
               .col-sm-6
                 = f.input :motivo

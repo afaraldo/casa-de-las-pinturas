@@ -42,6 +42,7 @@ class CajaMovimiento < ActiveRecord::Base
     movimiento_egreso.motivo = "Transferencia de cuenta bancaria a caja registradora"
     movimiento_egreso.tipo = :egreso
     movimiento_egreso.caja_id = Caja.get_caja_por_forma(:tarjeta).id
+    movimiento_egreso.es_transferencia = true
 
     # Set attributes of CajaMovimientoDetalle
     movimiento_egreso_detalle = movimiento_egreso.detalles.build
@@ -56,6 +57,7 @@ class CajaMovimiento < ActiveRecord::Base
     movimiento_ingreso.motivo = "Transferencia de cuenta bancaria a caja registradora"
     movimiento_ingreso.tipo = :ingreso
     movimiento_ingreso.caja_id = Caja.get_caja_por_forma(:efectivo).id
+    movimiento_ingreso.es_transferencia = true
 
     # Set attributes of CajaMovimientoDetalle
     movimiento_ingreso_detalle = movimiento_ingreso.detalles.build
