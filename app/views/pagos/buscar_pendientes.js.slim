@@ -3,3 +3,9 @@
 - else
   | $('#compra-detalles-body').html("#{escape_javascript(render 'compras_pendientes', compras: @compras, actualizando: false, pago: @pago)}");
   | PagosUI.mostrarBoletas(true);
+
+- if @devoluciones.size == 0
+  | PagosUI.noHayDevoluciones("#{@proveedor.nombre}");
+- else
+  | $('#creditos-detalles-body').html("#{escape_javascript(render 'credito_devoluciones', devoluciones: @devoluciones, actualizando: false, pago: nil)}");
+  | PagosUI.mostrarDevoluciones();
