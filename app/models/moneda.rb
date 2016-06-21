@@ -11,7 +11,7 @@ class Moneda < ActiveRecord::Base
   validates :abreviatura, uniqueness: true
   validates :defecto, inclusion: { in: [true, false] }
 
-  default_scope { order('lower(nombre)') } # Ordenar por nombre por defecto
+  default_scope { order('defecto DESC') }
   scope :by_nombre, lambda { |value| where('lower(nombre) = ?', value.downcase) } # buscar por nombre
 
   after_initialize :set_defecto, if: :new_record?

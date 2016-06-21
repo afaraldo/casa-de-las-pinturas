@@ -1,0 +1,8 @@
+| var modal = $('#main-modal-sm');
+- if @error
+  | noty({type: "error", text : "#{@message}"});
+- else
+  | noty({type: "success", text : "#{@message}"});
+  | modal.modal('hide');
+  | $('#categoria_gastos-table').html("#{escape_javascript(render 'list', categoria_gastos: @categoria_gastos)}");
+  | $('#paginate-container').html("#{escape_javascript(paginate(@categoria_gastos, params: {controller: :categoria_gastos, action: :index}, remote: true)) }");

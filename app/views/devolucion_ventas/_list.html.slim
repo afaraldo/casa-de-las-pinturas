@@ -1,0 +1,16 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Fecha
+      th Cliente
+      th Motivo
+      th Monto
+      th Credito disponible
+  tbody
+    - devolucion_ventas.each do |devolucion|
+      tr.fila-clickeable data-url="#{devolucion_venta_path(devolucion)}"
+        td = localize(devolucion.fecha.to_date)
+        td = devolucion.persona_nombre
+        td = devolucion.motivo
+        td.text-right = number_to_currency(devolucion.importe_total)
+        td.text-right = number_to_currency(devolucion.credito_restante)

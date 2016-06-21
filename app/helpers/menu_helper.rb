@@ -9,8 +9,24 @@ module MenuHelper
 
     menu.each do |item, opciones|
       active = is_active_main_menu?(opciones['active_menu'])
-      html << content_tag(:li, link_to(content_tag(:span, opciones['text']), opciones['url']), class: active ? 'active' : '')
+      html << "<li class='dropdown #{active ? 'active' : ''}'>"
+        html << link_to((opciones['text'] + '<span class="caret"></span>').html_safe, '#', class: 'dropdown-toggle')
+        html << build_submenus(opciones['submenus'])
+      html << "</li>"
     end
+
+    html.html_safe
+  end
+
+  def build_submenus(submenus)
+    html = "<ul class='dropdown-menu'>"
+
+    submenus.each do |item, opciones|
+      active = is_active_submenu_menu?(opciones['active_submenu'])
+      html << content_tag(:li, link_to(opciones['text'], opciones['url']), class: active ? 'active' : '')
+    end
+
+    html << "</ul>"
 
     html.html_safe
   end
@@ -19,20 +35,7 @@ module MenuHelper
     @menu_setup[:main_menu] == active_indicator
   end
 
-  # Listado de submenus para cada seccion
-  def side_menu
-    items = @menu_setup[:main_menu].nil? ? [] : MENU_DATA['menu'][@menu_setup[:main_menu].to_s]['submenus']
-    html = ""
-
-    items.each do |item, opciones|
-      active = is_active_side_menu?(opciones['active_submenu'])
-      html << content_tag(:li, link_to((opciones['text'] + (active ? ' <i class="fa fa-angle-right pull-right"></i>' : '')).html_safe, opciones['url']), class: active ? 'active' : '')
-    end
-
-    html.html_safe
-  end
-
-  def is_active_side_menu?(active_indicator)
+  def is_active_submenu_menu?(active_indicator)
     @menu_setup[:side_menu] == active_indicator
   end
 

@@ -1,0 +1,27 @@
+body.vista-imprimir {
+  max-width: 21cm;
+}
+@media print {
+  body.vista-imprimir{
+    table.table{
+      td, th{
+        padding: 4px;
+        font-size: 11px;
+      }
+    }
+  }
+  a[href]:after {
+    content: none !important;
+  }
+  .label {
+    border: 0px solid #000;
+  }
+  .wordbreak {
+    word-break: break-all
+  }
+  .tab-pane {
+    display: block !important;
+  }
+  table { page-break-inside:auto }
+  tr    { page-break-inside:avoid; page-break-after:auto }
+}

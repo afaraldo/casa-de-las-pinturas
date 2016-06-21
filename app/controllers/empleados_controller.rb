@@ -54,7 +54,9 @@ class EmpleadosController < ApplicationController
       params[:empleado][:user_attributes].delete(:password)
       params[:empleado][:user_attributes].delete(:password_confirmation)
     end
-    if @empleado.update(empleado_params)
+    @empleado.assign_attributes(empleado_params)
+    @redirect = true if @empleado.user.encrypted_password_changed? && @empleado.user.id == current_user.id
+    if @empleado.save
       @error = false
       @message = "Se ha guardado el usuario"
       get_empleados
@@ -90,7 +92,7 @@ class EmpleadosController < ApplicationController
 
   def get_empleados
     @search = Empleado.search(params[:q])
-    @empleados = @search.result.page(params[:page])
+    @empleados = @search.result.includes(:user).page(params[:page])
   end
 
   private
@@ -102,6 +104,6 @@ class EmpleadosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def empleado_params
-      params.require(:empleado).permit(:nombre, :telefono, :direccion, :numero_documento, { user_attributes: [ :id, :username, :password, :password_confirmation] })
+      params.require(:empleado).permit(:nombre, :telefono, :direccion, :numero_documento, { user_attributes: [ :id, :username, :password, :password_confirmation, :rol] })
     end
 end

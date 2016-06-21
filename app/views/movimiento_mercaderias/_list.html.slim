@@ -4,14 +4,10 @@ table.table.table-bordered.table-hover
       th Fecha
       th Motivo
       th Tipo
-      th.table-actions
+
   tbody
-    - @movimientos.each do |movimiento|
-      tr
+    - movimientos.each do |movimiento|
+      tr.fila-clickeable data-url="#{movimiento_mercaderia_path(movimiento)}"
         td = localize(movimiento.fecha.to_date)
-        td = link_to movimiento.motivo, movimiento_mercaderia_path(movimiento)
+        td = movimiento.motivo
         td = movimiento.tipo_text
-        td.text-right
-          = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_movimiento_mercaderia_path(movimiento), class: 'btn btn-default btn-sm'
-          | #{' '}
-          = link_to ' <i class="fa fa-trash"></i>'.html_safe, movimiento_mercaderia_path(movimiento), method: 'delete', data: {confirm: "¿Desea eliminar el movimiento?"}, class: 'btn btn-danger btn-sm'

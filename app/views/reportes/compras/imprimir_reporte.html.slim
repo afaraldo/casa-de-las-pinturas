@@ -1,0 +1,17 @@
+h4 Reporte de compras
+.row
+  .col-xs-6
+    p
+      strong Desde el
+      = " #{localize(@desde.to_date)} "
+      strong hasta el
+      = " #{localize(@hasta.to_date)}"
+  .col-xs-6
+    p
+      strong Agrupado por:
+      = " #{agrupado_por_titulo(params[:agrupar_por])}"
+    - unless params[:persona_id].blank?
+      p
+        strong Proveedor:
+        = " #{@proveedor.nombre}"
+= render "reportes/compras/#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", reporte: @reporte

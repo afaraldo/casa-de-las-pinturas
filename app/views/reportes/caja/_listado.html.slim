@@ -1,0 +1,25 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Motivo
+      th Ingreso
+      th Egreso
+  tbody
+    - total_ingresos = 0
+    - total_egresos = 0
+    - reporte[:agrupado].each do |grupo, movimientos|
+      tr.active.text-bold
+        td colspan="3" = grupo
+      - formatear_movimientos(movimientos).each do |m|
+        - total_ingresos += m[:ingreso]
+        - total_egresos += m[:egreso]
+        tr
+          td = m[:motivo]
+          td.text-right = number_to_currency(m[:ingreso])
+          td.text-right = number_to_currency(m[:egreso])
+  tfoot
+    tr.text-bold.text-right
+      td Totales:
+      td = number_to_currency(total_ingresos)
+      td = number_to_currency(total_egresos)
+= paginate reporte[:todo], remote: true

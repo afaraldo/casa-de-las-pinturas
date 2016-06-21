@@ -1,0 +1,38 @@
+section.content-header
+  h1 Compras
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Listado de pagos
+          .box-tools.pull-right.hidden-print
+            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, pagos_imprimir_url, class: 'btn btn-default imprimir-listado'
+            = ' '
+            = link_to 'Nuevo pago', new_pago_path, class: 'btn btn-primary'
+        .box-body#boletas-lista
+          #compra-search.buscador-listado.hidden-print
+            = search_form_for @search, remote: true, class: 'remote-search' do |f|
+              .row
+                .col-xs-3
+                  div#date-range.btn.btn-default.daterange.btn-block
+                    = f.hidden_field :fecha_gteq , class: 'fecha-desde'
+                    = f.hidden_field :fecha_lteq , class: 'fecha-hasta'
+                    i.fa.fa-calendar
+                    span Fecha
+                    b.caret
+                .col-xs-4
+                  .input-group
+                    = f.search_field :numero_comprobante_or_id_cont, class: 'form-control', placeholder: 'Nro. de pago o de comprobante...'
+                    .input-group-btn
+                      button.btn.btn-default type="submit" name="commit"
+                        i.fa.fa-search
+                .col-xs-4
+                  .form-group
+                    = f.search_field :persona_id_eq_any, id: 'personas-buscador', class: 'form-control', placeholder: 'Todos los proveedores...'
+          #pagos-table.overlay-wrapper.buscador-resultados.table-responsive
+            = render 'list', pagos: @pagos
+          #pagos-paginate-container.hidden-print
+            = paginate @pagos, remote: true
+javascript:
+  PagosUI.setbuscarProveedorUrl("#{proveedores_buscar_path}");

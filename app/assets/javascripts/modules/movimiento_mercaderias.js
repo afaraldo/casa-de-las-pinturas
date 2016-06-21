@@ -3,14 +3,27 @@ var MovimientoMercaderiasUI = (function(){
         buscarMercaderiaUrl = '';
 
     function initFormEvents(){
-        elementos.movimientoForm.validate({ignore: []});
+        elementos.movimientoForm.validate({ignore: []}); // validar formulario. ignore: [] es para que valide campos no visibles tambien
 
-        $('.datepicker').datepicker({endDate: '0d'});
+        MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: buscarMercaderiaUrl});
 
-        $('#movimiento-detalles-body').on('cocoon:after-insert', function(e, insertedItem) {
+        NumberHelper.mascaraCantidad('.maskCantidad');
 
+        DatepickerHelper.initDatepicker('.datepicker');
+
+        if($('.nested-fields').length == 1){
+            $('.remove_fields').addClass('hide');
+        }
+
+        /*
+            Eventos al agregar/eliminar detalles
+         */
+        $('#movimiento-detalles-body').on('cocoon:after-insert', function(e, insertedItem) { // Evento luego de insertar un detalle
+
+            // Se inicializa el buscador de mercaderias y se agrega mascara a los campos del nuevo detalle
             MercaderiasUI.buscarMercaderia({elemento: insertedItem.find('.mercaderia-select'), url: buscarMercaderiaUrl});
             NumberHelper.mascaraCantidad('.maskCantidad');
+
             // Se vuelve a mostar el boton de eliminar si es que se escondio en algun momento
             $('.remove_fields').removeClass('hide');
 
@@ -24,14 +37,6 @@ var MovimientoMercaderiasUI = (function(){
 
         });
 
-        MercaderiasUI.buscarMercaderia({elemento: $('.mercaderia-select'), url: buscarMercaderiaUrl});
-
-        NumberHelper.mascaraCantidad('.maskCantidad');
-
-        if($('.nested-fields').length == 1){
-            $('.remove_fields').addClass('hide');
-        }
-
     }
 
     return {
@@ -41,11 +46,7 @@ var MovimientoMercaderiasUI = (function(){
             }
         },
         index: function() {
-            $('.input-daterange')
-                .datepicker({autoclose: false}) // inicializar rango de fechas del buscador
-                .on('changeDate', function(e){ // Evento para hacer submit al formulario cuando se cambia la fecha
-                    $(this).parents('.remote-search').submit();
-                });
+            DatepickerHelper.initDateRangePicker('#rango-de-fecha');
         },
         'new': function() {
             initFormEvents();

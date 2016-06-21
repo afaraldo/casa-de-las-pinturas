@@ -13,6 +13,25 @@
         }
       }
     }
+
+    .dropdown:hover .dropdown-menu{
+      display: block;
+    }
+
+    .dropdown-toggle{
+      .caret{
+        margin-left: 10px;
+      }
+    }
+
+    .dropdown-menu{
+      &> li{
+        &> a{
+          padding: 8px 20px;
+          font-size: 15px;
+        }
+      }
+    }
   }
   .sidebar-toggle{
     padding: 20px 15px;

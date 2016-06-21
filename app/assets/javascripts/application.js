@@ -27,7 +27,10 @@
 //= require ./libs/jquery.inputmask.bundle.js
 //= require ./libs/bootstrap-datepicker/bootstrap-datepicker.js
 //= require ./libs/bootstrap-datepicker/bootstrap-datepicker.es.min.js
+//= require ./libs/moment.js
+//= require ./libs/daterangepicker.js
 //= require ./libs/libs.defaults.js
+//= require ./libs/highcharts.js
 //= require cocoon
 //= require_tree ./helpers
 //= require_tree ./modules
@@ -80,12 +83,32 @@ CasaDeLasPinturas = {
                 }
             });
 
+            // Evitar que se modifique los radio buttons no editables
+            $('.disabled-group').on('click', '.btn', function(e){
+                return false;
+            });
+
             TablasHelper.filasClickeablesEvent();
+
+            ImprimirHelper.imprimirEvento();
+
+            I18n.locale = 'es';
 
         }
     },
 
-    movimiento_mercaderias: MovimientoMercaderiasUI
+    movimiento_mercaderias: MovimientoMercaderiasUI,
+    compras: BoletasUI,
+    ventas: BoletasUI,
+    pagos: PagosUI,
+    cuentas_corrientes: CuentaCorrientesUI,
+    devolucion_compras: DevolucionComprasUI,
+    devolucion_ventas: DevolucionVentasUI,
+    caja_movimientos: CajaMovimientosUI,
+    reportes: ReportesUI,
+    cobros: CobrosUI,
+    transferencias: TransferenciasUI,
+    welcome: ReportesUI
 
 };
 
@@ -119,4 +142,3 @@ UTIL = {
 };
 
 $( document ).on('ready', UTIL.init );
-

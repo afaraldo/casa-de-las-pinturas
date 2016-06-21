@@ -8,6 +8,12 @@ class ClientesController < ApplicationController
     @menu_setup[:side_menu] = :clientes_sidemenu
   end
 
+  # buscador de proveedores
+  def buscar
+    get_clientes
+    render json: {items: @clientes, total_count: @clientes.total_count}
+  end
+
   # GET /clientes
   # GET /clientes.json
   def index
@@ -73,7 +79,7 @@ class ClientesController < ApplicationController
       get_clientes
     else
       @error = true
-      @message = "Ha ocurrido un problema al tratar de eliminar el cliente"
+      @message = "Ha ocurrido un problema al tratar de eliminar el cliente. #{@cliente.errors.full_messages.to_sentence}"
     end
 
     render 'reload_list', format: :js

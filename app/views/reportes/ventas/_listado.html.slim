@@ -1,0 +1,27 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Nro. de comprobante
+      th Condicion de cobro
+      th Cliente
+      th Monto
+      th Estado
+  tbody
+    - total_reporte = 0
+    - reporte[:agrupado].each do |grupo, ventas|
+      tr.active.text-bold
+        td colspan="5" = grupo
+      - ventas.each do |c|
+        - total_reporte += c.importe_total
+        tr
+          td = c.numero_comprobante
+          td = c.condicion_text
+          td = c.persona_nombre
+          td.text-right = number_to_currency(c.importe_total)
+          td = "<label class='label label-#{c.estado.pagado? ? 'success' : 'warning'}'>#{c.estado_text}</label>".html_safe
+  tfoot
+    tr.text-bold.text-right
+      td colspan="3" Total reporte:
+      td = number_to_currency(total_reporte)
+      td
+= paginate reporte[:todo], remote: true

@@ -4,5 +4,10 @@
 - else
   | noty({type: "success", text : "#{@message}"});
   | modal.modal('hide');
-  | $('#proveedores-table').html("#{escape_javascript(render partial: 'list', locals: {proveedores: @proveedores})}");
-  | $('#paginate-container').html("#{escape_javascript(paginate(@proveedores, params: {controller: :proveedores, action: :index}, remote: true)) }");
+  - if params[:from_boletas].present?
+    | $("#limite_credito").html(NumberHelper.aMoneda(#{@proveedor.limite_credito}));
+    | $("#saldo").html(NumberHelper.aMoneda(#{@proveedor.limite_credito - @proveedor.saldo_actual}));
+    | $("#personas-buscador").select2('data', #{@proveedor.to_json.html_safe})
+  - else
+    | $('#proveedores-table').html("#{escape_javascript(render 'list', proveedores: @proveedores)}");
+    | $('#paginate-container').html("#{escape_javascript(paginate(@proveedores, params: {controller: :proveedores, action: :index}, remote: true)) }");

@@ -1,0 +1,17 @@
+h4 Reporte de ventas
+.row
+  .col-xs-6
+    p
+      strong Desde el
+      = " #{localize(@desde.to_date)} "
+      strong hasta el
+      = " #{localize(@hasta.to_date)}"
+  .col-xs-6
+    p
+      strong Agrupado por:
+      = " #{agrupado_por_titulo(params[:agrupar_por])}"
+    - unless params[:persona_id].blank?
+      p
+        strong Cliente:
+        = " #{@cliente.nombre}"
+= render "reportes/ventas/#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", reporte: @reporte

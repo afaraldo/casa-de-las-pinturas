@@ -1,0 +1,154 @@
+section.content-header
+  h1 Compras
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          a.volver-link.hidden-print href="#{pagos_path}"
+            i.fa.fa-angle-double-left
+            | Volver al listado de pagos
+          .clearfix
+          h3.box-title Pago Nro. #{@pago.numero}
+          .box-tools.hidden-print
+            = link_to 'Imprimir'.html_safe, "/pagos/#{@pago.id}/imprimir_show", class: 'btn btn-default imprimir-listado'
+            = ' '
+            - if @pago.credito?
+              = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_pago_path(@pago), class: 'btn btn-default'
+            - else
+              button.btn.btn-default.disabled data-toggle="tooltip" title="No se puede editar el pago porque pertenece a una compra al contado."
+                i.fa.fa-edit
+                |  Editar
+            = ' '
+            - if @pago.credito?
+              - if @stock_negativo && @stock_negativo.size > 0
+                = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, pago_path(@pago), method: 'delete', data: {confirm: "La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}. ¿Seguro que desea eliminar la compra?"}, class: 'btn btn-danger'
+              - else
+                = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, pago_path(@pago), method: 'delete', data: {confirm: "¿Desea eliminar el pago?"}, class: 'btn btn-danger'
+            - else
+              button.btn.btn-danger.disabled data-toggle="tooltip" title="No se puede eliminar el pago porque pertenece a una compra al contado."
+                i.fa.fa-trash
+                |  Eliminar
+        .box-body
+          .row
+            .col-sm-9
+              .row
+                .col-sm-4
+                  label.control-label Fecha
+                  p = localize(@pago.fecha.to_date)
+                .col-sm-4
+                  label.control-label Proveedor
+                  p = @pago.persona_nombre
+              .row
+                .col-sm-4
+                  label.control-label Nro. de Comprobante
+                  p = @pago.numero_comprobante
+  .row
+    .col-xs-12
+      .nav-tabs-custom
+        ul.nav.nav-tabs.hidden-print
+          li.active
+            a href="#detalles" data-toggle="tab" Formas de pago
+          li
+            a href="#compras" data-toggle="tab" Compras Pagadas
+          li
+            a href="#creditos" data-toggle="tab" Crédito utilizado
+        .tab-content
+          .tab-pane.active#detalles
+            h4.visible-print Formas de Cobro
+            table.table.table-bordered.detalles-table.calcular-total
+              thead
+                tr
+                  th Forma
+                  th Moneda
+                  th Monto
+                  th Cotización
+                  th Subtotal
+              tbody#movimiento-detalles-body
+                - total = 0
+                - @pago.detalles.each do |d|
+                  tr
+                    td = d.forma_text
+                    td = d.moneda_nombre
+                    td.text-right = number_to_currency(d.monto, unit: '')
+                    td.text-right = number_to_currency(d.cotizacion, unit: '')
+                    td.text-right = number_to_currency(d.monto * d.cotizacion, unit: '')
+                  - total += d.monto * d.cotizacion
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total)
+          .tab-pane#compras
+            h4.visible-print Compras Pagadas
+            table.table.table-bordered.detalles-table.calcular-pagos-total
+              thead
+                tr
+                  th Número
+                  th Nro. de comprobante
+                  th Fecha
+                  th Importe total
+                  th Importe pagado
+              tbody
+                - total_compras = 0
+                - @pago.boletas_detalles.each do |bd|
+                  - compra = bd.boleta
+                  - total_compras += bd.monto_utilizado
+                  tr.fila-clickeable data-url="#{compra_path(compra.id)}"
+                    td = compra.numero
+                    td = compra.numero_comprobante
+                    td = localize(compra.fecha.to_date)
+                    td.text-right = number_to_currency(compra.importe_total, unit: '')
+                    td.text-right = number_to_currency(bd.monto_utilizado, unit: '')
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total_compras)
+          .tab-pane#creditos
+          	h4.visible-print Crédito utilizado
+            table.table.table-bordered.detalles-table
+              thead
+                tr
+                  th Fecha
+                  th Numero
+                  th Monto
+                  th Monto usado
+              tbody#movimiento-detalles-body
+                - total = 0
+                - @pago.recibos_creditos_detalles.each do |p|
+                  - total += p.monto_utilizado
+                  tr.fila-clickeable data-url="#{devolucion_compra_path(p.notas_creditos_debito.id)}"
+                    td = localize(p.notas_creditos_debito.fecha.to_date)
+                    td = p.notas_creditos_debito.id
+                    td.text-right = number_to_currency(p.notas_creditos_debito.importe_total)
+                    td.text-right = number_to_currency(p.monto_utilizado)
+              tfoot
+                tr
+                  td
+                  td
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total)
+  - if @pago.total_credito_utilizado > 0
+    .row
+      .col-sm-offset-8.col-sm-4
+        .box.box-solid
+          .box-body
+            table.table.bg-warning
+              tbody
+                tr
+                  td Total boletas:
+                  td.text-right = "#{number_to_currency(@pago.total_pagado + @pago.total_credito_utilizado)}"
+                - if @pago.total_credito_utilizado > 0
+                  tr
+                    td Crédito utilizado:
+                    td.text-right = "#{number_to_currency(@pago.total_credito_utilizado)}"
+                tr
+                  td.text-bold Total formas de pago:
+                  td.text-right.text-bold = number_to_currency(@pago.total_pagado)

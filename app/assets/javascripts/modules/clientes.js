@@ -23,6 +23,11 @@ var ClientesUI = (function(){
 
             // Validate form
             $('#cliente-form').validate();
+
+            // Auto focus
+            $('.modal').on('shown.bs.modal', function() {
+              $(this).find('[autofocus]').focus();
+            });
         }
     };
 

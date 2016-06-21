@@ -10,9 +10,16 @@ section.content
           .box-body
             = f.error_notification
             .row
-              .col-sm-4
-                = f.input :fecha, as: :string, input_html: { class: 'datepicker', value: @movimiento.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)  }
-                = f.input :tipo,  as: :radio_buttons, item_wrapper_class: 'radio-inline', label_html: {style: 'display: block;'}
+              .col-sm-3
+                = f.input :fecha, wrapper: :vertical_input_group do
+                  = f.input_field :fecha, as: :string, class: 'datepicker form-control', value: @movimiento.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                  .input-group-btn
+                    .btn.btn-default
+                      i.fa.fa-calendar
+              .col-sm-3
+                = f.input :tipo, as: :radio_group_buttons
+            .row
+              .col-sm-6
                 = f.input :motivo
             .links
               label.control-label Mercaderias
@@ -32,10 +39,21 @@ section.content
                                             'data-association-insertion-node' => '#movimiento-detalles-body',
                                             'data-association-insertion-method' => 'append'
           .box-footer
-            .text-right.form-actions
-              = link_to 'Cancelar', movimiento_mercaderias_path, class: 'btn btn-default'
-              | #{' '}
-              button.btn.btn-primary type="submit" Guardar movimiento
+            - if @stock_negativo && @stock_negativo.size > 0
+              input.hidden name="guardar_si_o_si" value= "true"
+              .alert.alert-warning
+                p
+                | La operación va a provocar existencia negativa en los siguientes productos: #{@stock_negativo.map {|m| m.nombre }.to_sentence}
+                p Esta seguro que quiere continuar?
+                .form-actions
+                  = link_to 'Cancelar', movimiento_mercaderias_path, class: 'btn btn-default'
+                  | #{' '}
+                  button.btn.btn-primary type="submit" Continuar
+            - else
+              .text-right.form-actions
+                = link_to 'Cancelar', movimiento_mercaderias_path, class: 'btn btn-default'
+                | #{' '}
+                button.btn.btn-primary type="submit" Guardar movimiento
 
 javascript:
   MovimientoMercaderiasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");

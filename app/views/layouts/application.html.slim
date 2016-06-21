@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title CasaDeLasPinturas
+    title La Casa de las Pinturas
     meta name="viewport" content="width=device-width, initial-scale=1.0"
     = stylesheet_link_tag    'application', media: 'all'
     = javascript_include_tag 'application'
@@ -9,10 +9,6 @@ html
   body.skin-blue-light data-controller="#{controller_name}" data-action="#{action_name}"
     .wrapper
       = render 'layouts/main_menu'
-      aside.main-sidebar
-        section.sidebar
-          ul.sidebar-menu
-            = side_menu
       .content-wrapper
         //= render 'layouts/mensajes'
         == yield

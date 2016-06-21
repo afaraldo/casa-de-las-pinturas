@@ -9,6 +9,8 @@
 @import "libs/fontawesome/font-awesome";
 @import "libs/select2";
 @import "libs/bootstrap-datepicker3";
+@import "libs/daterangepicker";
+@import "libs/morris";
 
 // AdminLTE
 @import "adminlte/AdminLTE";
@@ -25,7 +27,53 @@
   }
 }
 
+.volver-link{
+  i{
+    margin-right: 5px;
+  }
+}
+
+.form-subtitle{
+  border-bottom: 1px solid #eee;
+  margin-top: 10px;
+  text-transform: uppercase;
+  color: #555;
+}
 
 .popover-content{
   word-break: break-word;
+}
+
+.alert{
+  .form-actions{
+    margin-top: 15px;
+  }
+  .btn-default{
+    color: #444;
+    text-decoration: none;
+  }
+}
+
+.seleccionar-panel{
+  cursor: pointer;
+  color: #666;
+  .fa-search, .fa-list{
+    font-size: 32px;
+  }
+}
+
+.text-largo{
+  word-wrap: break-word;
+}
+
+.disabled-group{
+  display: inline-block;
+
+  .btn-group{
+    opacity: 0.8;
+  }
+}
+
+.btn-wrap{
+  display: inline-block;
 }

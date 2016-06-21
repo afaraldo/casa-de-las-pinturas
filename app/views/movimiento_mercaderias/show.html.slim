@@ -5,11 +5,17 @@ section.content
     .col-xs-12
       .box
         .box-header
-          h3.box-title Movimiento de mercaderia
+          .row
+            .col-xs-12
+              = link_to '<i class="fa fa-angle-double-left"></i> Volver al listado de movimientos'.html_safe, movimiento_mercaderias_path
+          .row
+            .col-xs-12
+              h3.box-title Movimiento de mercaderia
           .box-tools
             = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_movimiento_mercaderia_path(@movimiento), class: 'btn btn-default'
             = " "
-            = link_to ' <i class="fa fa-trash"></i> Eliminar'.html_safe, movimiento_mercaderia_path(@movimiento), method: 'delete', data: {confirm: "¿Esta seguro que desea eliminar el movimiento?"}, class: 'btn btn-danger'
+            - stock_negativo = @movimiento.check_detalles_negativos(true)
+            = link_to ' <i class="fa fa-trash"></i> Eliminar'.html_safe, movimiento_mercaderia_path(@movimiento), method: 'delete', data: {confirm: stock_negativo.size > 0 ? "La operación va a provocar existencia negativa en los siguientes productos: #{stock_negativo.map {|m| m.nombre }.to_sentence} Esta seguro que quiere continuar?" : "¿Esta seguro que desea eliminar el movimiento?"}, class: 'btn btn-danger'
         .box-body
           dl.cabecera-info
             dt Fecha
@@ -30,4 +36,4 @@ section.content
                 tr
                   td = d.mercaderia_codigo
                   td = d.mercaderia_nombre
-                  td.text-right = number_with_precision(d.cantidad)
+                  td.text-right = number_with_precision(d.cantidad, delimiter: '.')

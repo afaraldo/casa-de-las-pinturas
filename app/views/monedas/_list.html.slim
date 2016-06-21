@@ -16,4 +16,4 @@ table.table.table-bordered.table-hover
         td
           = link_to '<i class="fa fa-edit"></i>'.html_safe, edit_moneda_path(moneda), remote: true, class: 'btn btn-default btn-sm'
           | #{' '}
-          = !moneda.defecto ? (link_to ' <i class="fa fa-trash"></i>'.html_safe, moneda_path(moneda), method: 'delete', data: {confirm: "¿Desea eliminar el moneda #{moneda.nombre}?"}, remote: true, class: 'btn btn-danger btn-sm') : " "
+          = !moneda.defecto ? (link_to ' <i class="fa fa-trash"></i>'.html_safe, moneda_path(moneda), method: 'delete', data: {confirm: "¿Desea eliminar la moneda #{moneda.nombre}?"}, remote: true, class: 'btn btn-danger btn-sm') : " "

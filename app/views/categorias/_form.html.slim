@@ -4,7 +4,8 @@
   .modal-header
     button.close type="button" data-dismiss="modal"
       span &times;
-    = categoria.new_record? ? 'Nueva categoría' : 'Editar categoría'
+    h4.modal-title
+      = categoria.new_record? ? 'Nueva categoría' : 'Editar categoría'
   .modal-body
     = f.input :id, as: :hidden, input_html: { id: 'categoria_id' }
     = f.input :nombre,    input_html: {class: 'uniqueCategoriaNombre'}, autofocus: true

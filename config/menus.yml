@@ -6,16 +6,24 @@ menu:
     submenus:
       compras:
         text: "Compras"
-        url: "#"
+        url: :compras
         active_submenu: :compras_sidemenu
-      pedidos_compras:
-        text: "Pedido de compras"
-        url: "#"
-        active_submenu: :pedidos_sidemenu
+      pagos:
+        text: "Pagos"
+        url: :pagos
+        active_submenu: :pagos_sidemenu
       proveedores:
         text: "Proveedores"
         url: :proveedores
         active_submenu: :proveedores_sidemenu
+      cuentas_corrientes:
+        text: "Cuentas corrientes"
+        url: :cuentas_corrientes_proveedores
+        active_submenu: :cuentas_corrientes_proveedores
+      devolucion_compras:
+        text: "Devoluciones"
+        url: :devolucion_compras
+        active_submenu: :devolucion_compras_sidemenu
   ventas:
     text: "Ventas"
     url: :clientes
@@ -23,12 +31,24 @@ menu:
     submenus:
       ventas:
         text: "Ventas"
-        url: "#"
-        active_submenu: :compras_sidemenu
+        url: :ventas
+        active_submenu: :ventas_sidemenu
+      cobros:
+        text: "Cobros"
+        url: :cobros
+        active_submenu: :cobros_sidemenu
       clientes:
         text: "Clientes"
         url: :clientes
         active_submenu: :clientes_sidemenu
+      cuentas_corrientes:
+        text: "Cuentas corrientes"
+        url: :cuentas_corrientes_clientes
+        active_submenu: :cuentas_corrientes_clientes
+      devolucion_ventas:
+        text: "Devoluciones"
+        url: :devolucion_ventas
+        active_submenu: :devolucion_ventas_sidemenu
   stock:
     text: "Stock"
     url: :inventarios
@@ -39,27 +59,55 @@ menu:
         url: :inventarios
         active_submenu: :inventario_sidemenu
       mercaderias:
-        text: "Mercaderias"
+        text: "Mercaderías"
         url: :mercaderias
         active_submenu: :mercaderias_sidemenu
       movimientos_inventario:
-        text: "Movimientos de mercaderias"
+        text: "Movimientos de mercaderías"
         url: :movimiento_mercaderias
         active_submenu: :movimientos_mercaderias_sidemenu
+      historico:
+        text: "Histórico de mercaderías"
+        url: :mercaderias_historico
+        active_submenu: :mercaderias_historico
   cajas:
     text: "Cajas"
     url: "#"
     active_menu: :cajas
     submenus:
       cotizacion:
-        text: "Cotizacion"
+        text: "Cotización"
         url: :monedas
         active_submenu: :monedas_sidemenu
+      categoria_gastos:
+        text: "Categoría de Gastos"
+        url: :categoria_gastos
+        active_submenu: :categoria_gastos_sidemenu
+      caja_movimientos:
+        text: "Movimientos de cajas"
+        url: :caja_movimientos
+        active_submenu: :caja_movimientos_sidemenu
   reportes:
     text: "Reportes"
     url: "#"
     active_menu: :reportes
     submenus:
+      reporte_compras:
+        text: "Reporte de compras"
+        url: :reportes_compras
+        active_submenu: :reporte_compras
+      reporte_ventas:
+        text: "Reporte de ventas"
+        url: :reportes_ventas
+        active_submenu: :reporte_ventas
+      reporte_gastos:
+        text: "Reporte de gastos"
+        url: :reportes_gastos
+        active_submenu: :reporte_gastos
+      reporte_caja:
+        text: "Reporte de caja"
+        url: :reportes_caja
+        active_submenu: :reporte_caja
   configuraciones:
     text: "Configuraciones"
     url: :configuraciones

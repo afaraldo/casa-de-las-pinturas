@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  persona_id: 
+  numero: 1
+  numero_factura: 1
+  fecha: 2016-03-31 04:30:15
+  fecha_vencimiento: 2016-03-31 04:30:15
+  estado: MyString
+  tipo: MyString
+  condicion: MyString
+  importe_total: 1
+  importe_pendiente: 1
+  importe_descontado: 1
+
+two:
+  persona_id: 
+  numero: 1
+  numero_factura: 1
+  fecha: 2016-03-31 04:30:15
+  fecha_vencimiento: 2016-03-31 04:30:15
+  estado: MyString
+  tipo: MyString
+  condicion: MyString
+  importe_total: 1
+  importe_pendiente: 1
+  importe_descontado: 1

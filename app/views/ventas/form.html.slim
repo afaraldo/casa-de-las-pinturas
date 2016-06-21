@@ -1,0 +1,220 @@
+section.content-header
+  h1 Ventas
+section.content
+  .row
+    .col-xs-12
+      .box
+        = simple_form_for @venta, html: { id: 'boleta-form' } do |f|
+          .box-header
+            a.volver-link href= ventas_path
+              i.fa.fa-angle-double-left style="margin-right: 5px;"
+              | Volver al listado de ventas
+            .clearfix
+            h3.box-title = @venta.new_record? ? 'Nueva Venta' : "Editar Venta Nro. #{@venta.numero}"
+          .box-body
+            = f.error_notification
+            .row
+              .col-sm-9
+                .row
+                  .col-sm-4
+                    = f.input :fecha, wrapper: :vertical_input_group do
+                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', id: 'boleta-fecha', autofocus: f.object.fecha.nil?, value: @venta.new_record? && f.object.fecha.nil? ? '' : localize(@venta.fecha.to_date)
+                      .input-group-btn
+                        .btn.btn-default
+                          i.fa.fa-calendar
+                  .col-sm-4.select2-input-group
+                    = f.input :persona, wrapper: :vertical_input_group,  label: 'Cliente' do
+                      = f.input_field :persona_id, as: :string,
+                                                   label: false,
+                                                   id: 'personas-buscador',
+                                                   disabled: @venta.creditos_detalles.size > 0 && @venta.persisted?,
+                                                   class: 'form-control required',
+                                                   data: {"msg-required" => 'Debe seleccionar un cliente',
+                                                          persona: f.object.persona.to_json },
+                                                   placeholder: 'Buscar cliente...'
+                      - if @venta.creditos_detalles.size == 0
+                        .input-group-btn
+                          = link_to '<i class="fa fa-plus"></i>'.html_safe,
+                                    new_cliente_path(from_boletas: true),
+                                    data: {toggle: 'tooltip'},
+                                    title: 'Nuevo cliente',
+                                    class: 'btn btn-default',
+                                    remote: true
+                  .col-sm-4
+                    = f.input :condicion, as: :radio_group_buttons, disabled: @venta.persisted?, input_html: { class: 'boleta-condicion' }
+                .row
+                  /// FECHA DE VENCIMENTO
+                  .col-sm-4
+                    = f.input :fecha_vencimiento, wrapper: :vertical_input_group, label: 'Fecha de vencimiento', wrapper_html: {id: 'fecha-vencimiento-wrapper', class: !@venta.condicion.nil? && @venta.condicion.credito? ? '' : 'hide'} do
+                      = f.input_field :fecha_vencimiento, as: :string, class: 'datepicker form-control fechaVencimiento', id: 'boleta-fecha-vencimiento', value: f.object.fecha_vencimiento.nil? ? '' : localize(f.object.fecha_vencimiento.to_date)
+                      .input-group-btn
+                        .btn.btn-default
+                          i.fa.fa-calendar
+                  .col-sm-4
+                    = f.input :numero_comprobante, label: 'Número de Comprobante', value: @venta.new_record? && f.object.numero_comprobante.nil? ? '' : f.object.numero_comprobante
+
+              ///////////// CREDITO DISPONIBLE /////////////
+              .col-sm-3
+                .alert.alert-info#credito-persona-info class="#{'hide' if @venta.condicion.nil? || !@venta.condicion.credito? }"
+                  strong Crédito disponible:
+                  br
+                  h4.text-center style="margin-top: 10px; font-size: 16px;"
+                    span#saldo 0
+                    = ' '
+                    span de
+                    = ' '
+                    span#limite_credito 0
+                  p.text-center
+                    - if @venta.new_record?
+                      = link_to 'Actualizar límite', "#", id: 'link_to_persona', remote: true
+                    - else
+                      = link_to 'Actualizar límite', edit_cliente_path(@venta.persona.id), id: 'link_to_persona', remote: true
+
+            /////////////
+              DEVOLUCIONES
+            /////////////
+            #devoluciones-persona.hide
+              .form-subtitle
+                label Crédito de devoluciones
+              br
+              .row.overlay-wrapper#mensaje-devoluciones
+                .overlay.hide
+                  i.fa.fa-refresh.fa-spin
+                .col-xs-12
+                  .well.text-center
+                    h3 = @venta.persona.nil? ? "Seleccione un cliente para ver los creditos disponibles" : "No hay devoluciones disponibles para el cliente #{@venta.persona_nombre}"
+              table.table.table-bordered.detalles-table#devoluciones-disponibles-tabla.hide
+                thead
+                  tr
+                    th Número
+                    th Fecha
+                    th Monto
+                    th Crédito disponible
+                    th Crédito a usar
+                    th
+                tbody#creditos-detalles-body
+                // Al editar Incluir devoluciones disponibles del proveedor que no sean las que ya estan asociadas a la compra
+                - creditos_usados = @venta.creditos_detalles.map(&:notas_creditos_debito_id)
+                - creditos_disponibles = @venta.persona ? @venta.persona.devoluciones_disponibles.reject { |d| creditos_usados.include?(d.id) } : []
+                = render 'credito_devoluciones', devoluciones: @venta.creditos_detalles.to_a + creditos_disponibles.to_a, actualizando: true, venta: @venta
+                tfoot
+                  tr
+                    td colspan="3"
+                    td.text-right.text-bold
+                      | Total:
+                    td.table-total.text-right.text-bold
+                      span
+                    td
+            .form-subtitle
+              label Mercaderías
+              = link_to '<i class="fa fa-plus"></i>'.html_safe,
+                        new_mercaderia_path(from_mercaderias: true),
+                        data: {toggle: 'tooltip'},
+                        title: 'Nueva mercadería',
+                        class: 'btn btn-default btn-sm',
+                        style: 'margin-left: 10px;',
+                        remote: true
+            br
+            - if @venta.errors.has_key?(:importe_total)
+              p.text-danger = "El importe total de la venta #{t('errors.messages.less_than', count: number_to_currency(DECIMAL_LIMITE[:superior]))}"
+            table.table.table-bordered.detalles-table.calcular-total
+              thead
+                tr
+                  th Código
+                  th Mercadería
+                  th Cantidad
+                  th Precio Unitario
+                  th Subtotal
+                  th
+              tbody#boleta-detalles-body
+                = f.simple_fields_for :detalles do |detalle|
+                  = render 'detalle_fields', f: detalle
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span
+                  td
+
+            = link_to_add_association '<i class="fa fa-plus"></i> Agregar mercadería'.html_safe, f, :detalles, class: 'btn btn-default pull-right',
+                                            'data-association-insertion-node' => '#boleta-detalles-body',
+                                            'data-association-insertion-method' => 'append'
+            .clearfix
+            /////////////
+              RESUMEN DE TOTALES
+            /////////////
+            br
+            .row#boleta-resumen.hide
+              .col-sm-offset-8.col-sm-4
+                table.table.bg-warning
+                  tbody
+                    tr
+                      td Total mercaderias:
+                      td.text-right#res-total-mercaderia data-total="0" Gs. 0
+                    tr
+                      td Crédito utilizado:
+                      td.text-right#res-total-creditos data-total="0" Gs. 0
+                    tr
+                      td.text-bold Total a pagar:
+                      td.text-right.text-bold#res-total-a-pagar Gs. 0
+
+            .row#pago-detalles.hide
+              .col-xs-12
+                .form-subtitle
+                  label Formas de cobro
+                br
+                - if @venta.errors.has_key?(:"recibos_detalles.recibo.importe_total")
+                  - esconder_validacion_detalles = ""
+                - else
+                  - esconder_validacion_detalles = 'hide'
+                p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de pago debe ser igual al total a pagar de la venta.
+                = f.simple_fields_for :recibos_detalles do |r_form|
+                  = r_form.simple_fields_for :recibo, @cobro do |recibo_form|
+                    table.table.table-bordered.detalles-table.calcular-pagos-total
+                      thead
+                        tr
+                          th Forma
+                          th Moneda
+                          th Monto
+                          th Cotización
+                          th Subtotal
+                      tbody#cobro-detalles-body
+                        = recibo_form.simple_fields_for :detalles do |detalle|
+                          = render 'cobros/detalles', f: detalle
+                      tfoot
+                        tr
+                          td colspan="3"
+                          td.text-right.text-bold
+                            | Total:
+                          td.table-total.text-right.text-bold
+                            span
+            .box-footer
+              - if @venta.errors.has_key?(:stock_negativo) || @venta.errors.has_key?(:saldo_negativo)
+                input.hidden name="guardar_si_o_si" value= "true"
+                .alert.alert-warning#mensaje-saldo-negativo
+                  - if @venta.errors.has_key?(:stock_negativo)
+                    p = @venta.errors.get(:stock_negativo).to_sentence
+                    p Esta seguro que quiere continuar?
+                  - if @venta.errors.has_key?(:saldo_negativo)
+                    p = @venta.errors.get(:saldo_negativo).to_sentence
+                    p Esta seguro que quiere continuar?
+                  .form-actions
+                    = link_to 'Cancelar', ventas_path, class: 'btn btn-default'
+                    | #{' '}
+                    button.btn.btn-primary type="submit" Continuar
+              - else
+                .form-actions.text-right
+                  = link_to 'Cancelar', @venta.new_record? ? ventas_path : venta_path(@venta.id), class: 'btn btn-default'
+                  | #{' '}
+                  button.btn.btn-primary type="submit" Guardar Venta
+
+javascript:
+  BoletasUI.setBuscarMercaderiaUrl("#{mercaderias_buscar_path}");
+  BoletasUI.setBuscarPersonasUrl("#{clientes_buscar_path}");
+  BoletasUI.setDevolucionesPendientesUrl("#{ventas_buscar_devoluciones_path}");
+
+- if @venta.errors.has_key?(:stock_negativo) || @venta.errors.has_key?(:saldo_negativo)
+  javascript:
+    MensajesHelper.irHasta($('#mensaje-saldo-negativo').offset().top);

@@ -1,0 +1,163 @@
+section.content-header
+  h1 Compra
+section.content
+  .row
+    .col-xs-12
+      .box
+        = simple_form_for @pago, html: { id: 'pago-form' } do |f|
+          .box-header
+            a.volver-link href= pagos_path
+              i.fa.fa-angle-double-left
+              | Volver al listado de pagos
+            .clearfix
+            h3.box-title = @pago.new_record? ? 'Nuevo pago' : "Editar pago Nro. #{@pago.numero}"
+          .box-body
+            = f.error_notification
+            .row
+              .col-sm-9
+                .row
+                  .col-sm-4
+                    = f.input :fecha, wrapper: :vertical_input_group do
+                      = f.input_field :fecha, as: :string, class: 'datepicker form-control', autofocus: f.object.fecha.nil?, value: @pago.new_record? && f.object.fecha.nil? ? '' : localize(f.object.fecha.to_date)
+                      .input-group-btn
+                        .btn.btn-default
+                          i.fa.fa-calendar
+                  .col-sm-4
+                    = f.association :persona, as: :string, label: 'Proveedor', disabled: @pago.persisted?, input_html: { id: 'personas-buscador', placeholder: 'Buscar proveedor...', data: { 'msg-required' => 'Este campo es obligatorio.',persona: f.object.persona.to_json } }
+                .row
+                  .col-sm-4
+                    = f.input :numero_comprobante, label: 'Número de Comprobante'
+            .row.overlay-wrapper#pago-mensajes
+              .overlay.hide
+                i.fa.fa-refresh.fa-spin
+              .col-xs-12
+                .well.seleccionar-panel.text-center
+                  i.fa.fa-search
+                  h3 Seleccione un proveedor para ver las boletas y devoluciones pendientes
+            .row#pago-boletas-devoluciones.hide
+              .col-xs-12
+                .form-subtitle
+                  label Crédito de devoluciones
+                br
+                table.table.table-bordered.detalles-table#creditos-disponibles-tabla
+                  thead
+                    tr
+                      th Número
+                      th Fecha
+                      th Monto
+                      th Crédito disponible
+                      th Crédito a usar
+                      th
+                  tbody#creditos-detalles-body
+                    // Al editar Incluir devoluciones disponibles del proveedor que no sean las que ya estan asociadas al pago
+                    - creditos_usados = @pago.recibos_creditos_detalles.map(&:notas_creditos_debito_id)
+                    - creditos_disponibles = @pago.persona ? @pago.persona.devoluciones_disponibles.reject { |d| creditos_usados.include?(d.id) } : []
+                    = render 'credito_devoluciones', devoluciones: @pago.recibos_creditos_detalles.to_a + creditos_disponibles.to_a, actualizando: true, pago: @pago
+                  tfoot
+                    tr
+                      td colspan="3"
+                      td.text-right.text-bold
+                        | Total:
+                      td.table-total.text-right.text-bold
+                        span 0
+                      td
+
+                .form-subtitle
+                  label Boletas pendientes
+                br
+                p.text-danger.hide#boletas-seleccionadas-validation Debe seleccionar al menos una compra a pagar
+                table.table.table-bordered.detalles-table#compra-detalles-tabla
+                  thead
+                    tr
+                      th Número
+                      th Fecha
+                      th Fecha de vencimiento
+                      th Total Pendiente
+                      th Total a cobrar
+                      th
+                  tbody#compra-detalles-body
+                    - boletas_usadas = @pago.boletas_detalles.map(&:boleta_id)
+                    - boletas_disponibles = @pago.persona ? @pago.persona.compras_pendientes.reject { |d| boletas_usadas.include?(d.id) } : []
+                    = render 'compras_pendientes', compras: @pago.boletas_detalles.to_a + boletas_disponibles.to_a, actualizando: true, pago: @pago
+                  tfoot
+                    tr
+                      td colspan="3"
+                      td.text-right.text-bold
+                        | Total:
+                      td.table-total.text-right.text-bold
+                        span 0
+                      td
+
+                .clearfix
+                /////////////
+                  RESUMEN DE TOTALES
+                /////////////
+                br
+                .row#boleta-resumen
+                  .col-sm-offset-8.col-sm-4
+                    table.table.bg-warning
+                      tbody
+                        tr
+                          td Total boletas:
+                          td.text-right#res-total-boleta data-total="0" Gs. 0
+                        tr
+                          td Crédito utilizado:
+                          td.text-right#res-total-creditos data-total="0" Gs. 0
+                        tr
+                          td.text-bold Total a pagar:
+                          td.text-right.text-bold#res-total-a-pagar Gs. 0
+
+            .row#pago-detalles.hide
+              .col-xs-12
+                .form-subtitle
+                  label Formas de pago
+                br
+                - esconder_validacion_detalles = @pago.errors.has_key?(:"recibos_detalles.recibo.importe_total") ? '' : 'hide'
+                p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de pago debe ser igual al total a cobrar de las boletas seleccionadas.
+
+                table.table.table-bordered.detalles-table.calcular-pagos-total
+                  thead
+                    tr
+                      th Forma
+                      th Moneda
+                      th Monto
+                      th Cotización
+                      th Subtotal
+                      th
+                  tbody#pago-detalles-body
+                    = f.simple_fields_for :detalles do |detalle|
+                      = render 'detalles', f: detalle
+                  tfoot
+                    tr
+                      td colspan="3"
+                      td.text-right.text-bold
+                        | Total:
+                      td.table-total.text-right.text-bold
+                        span
+                      td
+          .box-footer
+            - if @saldo_negativo && @saldo_negativo.size > 0
+              input.hidden name="guardar_si_o_si" value= "true"
+              .alert.alert-warning#mensaje-saldo-negativo
+                p
+                  | La operación va a provocar que los fondos de la caja quede en negativo para las siguientes monedas: #{@saldo_negativo.map(&:nombre).to_sentence}.
+                p Esta seguro que quiere continuar?
+                .form-actions
+                  = link_to 'Cancelar', pagos_path, class: 'btn btn-default'
+                  | #{' '}
+                  button.btn.btn-primary type="submit" Continuar
+            - else
+              .form-actions.text-right
+                = link_to 'Cancelar', pagos_path, class: 'btn btn-default'
+                | #{' '}
+                button.btn.btn-primary type="submit" Guardar pago
+
+
+javascript:
+  PagosUI.setbuscarProveedorUrl("#{proveedores_buscar_path}");
+  PagosUI.setboletasPendientesUrl("#{pagos_buscar_pendientes_path}");
+
+- if @saldo_negativo && @saldo_negativo.size > 0
+  javascript:
+    MensajesHelper.irHasta($('#mensaje-saldo-negativo').offset().top);
+

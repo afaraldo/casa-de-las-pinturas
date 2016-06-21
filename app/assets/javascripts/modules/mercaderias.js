@@ -32,10 +32,10 @@ var MercaderiasUI = (function(){
     // Recibe una lista de mercaderias y elimina si alguno ya esta seleccionado entre los detalles
     // se asume que los inputs tengan las clase .mercaderia-select
     function eliminarItemsSeleccionados(items) {
-        var seleccionados = $.map($('input.mercaderia-select'), function(v,i){ return $(v).val();});
+        var seleccionados = $.map($('input.mercaderia-select'), function(v,i){ return parseInt($(v).val());});
 
         for(var i = 0; i < items.length; i++) {
-            if($.inArray(items[0].id, seleccionados) > -1) {
+            if($.inArray(parseInt(items[i].id), seleccionados) > -1) {
                 items.splice(i, 1);
             }
         }
@@ -43,13 +43,21 @@ var MercaderiasUI = (function(){
         return items;
     }
 
-    // Inicializador del buscador
-    // Recibe un objeto con:
-    // {
-    //   elemento: el elemento input al que se va a utilizar como buscador,
-    //   url: la url del metodo para buscar en el servidor
-    // }
+    /**
+     * Inicializador del buscador
+     * Recibe un objeto con:
+     * {
+     *   elemento: el objeto jquery del elemento input al que se va a utilizar como buscador,
+     *   url: la url del metodo para buscar en el servidor,
+     *   customSelection: function callback para despues que se seleccione la mercaderia
+     * }
+     */
     function buscarMercaderia(opciones){
+        var customSelection = false;
+
+        if(opciones.hasOwnProperty('customSelection'))
+            customSelection = true;
+
         opciones.elemento.select2({
             placeholder: 'Buscar mercadería...',
             minimumInputLength: 2,
@@ -74,7 +82,7 @@ var MercaderiasUI = (function(){
                 callback($(element).data('mercaderia')); // Se setea la mercaderia si ya esta seleccionada
             },
             formatResult: formatMercaderias,
-            formatSelection: formatMercaderiasSelection,
+            formatSelection: customSelection ? opciones.customSelection : formatMercaderiasSelection,
             escapeMarkup: function(m) { return m; }
         });
     }
@@ -117,7 +125,17 @@ var MercaderiasUI = (function(){
             });
         },
         recargarCategorias: recargarCategorias,
-        buscarMercaderia:   buscarMercaderia
+        buscarMercaderia:   buscarMercaderia,
+        historico: function(url){
+            var buscadorInput = $('#mercaderia-buscador');
+
+            buscarMercaderia({elemento: buscadorInput, url: url});
+            DatepickerHelper.initDateRangePicker('#date-range');
+
+            $('.seleccionar-panel').on('click', function(e){
+                buscadorInput.select2('open');
+            });
+        }
     };
 
 }());

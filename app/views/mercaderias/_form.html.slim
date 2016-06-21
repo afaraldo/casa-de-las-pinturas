@@ -4,10 +4,11 @@
   .modal-header
     button.close type="button" data-dismiss="modal"
       span &times;
-    = mercaderia.new_record? ? 'Nueva mercadería' : 'Editar mercadería'
+    h4.modal-title
+      = mercaderia.new_record? ? 'Nueva mercadería' : 'Editar mercadería'
   .modal-body
     = f.input :id, as: :hidden, input_html: { id: 'mercaderia_id' }
-    = f.input :codigo,          input_html: {class: 'uniqueMercaderiaCodigo'}
+    = f.input :codigo, autofocus: true, input_html: {class: 'uniqueMercaderiaCodigo'}
     = f.input :nombre
     .row
       .col-xs-10
@@ -33,7 +34,7 @@
       .col-xs-6
         = f.input :stock_minimo, as: :string, input_html: {class: 'maskCantidad', value: number_with_precision(f.object.stock_minimo)}
       .col-xs-6
-        = f.input :stock,        as: :string, input_html: {class: 'maskCantidad', value: number_with_precision(f.object.stock)}
+        = f.input :stock_inicial,        as: :string, input_html: {class: 'maskCantidad', value: number_with_precision(f.object.stock_inicial)}, disabled: !(mercaderia.new_record?)
   .modal-footer.text-right
     button.btn.btn-default.pull-left [type="button" data-dismiss="modal" aria-hidden="true"] Cancelar
     input.btn.btn-primary type="submit" value="Guardar" data-disable-with="Guardando..."

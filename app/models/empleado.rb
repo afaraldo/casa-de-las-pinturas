@@ -5,5 +5,5 @@ class Empleado < Persona
   validates :nombre, length: {maximum: 150, minimum: 2}
   validates :nombre, uniqueness: true
   validates :numero_documento, format: { with: /\A(\d+[.]*[ ]*-?)+\z/, message: :only_numbers_is_allowed }, allow_blank: false
-  delegate :username, to: :user, prefix: true
+  delegate :username, :rol, :id, to: :user, prefix: true
 end

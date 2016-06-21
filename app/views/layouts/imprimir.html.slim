@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    title La Casa de las Pinturas
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    = javascript_include_tag 'imprimir'
+    = stylesheet_link_tag    'application', media: 'all'
+    = csrf_meta_tags
+  body.vista-imprimir data-controller="#{controller_name}" data-action="#{action_name}"
+    == yield
+    javascript:
+      setTimeout(function(){ window.print(); }, 500);

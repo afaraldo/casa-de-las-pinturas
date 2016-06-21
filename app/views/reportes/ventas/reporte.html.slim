@@ -1,0 +1,42 @@
+section.content-header
+  h1 Reportes
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          h3.box-title Reporte de Ventas
+          .box-tools.pull-right.hidden-print
+            = link_to '<i class="fa fa-print"></i> Imprimir'.html_safe, reportes_imprimir_reporte_ventas_path, class: 'btn btn-primary imprimir-listado'
+        .box-body
+          #reporte-search.buscador-listado.hidden-print
+            = form_tag reportes_ventas_path, remote: true, method: :get, class: 'remote-search' do
+              = hidden_field_tag :order_by, 'grupo', id: 'filtro-order-by'
+              = hidden_field_tag :order_dir, 'asc', id: 'filtro-order-dir'
+              .row
+                .col-sm-3
+                  .form-group
+                    label.control-label Filtrar por:
+                    div#date-range.btn.btn-default.daterange.btn-block
+                      = hidden_field_tag :fecha_desde, nil, class: 'fecha-desde'
+                      = hidden_field_tag :fecha_hasta, nil, class: 'fecha-hasta'
+                      i.fa.fa-calendar
+                      span #{localize(@desde.to_date)} - #{localize(@hasta.to_date)}
+                      b.caret
+                .col-sm-3
+                  .form-group.top-25
+                    = search_field_tag :persona_id, nil, id: 'personas-buscador', class: 'form-control', placeholder: "Todos los clientes..."
+                .col-sm-3
+                  .form-group
+                    label.control-label Agrupar por:
+                    = select_tag :agrupar_por, options_for_select(ventas_grupos, 'dia'), class: 'form-control'
+                .col-sm-3
+                  div.top-25 data-toggle="buttons"
+                    label.btn.btn-default
+                      input type="checkbox" name="modo_resumido"
+                      | Modo resumido
+          #reporte-table.overlay-wrapper.buscador-resultados.table-responsive
+            = render "reportes/ventas/#{params[:modo_resumido].present? ? 'resumido' : 'listado'}", reporte: @reporte
+  javascript:
+    ReportesUI.setBuscarPersonaUrl("#{clientes_buscar_path}");
+

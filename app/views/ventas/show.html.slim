@@ -1,0 +1,168 @@
+section.content-header
+  h1 Ventas
+section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          a.volver-link.hidden-print href= ventas_path
+            i.fa.fa-angle-double-left style="margin-right: 5px;"
+            | Volver al listado de ventas
+          .clearfix
+          h3.box-title
+            = "Venta Nro. #{@venta.numero}".html_safe
+          .box-tools.hidden-print
+            = link_to 'Imprimir'.html_safe, "/ventas/#{@venta.id}/imprimir_show", class: 'btn btn-default imprimir-listado'
+            = ' '
+            - @saldo_negativo = @venta.check_detalles_negativos_pago true
+            - if @venta.es_editable?
+              = link_to '<i class="fa fa-edit"></i> Editar'.html_safe, edit_venta_path(@venta),  html_options = {class: 'btn btn-default'}
+              = ' '
+              - if @saldo_negativo && @saldo_negativo.size > 0
+                = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, venta_path(@venta), method: 'delete', data: {confirm: "La operación va a provocar existencia negativa en los siguientes monedas: #{@saldo_negativo.map {|m| m.nombre }.to_sentence}. ¿Seguro que desea eliminar la venta?"}, class: 'btn btn-danger'
+              - else
+                = link_to '<i class="fa fa-trash"></i> Eliminar'.html_safe, venta_path(@venta), method: 'delete', data: {confirm: "¿Desea eliminar la venta?"}, class: 'btn btn-danger'
+            - else
+              button.btn.btn-default.disabled data-toggle="tooltip" title="No se puede eliminar la venta porque tiene cobros o creditos asociados."
+                i.fa.fa-trash
+                |  Editar
+              = ' '
+              button.btn.btn-danger.disabled data-toggle="tooltip" title="No se puede eliminar la venta porque tiene cobros o creditos asociados."
+                i.fa.fa-trash
+                |  Eliminar
+        .box-body
+          .row
+            .col-sm-9
+              .row
+                .col-sm-4
+                  label.control-label Fecha
+                  p = localize(@venta.fecha.to_date)
+                .col-sm-4
+                  label.control-label Cliente
+                  p = @venta.persona_nombre
+                .col-sm-4
+                  label.control-label Condición de cobro
+                  p = @venta.condicion.capitalize
+              .row
+                - if @venta.credito?
+                  .col-sm-4
+                    label.control-label Fecha de vencimiento
+                    p = localize(@venta.fecha_vencimiento.to_date)
+                - if !@venta.numero_comprobante.blank?
+                  .col-sm-4
+                    label.control-label Nro. de Comprobante
+                    p.text-largo = @venta.numero_comprobante
+                .col-sm-4
+                  label.control-label Estado
+                  p
+                    = ['<label class="label label-success">Pagado</label>', '<label class="label label-warning">Pendiente</label>'][@venta.estado == 'pagado' ? 0 : 1].html_safe
+  .row
+    .col-xs-12
+      .nav-tabs-custom
+        ul.nav.nav-tabs.hidden-print
+          li.active
+            a href="#mercaderias" data-toggle="tab" Mercaderías
+          li
+            a href="#pagos" data-toggle="tab" Cobros
+          li
+            a href="#creditos" data-toggle="tab" Crédito utilizado
+        .tab-content
+          .tab-pane.active#mercaderias
+            h4.visible-print Mercaderías
+            table.table.table-bordered.detalles-table.calcular-total
+              thead
+                tr
+                  th Código
+                  th Mercadería
+                  th Cantidad
+                  th Precio Unitario
+                  th Subtotal
+              tbody#movimiento-detalles-body
+                - total = 0
+                - @venta.detalles.each do |m|
+                  - n = m.cantidad
+                  tr
+                    td = m.mercaderia.codigo
+                    td = m.mercaderia.nombre
+                    td.text-right = number_with_precision(n, delimiter: '.')
+                    td.text-right = number_to_currency(m.precio_unitario)
+                    td.text-right = number_to_currency(n * m.precio_unitario)
+                  - total += n * m.precio_unitario
+              tfoot
+                tr
+                  td colspan="3"
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total)
+          .tab-pane#pagos
+            h4.visible-print Cobros
+            table.table.table-bordered.detalles-table.calcular-pagos-total
+              thead
+                tr
+                  th Fecha
+                  th Número
+                  th Monto
+              tbody#movimiento-detalles-body
+                - total = 0
+                - @venta.recibos_detalles.each do |p|
+                  - total += p.monto_utilizado
+                  tr.fila-clickeable data-url="#{cobro_path(p.recibo_id)}"
+                    td = localize(p.recibo.fecha.to_date)
+                    td = p.recibo.numero
+                    td.text-right = number_to_currency(p.monto_utilizado)
+              tfoot
+                tr
+                  td
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total)
+          .tab-pane#creditos
+            h4.visible-print Crédito utilizado
+            table.table.table-bordered.detalles-table
+              thead
+                tr
+                  th Fecha
+                  th Número
+                  th Monto
+                  th Monto usado
+              tbody#movimiento-detalles-body
+                - total = 0
+                - @venta.creditos_detalles.each do |p|
+                  - total += p.monto_utilizado
+                  tr.fila-clickeable data-url="#{devolucion_venta_path(p.notas_creditos_debito.id)}"
+                    td = localize(p.notas_creditos_debito.fecha.to_date)
+                    td = p.notas_creditos_debito.id
+                    td.text-right = number_to_currency(p.notas_creditos_debito.importe_total)
+                    td.text-right = number_to_currency(p.monto_utilizado)
+              tfoot
+                tr
+                  td
+                  td
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total)
+  - if @venta.estado.pendiente? || @venta.importe_credito_utilizado > 0
+    .row
+      .col-sm-offset-8.col-sm-4
+        .box.box-solid
+          .box-body
+            table.table.bg-warning
+              tbody
+                tr
+                  td Total mercaderías:
+                  td.text-right = "#{number_to_currency(@venta.importe_total)}"
+                - if @venta.importe_credito_utilizado > 0
+                  tr
+                    td Crédito utilizado:
+                    td.text-right = "#{number_to_currency(@venta.importe_credito_utilizado)}"
+                - if @venta.importe_pagado > 0
+                  tr
+                    td.text-bold Total pagado:
+                    td.text-right.text-bold = number_to_currency(@venta.importe_pagado)
+                - if @venta.credito?
+                  tr.bg-yellow
+                    td.text-bold Total pendiente:
+                    td.text-right.text-bold = "#{number_to_currency(@venta.importe_pendiente)}"

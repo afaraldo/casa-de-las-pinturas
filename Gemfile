@@ -39,6 +39,9 @@ gem "cocoon", '~> 1.2.8'
 
 gem 'devise'
 
+# log de auditoria
+gem 'paper_trail', '~> 4'
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -74,6 +77,10 @@ gem "bcrypt-ruby", '~> 3.0.0'
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
+
+  gem 'pry-rails'
+  gem 'pry-rescue'
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 
@@ -86,6 +93,8 @@ end
 
 gem 'rollbar', '~> 2.8.3'
 gem 'oj', '~> 2.12.14'
+
+gem 'quiet_assets'
 
 group :development do
   gem 'better_errors'

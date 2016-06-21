@@ -1,0 +1,36 @@
+- unless movimientos
+  .row#cuenta-corrientes-mensajes
+    .col-xs-12
+      .well.seleccionar-panel.text-center
+        i.fa.fa-search
+        h3 Seleccione un #{cuenta_tipo.singularize} para ver el listado de movimientos
+- else
+  table.table.table-bordered.table-hover
+    thead
+      tr
+        th Fecha
+        th Motivo
+        th Débito
+        th Crédito
+        th Saldo
+    tbody
+      - balance = movimientos[:balance_anterior]
+      tr.active
+        td.text-right colspan="4" Saldo anterior:
+        td.text-right = number_to_currency(balance, unit: '')
+      - if movimientos[:movimientos].empty?
+        tr.bg-info.text-center
+          td colspan="5" No hay movimientos para el #{cuenta_tipo.singularize} en el rango de fecha seleccionado
+      - formatear_movimientos(movimientos[:movimientos]).each do |m|
+        - balance += (m[:ingreso] - m[:egreso])
+        tr.fila-clickeable data-url="#{m[:url]}"
+          td = localize(m[:fecha].to_date)
+          td = m[:motivo]
+          td.text-right = number_to_currency(m[:ingreso], unit: '')
+          td.text-right = number_to_currency(m[:egreso], unit: '')
+          td.text-right = number_to_currency(balance, unit: '')
+      tr.text-bold
+        td.text-right colspan="4" Balance:
+        td.text-right = number_to_currency(balance, unit: '')
+  - unless ultimos_movimientos?
+    = paginate movimientos[:movimientos], remote: true

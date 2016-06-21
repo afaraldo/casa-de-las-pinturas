@@ -1,1 +1,14 @@
 @import "common";
+@import "print";
+
+
+.content-wrapper, .main-footer{
+  margin-left: 0;
+}
+
+//.content-wrapper{
+//  &> .content-header, &> .content {
+//    max-width: 1180px;
+//    margin: 0 auto;
+//  }
+//}

@@ -1,0 +1,20 @@
+table.table.table-bordered.table-hover
+  thead
+    tr
+      th Fecha
+      th Número de compra
+      th Nro. de comprobante
+      th Condición de pago
+      th Proveedor
+      th Monto
+      th Estado
+  tbody
+    - compras.each do |compra|
+      tr.fila-clickeable data-url="#{compra_path(compra)}"
+        td = localize(compra.fecha.to_date)
+        td = link_to compra.numero, compra_path(compra.id)
+        td.wordbreak = compra.numero_comprobante
+        td = compra.condicion_text
+        td = compra.persona_nombre
+        td.text-right = number_to_currency(compra.importe_total)
+        td = "<label class='label label-#{compra.estado.pagado? ? 'success' : 'warning'}'>#{compra.estado_text}</label>".html_safe
