@@ -37,4 +37,3 @@ class ReciboNotaCreditoDebito < ActiveRecord::Base
   end
 
 end
-

@@ -110,4 +110,45 @@ section.content
                   td.table-total.text-right.text-bold
                     span = number_to_currency(total_compras)
           .tab-pane#creditos
-            h4.visible-print Crédito utilizado
+          	h4.visible-print Crédito utilizado
+            table.table.table-bordered.detalles-table
+              thead
+                tr
+                  th Fecha
+                  th Numero
+                  th Monto
+                  th Monto usado
+              tbody#movimiento-detalles-body
+                - total = 0
+                - @pago.recibos_creditos_detalles.each do |p|
+                  - total += p.monto_utilizado
+                  tr.fila-clickeable data-url="#{devolucion_compra_path(p.notas_creditos_debito.id)}"
+                    td = localize(p.notas_creditos_debito.fecha.to_date)
+                    td = p.notas_creditos_debito.id
+                    td.text-right = number_to_currency(p.notas_creditos_debito.importe_total)
+                    td.text-right = number_to_currency(p.monto_utilizado)
+              tfoot
+                tr
+                  td
+                  td
+                  td.text-right.text-bold
+                    | Total:
+                  td.table-total.text-right.text-bold
+                    span = number_to_currency(total)
+  - if @pago.total_credito_utilizado > 0
+    .row
+      .col-sm-offset-8.col-sm-4
+        .box.box-solid
+          .box-body
+            table.table.bg-warning
+              tbody
+                tr
+                  td Total boletas:
+                  td.text-right = "#{number_to_currency(@pago.total_credito_utilizado - @pago.total_pagado)}"
+                - if @pago.total_credito_utilizado > 0
+                  tr
+                    td Crédito utilizado:
+                    td.text-right = "#{number_to_currency(@pago.total_credito_utilizado)}"
+                tr
+                  td.text-bold Total formas de pago:
+                  td.text-right.text-bold = number_to_currency(@pago.total_pagado)

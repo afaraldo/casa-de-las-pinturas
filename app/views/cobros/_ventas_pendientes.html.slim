@@ -1,9 +1,10 @@
 - total = 0
 - ventas.each_with_index do |c, i|
-  - venta = actualizando ? c.boleta : c # cuando se edita, la venta esta en boletas_detalles
+  - es_venta = c.instance_of?(Venta)
+  - venta = es_venta ? c : c.boleta # cuando se edita, la venta esta en boletas_detalles
   - total += venta.importe_pendiente
   - importe_pendiente = venta.importe_pendiente
-  - if !cobro.nil? && cobro.persisted? # Sumar el monto utilizado al editar el cobro
+  - if !cobro.nil? && cobro.persisted? && !es_venta # Sumar el monto utilizado al editar el cobro
     - importe_pendiente += c.monto_utilizado
   tr
     td = venta.numero
@@ -13,11 +14,11 @@
     td
       div class="form-group #{'has-error' if c.errors.has_key?(:monto_utilizado)}"
         = hidden_field "cobro[boletas_detalles_attributes][#{i}]", :boleta_id, value: venta.id
-        = text_field "cobro[boletas_detalles_attributes][#{i}]", :monto_utilizado, value: number_with_precision(actualizando ? c.monto_utilizado : venta.importe_pendiente), class: 'form-control mascaraMoneda monto-a-sumar'
+        = text_field "cobro[boletas_detalles_attributes][#{i}]", :monto_utilizado, value: number_with_precision(es_venta ? venta.importe_pendiente : c.monto_utilizado), class: 'form-control mascaraMoneda monto-a-sumar'
         - if c.errors.has_key?(:monto_utilizado)
           span.help-block = c.errors.get(:monto_utilizado).to_sentence
     td
-      - seleccionado = actualizando ? {checked: ''} : {} # checkear la venta al editar o cuando hay errores en el create
+      - seleccionado = actualizando && !es_venta ? {checked: ''} : {} # checkear la venta al editar o cuando hay errores en el create
       input type="checkbox" name="cobro[boletas_detalles_attributes][#{i}][pagado]" class="pagar-boleta" *seleccionado
-      - if !cobro.nil? && cobro.persisted? # incluir el id del detalle al editar
+      - if !cobro.nil? && cobro.persisted? && !es_venta # incluir el id del detalle al editar
         input type="hidden" name="cobro[boletas_detalles_attributes][#{i}][id]" value="#{c.id}"

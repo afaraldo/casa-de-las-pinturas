@@ -70,7 +70,8 @@ Rails.application.routes.draw do
   post 'caja_movimientos/create_transferencia' => 'caja_movimientos#create_transferencia'
   get 'caja_movimientos/imprimir' => 'caja_movimientos#imprimir'
   get 'caja_movimientos/:id/imprimir_show' => 'caja_movimientos#imprimir_show'
-  resources :caja_movimientos
+
+  resources :caja_movimientos, except: [:edit, :update, :destroy]
 
   get 'cobros/buscar_pendientes' => 'cobros#buscar_pendientes'
   get 'cobros/imprimir' => 'cobros#imprimir'

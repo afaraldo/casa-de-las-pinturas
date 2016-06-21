@@ -28,7 +28,7 @@ class DevolucionVentasController < ApplicationController
   def imprimir
     get_devolucion_ventas
   end
-  
+
   def imprimir_show
   end
 
@@ -145,6 +145,5 @@ class DevolucionVentasController < ApplicationController
                                    boletas_detalles_attributes: [:id, :boleta_id, :_destroy])
 
     end
-
 
 end

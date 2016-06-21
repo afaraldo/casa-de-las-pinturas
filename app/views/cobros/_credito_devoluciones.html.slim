@@ -1,7 +1,8 @@
 - devoluciones.each_with_index do |d, i|
-  - devolucion = actualizando ? d.notas_creditos_debito : d
+  - es_devolucion = d.instance_of?(DevolucionVenta)
+  - devolucion = es_devolucion ? d : d.notas_creditos_debito
   - credito_restante = devolucion.credito_restante
-  - if !cobro.nil? && cobro.persisted? # Sumar el monto utilizado al editar el cobro
+  - if !cobro.nil? && cobro.persisted? && !es_devolucion # Sumar el monto utilizado al editar el cobro
     - credito_restante += d.monto_utilizado
   tr
     td = devolucion.id
@@ -11,11 +12,11 @@
     td
       div class="form-group #{'has-error' if d.errors.has_key?(:monto_utilizado)}"
         = hidden_field "cobro[recibos_creditos_detalles_attributes][#{i}]", :notas_creditos_debito_id, value: devolucion.id
-        = text_field "cobro[recibos_creditos_detalles_attributes][#{i}]", :monto_utilizado, value: number_with_precision(actualizando ? d.monto_utilizado : devolucion.credito_restante), class: 'form-control mascaraMoneda monto-a-sumar'
+        = text_field "cobro[recibos_creditos_detalles_attributes][#{i}]", :monto_utilizado, value: number_with_precision(es_devolucion ? devolucion.credito_restante : d.monto_utilizado), class: 'form-control mascaraMoneda monto-a-sumar'
         - if d.errors.has_key?(:monto_utilizado)
           span.help-block = d.errors.get(:monto_utilizado).to_sentence
     td
-      - seleccionado = actualizando ? {checked: ''} : {} # checkear el cobro al editar o cuando hay errores en el create
+      - seleccionado = actualizando && !es_devolucion ? {checked: ''} : {} # checkear el cobro al editar o cuando hay errores en el create
       input type="checkbox" name="cobro[recibos_creditos_detalles_attributes][#{i}][usado]" class="usar-credito" *seleccionado
-      - if !cobro.nil? && cobro.persisted? # incluir el id del detalle al editar
+      - if !cobro.nil? && cobro.persisted? && !es_devolucion # incluir el id del detalle al editar
         input type="hidden" name="cobro[recibos_creditos_detalles_attributes][#{i}][id]" value="#{d.id}"

@@ -13,4 +13,4 @@ table.table.table-bordered.table-hover
         td = cobro.numero
         td.wordbreak = cobro.numero_comprobante
         td = cobro.persona_nombre
-        td.text-right = number_to_currency(cobro.total_pagado)
+        td.text-right = number_to_currency(cobro.total_pagado + cobro.total_credito_utilizado)

@@ -1,5 +1,5 @@
 section.content-header
-  h1 Compras
+  h1 Compra
 section.content
   .row
     .col-xs-12
@@ -10,7 +10,7 @@ section.content
               i.fa.fa-angle-double-left
               | Volver al listado de pagos
             .clearfix
-            h3.box-title = @pago.new_record? ? 'Nuevo Pago' : "Editar Pago Nro. #{@pago.numero}"
+            h3.box-title = @pago.new_record? ? 'Nuevo pago' : "Editar pago Nro. #{@pago.numero}"
           .box-body
             = f.error_notification
             .row
@@ -36,27 +36,31 @@ section.content
                   h3 Seleccione un proveedor para ver las boletas y devoluciones pendientes
             .row#pago-boletas-devoluciones.hide
               .col-xs-12
-                /.form-subtitle
-                /  label Crédito de devoluciones
-                /br
-                /table.table.table-bordered.detalles-table
-                /  thead
-                /    tr
-                /      th Número
-                /      th Monto
-                /      th Crédito disponible
-                /      th Crédito a usar
-                /      th
-                /  tbody#compra-detalles-body
-                /
-                /  tfoot
-                /    tr
-                /      td colspan="2"
-                /      td.text-right.text-bold
-                /        | Total:
-                /      td.table-total.text-right.text-bold
-                /        span 200.000
-                /      td
+                .form-subtitle
+                  label Crédito de devoluciones
+                br
+                table.table.table-bordered.detalles-table#creditos-disponibles-tabla
+                  thead
+                    tr
+                      th Número
+                      th Fecha
+                      th Monto
+                      th Crédito disponible
+                      th Crédito a usar
+                      th
+                  tbody#creditos-detalles-body
+                    // Al editar Incluir devoluciones disponibles del proveedor que no sean las que ya estan asociadas al pago
+                    - creditos_usados = @pago.recibos_creditos_detalles.map(&:notas_creditos_debito_id)
+                    - creditos_disponibles = @pago.persona ? @pago.persona.devoluciones_disponibles.reject { |d| creditos_usados.include?(d.id) } : []
+                    = render 'credito_devoluciones', devoluciones: @pago.recibos_creditos_detalles.to_a + creditos_disponibles.to_a, actualizando: true, pago: @pago
+                  tfoot
+                    tr
+                      td colspan="3"
+                      td.text-right.text-bold
+                        | Total:
+                      td.table-total.text-right.text-bold
+                        span 0
+                      td
 
                 .form-subtitle
                   label Boletas pendientes
@@ -69,41 +73,47 @@ section.content
                       th Fecha
                       th Fecha de vencimiento
                       th Total Pendiente
-                      th Total a pagar
+                      th Total a cobrar
                       th
                   tbody#compra-detalles-body
-                    = render 'compras_pendientes', compras: @pago.boletas_detalles, actualizando: true, pago: @pago
+                    - boletas_usadas = @pago.boletas_detalles.map(&:boleta_id)
+                    - boletas_disponibles = @pago.persona ? @pago.persona.compras_pendientes.reject { |d| boletas_usadas.include?(d.id) } : []
+                    = render 'compras_pendientes', compras: @pago.boletas_detalles.to_a + boletas_disponibles.to_a, actualizando: true, pago: @pago
                   tfoot
                     tr
-                      td colspan="2"
+                      td colspan="3"
                       td.text-right.text-bold
                         | Total:
-                      td.text-right.text-bold
                       td.table-total.text-right.text-bold
                         span 0
                       td
 
-            /.row
-            /  .col-sm-offset-8.col-sm-4
-            /    table.table.bg-warning
-            /      tbody
-            /        tr
-            /          td Total mercaderias:
-            /          td.text-right Gs. 528.200
-            /        tr
-            /          td Crédito utilizado:
-            /          td.text-right Gs. 200.000
-            /        tr
-            /          td.text-bold Total a pagar:
-            /          td.text-right.text-bold Gs. 328.200
+                .clearfix
+                /////////////
+                  RESUMEN DE TOTALES
+                /////////////
+                br
+                .row#boleta-resumen
+                  .col-sm-offset-8.col-sm-4
+                    table.table.bg-warning
+                      tbody
+                        tr
+                          td Total boletas:
+                          td.text-right#res-total-boleta data-total="0" Gs. 0
+                        tr
+                          td Crédito utilizado:
+                          td.text-right#res-total-creditos data-total="0" Gs. 0
+                        tr
+                          td.text-bold Total a pagar:
+                          td.text-right.text-bold#res-total-a-pagar Gs. 0
 
             .row#pago-detalles.hide
               .col-xs-12
                 .form-subtitle
                   label Formas de pago
                 br
-                - esconder_validacion_detalles = @pago.errors.has_key?(:importe_total) ? '' : 'hide'
-                p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de pago debe ser igual al total a pagar de las boletas seleccionadas.
+                - esconder_validacion_detalles = @pago.errors.has_key?(:"recibos_detalles.recibo.importe_total") ? '' : 'hide'
+                p#recibo-total-validation class="text-danger #{esconder_validacion_detalles}" El total de las formas de pago debe ser igual al total a cobrar de las boletas seleccionadas.
 
                 table.table.table-bordered.detalles-table.calcular-pagos-total
                   thead
@@ -140,7 +150,7 @@ section.content
               .form-actions.text-right
                 = link_to 'Cancelar', pagos_path, class: 'btn btn-default'
                 | #{' '}
-                button.btn.btn-primary type="submit" Guardar Pago
+                button.btn.btn-primary type="submit" Guardar pago
 
 
 javascript:

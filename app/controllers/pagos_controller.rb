@@ -14,9 +14,8 @@ class PagosController < ApplicationController
   # busca las compras y devoluciones pendientes de un proveedor dado
   def buscar_pendientes
     @proveedor = Proveedor.find(params[:proveedor_id])
-
     @compras = @proveedor.compras_pendientes
-    @devoluciones = []
+    @devoluciones = @proveedor.devoluciones_disponibles
   end
 
   def imprimir
@@ -54,7 +53,6 @@ class PagosController < ApplicationController
   # POST /pagos.json
   def create
     @pago = Pago.new(pago_params)
-    @pago.condicion = "credito"
     @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @pago.check_detalles_negativos
 
     respond_to do |format|
@@ -75,7 +73,6 @@ class PagosController < ApplicationController
   # PATCH/PUT /pagos/1.json
   def update
     @pago.assign_attributes(pago_params)
-    @pago.condicion = "credito"
     @saldo_negativo = params[:guardar_si_o_si].present? ? [] : @pago.check_detalles_negativos
 
     respond_to do |format|
@@ -135,9 +132,22 @@ class PagosController < ApplicationController
         end
       end
 
+      # se eliminan los creditos que no se seleccionaron para utilizar
+      unless params[:pago][:recibos_creditos_detalles_attributes].blank?
+        params[:pago][:recibos_creditos_detalles_attributes].each do |k, valor|
+          if valor[:id].present?
+            params[:pago][:recibos_creditos_detalles_attributes][k][:_destroy] = '1' unless valor[:usado].present?
+          else
+            params[:pago][:recibos_creditos_detalles_attributes].delete(k) unless valor[:usado].present?
+          end
+        end
+      end
+
       params.require(:pago).permit(:persona_id, :numero_comprobante, :fecha,
                                    detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma, :_destroy],
-                                   boletas_detalles_attributes: [:id, :monto_utilizado, :boleta_id, :_destroy])
+                                   boletas_detalles_attributes: [:id, :monto_utilizado, :boleta_id, :_destroy],
+                                   recibos_creditos_detalles_attributes: [:id, :notas_creditos_debito_id, :monto_utilizado, :_destroy],
+                                   )
 
     end
 

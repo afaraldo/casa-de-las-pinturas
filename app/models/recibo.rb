@@ -40,11 +40,11 @@ class Recibo < ActiveRecord::Base
   validate  :condicion_cambiada?, on: :update
 
   def total_pagado
-    total_efectivo + total_tarjeta + total_credito_utilizado
+    total_efectivo + total_tarjeta
   end
 
   def total_pagado_was
-    total_efectivo_was.to_f + total_tarjeta_was.to_f + total_credito_utilizado_was.to_f
+    total_efectivo_was.to_f + total_tarjeta_was.to_f
   end
 
   def numero
