@@ -123,12 +123,24 @@ class CobrosController < ApplicationController
     def cobro_params
 
       procesar_cantidades
+
       # se eliminan de params las boletas que no se seleccionaron o se marcan para eliminar
       params[:cobro][:boletas_detalles_attributes].each do |k, valor|
         if valor[:id].present?
           params[:cobro][:boletas_detalles_attributes][k][:_destroy] = '1' unless valor[:pagado].present?
         else
           params[:cobro][:boletas_detalles_attributes].delete(k) unless valor[:pagado].present?
+        end
+        end
+
+      # se eliminan los creditos que no se seleccionaron para utilizar
+      unless params[:cobro][:recibos_creditos_detalles_attributes].blank?
+        params[:cobro][:recibos_creditos_detalles_attributes].each do |k, valor|
+          if valor[:id].present?
+            params[:cobro][:recibos_creditos_detalles_attributes][k][:_destroy] = '1' unless valor[:usado].present?
+          else
+            params[:cobro][:recibos_creditos_detalles_attributes].delete(k) unless valor[:usado].present?
+          end
         end
       end
 
