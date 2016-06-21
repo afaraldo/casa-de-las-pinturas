@@ -51,7 +51,7 @@ section.content
                   tbody#creditos-detalles-body
                     // Al editar Incluir devoluciones disponibles del proveedor que no sean las que ya estan asociadas al pago
                     - creditos_usados = @pago.recibos_creditos_detalles.map(&:notas_creditos_debito_id)
-                    - creditos_disponibles = @pago.persisted? ? @pago.persona.devoluciones_disponibles.reject { |d| creditos_usados.include?(d.id) } : []
+                    - creditos_disponibles = @pago.persona ? @pago.persona.devoluciones_disponibles.reject { |d| creditos_usados.include?(d.id) } : []
                     = render 'credito_devoluciones', devoluciones: @pago.recibos_creditos_detalles.to_a + creditos_disponibles.to_a, actualizando: true, pago: @pago
                   tfoot
                     tr
@@ -76,7 +76,9 @@ section.content
                       th Total a cobrar
                       th
                   tbody#compra-detalles-body
-                    = render 'compras_pendientes', compras: @pago.boletas_detalles, actualizando: true, pago: @pago
+                    - boletas_usadas = @pago.boletas_detalles.map(&:boleta_id)
+                    - boletas_disponibles = @pago.persona ? @pago.persona.compras_pendientes.reject { |d| boletas_usadas.include?(d.id) } : []
+                    = render 'compras_pendientes', compras: @pago.boletas_detalles.to_a + boletas_disponibles.to_a, actualizando: true, pago: @pago
                   tfoot
                     tr
                       td colspan="3"
@@ -91,7 +93,7 @@ section.content
                   RESUMEN DE TOTALES
                 /////////////
                 br
-                .row#boleta-resumen.hide
+                .row#boleta-resumen
                   .col-sm-offset-8.col-sm-4
                     table.table.bg-warning
                       tbody

@@ -49,7 +49,10 @@ section.content
                       th Crédito a usar
                       th
                   tbody#creditos-detalles-body
-                    = render 'credito_devoluciones', devoluciones: @cobro.recibos_creditos_detalles, actualizando: true, cobro: @cobro
+                    // Al editar Incluir devoluciones disponibles del proveedor que no sean las que ya estan asociadas al pago
+                    - creditos_usados = @cobro.recibos_creditos_detalles.map(&:notas_creditos_debito_id)
+                    - creditos_disponibles = @cobro.persona ? @cobro.persona.devoluciones_disponibles.reject { |d| creditos_usados.include?(d.id) } : []
+                    = render 'credito_devoluciones', devoluciones: @cobro.recibos_creditos_detalles.to_a + creditos_disponibles.to_a, actualizando: true, cobro: @cobro
                   tfoot
                     tr
                       td colspan="3"
@@ -73,7 +76,9 @@ section.content
                       th Total a cobrar
                       th
                   tbody#venta-detalles-body
-                    = render 'ventas_pendientes', ventas: @cobro.boletas_detalles, actualizando: true, cobro: @cobro
+                    - boletas_usadas = @cobro.boletas_detalles.map(&:boleta_id)
+                    - boletas_disponibles = @cobro.persona ? @cobro.persona.ventas_pendientes.reject { |d| boletas_usadas.include?(d.id) } : []
+                    = render 'ventas_pendientes', ventas: @cobro.boletas_detalles.to_a + boletas_disponibles.to_a, actualizando: true, cobro: @cobro
                   tfoot
                     tr
                       td colspan="3"
@@ -155,4 +160,3 @@ javascript:
 - if @saldo_negativo && @saldo_negativo.size > 0
   javascript:
     MensajesHelper.irHasta($('#mensaje-saldo-negativo').offset().top);
-

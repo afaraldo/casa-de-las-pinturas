@@ -132,10 +132,21 @@ class PagosController < ApplicationController
         end
       end
 
+      # se eliminan los creditos que no se seleccionaron para utilizar
+      unless params[:pago][:recibos_creditos_detalles_attributes].blank?
+        params[:pago][:recibos_creditos_detalles_attributes].each do |k, valor|
+          if valor[:id].present?
+            params[:pago][:recibos_creditos_detalles_attributes][k][:_destroy] = '1' unless valor[:usado].present?
+          else
+            params[:pago][:recibos_creditos_detalles_attributes].delete(k) unless valor[:usado].present?
+          end
+        end
+      end
+
       params.require(:pago).permit(:persona_id, :numero_comprobante, :fecha,
                                    detalles_attributes: [:id, :monto, :cotizacion, :moneda_id, :forma, :_destroy],
                                    boletas_detalles_attributes: [:id, :monto_utilizado, :boleta_id, :_destroy],
-                                   recibos_creditos_detalleS_attributes: [:id, :notas_creditos_debito_id, :monto_utilizado, :_destroy],
+                                   recibos_creditos_detalles_attributes: [:id, :notas_creditos_debito_id, :monto_utilizado, :_destroy],
                                    )
 
     end
