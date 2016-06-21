@@ -145,5 +145,5 @@ class DevolucionVentasController < ApplicationController
                                    boletas_detalles_attributes: [:id, :boleta_id, :_destroy])
 
     end
-  
+
 end
