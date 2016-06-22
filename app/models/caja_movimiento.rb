@@ -166,7 +166,7 @@ class CajaMovimiento < ActiveRecord::Base
     opciones[:order_by] = 'grupo' if opciones[:order_by].nil?
     opciones[:order_dir] = 'asc' if opciones[:order_dir].nil?
 
-    resultado = self.unscoped.where(deleted_at: nil, tipo: :egreso).where(fecha: opciones[:desde]..opciones[:hasta])
+    resultado = self.unscoped.where(deleted_at: nil, tipo: :egreso).where(es_transferencia: false).where(fecha: opciones[:desde]..opciones[:hasta])
 
     resultado = resultado.where(categoria_gasto_id: opciones[:categoria_gasto_id]) unless opciones[:categoria_gasto_id].blank?
 
